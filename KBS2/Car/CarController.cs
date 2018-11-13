@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KBS2.Car
 {
-    class CarController
+    public class CarController
     {
         public Car Car { get; set; }
 
@@ -56,6 +56,41 @@ namespace KBS2.Car
         public void AddCustomer(Customer customer)
         {
             Car.Passengers.Add(customer);
+        }
+
+        /// <summary>
+        /// Change direction of the car and throw an event
+        /// </summary>
+        /// <return>returns bool true if car is able to rotate</return>
+        /// <param name="direction">change the direction of the car with DirectionCar</param>
+        private bool ChangeDirectionCar(DirectionCar direction) 
+        {
+            if(Car.Direction == direction)
+            {
+                return false;
+            }
+            if(Car.Direction == DirectionCar.North && direction == DirectionCar.South)
+            {
+                return false;
+            }
+            if(Car.Direction == DirectionCar.South && direction == DirectionCar.North)
+            {
+                return false;
+            }
+            if(Car.Direction == DirectionCar.West && direction == DirectionCar.East)
+            {
+                return false;
+            }
+            if(Car.Direction == DirectionCar.East && direction == DirectionCar.West)
+            {
+                return false;
+            }
+            else
+            {
+                // throw an event for the the sensors to change direction.
+                return true;
+            }
+
         }
 
         public void Update()

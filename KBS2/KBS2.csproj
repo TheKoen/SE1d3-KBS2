@@ -58,6 +58,7 @@
     <Compile Include="Building.cs" />
     <Compile Include="Car\Car.cs" />
     <Compile Include="Car\CarController.cs" />
+    <Compile Include="Car\DirectionCar.cs" />
     <Compile Include="Car\Sensors\ActiveSensor.cs" />
     <Compile Include="Car\Sensors\ActiveSensors\ObjectSensor.cs" />
     <Compile Include="Car\Sensors\Direction.cs" />

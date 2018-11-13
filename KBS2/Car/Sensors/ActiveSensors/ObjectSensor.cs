@@ -8,9 +8,12 @@ namespace KBS2.Car.Sensors.ActiveSensors
 {
     public class ObjectSensor : PassiveSensor
     {
-        public ObjectSensor(Direction direction)
+        public ObjectSensor(Direction direction, double range)
         {
-           SensorDirection = direction;
+            Range = range;
+            SensorDirection = direction;
+
+
         }
     }
 
@@ -25,7 +28,23 @@ namespace KBS2.Car.Sensors.ActiveSensors
 
         public override void Update()
         {
-            throw new NotImplementedException();
+            if(Sensor.SensorDirection == Direction.Front)
+            {
+
+            }
+            else if(Sensor.SensorDirection == Direction.Back)
+            {
+
+            }
+            else if(Sensor.SensorDirection == Direction.Left)
+            {
+
+            }
+            else if(Sensor.SensorDirection == Direction.Right)
+            {
+
+            }
         }
+
     }
 }

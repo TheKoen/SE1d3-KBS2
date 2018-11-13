@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace KBS2
 {
-    class Road
+    public class Road
     {
         public Vector Start { get; set; }
         public Vector End { get; set; }
