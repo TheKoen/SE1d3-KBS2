@@ -67,6 +67,7 @@
     <Compile Include="Car\Sensors\SensorController.cs" />
     <Compile Include="Car\Sensors\SensorEventArgs.cs" />
     <Compile Include="CityController.cs" />
+    <Compile Include="CityParser.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="Road.cs" />
