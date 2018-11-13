@@ -9,9 +9,9 @@ namespace KBS2
 {
     class Road
     {
-        public Vector start;
-        public Vector end;
-        public int width;
-        public int maxSpeed;
+        public Vector Start { get; set; }
+        public Vector End { get; set; }
+        public int Width { get; set; }
+        public int MaxSpeed { get; set; }
     }
 }

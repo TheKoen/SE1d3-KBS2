@@ -10,8 +10,8 @@ namespace KBS2
     class Building
     {
 
-        public Vector location;
-        public int size;
+        public Vector Location { get; set; }
+        public int Size { get; set; }
 
     }
 }
