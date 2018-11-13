@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Building.cs" />
     <Compile Include="CityController.cs" />
+    <Compile Include="CityParser.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="Road.cs" />
     <Page Include="MainWindow.xaml">
