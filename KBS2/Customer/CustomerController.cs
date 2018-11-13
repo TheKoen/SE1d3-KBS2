@@ -8,6 +8,11 @@ namespace KBS2.Customer
 {
     class CustomerController
     {
+        public CustomerController()
+        {
+
+        }
+
         public void Update() { }
     }
 }

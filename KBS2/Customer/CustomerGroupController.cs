@@ -8,6 +8,15 @@ namespace KBS2.Customer
 {
     class CustomerGroupController
     {
-        public void Update() { }
+        public CustomerGroup Group { get; set; }
+
+        public CustomerGroupController(CustomerGroup group)
+        {
+            Group = group;
+        }
+
+        public void Update() {
+
+        }
     }
 }
