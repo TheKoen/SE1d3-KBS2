@@ -56,6 +56,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Building.cs" />
+    <Compile Include="Car\Car.cs" />
+    <Compile Include="Car\CarController.cs" />
+    <Compile Include="Car\Sensors\ActiveSensor.cs" />
+    <Compile Include="Car\Sensors\ActiveSensors\ObjectSensor.cs" />
+    <Compile Include="Car\Sensors\Direction.cs" />
+    <Compile Include="Car\Sensors\PassiveSensor.cs" />
+    <Compile Include="Car\Sensors\PassiveSensors\LineSensor.cs" />
+    <Compile Include="Car\Sensors\Sensor.cs" />
+    <Compile Include="Car\Sensors\SensorController.cs" />
+    <Compile Include="Car\Sensors\SensorEventArgs.cs" />
     <Compile Include="CityController.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="Road.cs" />
@@ -99,8 +109,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Car\Sensor\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
