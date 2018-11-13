@@ -1,0 +1,7 @@
+
+.idea/*
+.vs/*
+KBS2/obj/*
+KBS2/bin/*
+UnitTests/obj/*
+UnitTests/bin/*
