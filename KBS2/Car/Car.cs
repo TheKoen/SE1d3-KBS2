@@ -16,6 +16,7 @@ namespace KBS2.Car
         public List<Sensor> Sensors { get; set; } = new List<Sensor>();
         public CarController Controller { get; set; } = new CarController();
         public List<Customer> Passengers { get; set; } = new List<Customer>();
+        public Road CurrentRoad { get; set; }
 
         /// <summary>
         /// Create a car 
