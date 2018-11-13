@@ -57,6 +57,10 @@
     </ApplicationDefinition>
     <Compile Include="Building.cs" />
     <Compile Include="CityController.cs" />
+    <Compile Include="Customer\Customer.cs" />
+    <Compile Include="Customer\CustomerController.cs" />
+    <Compile Include="Customer\CustomerGroup.cs" />
+    <Compile Include="Customer\CustomerGroupController.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="Road.cs" />
     <Page Include="MainWindow.xaml">
