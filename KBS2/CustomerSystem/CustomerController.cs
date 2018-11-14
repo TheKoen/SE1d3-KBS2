@@ -13,6 +13,10 @@ namespace KBS2.CustomerSystem
             Customer = customer;            
         }
 
+        /// <summary>
+        /// Looks at the position of the group and checks the distance between self and group.
+        /// </summary>
+        /// <returns>Distance between group and own location.</returns>
         public double WhereIsMyGroup()
         {
             return VectorUtil.Distance(Customer.Group.Location, Customer.Location);
