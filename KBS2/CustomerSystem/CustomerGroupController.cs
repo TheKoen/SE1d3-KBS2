@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.GPS;
 using KBS2.Util;
 
 namespace KBS2.CustomerSystem
@@ -8,12 +10,15 @@ namespace KBS2.CustomerSystem
     public class CustomerGroupController
     {
         public CustomerGroup Group { get; set; }
+        private static readonly int GroupDistanceFromRoad = 10;
+       
 
         public CustomerGroupController(CustomerGroup group)
         {
             Group = group;
             var road = LookForNearestRoad();
             MoveToNearestRoad(road);
+            Group.RoadsNear = GPSSystem.GetRoadsInRange(Group.Location);
             //Order car
         }
 
@@ -38,9 +43,7 @@ namespace KBS2.CustomerSystem
                 {
                     closestRoad = road;
                     closestDistance = distanceStart;
-                }
-
-                if (distanceEnd < closestDistance)
+                }else if (distanceEnd < closestDistance)
                 {
                     closestRoad = road;
                     closestDistance = distanceEnd;
@@ -89,22 +92,22 @@ namespace KBS2.CustomerSystem
             {
                 if (CheckHorizontalRoadPosition(road))
                 {
-                    Group.Location = new Vector(Group.Location.X, road.Start.Y - (road.Width / 2.0) - 1);
+                    Group.Location = new Vector(Group.Location.X, road.Start.Y - (road.Width / 2.0) - GroupDistanceFromRoad);
                 }
                 else
                 {
-                    Group.Location = new Vector(Group.Location.X, road.Start.Y + (road.Width / 2.0) + 1);
+                    Group.Location = new Vector(Group.Location.X, road.Start.Y + (road.Width / 2.0) + GroupDistanceFromRoad);
                 }
             }
             else
             {
                 if (CheckVerticalRoadPosition(road))
                 {
-                    Group.Location = new Vector(road.Start.X - (road.Width / 2.0) - 1, Group.Location.Y);
+                    Group.Location = new Vector(road.Start.X - (road.Width / 2.0) - GroupDistanceFromRoad, Group.Location.Y);
                 }
                 else
                 {
-                    Group.Location = new Vector(road.Start.X + (road.Width / 2.0) + 1, Group.Location.Y);
+                    Group.Location = new Vector(road.Start.X + (road.Width / 2.0) + GroupDistanceFromRoad, Group.Location.Y);
                 }
             }
         }
