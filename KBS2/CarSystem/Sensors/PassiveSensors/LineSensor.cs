@@ -40,6 +40,8 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         {
             var currentLoc = Sensor.Car.Location;
             var road = Sensor.Car.CurrentRoad;
+            if (road == null) return;
+
             var currentValue = road.IsXRoad() ? currentLoc.Y : currentLoc.X;
             var roadValue = road.IsXRoad() ? road.Start.Y : road.Start.X;
             var positiveDir = Sensor.Car.Direction.Equals(DirectionCar.South) ||

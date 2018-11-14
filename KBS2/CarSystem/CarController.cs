@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using KBS2.Car;
 using KBS2.CustomerSystem;
 
 namespace KBS2.CarSystem
@@ -31,7 +30,7 @@ namespace KBS2.CarSystem
         /// <param name="customer">customer that needs to be removed out of the car</param>
         public Customer RemoveCustomer(Customer customer)
         {
-            Car.Passengers.Remove();
+            Car.Passengers.Remove(customer);
             return customer;
         }
 
