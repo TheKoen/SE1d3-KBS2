@@ -10,8 +10,13 @@ namespace KBS2
     class Intersection
     {
 
-        public Vector location;
-        public int size;
+        public Vector Location { get; set; }
+        public int Size { get; set; }
 
+        public Intersection(Vector l, int s)
+        {
+            this.Location = l;
+            this.Size = s;
+        }
     }
 }
