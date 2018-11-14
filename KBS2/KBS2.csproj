@@ -66,7 +66,6 @@
     <Compile Include="CarSystem\Sensors\PassiveSensors\LineSensor.cs" />
     <Compile Include="CarSystem\Sensors\Sensor.cs" />
     <Compile Include="CarSystem\Sensors\SensorController.cs" />
-    <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
     <Compile Include="CitySystem\CityController.cs" />
     <Compile Include="CitySystem\CityParser.cs" />
     <Compile Include="GPS\GPSSystem.cs" />

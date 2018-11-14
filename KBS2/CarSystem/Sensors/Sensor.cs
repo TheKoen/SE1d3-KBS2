@@ -1,4 +1,4 @@
-﻿using KBS2.Car.Sensors;
+﻿using KBS2.CarSystem.Sensors;
 
 namespace KBS2.CarSystem.Sensors
 {
