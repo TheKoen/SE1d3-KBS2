@@ -4,7 +4,7 @@ using KBS2.CarSystem;
 
 namespace KBS2.CitySystem
 {
-    class City
+    public class City
     {
         private static City instance;
         public List<Road> Roads { get; set; }
@@ -23,10 +23,5 @@ namespace KBS2.CitySystem
         {
             return instance;
         }
-
-        public void loadCity(XmlDocument city)
-        {
-        }
-
     }
 }
