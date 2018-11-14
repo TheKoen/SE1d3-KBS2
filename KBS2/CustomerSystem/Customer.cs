@@ -11,14 +11,16 @@ namespace KBS2.CustomerSystem
         public CustomerController Controller { get; set; }
         public int Age { get; set; }
         public Building Building { get; set; }
+        public CustomerGroup Group { get; set; }
 
-        public Customer(Vector location, int age, Building building)
+        public Customer(Vector location, int age, Building building, CustomerGroup group)
         {
             Location = location;
             Age = age;
             Building = building;
             Moral = 10;
-            Controller = new CustomerController();
+            Controller = new CustomerController(this);
+            Group = group;
         }
     }
 }
