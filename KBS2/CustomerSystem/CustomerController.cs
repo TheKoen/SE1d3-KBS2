@@ -22,15 +22,23 @@ namespace KBS2.CustomerSystem
             return VectorUtil.Distance(Customer.Group.Location, Customer.Location);
         }
 
-        public void Update() {
-            var gL = Customer.Group.Location;
-            var cL = Customer.Location;
+        /// <summary>
+        /// Moves the customer towards the group.
+        /// </summary>
+        public void MoveTowardsGroup()
+        {
+            Vector gL = Customer.Group.Location;
+            Vector cL = Customer.Location;
 
+            Vector delta = new Vector(gL.X - cL.X, gL.Y - cL.X);
+            delta.Normalize();
+            Customer.Location = Vector.Add(Customer.Location, delta);
+        }
+
+        public void Update() {
             if (WhereIsMyGroup() > 40)
             {
-                Vector delta = new Vector(gL.X - cL.X, gL.Y - cL.X);
-                delta.Normalize();
-                Customer.Location = Vector.Add(Customer.Location, delta);
+                MoveTowardsGroup();
             };
         }
     }
