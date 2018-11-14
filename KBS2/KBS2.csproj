@@ -55,27 +55,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Building.cs" />
-    <Compile Include="Car\Car.cs" />
-    <Compile Include="Car\CarController.cs" />
-    <Compile Include="Car\DirectionCar.cs" />
-    <Compile Include="Car\Sensors\ActiveSensor.cs" />
-    <Compile Include="Car\Sensors\ActiveSensors\ObjectSensor.cs" />
-    <Compile Include="Car\Sensors\Direction.cs" />
-    <Compile Include="Car\Sensors\PassiveSensor.cs" />
-    <Compile Include="Car\Sensors\PassiveSensors\LineSensor.cs" />
-    <Compile Include="Car\Sensors\Sensor.cs" />
-    <Compile Include="Car\Sensors\SensorController.cs" />
-    <Compile Include="Car\Sensors\SensorEventArgs.cs" />
-    <Compile Include="CityController.cs" />
-    <Compile Include="CityParser.cs" />
+    <Compile Include="CitySystem\Building.cs" />
+    <Compile Include="CarSystem\Car.cs" />
+    <Compile Include="CarSystem\CarController.cs" />
+    <Compile Include="CarSystem\DirectionCar.cs" />
+    <Compile Include="CarSystem\Sensors\ActiveSensor.cs" />
+    <Compile Include="CarSystem\Sensors\ActiveSensors\ObjectSensor.cs" />
+    <Compile Include="CarSystem\Sensors\Direction.cs" />
+    <Compile Include="CarSystem\Sensors\PassiveSensor.cs" />
+    <Compile Include="CarSystem\Sensors\PassiveSensors\LineSensor.cs" />
+    <Compile Include="CarSystem\Sensors\Sensor.cs" />
+    <Compile Include="CarSystem\Sensors\SensorController.cs" />
+    <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
+    <Compile Include="CitySystem\CityController.cs" />
+    <Compile Include="CitySystem\CityParser.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
-    <Compile Include="Customer\Customer.cs" />
-    <Compile Include="Customer\CustomerController.cs" />
-    <Compile Include="Customer\CustomerGroup.cs" />
-    <Compile Include="Customer\CustomerGroupController.cs" />
-    <Compile Include="Intersection.cs" />
-    <Compile Include="Road.cs" />
+    <Compile Include="CustomerSystem\Customer.cs" />
+    <Compile Include="CustomerSystem\CustomerController.cs" />
+    <Compile Include="CustomerSystem\CustomerGroup.cs" />
+    <Compile Include="CustomerSystem\CustomerGroupController.cs" />
+    <Compile Include="CitySystem\Intersection.cs" />
+    <Compile Include="CitySystem\Road.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -84,7 +84,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="City.cs" />
+    <Compile Include="CitySystem\City.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

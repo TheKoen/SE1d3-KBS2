@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using KBS2.CitySystem;
 
-namespace KBS2.Customer
+namespace KBS2.CustomerSystem
 {
-    class CustomerGroupController
+    public class CustomerGroupController
     {
         public CustomerGroup Group { get; set; }
 
