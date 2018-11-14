@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace KBS2.Customer
@@ -19,9 +16,9 @@ namespace KBS2.Customer
         {
             for(int i = 0; i < customers; i++)
             {
-                Customers.Add(new Customer(start.location, random.Next(4, 90), start));
+                Customers.Add(new Customer(start.Location, random.Next(4, 90), start));
             }
-            Location = start.location;
+            Location = start.Location;
             Destination = destination;
             Controller = new CustomerGroupController(this);
         }
