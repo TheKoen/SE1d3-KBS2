@@ -35,8 +35,8 @@ namespace KBS2.Customer
             {
                 var roadstart = road.start;
                 var roadend = road.end;
-                var distanceStart = Math.Sqrt(Math.Pow(Group.StartLocation.X - roadstart.X, 2) + Math.Pow(Group.StartLocation.Y - roadstart.Y, 2));
-                var distanceEnd = Math.Sqrt(Math.Pow(Group.StartLocation.X - roadend.X, 2) + Math.Pow(Group.StartLocation.Y - roadend.Y, 2));
+                var distanceStart = Math.Sqrt(Math.Pow(Group.Location.X - roadstart.X, 2) + Math.Pow(Group.Location.Y - roadstart.Y, 2));
+                var distanceEnd = Math.Sqrt(Math.Pow(Group.Location.X - roadend.X, 2) + Math.Pow(Group.Location.Y - roadend.Y, 2));
 
                 if(distanceStart < closestDistance)
                 {
