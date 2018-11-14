@@ -2,8 +2,11 @@
 {
     public class CustomerController
     {
-        public CustomerController()
+        public Customer Customer { get; set; }
+
+        public CustomerController(Customer customer)
         {
+            Customer = customer;
 
         }
 
