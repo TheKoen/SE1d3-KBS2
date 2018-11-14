@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="AddCity" HorizontalAlignment="Left" Margin="262,169,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Name="AddCity" Content="AddCity" HorizontalAlignment="Left" Margin="554,169,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_AddCity"/>
+        <Button Name="Coffee" Content="Coffee" HorizontalAlignment="Left" Margin="554,203,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_Coffee"/>
+        <Label Name="CoffeeLabel" Content="" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="391" Width="539" FontFamily="Geotype TT" FontSize="500"/>
 
     </Grid>
 </Window>

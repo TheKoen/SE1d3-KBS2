@@ -30,11 +30,16 @@ namespace KBS2
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_AddCity(object sender, RoutedEventArgs e)
         {
             XmlDocument xmlCity = new XmlDocument();
             xmlCity.Load("testcity.xml");
             City = CityParser.MakeCity(xmlCity);
+        }
+
+        private void Button_Click_Coffee(object sender, RoutedEventArgs e)
+        {
+            CoffeeLabel.Content = "m";
         }
     }
 }
