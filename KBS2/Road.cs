@@ -21,5 +21,10 @@ namespace KBS2
             this.Width = w;
             this.MaxSpeed = ms;
         }
+
+        public bool IsXRoad()
+        {
+            return Math.Abs(Start.Y - End.Y) < 0.01;
+        }
     }
 }
