@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using KBS2.Car;
+using KBS2.CustomerSystem;
 
-namespace KBS2.Car
+namespace KBS2.CarSystem
 {
     public class CarController
     {
-        public Car Car { get; set; }
+        public CarSystem.Car Car { get; set; }
 
-        public CarController(Car car) 
+        public CarController(CarSystem.Car car) 
         {
             Car = car;
         }

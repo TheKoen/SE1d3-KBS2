@@ -1,12 +1,10 @@
-﻿using KBS2.Car.Sensors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
+using KBS2.CarSystem.Sensors;
+using KBS2.CitySystem;
+using KBS2.CustomerSystem;
 
-namespace KBS2.Car
+namespace KBS2.CarSystem
 {
     public class Car
     {

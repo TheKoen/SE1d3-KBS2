@@ -1,7 +1,7 @@
 ﻿using System;
 using KBS2.GPS;
 
-namespace KBS2.Car.Sensors.PassiveSensors
+namespace KBS2.CarSystem.Sensors.PassiveSensors
 {
     public class LineSensor : PassiveSensor
     {

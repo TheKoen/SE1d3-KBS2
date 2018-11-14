@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace KBS2
+namespace KBS2.CitySystem
 {
     public class Road
     {
@@ -20,6 +16,11 @@ namespace KBS2
             this.End = e;
             this.Width = w;
             this.MaxSpeed = ms;
+        }
+
+        public bool IsXRoad()
+        {
+            return Math.Abs(Start.Y - End.Y) < 0.01;
         }
     }
 }
