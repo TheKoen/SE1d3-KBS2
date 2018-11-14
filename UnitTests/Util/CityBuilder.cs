@@ -23,9 +23,21 @@ namespace UnitTests.Util
             return this;
         }
 
+        public CityBuilder Road(Road road)
+        {
+            City.Roads.Add(road);
+            return this;
+        }
+
         public CityBuilder Building(Vector location, int size)
         {
             City.Buildings.Add(new Building(location, size));
+            return this;
+        }
+
+        public CityBuilder Building(Building building)
+        {
+            City.Buildings.Add(building);
             return this;
         }
 
