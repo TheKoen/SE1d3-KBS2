@@ -93,7 +93,7 @@ namespace KBS2.CustomerSystem
                 }
                 else
                 {
-                    Group.Location = new Vector(Group.Location.Y, road.Start.Y + (road.Width / 2.0) + 1);
+                    Group.Location = new Vector(Group.Location.X, road.Start.Y + (road.Width / 2.0) + 1);
                 }
             }
             else
