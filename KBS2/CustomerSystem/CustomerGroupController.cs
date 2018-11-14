@@ -14,11 +14,11 @@ namespace KBS2.CustomerSystem
             var road = LookForNearestRoad();
             if (checkRoad(road))
             {
-               Group.Location = new Vector(Group.Location.X - (road.width / 2), Group.Location.Y);
+               Group.Location = new Vector(Group.Location.X - (road.Width / 2), Group.Location.Y);
             }
             else
             {
-                Group.Location = new Vector(Group.Location.X, Group.Location.Y - (road.width / 2));
+                Group.Location = new Vector(Group.Location.X, Group.Location.Y - (road.Width / 2));
             }
         }
 
@@ -28,10 +28,10 @@ namespace KBS2.CustomerSystem
             Road closestRoad = null;
             double closestDistance = double.MaxValue;
             
-            foreach(Road road in city.roads)
+            foreach(Road road in city.Roads)
             {
-                var roadstart = road.start;
-                var roadend = road.end;
+                var roadstart = road.Start;
+                var roadend = road.End;
                 var distanceStart = Math.Sqrt(Math.Pow(Group.Location.X - roadstart.X, 2) + Math.Pow(Group.Location.Y - roadstart.Y, 2));
                 var distanceEnd = Math.Sqrt(Math.Pow(Group.Location.X - roadend.X, 2) + Math.Pow(Group.Location.Y - roadend.Y, 2));
 
@@ -57,7 +57,7 @@ namespace KBS2.CustomerSystem
         /// <returns>returns true with an Vertical road and false with an Horizontal road</returns>
         public bool checkRoad(Road road)
         {
-            if(road.start.Y == road.end.Y) {
+            if(road.Start.Y == road.End.Y) {
                 return true;
             }
             else

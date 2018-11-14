@@ -17,9 +17,9 @@ namespace KBS2.CustomerSystem
         {
             for(int i = 0; i < customers; i++)
             {
-                Customers.Add(new CustomerSystem.Customer(start.location, random.Next(4, 90), start));
+                Customers.Add(new CustomerSystem.Customer(start.Location, random.Next(4, 90), start));
             }
-            Location = start.location;
+            Location = start.Location;
             Destination = destination;
             Controller = new CustomerGroupController(this);
         }
