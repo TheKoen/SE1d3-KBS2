@@ -53,7 +53,7 @@ namespace KBS2.CustomerSystem
         /// Checks if the road is an Horizontal road or an Vertical road
         /// </summary>
         /// <param name="road"></param>
-        /// <returns>returns true with an Vertical road and false with an Horizontal road</returns>
+        /// <returns>returns true with an horizontal road and false with an vertical road</returns>
         public bool CheckRoadOrientation(Road road)
         {
             return road.Start.Y == road.End.Y;
@@ -87,6 +87,17 @@ namespace KBS2.CustomerSystem
         {
             if (CheckRoadOrientation(road))
             {
+                if (CheckHorizontalRoadPosition(road))
+                {
+                    Group.Location = new Vector(Group.Location.X, road.Start.Y - (road.Width / 2.0) - 1);
+                }
+                else
+                {
+                    Group.Location = new Vector(Group.Location.X, road.Start.Y + (road.Width / 2.0) + 1);
+                }
+            }
+            else
+            {
                 if (CheckVerticalRoadPosition(road))
                 {
                     Group.Location = new Vector(road.Start.X - (road.Width / 2.0) - 1, Group.Location.Y);
@@ -94,17 +105,6 @@ namespace KBS2.CustomerSystem
                 else
                 {
                     Group.Location = new Vector(road.Start.X + (road.Width / 2.0) + 1, Group.Location.Y);
-                }
-            }
-            else
-            {
-                if (CheckHorizontalRoadPosition(road))
-                {
-                    Group.Location = new Vector(road.Start.Y - (road.Width / 2.0) - 1, Group.Location.Y);
-                }
-                else
-                {
-                    Group.Location = new Vector(road.Start.Y + (road.Width / 2.0) + 1, Group.Location.Y);
                 }
             }
         }
