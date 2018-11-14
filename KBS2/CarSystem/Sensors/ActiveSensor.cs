@@ -1,4 +1,5 @@
-﻿namespace KBS2.CarSystem.Sensors
+﻿
+namespace KBS2.CarSystem.Sensors
 {
     public delegate void EventHandlerSensor(object sender, SensorEventArgs e);
     

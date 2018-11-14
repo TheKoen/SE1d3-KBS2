@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
     <Compile Include="CitySystem\Building.cs" />
     <Compile Include="CarSystem\Car.cs" />
     <Compile Include="CarSystem\CarController.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="CarSystem\Sensors\SensorController.cs" />
     <Compile Include="CitySystem\CityController.cs" />
     <Compile Include="CitySystem\CityParser.cs" />
+    <Compile Include="CitySystem\IEntity.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="CustomerSystem\Customer.cs" />
     <Compile Include="CustomerSystem\CustomerController.cs" />

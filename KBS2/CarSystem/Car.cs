@@ -7,7 +7,7 @@ using KBS2.GPS;
 
 namespace KBS2.CarSystem
 {
-    public class Car
+    public class Car : IEntity
     {
         public Vector Location { get; set; }
         public DirectionCar Direction { get; set; }
@@ -31,6 +31,11 @@ namespace KBS2.CarSystem
             Controller = new CarController(this);
             Sensors.ForEach(sensor => sensor.Car = this);
             CurrentRoad = GPSSystem.GetRoad(location);
+        }
+
+        public Vector GetLocation()
+        {
+            return Location;
         }
     }
 }
