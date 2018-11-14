@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace KBS2.CitySystem
 {
-    class CityParser
+    public class CityParser
     {
         public static City MakeCity(XmlDocument city)
         {
