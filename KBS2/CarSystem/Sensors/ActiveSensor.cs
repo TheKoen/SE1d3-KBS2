@@ -1,4 +1,7 @@
 ﻿
+using KBS2.CitySystem;
+using System.Collections.Generic;
+
 namespace KBS2.CarSystem.Sensors
 {
     public delegate void EventHandlerSensor(object sender, SensorEventArgs e);
@@ -29,7 +32,7 @@ namespace KBS2.CarSystem.Sensors
         /// <summary>
         /// Use this method to throw the SensorEvent
         /// </summary>
-        protected void DetectedEntities()
+        public void DetectedEntities()
         {
             if (!Entities.Empty)
                 SensorEvent?.Invoke(this, new SensorEventArgs(this, Entities));

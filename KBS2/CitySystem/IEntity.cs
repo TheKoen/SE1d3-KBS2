@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace KBS2.CitySystem
 {
-    interface IEntity   
+    public interface IEntity   
     {
         Vector GetLocation();
     }

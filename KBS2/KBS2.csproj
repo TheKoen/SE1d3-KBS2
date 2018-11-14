@@ -61,7 +61,7 @@
     <Compile Include="CarSystem\CarController.cs" />
     <Compile Include="CarSystem\DirectionCar.cs" />
     <Compile Include="CarSystem\Sensors\ActiveSensor.cs" />
-    <Compile Include="CarSystem\Sensors\ActiveSensors\ObjectSensor.cs" />
+    <Compile Include="CarSystem\Sensors\ActiveSensors\CollisionSensor.cs" />
     <Compile Include="CarSystem\Sensors\Direction.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensor.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\LineSensor.cs" />
