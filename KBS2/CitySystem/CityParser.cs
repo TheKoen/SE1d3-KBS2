@@ -30,6 +30,14 @@ namespace KBS2.CitySystem
                 cityObject.Buildings.Add(ParseBuilding((XmlNode)building));
             }
 
+            //selecting and adding intersections to list
+            var intersections = city.SelectSingleNode("//City/Intersections");
+            if (intersections == null)
+                throw new XmlException("Missing intersections in city.");
+            foreach (var intersection in intersections.ChildNodes)
+            {
+                cityObject.Intersections.Add(ParseIntersection((XmlNode)intersection));
+            }
             return cityObject;
         }
 
@@ -57,5 +65,12 @@ namespace KBS2.CitySystem
             return new Building(loc, size);
         }
 
+        public static Intersection ParseIntersection(XmlNode node)
+        {
+            var loc = ParseLocation(node.Attributes["Location"].InnerText);
+            var size = int.Parse(node.Attributes["Size"].InnerText);
+
+            return new Intersection(loc, size);
+        }
     }
 }
