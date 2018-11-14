@@ -84,7 +84,7 @@ namespace KBS2.CarSystem
             }
             else
             {
-                // throw an event for the the sensors to change direction.
+                Car.Direction = direction;
                 return true;
             }
 
@@ -94,6 +94,5 @@ namespace KBS2.CarSystem
         {
             
         }
-
     }
 }

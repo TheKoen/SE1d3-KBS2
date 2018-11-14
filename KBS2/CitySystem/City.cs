@@ -25,10 +25,5 @@ namespace KBS2.CitySystem
         {
             return instance;
         }
-
-        public void loadCity(XmlDocument city)
-        {
-        }
-
     }
 }

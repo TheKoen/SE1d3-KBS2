@@ -3,6 +3,7 @@ using System.Windows;
 using KBS2.CarSystem.Sensors;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
+using KBS2.GPS;
 
 namespace KBS2.CarSystem
 {
@@ -28,6 +29,8 @@ namespace KBS2.CarSystem
             Location = location;
             Sensors = sensors;
             Controller = new CarController(this);
+            Sensors.ForEach(sensor => sensor.Car = this);
+            CurrentRoad = GPSSystem.GetRoad(location);
         }
     }
 }

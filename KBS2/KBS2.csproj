@@ -75,6 +75,7 @@
     <Compile Include="CustomerSystem\CustomerGroupController.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
+    <Compile Include="Util\VectorUtil.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

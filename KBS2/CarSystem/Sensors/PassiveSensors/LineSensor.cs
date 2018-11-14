@@ -1,4 +1,5 @@
 ﻿using System;
+using KBS2.CitySystem;
 using KBS2.GPS;
 
 namespace KBS2.CarSystem.Sensors.PassiveSensors
@@ -24,11 +25,13 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
     class LineSensorController : SensorController
     {
         public LineSensor Sensor { get; set; }
-
+        
         public LineSensorController(LineSensor sensor)
         {
             Sensor = sensor;
         }
+
+        
 
         /// <summary>
         /// Updates the distance to a line of a lane
@@ -36,7 +39,9 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         public override void Update()
         {
             var currentLoc = Sensor.Car.Location;
-            var road = GPSSystem.GetRoad(currentLoc);
+            var road = Sensor.Car.CurrentRoad;
+            if (road == null) return;
+
             var currentValue = road.IsXRoad() ? currentLoc.Y : currentLoc.X;
             var roadValue = road.IsXRoad() ? road.Start.Y : road.Start.X;
             var positiveDir = Sensor.Car.Direction.Equals(DirectionCar.South) ||
