@@ -1,4 +1,5 @@
 ﻿using KBS2.CitySystem;
+using KBS2.Util;
 using System.Collections.Generic;
 
 namespace KBS2.CarSystem.Sensors.ActiveSensors
@@ -55,22 +56,22 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
             {
                 case DirectionCar.North:
                     return City.Instance().Cars
-                        .FindAll(car => car.Location.Y > Sensor.Car.Location.Y && (car.Location.Y - Sensor.Car.Location.Y) < Sensor.Range)
+                        .FindAll(car => car.Location.Y > Sensor.Car.Location.Y && VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity)car);
                   
                 case DirectionCar.South:
                     return City.Instance().Cars
-                        .FindAll(car => car.Location.Y < Sensor.Car.Location.Y && (Sensor.Car.Location.Y - car.Location.Y) < Sensor.Range)
+                        .FindAll(car => car.Location.Y < Sensor.Car.Location.Y && VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity)car);
 
                 case DirectionCar.East:
                     return City.Instance().Cars
-                        .FindAll(car => car.Location.X > Sensor.Car.Location.X && (car.Location.X - Sensor.Car.Location.X) < Sensor.Range)
+                        .FindAll(car => car.Location.X > Sensor.Car.Location.X && VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity)car);
 
                 case DirectionCar.West:
                     return City.Instance().Cars
-                        .FindAll(car => car.Location.X < Sensor.Car.Location.X && (Sensor.Car.Location.X - car.Location.X) < Sensor.Range)
+                        .FindAll(car => car.Location.X < Sensor.Car.Location.X && VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity)car);
                 default:
                     throw new System.Exception("Error Check Entities in range");
