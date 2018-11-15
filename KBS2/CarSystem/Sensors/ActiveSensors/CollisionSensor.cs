@@ -83,7 +83,7 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         /// </summary>
         /// <param name="carDir">car direction</param>
         /// <returns>direction for the sensor</returns>
-        private DirectionCar CheckDirAuto(DirectionCar carDir)
+        private DirectionCar CheckDirAuto(DirectionCar carDir) 
         {
             if (Sensor.SensorDirection == Direction.Front)
             {

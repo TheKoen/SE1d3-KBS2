@@ -34,7 +34,7 @@ namespace KBS2.CarSystem.Sensors
         /// </summary>
         public void DetectedEntities()
         {
-            if (!Entities.Empty)
+            if (Entities.Count != 0)
                 SensorEvent?.Invoke(this, new SensorEventArgs(this, Entities));
             else
                 throw new System.Exception("There are no entities in range of this sensor");
