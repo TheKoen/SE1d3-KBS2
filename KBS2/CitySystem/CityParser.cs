@@ -59,11 +59,21 @@ namespace KBS2.CitySystem
 
         public static Building ParseBuilding(XmlNode node)
         {
-            node.Name //checken 
             var loc = ParseLocation(node.Attributes["Location"].InnerText);
             var size = int.Parse(node.Attributes["Size"].InnerText);
-            //checken building/garage
-            return new Building(loc, size);
+            //checking the type of building
+            if(node.Name == "Building")
+            {
+                return new Building(loc, size);
+            }
+            else if(node.Name == "Garage")
+            {
+                return new Garage(loc, size);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static Intersection ParseIntersection(XmlNode node)

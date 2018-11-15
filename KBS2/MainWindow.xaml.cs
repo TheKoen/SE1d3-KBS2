@@ -36,10 +36,5 @@ namespace KBS2
             xmlCity.Load("testcity.xml");
             City = CityParser.MakeCity(xmlCity);
         }
-
-        private void Button_Click_Coffee(object sender, RoutedEventArgs e)
-        {
-            CoffeeLabel.Content = "m";
-        }
     }
 }
