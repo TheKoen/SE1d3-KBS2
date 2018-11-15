@@ -32,7 +32,8 @@ namespace KBS2.Console
         {
             // Getting the command from the TextBox and invoking the SendCommand event
             var command = TextBoxInput.Text.Trim();
-            SendCommand(this, new SendCommandArgs(command));
+            SendCommand?.Invoke(this, new SendCommandArgs(command));
+            TextBoxInput.Text = string.Empty;
         }
 
         /// <summary>
@@ -42,14 +43,13 @@ namespace KBS2.Console
         /// <param name="color">The color to print the text with</param>
         public void Print(IEnumerable<char> text, Color color)
         {
-            StackFrame frame = null;
             Type caller = null;
-            int layer = 1;
+            var layer = 1;
             // Finding first calling Type that is not this one
             while (caller == null || caller == typeof(ConsoleControl))
             {
                 // Getting info on the n-th caller on the stack
-                frame = new StackFrame(layer++, true);
+                var frame = new StackFrame(layer++, true);
                 caller = frame.GetMethod().DeclaringType;
             }
 
@@ -58,7 +58,7 @@ namespace KBS2.Console
                 TextBlockOutput.Inlines.Add(new Run("\r\n"));
             // Adding a piece of text with a color into the TextBlock
             TextBlockOutput.Inlines.Add(
-                new Run(string.Format("[{0}] {1}", caller.FullName, string.Join("", text)))
+                new Run($"[{caller.FullName}] {string.Join("", text)}")
                 { Foreground = new SolidColorBrush(color) }
             );
             // Scrolling to the bottom of the ScrollViewer so that the user always sees the new text
