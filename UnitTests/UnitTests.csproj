@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarSystem\Sensors\ActiveSensor\CollisionSensorTest.cs" />
+    <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadarTest.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\LineSensorTest.cs" />
     <Compile Include="CitySystem\CityParserTest.cs" />
     <Compile Include="CustomerSytem\CustomerGroupTest.cs" />
