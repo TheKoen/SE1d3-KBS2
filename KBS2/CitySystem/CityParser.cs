@@ -29,7 +29,7 @@ namespace KBS2.CitySystem
             {
                 cityObject.Buildings.Add(ParseBuilding((XmlNode)building));
             }
-
+            
             //selecting and adding intersections to list
             var intersections = city.SelectSingleNode("//City/Intersections");
             if (intersections == null)
@@ -59,9 +59,10 @@ namespace KBS2.CitySystem
 
         public static Building ParseBuilding(XmlNode node)
         {
+            node.Name //checken 
             var loc = ParseLocation(node.Attributes["Location"].InnerText);
             var size = int.Parse(node.Attributes["Size"].InnerText);
-
+            //checken building/garage
             return new Building(loc, size);
         }
 
