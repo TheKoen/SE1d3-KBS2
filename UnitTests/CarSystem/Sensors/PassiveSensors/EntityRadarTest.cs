@@ -39,7 +39,7 @@ namespace UnitTests.CarSystem.Sensors.PassiveSensors
 
             sensor.Controller.Update();
 
-            if(sensor.EntitiesInRange.Find(car => car.Equals((IEntity)secCar)).Equals((IEntity)secCar))
+            if(sensor.EntitiesInRange.Any(car => car.Equals(secCar)))
             {
                 Assert.Pass();
             }

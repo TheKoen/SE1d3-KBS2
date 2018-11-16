@@ -22,8 +22,6 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
             SensorDirection = Direction.Global;
             Controller = new EntityRadarController(this);
         }
-
-        
     }
 
     /// <summary>
