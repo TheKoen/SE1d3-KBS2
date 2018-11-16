@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using KBS2.CarSystem;
 using KBS2.CitySystem;
 
 namespace KBS2.GPS
@@ -42,6 +43,20 @@ namespace KBS2.GPS
             }
 
             return null;
+        }
+
+        public static List<Road> GetRoadsInRange(Vector location, int range)
+        {
+            var roads = new List<Road>
+            {
+                GetRoad(new Vector(location.X + range, location.Y)),
+                GetRoad(new Vector(location.X - range, location.Y)),
+                GetRoad(new Vector(location.X, location.Y + range)),
+                GetRoad(new Vector(location.X, location.Y + range)),
+                GetRoad(new Vector(location.X, location.Y))
+            };
+            roads.RemoveAll(road => road == null);
+            return roads.Distinct().ToList();
         }
     }
 }
