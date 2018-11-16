@@ -7,8 +7,9 @@ namespace KBS2.CustomerSystem
 {
     public class CustomerController
     {
-        public Customer Customer { get; set; }
         private static Random Random = new Random();
+
+        public Customer Customer { get; set; }
         private bool Walking = false;
         private Vector Direction;
         private int Delay;
@@ -32,13 +33,13 @@ namespace KBS2.CustomerSystem
         /// </summary>
         public bool MoveTowardsLocation(Vector location)
         {
-            Vector cL = Customer.Location;
+            var cL = Customer.Location;
 
-            Vector delta = new Vector(location.X - cL.X, location.Y - cL.X);
+            var delta = new Vector(location.X - cL.X, location.Y - cL.X);
             delta.Normalize();
             var target = Vector.Add(Customer.Location, delta);
             
-            foreach( var road in Customer.Group.RoadsNear)
+            foreach(var road in Customer.Group.RoadsNear)
             {
                 if (road.IsOnRoad(target)) return false;
             }
