@@ -16,6 +16,7 @@ namespace KBS2.CarSystem
         public CarController Controller { get; set; }
         public List<Customer> Passengers { get; set; } = new List<Customer>();
         public Road CurrentRoad { get; set; }
+        public Vector CurrentTarget { get; set; }
 
         /// <summary>
         /// Create a car 
