@@ -83,6 +83,7 @@
     <Compile Include="CustomerSystem\CustomerController.cs" />
     <Compile Include="CustomerSystem\CustomerGroup.cs" />
     <Compile Include="CustomerSystem\CustomerGroupController.cs" />
+    <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
     <Compile Include="MainLoop.cs" />
