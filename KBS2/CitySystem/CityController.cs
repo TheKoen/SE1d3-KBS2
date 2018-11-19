@@ -49,9 +49,8 @@ namespace KBS2.CitySystem
                 .ToList();
             var garage = garages[Random.Next(garages.Count)];
             var model = CarModel.TestModel; //TODO: Select model based on settings
-            var direction = DirectionCar.East;
 
-            garage.SpawnCar(CAR_ID++, model, direction);
+            garage.SpawnCar(CAR_ID++, model);
         }
     }
 }
