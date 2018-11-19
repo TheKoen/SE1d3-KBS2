@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using KBS2.Console;
-using KBS2.Utilities;
+using KBS2.Util;
 using NUnit.Framework;
 
 namespace UnitTests.CommandSystem
@@ -15,7 +15,7 @@ namespace UnitTests.CommandSystem
         {
             // Checking if the property gets registered correctly
             CommandHandler.RegisterProperty("UnitTest", ref testProp);
-            Assert.Contains("UnitTest", CommandHandler.GetPropertyNames());
+            Assert.Contains("UnitTest", CommandHandler.GetProperties().Keys);
             Assert.Throws(typeof(KeyExistsException),
                 () => CommandHandler.RegisterProperty("UnitTest", ref testProp));
         }
