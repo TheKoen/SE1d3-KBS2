@@ -11,9 +11,12 @@ namespace UnitTests.Util
 {
     public class CarBuilder
     {
+        public static int ID = 0;
+
         private Vector location;
         private List<Sensor> sensors = new List<Sensor>();
         private DirectionCar direction;
+        private CarModel model;
 
         public CarBuilder Location(Vector location)
         {
@@ -33,13 +36,19 @@ namespace UnitTests.Util
             return this;
         }
 
+        public CarBuilder Model(CarModel model)
+        {
+            this.model = model;
+            return this;
+        }
+
         public Car Build()
         {
             if (location == null)
             {
                 throw new ArgumentException("Location cannot be null");
             }
-            return new Car(location, sensors, direction);
+            return new Car(ID++, model, location, sensors, direction);
         }
     }
 }
