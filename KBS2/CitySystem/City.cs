@@ -38,6 +38,7 @@ namespace KBS2.CitySystem
 
         public List<Road> Roads { get; set; }
         public List<Building> Buildings { get; set; }
+        public List<Intersection> Intersections { get; set; }
         public List<Car> Cars { get; set; }
         public List<Customer> Customers { get; set; }
 
@@ -47,6 +48,7 @@ namespace KBS2.CitySystem
 
             Roads = new List<Road>();
             Buildings = new List<Building>();
+            Intersections = new List<Intersection>();
             Cars = new List<Car>();
 
             CommandHandler.RegisterProperty("availableCars", ref availableCars);
