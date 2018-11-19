@@ -99,7 +99,7 @@ namespace KBS2.CarSystem
 
             if (distanceToLeft > distanceToRight && velocity.X < 0.5)
             {
-                velocity.X += 0.1;
+                velocity.X -= 0.1;
             }
             else if (distanceToRight > distanceToLeft && velocity.X > -0.5)
             {
