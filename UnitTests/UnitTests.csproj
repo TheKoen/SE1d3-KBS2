@@ -63,6 +63,7 @@
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadarTest.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\LineSensorTest.cs" />
     <Compile Include="CitySystem\CityParserTest.cs" />
+    <Compile Include="CitySystem\GarageTest.cs" />
     <Compile Include="CommandSystem\CommandListTest.cs" />
     <Compile Include="CommandSystem\PropertyTest.cs" />
     <Compile Include="CustomerSytem\CustomerGroupTest.cs" />
