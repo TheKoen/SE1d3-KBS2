@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Windows;
 using KBS2.CarSystem;
 using KBS2.CarSystem.Sensors;
@@ -23,12 +23,13 @@ namespace UnitTests.CarSystem.Sensors.PassiveSensors
                 .Road(new Vector(0, 50), new Vector(10, 50), 10)
                 .Road(new Vector(0, 20), new Vector(10, 20), 10)
                 .Build();
-            var sensor = new LineSensor(direction);
-            city.Cars.Add(new CarBuilder()
+            var sensorCar = new CarBuilder()
                 .Location(new Vector(carX, carY))
                 .Direction(DirectionCar.East)
-                .Sensor(sensor)
-                .Build());
+                .Sensor(car => new LineSensor(car, direction))
+                .Build();
+            city.Cars.Add(sensorCar);
+            var sensor = sensorCar.Controller.GetSensors<LineSensor>(direction).First();
 
             sensor.Controller.Update();
 

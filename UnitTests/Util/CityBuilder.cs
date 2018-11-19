@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.Console;
 
 namespace UnitTests.Util
 {
@@ -14,6 +15,7 @@ namespace UnitTests.Util
 
         public CityBuilder()
         {
+            CommandHandler.Reset();
             City = new City();
         }
 

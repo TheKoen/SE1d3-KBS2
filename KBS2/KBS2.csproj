@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CarSystem\CarModel.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadar.cs" />
     <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
     <Compile Include="CitySystem\Building.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="Exceptions\TypeMismatchException.cs" />
     <Compile Include="Exceptions\UnknownCommandException.cs" />
+    <Compile Include="CitySystem\Garage.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="CustomerSystem\Customer.cs" />
     <Compile Include="CustomerSystem\CustomerController.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="CustomerSystem\CustomerGroupController.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
+    <Compile Include="MainLoop.cs" />
     <Compile Include="Util\Property.cs" />
     <Compile Include="Util\VectorUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
@@ -136,8 +139,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Console\Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

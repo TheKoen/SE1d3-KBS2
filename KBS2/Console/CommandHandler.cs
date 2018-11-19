@@ -15,6 +15,11 @@ namespace KBS2.Console
         // List of properties that can be modified using console commands
         private static Dictionary<string, Property> propertyList = new Dictionary<string, Property>();
 
+        public static void Reset()
+        {
+            propertyList.Clear();
+        }
+
         /// <summary>
         /// Registers an <see cref="ICommand"/> to the <see cref="CommandHandler"/> for future use
         /// </summary>

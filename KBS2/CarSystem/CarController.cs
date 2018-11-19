@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using KBS2.CarSystem.Sensors;
+using KBS2.CarSystem.Sensors.PassiveSensors;
 using KBS2.CustomerSystem;
 
 namespace KBS2.CarSystem
 {
     public class CarController
     {
-        public CarSystem.Car Car { get; set; }
+        public Car Car { get; set; }
 
-        public CarController(CarSystem.Car car) 
+        public CarController(Car car) 
         {
             Car = car;
         }
@@ -55,44 +60,51 @@ namespace KBS2.CarSystem
             Car.Passengers.Add(customer);
         }
 
+        public List<T> GetSensors<T>(Direction side) where T : Sensor
+        {
+            return Car.Sensors
+                .FindAll(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side))
+                .ConvertAll(sensor => (T) sensor)
+                .ToList();
+        }
+
         /// <summary>
         /// Change direction of the car and throw an event
         /// </summary>
         /// <return>returns bool true if car is able to rotate</return>
         /// <param name="direction">change the direction of the car with DirectionCar</param>
-        private bool ChangeDirectionCar(DirectionCar direction) 
+        protected bool ChangeDirectionCar(DirectionCar direction) 
         {
             if(Car.Direction == direction)
             {
                 return false;
             }
-            if(Car.Direction == DirectionCar.North && direction == DirectionCar.South)
-            {
-                return false;
+            switch (Car.Direction) {
+                case DirectionCar.North when direction == DirectionCar.South:
+                case DirectionCar.South when direction == DirectionCar.North:
+                case DirectionCar.West when direction == DirectionCar.East:
+                case DirectionCar.East when direction == DirectionCar.West:
+                    return false;
+                default:
+                    Car.Direction = direction;
+                    return true;
             }
-            if(Car.Direction == DirectionCar.South && direction == DirectionCar.North)
-            {
-                return false;
-            }
-            if(Car.Direction == DirectionCar.West && direction == DirectionCar.East)
-            {
-                return false;
-            }
-            if(Car.Direction == DirectionCar.East && direction == DirectionCar.West)
-            {
-                return false;
-            }
-            else
-            {
-                Car.Direction = direction;
-                return true;
-            }
-
         }
 
         public void Update()
         {
-            
+            var distanceToLeft = GetSensors<LineSensor>(Direction.Left).First().Distance;
+            var distanceToRight = GetSensors<LineSensor>(Direction.Right).First().Distance;
+            var velocity = Car.Velocity;
+
+            if (distanceToLeft > distanceToRight && velocity.X < 0.5)
+            {
+                velocity.X -= 0.1;
+            }
+            else if (distanceToRight > distanceToLeft && velocity.X > -0.5)
+            {
+                velocity.X += 0.1;
+            }
         }
     }
 }

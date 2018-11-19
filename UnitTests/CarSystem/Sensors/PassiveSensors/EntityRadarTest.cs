@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using KBS2.CarSystem.Sensors;
+using KBS2.CarSystem.Sensors.PassiveSensors;
 using UnitTests.Util;
 
 namespace UnitTests.CarSystem.Sensors.PassiveSensors
@@ -25,17 +27,18 @@ namespace UnitTests.CarSystem.Sensors.PassiveSensors
                 .Road(new Vector(0, 50), new Vector(10, 50), 10)
                 .Road(new Vector(0, 20), new Vector(10, 20), 10)
                 .Build();
-            var sensor = new EntityRadar(range);
-            city.Cars.Add(new CarBuilder()
+            var sensorCar = new CarBuilder()
                 .Location(new Vector(carX, carY))
                 .Direction(DirectionCar.East)
-                .Sensor(sensor)
-                .Build());
+                .Sensor(car => new EntityRadar(car, range))
+                .Build();
+            city.Cars.Add(sensorCar);
             var secCar = (new CarBuilder()
                 .Location(new Vector(secCarX, secCarY))
                 .Direction(DirectionCar.East)
                 .Build());
             city.Cars.Add(secCar);
+            var sensor = sensorCar.Controller.GetSensors<EntityRadar>(Direction.Global).First();
 
             sensor.Controller.Update();
 
@@ -60,17 +63,18 @@ namespace UnitTests.CarSystem.Sensors.PassiveSensors
                 .Road(new Vector(0, 50), new Vector(10, 50), 10)
                 .Road(new Vector(0, 20), new Vector(10, 20), 10)
                 .Build();
-            var sensor = new EntityRadar(range);
-            city.Cars.Add(new CarBuilder()
+            var sensorCar = new CarBuilder()
                 .Location(new Vector(carX, carY))
                 .Direction(DirectionCar.East)
-                .Sensor(sensor)
-                .Build());
+                .Sensor(car => new EntityRadar(car, range))
+                .Build();
+            city.Cars.Add(sensorCar);
             var secCar = (new CarBuilder()
                 .Location(new Vector(secCarX, secCarY))
                 .Direction(DirectionCar.East)
                 .Build());
             city.Cars.Add(secCar);
+            var sensor = sensorCar.Controller.GetSensors<EntityRadar>(Direction.Global).First();
 
             sensor.Controller.Update();
 

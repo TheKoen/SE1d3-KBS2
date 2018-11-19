@@ -1,40 +1,36 @@
 ﻿using System;
-using KBS2.CitySystem;
-using KBS2.GPS;
 
 namespace KBS2.CarSystem.Sensors.PassiveSensors
 {
     public class LineSensor : PassiveSensor
     {
-        public double Distance { get; set; }
-
         /// <summary>
-        /// Create a lineSensor of a car
+        ///     Create a lineSensor of a car
         /// </summary>
-        /// <param name="directionSensor">Side where the sensor is located</param>
-        public LineSensor(Direction directionSensor)
+        /// <param name="direction">Side where the sensor is located</param>
+        public LineSensor(Car car, Direction direction) : base(car, direction)
         {
-            SensorDirection = directionSensor;
             Controller = new LineSensorController(this);
         }
+
+        public double Distance { get; set; }
     }
 
     /// <summary>
-    /// Controller of a linesensor
+    ///     Controller of a linesensor
     /// </summary>
-    class LineSensorController : SensorController
+    internal class LineSensorController : SensorController
     {
-        public LineSensor Sensor { get; set; }
-        
         public LineSensorController(LineSensor sensor)
         {
             Sensor = sensor;
         }
 
-        
+        public LineSensor Sensor { get; set; }
+
 
         /// <summary>
-        /// Updates the distance to a line of a lane
+        ///     Updates the distance to a line of a lane
         /// </summary>
         public override void Update()
         {
@@ -47,7 +43,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
             var positiveDir = Sensor.Car.Direction.Equals(DirectionCar.South) ||
                               Sensor.Car.Direction.Equals(DirectionCar.East);
 
-            switch (Sensor.SensorDirection)
+            switch (Sensor.Direction)
             {
                 case Direction.Left:
                     Sensor.Distance = Math.Abs(roadValue - currentValue);
@@ -55,11 +51,11 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
                 case Direction.Right:
                     var laneWidth = road.Width / 2.0;
                     Sensor.Distance = positiveDir
-                        ? Math.Abs((roadValue + laneWidth) - currentValue)
-                        : Math.Abs((roadValue - laneWidth) - currentValue);
+                        ? Math.Abs(roadValue + laneWidth - currentValue)
+                        : Math.Abs(roadValue - laneWidth - currentValue);
                     break;
                 default:
-                    throw new ArgumentException($"Unable to find line in direction {Sensor.SensorDirection}");
+                    throw new ArgumentException($"Unable to find line in direction {Sensor.Direction}");
             }
         }
     }

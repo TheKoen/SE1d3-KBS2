@@ -7,7 +7,7 @@ namespace KBS2.Utilities
     {
         private object _value;
         public Type PropertyType { get; }
-        public object Value
+        public dynamic Value
         {
             get => _value;
             set
@@ -17,7 +17,7 @@ namespace KBS2.Utilities
                 _value = value;
             }
         }
-
+        
         public Property(object value)
         {
             PropertyType = value.GetType();

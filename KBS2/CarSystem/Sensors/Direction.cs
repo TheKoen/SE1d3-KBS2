@@ -1,7 +1,7 @@
 ﻿namespace KBS2.CarSystem.Sensors
 {
     /// <summary>
-    /// Direction of a sensor
+    ///     Direction of a sensor
     /// </summary>
     public enum Direction
     {
