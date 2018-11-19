@@ -8,8 +8,8 @@ namespace KBS2.CitySystem
 {
     class Garage : Building
     {
-
         public DirectionCar Direction { get; set; }
+        public int AvailableCars { get; set; }
 
         public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
         {
