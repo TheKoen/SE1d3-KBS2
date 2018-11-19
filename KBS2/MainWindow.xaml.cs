@@ -1,4 +1,8 @@
-﻿using KBS2.CitySystem;
+using KBS2.CitySystem;
+using KBS2.Console;
+using KBS2.Console.Commands;
+using KBS2.Util;
+using KBS2.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +32,34 @@ namespace KBS2
         public MainWindow()
         {
             InitializeComponent();
-        }
+            
+            var file = new XmlDocument();
+            file.LoadXml("<City>\n\n" +
+                         "<Roads>\n<Road Start=\"3,10\" End=\"42,35\" Width=\"20\" MaxSpeed=\"50\"></Road>\n</Roads>\n\n" +
+                         "<Buildings>\n<Building Location=\"12,42\" Size=\"5\"></Building>\n</Buildings>\n\n" +
+                         "<Intersections>\n<Intersection Location =\"35,13\" Size=\"5\"></Intersection>\n</Intersections>\n\n" +
+                         "</City>");
 
-        private void Button_Click_AddCity(object sender, RoutedEventArgs e)
-        {
-            XmlDocument xmlCity = new XmlDocument();
-            xmlCity.Load("testcity.xml");
-            City = CityParser.MakeCity(xmlCity);
+            var city = CityParser.MakeCity(file);
+
+            // Registering commands
+            CommandHandler.RegisterCommand("Set", new CommandSet());
+
+            // Console logic
+            MainConsole.SendCommand += (sender, args) =>
+            {
+                var input = args.Command;
+
+                try
+                {
+                    var output = CommandHandler.HandleInput(input);
+                    MainConsole.Print(output);
+                }
+                catch (CommandException exception)
+                {
+                    MainConsole.Print(exception.Message, Colors.Red);
+                }
+            };
         }
     }
 }

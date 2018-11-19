@@ -5,7 +5,7 @@ using KBS2.CitySystem;
 using KBS2.Console;
 using KBS2.CustomerSystem;
 using KBS2.GPS;
-using KBS2.Utilities;
+using KBS2.Util;
 
 namespace KBS2.CarSystem
 {

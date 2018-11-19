@@ -1,11 +1,15 @@
-﻿using KBS2.Console;
-using System;
+﻿using System;
+using System.ComponentModel;
+using KBS2.Console;
 
-namespace KBS2.Utilities
+namespace KBS2.Util
 {
     public class Property
     {
-        private object _value;
+        public delegate void CustomPropertyChangedHandler(Property sender, CustomPropertyChangedArgs args);
+        public event CustomPropertyChangedHandler PropertyChanged;
+        
+        private dynamic _value;
         public Type PropertyType { get; }
         public dynamic Value
         {
@@ -14,11 +18,12 @@ namespace KBS2.Utilities
             {
                 if (value.GetType() != PropertyType)
                     throw new TypeMismatchException($"Cannot assign value of type \"{value.GetType().Name}\" to Property of type\"{PropertyType.Name}\"");
+                PropertyChanged?.Invoke(this, new CustomPropertyChangedArgs(_value, value));
                 _value = value;
             }
         }
         
-        public Property(object value)
+        public Property(dynamic value)
         {
             PropertyType = value.GetType();
             Value = value;
