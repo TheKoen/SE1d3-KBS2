@@ -1,19 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.GPS;
 using KBS2.Util;
 
 namespace KBS2.CustomerSystem
 {
     public class CustomerGroupController
     {
+        public static readonly int GroupDistanceFromRoad = 10;
+        public static readonly int GroupRadius = 30;
         public CustomerGroup Group { get; set; }
-
+       
         public CustomerGroupController(CustomerGroup group)
         {
             Group = group;
             var road = LookForNearestRoad();
             MoveToNearestRoad(road);
+            Group.RoadsNear = GPSSystem.GetRoadsInRange(Group.Location, GroupRadius);
             //Order car
         }
 
@@ -23,24 +28,22 @@ namespace KBS2.CustomerSystem
         /// <returns>returns the road with shortest start or ending point distance.</returns>
         public Road LookForNearestRoad()
         {
-            City city = City.Instance;
+            var city = City.Instance();
             Road closestRoad = null;
-            double closestDistance = double.MaxValue;
+            var closestDistance = double.MaxValue;
             
             foreach(Road road in city.Roads)
             {
-                Vector roadstart = road.Start;
-                Vector roadend = road.End;
-                double distanceStart = VectorUtil.Distance(roadstart, Group.Location);
-                double distanceEnd = VectorUtil.Distance(roadend, Group.Location);
+                var roadstart = road.Start;
+                var roadend = road.End;
+                var distanceStart = VectorUtil.Distance(roadstart, Group.Location);
+                var distanceEnd = VectorUtil.Distance(roadend, Group.Location);
 
                 if (distanceStart < closestDistance)
                 {
                     closestRoad = road;
                     closestDistance = distanceStart;
-                }
-
-                if (distanceEnd < closestDistance)
+                }else if (distanceEnd < closestDistance)
                 {
                     closestRoad = road;
                     closestDistance = distanceEnd;
@@ -87,25 +90,15 @@ namespace KBS2.CustomerSystem
         {
             if (CheckRoadOrientation(road))
             {
-                if (CheckHorizontalRoadPosition(road))
-                {
-                    Group.Location = new Vector(Group.Location.X, road.Start.Y - (road.Width / 2.0) - 1);
-                }
-                else
-                {
-                    Group.Location = new Vector(Group.Location.X, road.Start.Y + (road.Width / 2.0) + 1);
-                }
+                Group.Location = CheckHorizontalRoadPosition(road)
+                    ? new Vector(Group.Location.X, road.Start.Y - (road.Width / 2.0) - GroupDistanceFromRoad)
+                    : new Vector(Group.Location.X, road.Start.Y + (road.Width / 2.0) + GroupDistanceFromRoad);
             }
             else
             {
-                if (CheckVerticalRoadPosition(road))
-                {
-                    Group.Location = new Vector(road.Start.X - (road.Width / 2.0) - 1, Group.Location.Y);
-                }
-                else
-                {
-                    Group.Location = new Vector(road.Start.X + (road.Width / 2.0) + 1, Group.Location.Y);
-                }
+                Group.Location = CheckVerticalRoadPosition(road)
+                    ? new Vector(road.Start.X - (road.Width / 2.0) - GroupDistanceFromRoad, Group.Location.Y)
+                    : new Vector(road.Start.X + (road.Width / 2.0) + GroupDistanceFromRoad, Group.Location.Y);
             }
         }
 

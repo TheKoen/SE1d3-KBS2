@@ -30,10 +30,10 @@ namespace UnitTests.CustomerSytem
             Assert.AreEqual(road ? road1 : road2, result);
         }
 
-        [TestCase(100, 100, 0, 50, 100, 50, 100, 56)]
-        [TestCase(100, 10, 0, 50, 100, 50, 100, 44)]
-        [TestCase(100, 100, 50, 0, 50, 50, 56, 100)]
-        [TestCase(10, 100, 50, 0, 50, 50, 44, 100)]
+        [TestCase(100, 100, 0, 50, 100, 50, 100, 65)]
+        [TestCase(100, 10, 0, 50, 100, 50, 100, 35)]
+        [TestCase(100, 100, 50, 0, 50, 100, 65, 100)]
+        [TestCase(10, 100, 50, 0, 50, 100, 35, 100)]
         public void TestMoveToNearestRoad(double gX, double gY, double r1X, double r1Y, double r2X, double r2Y, double eX, double eY)
         {
             var building = new Building(new Vector(gX, gY), 8);

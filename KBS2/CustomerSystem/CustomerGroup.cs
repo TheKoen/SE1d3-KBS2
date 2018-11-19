@@ -11,7 +11,8 @@ namespace KBS2.CustomerSystem
         public List<Customer> Customers { get; set; } = new List<Customer>();
         public Building Destination { get; set; }
         public CustomerGroupController Controller { get; set; }
-        public Vector Location { get; set; } 
+        public Vector Location { get; set; }
+        public List<Road> RoadsNear;
 
         public CustomerGroup(int customers, Building start, Building destination)
         {
