@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using KBS2.Console;
+using KBS2.Console.Commands;
+using KBS2.Util;
+using KBS2.Utilities;
 
 namespace KBS2
 {
@@ -23,6 +15,25 @@ namespace KBS2
         public MainWindow()
         {
             InitializeComponent();
+
+            // Registering commands
+            CommandHandler.RegisterCommand("Set", new CommandSet());
+            
+            // Console logic
+            MainConsole.SendCommand += (sender, args) =>
+            {
+                var input = args.Command;
+
+                try
+                {
+                    var output = CommandHandler.HandleInput(input);
+                    MainConsole.Print(output);
+                }
+                catch (CommandException exception)
+                {
+                    MainConsole.Print(exception.Message, Colors.Red);
+                }
+            };
         }
     }
 }

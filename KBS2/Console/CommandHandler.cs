@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using KBS2.Util;
 
 namespace KBS2.Console
 {
@@ -42,7 +43,7 @@ namespace KBS2.Console
         /// <summary>
         /// Gets the name of every registered <see cref="ICommand"/>
         /// </summary>
-        /// <returns><see cref="List{string}"/> of names</returns>
+        /// <returns><see cref="List{String}"/> of names</returns>
         public static List<string> GetCommandNames()
         {
             return commandList.Select(c => c.Key).ToList();
@@ -51,10 +52,10 @@ namespace KBS2.Console
         /// <summary>
         /// Gets the name of every registered <see cref="Property"/>
         /// </summary>
-        /// <returns><see cref="List{string}"/> of names</returns>
-        public static List<string> GetPropertyNames()
+        /// <returns><see cref="Dictionary{String,Property}"/> of properties</returns>
+        public static Dictionary<string, Property> GetProperties()
         {
-            return propertyList.Select(c => c.Key).ToList();
+            return propertyList;
         }
 
         /// <summary>
