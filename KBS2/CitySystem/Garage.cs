@@ -6,7 +6,7 @@ using KBS2.CarSystem.Sensors;
 
 namespace KBS2.CitySystem
 {
-    class Garage : Building
+    public class Garage : Building
     {
         public DirectionCar Direction { get; set; }
         public int AvailableCars { get; set; }
