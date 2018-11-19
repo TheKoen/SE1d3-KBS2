@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using UnitTests.Util;
+using KBS2.CitySystem.Garage;
 
 namespace UnitTests.CitySystem
 {
