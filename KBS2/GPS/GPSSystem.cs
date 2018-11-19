@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
+using KBS2.CustomerSystem;
 using KBS2.Util;
 
 namespace KBS2.GPS
@@ -86,6 +84,46 @@ namespace KBS2.GPS
                 }
             }
             return closestRoad;
+        }
+
+        public static void RequestCar(Destination destination, CustomerGroup group)
+        {
+            // Look to nearest Garage.
+            var city = City.Instance;
+            var garages = city.Buildings
+                .FindAll(building => building is Garage)
+                .Select(building => (Garage)building)
+                .Where(g => g.AvailableCars > 0)
+                .ToList();
+
+            Garage nearestGarage = null;
+            var nearestDistance = double.MaxValue;
+
+            foreach (Garage garage in garages)
+            {
+                var tempDistance = VectorUtil.Distance(group.Location, garage.Location);
+                if(tempDistance < nearestDistance)
+                {
+                    nearestGarage = garage;
+                    nearestDistance = tempDistance;
+                }
+            }
+
+            // Nearest garage sends car  *OPTIONAL*(if available car applies to group needs)
+            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, CarModel.TestModel);
+            car.Destination = destination;
+
+        }
+
+        public static Destination GetDirection(Car car, Intersection intersection)
+        {
+            // Car uses Nearest Neighbor Algorithm and Distance to customer to receive direction.
+            // Check with connected roads
+            // from dest point -> End point of road
+            
+            //intersection returns dictionary with DirectionCar, Roads
+
+            
         }
     }
 }

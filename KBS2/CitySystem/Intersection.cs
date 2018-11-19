@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using KBS2.CarSystem;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace KBS2.CitySystem
 {
@@ -13,5 +15,11 @@ namespace KBS2.CitySystem
             this.Location = l;
             this.Size = s;
         }
+
+
+        public Dictionary<DirectionCar, Road> GetRoad()
+        {
+            return null; // TODO
+        } 
     }
 }
