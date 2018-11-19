@@ -10,9 +10,9 @@ namespace KBS2.CitySystem
         {
         }
 
-        public void SpawnCar(int id, CarModel model)
+        public Car SpawnCar(int id, CarModel model)
         {
-
+            return null;
         }
     }
 }

@@ -122,8 +122,8 @@ namespace KBS2.GPS
             // from dest point -> End point of road
             
             //intersection returns dictionary with DirectionCar, Roads
+            return new Destination();
 
-            
         }
     }
 }
