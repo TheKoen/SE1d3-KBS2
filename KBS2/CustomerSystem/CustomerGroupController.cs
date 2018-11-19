@@ -9,8 +9,8 @@ namespace KBS2.CustomerSystem
 {
     public class CustomerGroupController
     {
-        private static readonly int GroupDistanceFromRoad = 10;
-        private static readonly int GroupRadius = 30;
+        public static readonly int GroupDistanceFromRoad = 10;
+        public static readonly int GroupRadius = 30;
         public CustomerGroup Group { get; set; }
        
         public CustomerGroupController(CustomerGroup group)
