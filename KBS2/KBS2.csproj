@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CarSystem\CarModel.cs" />
+    <Compile Include="CarSystem\Destination.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadar.cs" />
     <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
     <Compile Include="CitySystem\Building.cs" />
