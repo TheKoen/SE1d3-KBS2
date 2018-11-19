@@ -3,7 +3,7 @@ using KBS2.CitySystem;
 
 namespace KBS2.CustomerSystem
 {
-    public class Customer
+    public class Customer : IEntity
     {
         public string Name { get; set; }
         public Vector Location { get; set; }
@@ -23,6 +23,11 @@ namespace KBS2.CustomerSystem
             Controller = new CustomerController(this);
             Group = group;
             Mood = CustomerSystem.Moral.Happy;
+        }
+
+        public Vector GetLocation()
+        {
+            return Location;
         }
     }
 }

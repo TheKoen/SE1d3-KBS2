@@ -28,7 +28,7 @@ namespace KBS2.CustomerSystem
         /// <returns>returns the road with shortest start or ending point distance.</returns>
         public Road LookForNearestRoad()
         {
-            var city = City.Instance();
+            var city = City.Instance;
             Road closestRoad = null;
             var closestDistance = double.MaxValue;
             

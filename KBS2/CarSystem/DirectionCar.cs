@@ -10,7 +10,7 @@ namespace KBS2.CarSystem
         West
     }
 
-    static class DirectionCarMethods
+    internal static class DirectionCarMethods
     {
         public static DirectionCar GetOpposite(this DirectionCar current)
         {
