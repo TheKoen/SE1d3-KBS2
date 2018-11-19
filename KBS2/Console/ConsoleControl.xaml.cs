@@ -40,8 +40,8 @@ namespace KBS2.Console
         /// Prints some text to the output of the <see cref="ConsoleControl"/>
         /// </summary>
         /// <param name="text">The text to display</param>
-        /// <param name="color">The color to print the text with</param>
-        public void Print(IEnumerable<char> text, Color color)
+        /// <param name="color">The color to print the text with, is White by default</param>
+        public void Print(IEnumerable<char> text, Color? color = null)
         {
             Type caller = null;
             var layer = 1;
@@ -59,19 +59,10 @@ namespace KBS2.Console
             // Adding a piece of text with a color into the TextBlock
             TextBlockOutput.Inlines.Add(
                 new Run($"[{caller.FullName}] {string.Join("", text)}")
-                { Foreground = new SolidColorBrush(color) }
+                { Foreground = new SolidColorBrush(color ?? Colors.White) }
             );
             // Scrolling to the bottom of the ScrollViewer so that the user always sees the new text
             ScrollViewerOutput.ScrollToBottom();
-        }
-
-        /// <summary>
-        /// Prints some text to the output of the <see cref="ConsoleControl"/>
-        /// </summary>
-        /// <param name="text">The text to display</param>
-        public void Print(IEnumerable<char> text)
-        {
-            Print(text, Colors.White);
         }
 
         private void HandleInputKeyDown(object sender, KeyEventArgs e)

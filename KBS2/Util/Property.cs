@@ -20,18 +20,13 @@ namespace KBS2.Util
                     throw new TypeMismatchException($"Cannot assign value of type \"{value.GetType().Name}\" to Property of type\"{PropertyType.Name}\"");
                 PropertyChanged?.Invoke(this, new CustomPropertyChangedArgs(_value, value));
                 _value = value;
-                
             }
         }
-
+        
         public Property(dynamic value)
         {
             PropertyType = value.GetType();
             Value = value;
         }
-        
-        
-        
-        
     }
 }
