@@ -16,40 +16,10 @@ namespace KBS2.CustomerSystem
         public CustomerGroupController(CustomerGroup group)
         {
             Group = group;
-            var road = LookForNearestRoad();
+            var road = GPSSystem.NearestRoad(group.Location);
             MoveToNearestRoad(road);
             Group.RoadsNear = GPSSystem.GetRoadsInRange(Group.Location, GroupRadius);
             //Order car
-        }
-
-        /// <summary>
-        /// Function to look at the shortest distance to the start and ending point to each road in the city comparing from customer current location.
-        /// </summary>
-        /// <returns>returns the road with shortest start or ending point distance.</returns>
-        public Road LookForNearestRoad()
-        {
-            var city = City.Instance;
-            Road closestRoad = null;
-            var closestDistance = double.MaxValue;
-            
-            foreach(Road road in city.Roads)
-            {
-                var roadstart = road.Start;
-                var roadend = road.End;
-                var distanceStart = VectorUtil.Distance(roadstart, Group.Location);
-                var distanceEnd = VectorUtil.Distance(roadend, Group.Location);
-
-                if (distanceStart < closestDistance)
-                {
-                    closestRoad = road;
-                    closestDistance = distanceStart;
-                }else if (distanceEnd < closestDistance)
-                {
-                    closestRoad = road;
-                    closestDistance = distanceEnd;
-                }
-            }
-            return closestRoad;
         }
 
         /// <summary>
