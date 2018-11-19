@@ -14,19 +14,19 @@ namespace KBS2.CitySystem
         public void SpawnCar(int id, CarModel model, DirectionCar direction)
         {
 
-            var road = GPS.GPSSystem.LookForNearestRoad(Location);
+            var road = GPS.GPSSystem.NearestRoad(Location);
 
-            int x;
-            int y;
+            double x;
+            double y;
 
             if (road.IsXRoad())
             {
-                x = (int)Location.X;
-                y = Location.Y > road.Location.Y ? road.Location.Y + (road.Width / 4d) : road.Location.Y - (road.Width / 4d);
+                x = Location.X;
+                y = Location.Y > road.Start.Y ? road.Start.Y + (road.Width / 4d) : road.Start.Y - (road.Width / 4d);
             }   else
             {
-                y = (int)Location.Y;
-                x = Location.X > road.Location.X ? road.Location.X + (road.Width / 4d) : road.Location.X - (road.Width / 4d);
+                y = Location.Y;
+                x = Location.X > road.Start.X ? road.Start.X + (road.Width / 4d) : road.Start.X - (road.Width / 4d);
             }
 
             var location = new Vector(x, y);
