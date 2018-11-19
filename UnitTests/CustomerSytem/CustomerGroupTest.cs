@@ -2,6 +2,7 @@
 using System.Windows;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
+using KBS2.GPS;
 using NUnit.Framework;
 using UnitTests.Util;
 
@@ -25,7 +26,7 @@ namespace UnitTests.CustomerSytem
 
             var group = new CustomerGroup(5, building, null);
 
-            var result = group.Controller.LookForNearestRoad();
+            var result = GPSSystem.NearestRoad(group.Location);
 
             Assert.AreEqual(road ? road1 : road2, result);
         }
