@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using KBS2.Console;
+using KBS2.CarSystem;
 using KBS2.CustomerSystem;
-using KBS2.Utilities;
 
 namespace KBS2.CitySystem
 {
     public class CityController
     {
         public static readonly Random Random = new Random();
+        private static int CAR_ID;
 
         private City City { get; }
 
@@ -19,9 +19,14 @@ namespace KBS2.CitySystem
 
         public void Update()
         {
-            if (City.Customers.Count < City.CustomerCount && Random.Next(10) == 1)
+            if (City.Customers.Count < City.CustomerCount && Random.Next(20) == 1)
             {
                 SpawnCustomerGroup();
+            }
+
+            if (City.Cars.Count < City.AvailableCars)
+            {
+                SpawnCar();
             }
         }
 
@@ -29,7 +34,7 @@ namespace KBS2.CitySystem
         {
             var building = City.Buildings[Random.Next(City.Buildings.Count)];
             var target = City.Buildings[Random.Next(City.Buildings.Count)];
-            var groupSize = Random.Next(1, (int) Math.Round((City.AvgGroupSize / 2.0) * 3.0));
+            var groupSize = Random.Next(1, (int) Math.Round(City.AvgGroupSize / 2.0 * 3.0));
 
             var group = new CustomerGroup(groupSize, building, target);
 
@@ -38,6 +43,14 @@ namespace KBS2.CitySystem
 
         public void SpawnCar()
         {
+            var garages = City.Buildings
+                .FindAll(building => building is Garage)
+                .Select(building => (Garage) building)
+                .ToList();
+            var garage = garages[Random.Next(garages.Count)];
+            var model = CarModel.TestModel; //TODO: Select model based on settings
+
+            garage.SpawnCar(CAR_ID++, model);
         }
     }
 }

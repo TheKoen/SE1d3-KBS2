@@ -18,7 +18,7 @@ namespace KBS2.GPS
         /// <returns>the road that the location is at, if none it returns null</returns>
         public static Road GetRoad(Vector location)
         {
-            var roads = City.Instance().Roads;
+            var roads = City.Instance.Roads;
 
             foreach (var road in roads)
             {

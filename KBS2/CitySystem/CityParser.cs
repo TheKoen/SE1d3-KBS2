@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using KBS2.Console;
+using System.Windows;
 using System.Xml;
 
 namespace KBS2.CitySystem
@@ -7,6 +8,8 @@ namespace KBS2.CitySystem
     {
         public static City MakeCity(XmlDocument city)
         {
+            CommandHandler.Reset();
+
             var cityObject = new City();
 
             var root = city.DocumentElement;
