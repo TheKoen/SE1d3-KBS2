@@ -60,10 +60,10 @@ namespace KBS2.CarSystem
             Car.Passengers.Add(customer);
         }
 
-        protected List<T> GetSensors<T>(Direction side) where T : Sensor
+        public List<T> GetSensors<T>(Direction side) where T : Sensor
         {
             return Car.Sensors
-                .FindAll(sensor => sensor.GetType() == typeof(T) && sensor.SensorDirection.Equals(side))
+                .FindAll(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side))
                 .ConvertAll(sensor => (T) sensor)
                 .ToList();
         }

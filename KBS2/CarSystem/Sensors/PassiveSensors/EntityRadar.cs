@@ -2,7 +2,7 @@
 using KBS2.CitySystem;
 using KBS2.Util;
 
-namespace KBS2.CarSystem.Sensors.ActiveSensors
+namespace KBS2.CarSystem.Sensors.PassiveSensors
 {
     public class EntityRadar : PassiveSensor
     {
@@ -10,10 +10,9 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         ///     EntityRadar radar checks for entities in range
         /// </summary>
         /// <param name="range">range of the radar</param>
-        public EntityRadar(double range)
+        public EntityRadar(Car car, double range) : base(car, Direction.Global)
         {
             Range = range;
-            SensorDirection = Direction.Global;
             Controller = new EntityRadarController(this);
         }
 

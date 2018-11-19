@@ -9,12 +9,14 @@ using KBS2.CarSystem.Sensors;
 
 namespace UnitTests.Util
 {
+    public delegate Sensor CreateSensor(Car car);
+
     public class CarBuilder
     {
         public static int ID = 0;
 
         private Vector location;
-        private List<Sensor> sensors = new List<Sensor>();
+        private List<CreateSensor> sensors = new List<CreateSensor>();
         private DirectionCar direction;
         private CarModel model;
 
@@ -24,7 +26,7 @@ namespace UnitTests.Util
             return this;
         }
 
-        public CarBuilder Sensor(Sensor sensor)
+        public CarBuilder Sensor(CreateSensor sensor)
         {
             sensors.Add(sensor);
             return this;
@@ -48,7 +50,11 @@ namespace UnitTests.Util
             {
                 throw new ArgumentException("Location cannot be null");
             }
-            return new Car(ID++, model, location, sensors, direction);
+
+            var car = new Car(ID++, model, location, new List<Sensor>(), direction);
+            sensors.ForEach(creator => car.Sensors.Add(creator(car)));
+
+            return car;
         }
     }
 }

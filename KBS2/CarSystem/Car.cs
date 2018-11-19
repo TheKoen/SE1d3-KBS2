@@ -44,11 +44,14 @@ namespace KBS2.CarSystem
         }
 
         public Vector Velocity { get; set; } = new Vector(0, 0);
-        public List<Sensor> Sensors { get; set; }
-        public CarController Controller { get; set; }
-        public List<Customer> Passengers { get; set; } = new List<Customer>();
+
+        public List<Sensor> Sensors { get; }
+        public List<Customer> Passengers { get; }
+
         public Road CurrentRoad { get; set; }
         public Vector CurrentTarget { get; set; }
+
+        public CarController Controller { get; }
 
         /// <summary>
         /// Create a car 
@@ -62,9 +65,11 @@ namespace KBS2.CarSystem
         {
             Id = id;
             Sensors = sensors;
-            Controller = new CarController(this);
-            Sensors.ForEach(sensor => sensor.Car = this);
+            Passengers = new List<Customer>();
             CurrentRoad = GPSSystem.GetRoad(location);
+            
+            Controller = new CarController(this);
+            MainWindow.Loop.Subscribe(Controller.Update);
 
             this.location = new Property(location);
             CommandHandler.RegisterProperty($"car{id}.location", ref this.location);

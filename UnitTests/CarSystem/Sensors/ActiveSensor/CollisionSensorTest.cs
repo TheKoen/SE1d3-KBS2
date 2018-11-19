@@ -2,11 +2,7 @@
 using KBS2.CarSystem.Sensors;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using UnitTests.Util;
 
@@ -24,16 +20,17 @@ namespace UnitTests.CarSystem.Sensors.ActiveSensor
                 .Road(new Vector(0, 20), new Vector(10, 20), 10)
                 .Build();
 
-            var sensor = new CollisionSensor(directionSensor, range);
-            city.Cars.Add(new CarBuilder()
+            var sensorCar = new CarBuilder()
                 .Location(new Vector(carX, carY))
                 .Direction(directionCar)
-                .Sensor(sensor)
-                .Build());
+                .Sensor(car => new CollisionSensor(car, directionSensor, range))
+                .Build();
+            city.Cars.Add(sensorCar);
             city.Cars.Add(new CarBuilder()
                 .Location(new Vector(secCarX, secCarY))
                 .Direction(directionCar)
                 .Build());
+            var sensor = sensorCar.Controller.GetSensors<CollisionSensor>(directionSensor).First();
 
             sensor.SubScribeSensorEvent(EventThrownGood);
 
@@ -52,16 +49,17 @@ namespace UnitTests.CarSystem.Sensors.ActiveSensor
                 .Road(new Vector(0, 20), new Vector(10, 20), 10)
                 .Build();
 
-            var sensor = new CollisionSensor(directionSensor, range);
-            city.Cars.Add(new CarBuilder()
+            var sensorCar = new CarBuilder()
                 .Location(new Vector(carX, carY))
                 .Direction(directionCar)
-                .Sensor(sensor)
-                .Build());
+                .Sensor(car => new CollisionSensor(car, directionSensor, range))
+                .Build();
+            city.Cars.Add(sensorCar);
             city.Cars.Add(new CarBuilder()
                 .Location(new Vector(secCarX, secCarY))
                 .Direction(directionCar)
                 .Build());
+            var sensor = sensorCar.Controller.GetSensors<CollisionSensor>(directionSensor).First();
 
             sensor.SubScribeSensorEvent(EventThrownBad);
 
@@ -70,12 +68,13 @@ namespace UnitTests.CarSystem.Sensors.ActiveSensor
             Assert.Pass();
         }
 
-        private void EventThrownGood(object source, SensorEventArgs e)
+        private static void EventThrownGood(object source, SensorEventArgs e)
         {
             Assert.Pass();
             return;
         }
-        private void EventThrownBad(object source, SensorEventArgs e)
+
+        private static void EventThrownBad(object source, SensorEventArgs e)
         {
             Assert.Fail();
             return;

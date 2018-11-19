@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using KBS2.CarSystem;
 using KBS2.Console;
 using KBS2.CustomerSystem;
@@ -36,11 +35,13 @@ namespace KBS2.CitySystem
             set => avgGroupSize.Value = value;
         }
 
-        public List<Road> Roads { get; set; }
-        public List<Building> Buildings { get; set; }
-        public List<Intersection> Intersections { get; set; }
-        public List<Car> Cars { get; set; }
-        public List<Customer> Customers { get; set; }
+        public List<Road> Roads { get; }
+        public List<Building> Buildings { get; }
+        public List<Intersection> Intersections { get; }
+        public List<Car> Cars { get; }
+        public List<Customer> Customers { get; }
+
+        public CityController Controller { get; }
 
         public City()
         {
@@ -50,6 +51,10 @@ namespace KBS2.CitySystem
             Buildings = new List<Building>();
             Intersections = new List<Intersection>();
             Cars = new List<Car>();
+            Customers = new List<Customer>();
+
+            Controller = new CityController(this);
+            MainWindow.Loop.Subscribe(Controller.Update);
 
             CommandHandler.RegisterProperty("availableCars", ref availableCars);
             CommandHandler.RegisterProperty("customerCount", ref customerCount);

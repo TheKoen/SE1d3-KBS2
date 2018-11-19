@@ -22,7 +22,7 @@ namespace KBS2
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        public static readonly MainLoop Loop = new MainLoop();
         public City City { get; set; }
 
         public MainWindow()

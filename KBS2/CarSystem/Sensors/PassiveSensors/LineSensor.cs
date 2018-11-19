@@ -7,10 +7,9 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         /// <summary>
         ///     Create a lineSensor of a car
         /// </summary>
-        /// <param name="directionSensor">Side where the sensor is located</param>
-        public LineSensor(Direction directionSensor)
+        /// <param name="direction">Side where the sensor is located</param>
+        public LineSensor(Car car, Direction direction) : base(car, direction)
         {
-            SensorDirection = directionSensor;
             Controller = new LineSensorController(this);
         }
 
@@ -44,7 +43,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
             var positiveDir = Sensor.Car.Direction.Equals(DirectionCar.South) ||
                               Sensor.Car.Direction.Equals(DirectionCar.East);
 
-            switch (Sensor.SensorDirection)
+            switch (Sensor.Direction)
             {
                 case Direction.Left:
                     Sensor.Distance = Math.Abs(roadValue - currentValue);
@@ -56,7 +55,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
                         : Math.Abs(roadValue - laneWidth - currentValue);
                     break;
                 default:
-                    throw new ArgumentException($"Unable to find line in direction {Sensor.SensorDirection}");
+                    throw new ArgumentException($"Unable to find line in direction {Sensor.Direction}");
             }
         }
     }

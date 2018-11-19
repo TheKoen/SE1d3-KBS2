@@ -7,10 +7,9 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
 {
     public class CollisionSensor : ActiveSensor
     {
-        public CollisionSensor(Direction direction, double range)
+        public CollisionSensor(Car car, Direction direction, double range) : base(car, direction)
         {
             Range = range;
-            SensorDirection = direction;
 
             Controller = new CollisionSensorController(this);
         }
@@ -84,12 +83,12 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         /// <returns>direction for the sensor</returns>
         private DirectionCar CheckDirAuto(DirectionCar carDir)
         {
-            if (Sensor.SensorDirection == Direction.Front)
+            if (Sensor.Direction == Direction.Front)
             {
                 return carDir;
             }
 
-            if (Sensor.SensorDirection == Direction.Back)
+            if (Sensor.Direction == Direction.Back)
             {
                 if (carDir == DirectionCar.North) return DirectionCar.South;
 
@@ -99,7 +98,7 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
 
                 if (carDir == DirectionCar.East) return DirectionCar.West;
             }
-            else if (Sensor.SensorDirection == Direction.Left)
+            else if (Sensor.Direction == Direction.Left)
             {
                 if (carDir == DirectionCar.North) return DirectionCar.West;
 
@@ -109,7 +108,7 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
 
                 if (carDir == DirectionCar.East) return DirectionCar.North;
             }
-            else if (Sensor.SensorDirection == Direction.Right)
+            else if (Sensor.Direction == Direction.Right)
             {
                 if (carDir == DirectionCar.North) return DirectionCar.East;
 

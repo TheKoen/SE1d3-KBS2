@@ -11,6 +11,8 @@ namespace KBS2.CarSystem.Sensors
         public List<IEntity> Entities { get; set; }
 
         public event EventHandlerSensor SensorEvent;
+        
+        protected ActiveSensor(Car car, Direction direction) : base(car, direction) { }
 
         /// <summary>
         ///     Subscribe to Sensors event
