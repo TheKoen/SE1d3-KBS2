@@ -42,8 +42,9 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         public override void Update()
         {
             Radar.EntitiesInRange = City.Instance().Cars
-                .FindAll(car => (VectorUtil.Distance(car.Location, Radar.Car.Location) < Radar.Range) && !car.Equals(Radar.Car))
+                .FindAll(car => !car.Equals(Radar.Car) && car.GetPoints().Any(point => VectorUtil.Distance(point, Radar.Car.Location) <= Radar.Range))
                 .ConvertAll(car => (IEntity)car);
+            
         }
     }
 }
