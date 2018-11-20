@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Threading;
-using KBS2.Utilities;
+using KBS2.Util;
 using Math = System.Math;
 
 namespace KBS2
@@ -26,6 +26,7 @@ namespace KBS2
                 Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(TickRate))
             };
             timer.Tick += Update;
+            tickRate.PropertyChanged += OnTickrateChange;
         }
 
         public void Subscribe(Update subscriber)
@@ -43,9 +44,9 @@ namespace KBS2
             timer.Stop();
         }
 
-        public void OnTickrateChange(object source, EventArgs args)
+        public void OnTickrateChange(object source, CustomPropertyChangedArgs args)
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(TickRate));
+            timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));
         }
 
         private void Update(object source, EventArgs args)

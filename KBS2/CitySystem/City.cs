@@ -3,7 +3,7 @@ using System.Linq;
 using KBS2.CarSystem;
 using KBS2.Console;
 using KBS2.CustomerSystem;
-using KBS2.Utilities;
+using KBS2.Util;
 
 namespace KBS2.CitySystem
 {
