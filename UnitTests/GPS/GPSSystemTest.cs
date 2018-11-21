@@ -1,4 +1,6 @@
-﻿using KBS2.CitySystem;
+﻿using KBS2.CarSystem;
+using KBS2.CarSystem.Sensors.PassiveSensors;
+using KBS2.CitySystem;
 using KBS2.GPS;
 using NUnit.Framework;
 using System;
@@ -35,7 +37,8 @@ namespace UnitTests.GPS
             }  
         }
         
-        [TestCase()]
+        [TestCase(0, 0, 0, 100, 100, 0, 100, 100, 0, 0)] // road 1 is nearest road
+        [TestCase(0, 0, 0, 100, 0, 150, 0, 250, 0, 100)] //
         public void NearestRoadTest(int x1b, int y1b, int x1e, int y1e, int x2b, int y2b, int x2e, int y2e, int ex, int ey)
         {
             var road1 = new Road(new Vector(x1b, y1b), new Vector(x1e, y1e), 20, 100);
@@ -48,14 +51,21 @@ namespace UnitTests.GPS
 
             var road = GPSSystem.NearestRoad(new Vector(ex, ey));
 
-            if(road.Equals(road1))
-            {
-                Assert.Pass();
-            }
-            else
-            {
-                Assert.Fail("estamited is not equal to the first road");
-            }
+            Assert.AreEqual(road, road1);
+        }
+
+        [TestCase()]
+        public void RequestCarTest(int x1b, int y1b, int x1e, int y1e, int carX, int carY)
+        {
+            var road1 = new Road(new Vector(x1b, y1b), new Vector(x1e, y1e), 20, 100);
+            var Car1 = new CarBuilder()
+                .Location(new Vector(carX, carY))
+                .Direction(DirectionCar.East)
+                .Build();
+
+            var city = new CityBuilder()
+                .Road(road1)
+                .Build();
         }
     }
 }
