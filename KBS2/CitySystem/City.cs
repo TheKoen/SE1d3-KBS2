@@ -3,7 +3,7 @@ using System.Linq;
 using KBS2.CarSystem;
 using KBS2.Console;
 using KBS2.CustomerSystem;
-using KBS2.Utilities;
+using KBS2.Util;
 
 namespace KBS2.CitySystem
 {
@@ -60,14 +60,6 @@ namespace KBS2.CitySystem
             CommandHandler.RegisterProperty("customerCount", ref customerCount);
             CommandHandler.RegisterProperty("globalSpeedLimit", ref speedLimit);
             CommandHandler.RegisterProperty("avgGroupSize", ref avgGroupSize);
-        }
-
-        public List<IEntity> GetEntities()
-        {
-            return new List<IEntity>()
-                .Concat(Cars)
-                .Concat(Customers)
-                .ToList();
         }
 
         public void AddGroup(CustomerGroup group)

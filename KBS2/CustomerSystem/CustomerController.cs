@@ -26,7 +26,7 @@ namespace KBS2.CustomerSystem
         public double WhereIsMyGroup()
         {
             if (Customer.Group == null) return 0;
-            return VectorUtil.Distance(Customer.Group.Location, Customer.Location);
+            return MathUtil.Distance(Customer.Group.Location, Customer.Location);
         }
 
         /// <summary>

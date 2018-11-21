@@ -5,7 +5,7 @@ using KBS2.CitySystem;
 using KBS2.Console;
 using KBS2.CustomerSystem;
 using KBS2.GPS;
-using KBS2.Utilities;
+using KBS2.Util;
 
 namespace KBS2.CarSystem
 {
@@ -54,6 +54,9 @@ namespace KBS2.CarSystem
 
         public CarController Controller { get; }
 
+        public int Width { get; set; }
+        public int Length { get; set; }
+
         /// <summary>
         /// Create a car 
         /// </summary>
@@ -62,10 +65,13 @@ namespace KBS2.CarSystem
         /// <param name="location">Location of this car</param>
         /// <param name="sensors">List with sensors for this car</param>
         /// <param name="direction">Direction the car is facing</param>
-        public Car(int id, CarModel model, Vector location, List<Sensor> sensors, DirectionCar direction)
+        public Car(int id, CarModel model, Vector location, List<Sensor> sensors, DirectionCar direction, int width, int length)
         {
             Id = id;
             Sensors = sensors;
+            Width = width;
+            Length = length;
+
             Passengers = new List<Customer>();
             CurrentRoad = GPSSystem.GetRoad(location);
             
@@ -88,6 +94,30 @@ namespace KBS2.CarSystem
         public Vector GetLocation()
         {
             return Location;
+        }
+
+        public List<Vector> GetPoints()
+        {
+            if(Direction == DirectionCar.North || Direction == DirectionCar.South)
+            {
+                return new List<Vector>()
+                {
+                    new Vector(Location.X + Width/2.0, Location.Y),
+                    new Vector(Location.X - Width/2.0, Location.Y),
+                    new Vector(Location.X, Location.Y + Length/2),
+                    new Vector(Location.X, Location.Y - Length/2)
+                };
+            }
+            else
+            {
+                return new List<Vector>()
+                {
+                    new Vector(Location.X + Length/2.0, Location.Y),
+                    new Vector(Location.X - Length/2.0, Location.Y),
+                    new Vector(Location.X, Location.Y + Width/2),
+                    new Vector(Location.X, Location.Y - Width/2)
+                };
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using KBS2.CitySystem;
 
 namespace KBS2.CustomerSystem
@@ -28,6 +29,15 @@ namespace KBS2.CustomerSystem
         public Vector GetLocation()
         {
             return Location;
+        }
+
+        public List<Vector> GetPoints()
+        {
+            return new List<Vector>()
+            {
+                Location
+            };
+
         }
     }
 }

@@ -5,17 +5,17 @@ namespace KBS2.CitySystem
 {
     public class Road
     {
-        public Vector Start { get; set; }
-        public Vector End { get; set; }
-        public int Width { get; set; }
-        public int MaxSpeed { get; set; }
+        public Vector Start { get; }
+        public Vector End { get; }
+        public int Width { get; }
+        public int MaxSpeed { get; }
 
-        public Road(Vector s, Vector e, int w, int ms)
+        public Road(Vector start, Vector end, int width, int maxSpeed)
         {
-            this.Start = s;
-            this.End = e;
-            this.Width = w;
-            this.MaxSpeed = ms;
+            Start = start;
+            End = end;
+            Width = width;
+            MaxSpeed = maxSpeed;
         }
 
         public bool IsXRoad()

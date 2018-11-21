@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using KBS2.CarSystem;
 using KBS2.CustomerSystem;
+using KBS2.Util;
 
 namespace KBS2.CitySystem
 {
@@ -28,6 +31,21 @@ namespace KBS2.CitySystem
             {
                 SpawnCar();
             }
+        }
+
+        public List<IEntity> GetEntities()
+        {
+            return new List<IEntity>()
+                .Concat(City.Cars)
+                .Concat(City.Customers)
+                .ToList();
+        }
+
+        public List<IEntity> GetEntitiesInRange(Vector location, double range)
+        {
+            return GetEntities()
+                .FindAll(entity => entity.GetPoints()
+                    .Any(point => MathUtil.Distance(point, location) < range));
         }
 
         public void SpawnCustomerGroup()
