@@ -56,10 +56,18 @@ namespace KBS2.Console.Commands
             var vectorMatches = regex.Match(string.Join(" ", val));
             if (!vectorMatches.Success) return string.Empty;
             
-            var output = new Vector(
-                double.Parse(vectorMatches.Groups["posX"].Value),
-                double.Parse(vectorMatches.Groups["posY"].Value)
-            );
+            Vector output;
+            try
+            {
+                output = new Vector(
+                    double.Parse(vectorMatches.Groups["posX"].Value),
+                    double.Parse(vectorMatches.Groups["posY"].Value)
+                );
+            }
+            catch (OverflowException oe)
+            {
+                throw new InvalidParametersException(oe.Message);
+            }
             return TryModifyProperty(prop, output, $"{output.X}, {output.Y}");
         }
 
@@ -75,7 +83,15 @@ namespace KBS2.Console.Commands
             var floatMatches = regex.Match(string.Join(" ", val));
             if (!floatMatches.Success) return string.Empty;
 
-            var output = float.Parse(floatMatches.Groups["value"].Value);
+            float output;
+            try
+            {
+                output = float.Parse(floatMatches.Groups["value"].Value);
+            }
+            catch (OverflowException oe)
+            {
+                throw new InvalidParametersException(oe.Message);
+            }
             return TryModifyProperty(prop, output, output.ToString(CultureInfo.InvariantCulture));
         }
 
@@ -91,7 +107,15 @@ namespace KBS2.Console.Commands
             var doubleMatches = regex.Match(string.Join(" ", val));
             if (!doubleMatches.Success) return string.Empty;
 
-            var output = double.Parse(doubleMatches.Groups["value"].Value);
+            double output;
+            try
+            {
+                output = double.Parse(doubleMatches.Groups["value"].Value);
+            }
+            catch (OverflowException oe)
+            {
+                throw new InvalidParametersException(oe.Message);
+            }
             return TryModifyProperty(prop, output, output.ToString(CultureInfo.InvariantCulture));
         }
 
@@ -107,7 +131,15 @@ namespace KBS2.Console.Commands
             var intMatches = regex.Match(string.Join(" ", val));
             if (!intMatches.Success) return string.Empty;
 
-            var output = int.Parse(intMatches.Groups["value"].Value);
+            int output;
+            try
+            {
+                output = int.Parse(intMatches.Groups["value"].Value);
+            }
+            catch (OverflowException oe)
+            {
+                throw new InvalidParametersException(oe.Message);
+            }
             return TryModifyProperty(prop, output, output.ToString());
         }
 

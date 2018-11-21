@@ -18,7 +18,9 @@ namespace UnitTests.Util
         private Vector location;
         private List<CreateSensor> sensors = new List<CreateSensor>();
         private DirectionCar direction;
-        private CarModel model = CarModel.TestModel;
+        private CarModel model;
+        private int width;
+        private int length;
 
         public CarBuilder Location(Vector location)
         {
@@ -29,6 +31,18 @@ namespace UnitTests.Util
         public CarBuilder Sensor(CreateSensor sensor)
         {
             sensors.Add(sensor);
+            return this;
+        }
+
+        public CarBuilder Width(int width)
+        {
+            this.width =width;
+            return this;
+        }
+
+        public CarBuilder Length(int length)
+        {
+            this.length = length;
             return this;
         }
 
@@ -51,7 +65,7 @@ namespace UnitTests.Util
                 throw new ArgumentException("Location cannot be null");
             }
 
-            var car = new Car(ID++, model, location, new List<Sensor>(), direction);
+            var car = new Car(ID++, model, location, new List<Sensor>(), direction, width, length);
             sensors.ForEach(creator => car.Sensors.Add(creator(car)));
 
             return car;

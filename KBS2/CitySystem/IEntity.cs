@@ -10,5 +10,7 @@ namespace KBS2.CitySystem
     public interface IEntity   
     {
         Vector GetLocation();
+
+        List<Vector> GetPoints();
     }
 }
