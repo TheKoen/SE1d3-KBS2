@@ -67,6 +67,7 @@
     <Compile Include="CommandSystem\PropertyTest.cs" />
     <Compile Include="CustomerSytem\CustomerGroupTest.cs" />
     <Compile Include="CustomerSytem\CustomerTest.cs" />
+    <Compile Include="GPS\GPSSystemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\CarBuilder.cs" />
     <Compile Include="Util\CityBuilder.cs" />
