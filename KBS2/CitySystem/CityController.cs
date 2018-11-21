@@ -11,7 +11,7 @@ namespace KBS2.CitySystem
     public class CityController
     {
         public static readonly Random Random = new Random();
-        private static int CAR_ID;
+        public static int CAR_ID;
 
         private City City { get; }
 
