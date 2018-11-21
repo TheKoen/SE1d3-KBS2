@@ -108,8 +108,7 @@ namespace KBS2.GPS
                     nearestDistance = tempDistance;
                 }
             }
-
-            // Nearest garage sends car  *OPTIONAL*(if available car applies to group needs)
+            
             var car = nearestGarage.SpawnCar(CityController.CAR_ID++, CarModel.TestModel);
             car.Destination = destination;
 
@@ -124,8 +123,7 @@ namespace KBS2.GPS
             {
                if (!car.CurrentRoad.Equals(road)) roads.Add(road);
             }
-
-            Road nextRoad = null;
+            
             Vector closestPointToDestination;
             var shortestDistance = Double.MaxValue;
             Road selectedRoad = null;
@@ -133,7 +131,10 @@ namespace KBS2.GPS
 
             foreach (var road in roads)
             {
+                if (road.Equals(car.Destination.Road))
+                {
 
+                }
                 //kijk naar verste afstand t.o.v auto
                 var furthestPoint = 0d;
                 var tempDStart = VectorUtil.Distance(road.Start, car.Location);
@@ -163,12 +164,8 @@ namespace KBS2.GPS
                 }
                 
             }
-
-            Destination d1 = new Destination();
-            d1.Road = selectedRoad;
-            d1.Location = selectDestination;
-
-            return d1;
+            
+            return new Destination { Road = selectedRoad, Location = selectDestination};
         }
     }
 }
