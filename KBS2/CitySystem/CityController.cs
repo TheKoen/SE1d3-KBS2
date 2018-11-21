@@ -45,7 +45,7 @@ namespace KBS2.CitySystem
         {
             return GetEntities()
                 .FindAll(entity => entity.GetPoints()
-                    .Any(point => VectorUtil.Distance(point, location) < range));
+                    .Any(point => MathUtil.Distance(point, location) < range));
         }
 
         public void SpawnCustomerGroup()
