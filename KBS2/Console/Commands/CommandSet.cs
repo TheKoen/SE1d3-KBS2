@@ -175,11 +175,11 @@ namespace KBS2.Console.Commands
                 CommandHandler.ModifyProperty(prop, output);
                 return $"Property \"{prop}\" set as ({outputStringRep})";
             }
-            catch (KeyNotFoundException knfe)
+            catch (KeyNotFoundException)
             {
                 throw new InvalidParametersException($"Unknown property \"{prop}\"");
             }
-            catch (TypeMismatchException tme)
+            catch (TypeMismatchException)
             {
                 throw new InvalidParametersException($"Property \"{prop}\" is not of type {output.GetType().Name}");
             }

@@ -39,7 +39,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         {
             Radar.EntitiesInRange = City.Instance.Controller.GetEntities()
                 .FindAll(entity => entity.GetPoints().Any(point =>
-                    VectorUtil.Distance(point, Radar.Car.Location) < Radar.Range && !entity.Equals(Radar.Car))
+                    MathUtil.Distance(point, Radar.Car.Location) < Radar.Range && !entity.Equals(Radar.Car))
                 );
         }
     }
