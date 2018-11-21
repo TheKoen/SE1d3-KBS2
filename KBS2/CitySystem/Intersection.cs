@@ -17,7 +17,7 @@ namespace KBS2.CitySystem
         }
 
 
-        public Dictionary<DirectionCar, Road> GetRoad()
+        public List<Road> GetRoads()
         {
             return null; // TODO
         } 

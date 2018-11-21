@@ -117,13 +117,58 @@ namespace KBS2.GPS
 
         public static Destination GetDirection(Car car, Intersection intersection)
         {
-            // Car uses Nearest Neighbor Algorithm and Distance to customer to receive direction.
-            // Check with connected roads
-            // from dest point -> End point of road
+            var roadsAtInteresection = intersection.GetRoads();
+            List<Road> roads = new List<Road>();
             
-            //intersection returns dictionary with DirectionCar, Roads
+            foreach(var road in roadsAtInteresection)
+            {
+               if (!car.CurrentRoad.Equals(road)) roads.Add(road);
+            }
 
-            
+            Road nextRoad = null;
+            Vector closestPointToDestination;
+            var shortestDistance = Double.MaxValue;
+            Road selectedRoad = null;
+            Vector selectDestination = new Vector();
+
+            foreach (var road in roads)
+            {
+
+                //kijk naar verste afstand t.o.v auto
+                var furthestPoint = 0d;
+                var tempDStart = VectorUtil.Distance(road.Start, car.Location);
+                var tempDEnd = VectorUtil.Distance(road.End, car.Location);
+
+                furthestPoint = (tempDStart > tempDEnd) ? tempDStart : tempDEnd;
+
+                if(tempDStart > tempDEnd)
+                {
+                    furthestPoint = tempDStart;
+                    closestPointToDestination = road.Start;
+                }
+                else
+                {
+                    furthestPoint = tempDEnd;
+                    closestPointToDestination = road.End;
+                }
+
+                // verste afstand t.o.v  klant
+                var distanceToDestination = VectorUtil.Distance(closestPointToDestination, car.Destination.Location);
+
+                if(distanceToDestination < shortestDistance)
+                {
+                    shortestDistance = distanceToDestination;
+                    selectedRoad = road;
+                    selectDestination = closestPointToDestination;
+                }
+                
+            }
+
+            Destination d1 = new Destination();
+            d1.Road = selectedRoad;
+            d1.Location = selectDestination;
+
+            return d1;
         }
     }
 }
