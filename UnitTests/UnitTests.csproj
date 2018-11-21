@@ -65,6 +65,7 @@
     <Compile Include="CitySystem\CityParserTest.cs" />
     <Compile Include="CommandSystem\CommandListTest.cs" />
     <Compile Include="CommandSystem\PropertyTest.cs" />
+    <Compile Include="Commands\CommandExportTest.cs" />
     <Compile Include="CustomerSytem\CustomerGroupTest.cs" />
     <Compile Include="CustomerSytem\CustomerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
