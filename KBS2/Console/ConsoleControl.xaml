@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="48" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="TextBoxInput" Grid.Column="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" KeyDown="HandleInputKeyDown">
+            <TextBox x:Name="TextBoxInput" x:FieldModifier="public" Grid.Column="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" KeyDown="HandleInputKeyDown">
                 <TextBox.Style>
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                         <Style.Resources>
@@ -47,7 +47,7 @@
                 </TextBox.Style>
             </TextBox>
 
-            <Button x:Name="ButtonSend" Grid.Column="1" Content="Send" />
+            <Button x:Name="ButtonSend" x:FieldModifier="public" Grid.Column="1" Content="Send" />
         </Grid>
     </Grid>
 </UserControl>
