@@ -1,6 +1,7 @@
 ﻿using KBS2.Console;
 using System.Windows;
 using System.Xml;
+using KBS2.CarSystem;
 
 namespace KBS2.CitySystem
 {
@@ -71,7 +72,7 @@ namespace KBS2.CitySystem
             }
             else if(node.Name == "Garage")
             {
-                return new Garage(loc, size);
+                return new Garage(loc, size, DirectionCar.North);
             }
             else
             {

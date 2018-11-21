@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CarSystem\CarModel.cs" />
+    <Compile Include="CarSystem\Destination.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadar.cs" />
     <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
     <Compile Include="CitySystem\Building.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="MainLoop.cs" />
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
     <Compile Include="Util\Property.cs" />
-    <Compile Include="Util\VectorUtil.cs" />
+    <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
     <Page Include="Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>

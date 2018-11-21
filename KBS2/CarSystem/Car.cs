@@ -50,6 +50,7 @@ namespace KBS2.CarSystem
 
         public Road CurrentRoad { get; set; }
         public Vector CurrentTarget { get; set; }
+        public Destination Destination { get; set; }
 
         public CarController Controller { get; }
 

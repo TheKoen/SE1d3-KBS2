@@ -18,7 +18,7 @@ namespace UnitTests.Util
         private Vector location;
         private List<CreateSensor> sensors = new List<CreateSensor>();
         private DirectionCar direction;
-        private CarModel model;
+        private CarModel model = CarModel.TestModel;
 
         public CarBuilder Location(Vector location)
         {
