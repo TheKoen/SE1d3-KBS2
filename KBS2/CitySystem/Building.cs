@@ -5,13 +5,13 @@ namespace KBS2.CitySystem
     public class Building
     {
 
-        public Vector Location { get; set; }
-        public int Size { get; set; }
+        public Vector Location { get; }
+        public int Size { get; }
 
-        public Building(Vector l, int s)
+        public Building(Vector location, int size)
         {
-            this.Location = l;
-            this.Size = s;
+            Location = location;
+            Size = size;
         }
     }
 }

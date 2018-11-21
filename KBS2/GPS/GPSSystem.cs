@@ -67,21 +67,11 @@ namespace KBS2.GPS
 
             foreach (var road in city.Roads)
             {
-                var roadstart = road.Start;
-                var roadend = road.End;
-                var distanceStart = VectorUtil.Distance(roadstart, location);
-                var distanceEnd = VectorUtil.Distance(roadend, location);
+                var distance = MathUtil.DistanceToRoad(location, road);
+                if (!(distance < closestDistance)) continue;
 
-                if (distanceStart < closestDistance)
-                {
-                    closestRoad = road;
-                    closestDistance = distanceStart;
-                }
-                else if (distanceEnd < closestDistance)
-                {
-                    closestRoad = road;
-                    closestDistance = distanceEnd;
-                }
+                closestDistance = distance;
+                closestRoad = road;
             }
             return closestRoad;
         }
@@ -101,7 +91,7 @@ namespace KBS2.GPS
 
             foreach (Garage garage in garages)
             {
-                var tempDistance = VectorUtil.Distance(group.Location, garage.Location);
+                var tempDistance = MathUtil.Distance(group.Location, garage.Location);
                 if(tempDistance < nearestDistance)
                 {
                     nearestGarage = garage;

@@ -1,25 +1,24 @@
 ﻿using KBS2.CarSystem;
 using System.Collections.Generic;
 using System.Windows;
+using KBS2.GPS;
 
 namespace KBS2.CitySystem
 {
     public class Intersection
     {
+        public Vector Location { get; }
+        public int Size { get; }
 
-        public Vector Location { get; set; }
-        public int Size { get; set; }
-
-        public Intersection(Vector l, int s)
+        public Intersection(Vector location, int size)
         {
-            this.Location = l;
-            this.Size = s;
+            Location = location;
+            Size = size;
         }
 
-
-        public Dictionary<DirectionCar, Road> GetRoad()
+        public List<Road> GetRoads()
         {
-            return null; // TODO
+            return GPSSystem.GetRoadsInRange(Location, Size);
         } 
     }
 }

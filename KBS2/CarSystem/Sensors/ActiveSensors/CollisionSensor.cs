@@ -48,28 +48,28 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
                     return City.Instance.Cars
                         .FindAll(car =>
                             car.Location.Y > Sensor.Car.Location.Y &&
-                            VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
+                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity) car);
 
                 case DirectionCar.South:
                     return City.Instance.Cars
                         .FindAll(car =>
                             car.Location.Y < Sensor.Car.Location.Y &&
-                            VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
+                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity) car);
 
                 case DirectionCar.East:
                     return City.Instance.Cars
                         .FindAll(car =>
                             car.Location.X > Sensor.Car.Location.X &&
-                            VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
+                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity) car);
 
                 case DirectionCar.West:
                     return City.Instance.Cars
                         .FindAll(car =>
                             car.Location.X < Sensor.Car.Location.X &&
-                            VectorUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
+                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
                         .ConvertAll(car => (IEntity) car);
                 default:
                     throw new Exception("Error Check Entities in range");

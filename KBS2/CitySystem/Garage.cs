@@ -8,12 +8,12 @@ namespace KBS2.CitySystem
 {
     public class Garage : Building
     {
-        public DirectionCar Direction { get; set; }
+        public DirectionCar Direction { get; }
         public int AvailableCars { get; set; }
 
         public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
         {
-            this.Direction = direction;
+            Direction = direction;
         }
 
         public Car SpawnCar(int id, CarModel model)
@@ -60,6 +60,7 @@ namespace KBS2.CitySystem
                 Road = road
             };
             City.Instance.Cars.Add(car);
+            AvailableCars--;
             return car;
         }
     }
