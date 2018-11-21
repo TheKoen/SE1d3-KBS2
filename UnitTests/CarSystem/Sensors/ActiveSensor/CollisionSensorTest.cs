@@ -11,13 +11,14 @@ namespace UnitTests.CarSystem.Sensors.ActiveSensor
     [TestFixture]
     class CollisionSensorTest
     {
-        [TestCase(Direction.Front, DirectionCar.North, 100, 0, 0, 0, 100)] // car in range 
-        [TestCase(Direction.Front, DirectionCar.North, 100, 0, 0, 50, 50)] // car right front but in range
+        [TestCase(Direction.Front, DirectionCar.North, 20, 10, 24, 10, 12)]
+        [TestCase(Direction.Back, DirectionCar.North, 20, 10, 12, 10, 24)]
+        [TestCase(Direction.Back, DirectionCar.North, 20, 5, 12, 10, 24)]
+        [TestCase(Direction.Back, DirectionCar.North, 20, 15, 12, 10, 24)]
         public void TestInRangeCollisionSensor(Direction directionSensor, DirectionCar directionCar, double range, double carX, double carY, double secCarX, double secCarY)
         {
             var city = new CityBuilder()
-                .Road(new Vector(0, 50), new Vector(10, 50), 10)
-                .Road(new Vector(0, 20), new Vector(10, 20), 10)
+                .Road(new Vector(10, 0), new Vector(10, 50), 40)
                 .Build();
 
             var sensorCar = new CarBuilder()
@@ -36,17 +37,17 @@ namespace UnitTests.CarSystem.Sensors.ActiveSensor
 
             sensor.Controller.Update();
 
-            Assert.Fail();
+            Assert.Fail("Car was not detected!");
         }
 
-        [TestCase(Direction.Front, DirectionCar.North, 100, 0, 0, 0, 200)] // out of range
-        [TestCase(Direction.Front, DirectionCar.North, 100, 0, 0, 0, -100)] // car behind
-        [TestCase(Direction.Front, DirectionCar.East, 100, 0, 0, 0, 200)] // car left of other car but out of range
+        [TestCase(Direction.Front, DirectionCar.North, 20, 10, 40, 10, 12)]
+        [TestCase(Direction.Back, DirectionCar.North, 20, 10, 12, 10, 40)]
+        [TestCase(Direction.Back, DirectionCar.North, 20, 0, 12, 10, 24)]
+        [TestCase(Direction.Back, DirectionCar.North, 20, 20, 12, 10, 24)]
         public void TestOutOfRangeCollisionSensor(Direction directionSensor, DirectionCar directionCar, double range, double carX, double carY, double secCarX, double secCarY)
         {
             var city = new CityBuilder()
-                .Road(new Vector(0, 50), new Vector(10, 50), 10)
-                .Road(new Vector(0, 20), new Vector(10, 20), 10)
+                .Road(new Vector(10, 0), new Vector(10, 50), 40)
                 .Build();
 
             var sensorCar = new CarBuilder()
@@ -71,13 +72,11 @@ namespace UnitTests.CarSystem.Sensors.ActiveSensor
         private static void EventThrownGood(object source, SensorEventArgs e)
         {
             Assert.Pass();
-            return;
         }
 
         private static void EventThrownBad(object source, SensorEventArgs e)
         {
-            Assert.Fail();
-            return;
+            Assert.Fail("Car was detected!");
         }
     }
 }

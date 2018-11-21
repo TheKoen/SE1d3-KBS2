@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using KBS2.CitySystem;
 using KBS2.Util;
 
@@ -36,10 +37,10 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         /// </summary>
         public override void Update()
         {
-            Radar.EntitiesInRange = City.Instance.Cars
-                .FindAll(car =>
-                    VectorUtil.Distance(car.Location, Radar.Car.Location) < Radar.Range && !car.Equals(Radar.Car))
-                .ConvertAll(car => (IEntity) car);
+            Radar.EntitiesInRange = City.Instance.Controller.GetEntities()
+                .FindAll(entity => entity.GetPoints().Any(point =>
+                    VectorUtil.Distance(point, Radar.Car.Location) < Radar.Range && !entity.Equals(Radar.Car))
+                );
         }
     }
 }

@@ -62,14 +62,6 @@ namespace KBS2.CitySystem
             CommandHandler.RegisterProperty("avgGroupSize", ref avgGroupSize);
         }
 
-        public List<IEntity> GetEntities()
-        {
-            return new List<IEntity>()
-                .Concat(Cars)
-                .Concat(Customers)
-                .ToList();
-        }
-
         public void AddGroup(CustomerGroup group)
         {
             Customers.AddRange(group.Customers);

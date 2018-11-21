@@ -35,7 +35,7 @@ namespace KBS2.CarSystem.Sensors
         /// <summary>
         ///     Use this method to throw the SensorEvent
         /// </summary>
-        public void DetectedEntities()
+        public void CallEvent()
         {
             if (Entities.Count != 0)
                 SensorEvent?.Invoke(this, new SensorEventArgs(this, Entities));
