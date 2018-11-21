@@ -27,11 +27,14 @@ namespace KBS2
     public partial class MainWindow : Window
     {
         public static readonly MainLoop Loop = new MainLoop();
+        public static ConsoleControl Console { get; private set; }
         public City City { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+
+            Console = MainConsole;
             
             var file = new XmlDocument();
             file.LoadXml("<City>\n\n" +
@@ -43,6 +46,7 @@ namespace KBS2
             var city = CityParser.MakeCity(file);
 
             // Registering commands
+            CommandHandler.RegisterCommand("Export", new CommandExport());
             CommandHandler.RegisterCommand("Set", new CommandSet());
 
             // Console logic
