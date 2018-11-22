@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer x:Name="ScrollViewerOutput" HorizontalScrollBarVisibility="Disabled">
-            <TextBlock x:Name="TextBlockOutput" Grid.Row="0" Margin="0" Background="Black" Foreground="White" TextWrapping="Wrap" />
+            <TextBlock x:Name="TextBlockOutput" Grid.Row="0" Margin="0" Background="Black" Foreground="White" TextWrapping="Wrap" FontFamily="Consolas" />
         </ScrollViewer>
 
         <Grid Grid.Row="1" Background="White">

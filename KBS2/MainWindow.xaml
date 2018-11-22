@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:KBS2"
         xmlns:console="clr-namespace:KBS2.Console"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <console:ConsoleControl x:Name="MainConsole" />

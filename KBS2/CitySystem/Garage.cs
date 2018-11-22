@@ -34,7 +34,7 @@ namespace KBS2.CitySystem
             }
 
             var location = new Vector(x, y);
-            var car = new Car(id, model, location, new List<Sensor>(), Direction);
+            var car = new Car(id, model, location, new List<Sensor>(), Direction, 10, 20);
             Vector destination;
             switch (Direction)
             {

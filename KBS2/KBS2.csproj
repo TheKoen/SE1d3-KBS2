@@ -73,6 +73,8 @@
     <Compile Include="CitySystem\CityController.cs" />
     <Compile Include="CitySystem\CityParser.cs" />
     <Compile Include="CitySystem\IEntity.cs" />
+    <Compile Include="Console\Commands\CommandExport.cs" />
+    <Compile Include="Console\Commands\CommandMap.cs" />
     <Compile Include="Console\Commands\CommandSet.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\EmptyCommandException.cs" />

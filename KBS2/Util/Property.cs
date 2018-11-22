@@ -23,8 +23,9 @@ namespace KBS2.Util
             }
         }
         
-        public Property(dynamic value)
+        public Property(object value)
         {
+            if (value == null) throw new ArgumentNullException();
             PropertyType = value.GetType();
             Value = value;
         }

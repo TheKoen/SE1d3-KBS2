@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using KBS2.CitySystem;
 using KBS2.Util;
 
@@ -27,12 +28,12 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         public override void Update()
         {
             var carDir = Sensor.Car.Direction;
-            var sensorDir = CheckDirAuto(carDir);
-            Sensor.Entities = CheckEntitiesInRange(sensorDir);
+            var sensorDir = GetAbsoluteDirection(carDir);
+            Sensor.Entities = GetEntitiesInRange(sensorDir);
 
-            if (CheckEntitiesInRange(sensorDir).Count == 0)
-                return;
-            Sensor.DetectedEntities();
+            if (GetEntitiesInRange(sensorDir).Count == 0) return;
+
+            Sensor.CallEvent();
         }
 
         /// <summary>
@@ -40,40 +41,16 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         /// </summary>
         /// <param name="sensorDir">the Direction of a sensor</param>
         /// <returns>a list of cars in range</returns>
-        private List<IEntity> CheckEntitiesInRange(DirectionCar sensorDir)
+        private List<IEntity> GetEntitiesInRange(DirectionCar sensorDir)
         {
-            switch (sensorDir)
-            {
-                case DirectionCar.North:
-                    return City.Instance.Cars
-                        .FindAll(car =>
-                            car.Location.Y > Sensor.Car.Location.Y &&
-                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
-                        .ConvertAll(car => (IEntity) car);
+            var car = Sensor.Car;
+            var range = Math.Min(car.CurrentRoad.Width / 4.0, Sensor.Range);
+            var direction = car.Direction.RotateTo(Sensor.Direction);
+            var add = Vector.Multiply(direction, (car.Length / 2.0 + range / 2.0));
+            var center = Vector.Add(car.Location, add);
 
-                case DirectionCar.South:
-                    return City.Instance.Cars
-                        .FindAll(car =>
-                            car.Location.Y < Sensor.Car.Location.Y &&
-                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
-                        .ConvertAll(car => (IEntity) car);
-
-                case DirectionCar.East:
-                    return City.Instance.Cars
-                        .FindAll(car =>
-                            car.Location.X > Sensor.Car.Location.X &&
-                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
-                        .ConvertAll(car => (IEntity) car);
-
-                case DirectionCar.West:
-                    return City.Instance.Cars
-                        .FindAll(car =>
-                            car.Location.X < Sensor.Car.Location.X &&
-                            MathUtil.Distance(car.Location, Sensor.Car.Location) <= Sensor.Range)
-                        .ConvertAll(car => (IEntity) car);
-                default:
-                    throw new Exception("Error Check Entities in range");
-            }
+            return City.Instance.Controller.GetEntitiesInRange(center, range)
+                .FindAll(entity => !entity.Equals(car));
         }
 
         /// <summary>
@@ -81,45 +58,20 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         /// </summary>
         /// <param name="carDir">car direction</param>
         /// <returns>direction for the sensor</returns>
-        private DirectionCar CheckDirAuto(DirectionCar carDir)
+        private DirectionCar GetAbsoluteDirection(DirectionCar carDir)
         {
-            if (Sensor.Direction == Direction.Front)
-            {
-                return carDir;
+            switch (Sensor.Direction) {
+                case Direction.Front:
+                    return carDir;
+                case Direction.Back:
+                    return carDir.GetOpposite();
+                case Direction.Left:
+                    return carDir.GetPrevious();
+                case Direction.Right:
+                    return carDir.GetNext();
+                default:
+                    throw new ArgumentException($"Unknown direction {Sensor.Direction}");
             }
-
-            if (Sensor.Direction == Direction.Back)
-            {
-                if (carDir == DirectionCar.North) return DirectionCar.South;
-
-                if (carDir == DirectionCar.South) return DirectionCar.North;
-
-                if (carDir == DirectionCar.West) return DirectionCar.East;
-
-                if (carDir == DirectionCar.East) return DirectionCar.West;
-            }
-            else if (Sensor.Direction == Direction.Left)
-            {
-                if (carDir == DirectionCar.North) return DirectionCar.West;
-
-                if (carDir == DirectionCar.South) return DirectionCar.East;
-
-                if (carDir == DirectionCar.West) return DirectionCar.South;
-
-                if (carDir == DirectionCar.East) return DirectionCar.North;
-            }
-            else if (Sensor.Direction == Direction.Right)
-            {
-                if (carDir == DirectionCar.North) return DirectionCar.East;
-
-                if (carDir == DirectionCar.South) return DirectionCar.West;
-
-                if (carDir == DirectionCar.West) return DirectionCar.North;
-
-                if (carDir == DirectionCar.East) return DirectionCar.South;
-            }
-
-            throw new Exception("Error check direction auto");
         }
     }
 }
