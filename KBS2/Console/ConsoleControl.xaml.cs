@@ -45,7 +45,7 @@ namespace KBS2.Console
         /// <param name="color">The color to print the text with, is White by default</param>
         public void Print(IEnumerable<char> text, Color? color = null)
         {
-            var stringText = $"[{DateTime.Now:T}] {string.Join("", text)}";
+            var stringText = $"[{DateTime.Now:hh:mm:ss}] {string.Join("", text)}";
 
             // Adding newline at the beginning when there already is input in the TextBlock
             if (TextBlockOutput.Inlines.Count > 0)

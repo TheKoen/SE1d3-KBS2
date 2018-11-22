@@ -22,7 +22,7 @@ namespace UnitTests.Console
             _console = new ConsoleControl();
             _printMethodRegex = new Regex(@"^\[(?<time>\d{2}:\d{2}:\d{2})\] (?<text>.*)$");
         }
-
+        
         [TestCase("", "")]
         [TestCase("Test", "Test")]
         public void SendCommandEventTest(string input, string expected)
@@ -31,7 +31,7 @@ namespace UnitTests.Console
 
             var handler = new ConsoleControl.SendCommandHandler(
                 (sender, args) => result = args.Command
-                );
+            );
 
             // Setting the event handler
             _console.SendCommand += handler;
