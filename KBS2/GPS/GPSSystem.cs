@@ -117,18 +117,23 @@ namespace KBS2.GPS
             Vector closestPointToDestination;
             var shortestDistance = Double.MaxValue;
             Road selectedRoad = null;
-            Vector selectDestination = new Vector();
+            var selectDestination = new Vector();
 
             foreach (var road in roads)
             {
                 if (road.Equals(car.Destination.Road))
                 {
+                    var destination = car.Destination;
+                    var distance = MathUtil.DistanceToRoad(destination.Location, road) - road.Width/4d;
+                    var direction = GetDirectionToRoad(destination.Location, road);
+                    var delta = Vector.Multiply(direction.GetDirection(), distance);
+                    var target = Vector.Add(destination.Location, delta);
 
+                    return new Destination { Road = road, Location = target };
                 }
-                //kijk naar verste afstand t.o.v auto
                 var furthestPoint = 0d;
-                var tempDStart = VectorUtil.Distance(road.Start, car.Location);
-                var tempDEnd = VectorUtil.Distance(road.End, car.Location);
+                var tempDStart = MathUtil.Distance(road.Start, car.Location);
+                var tempDEnd = MathUtil.Distance(road.End, car.Location);
 
                 furthestPoint = (tempDStart > tempDEnd) ? tempDStart : tempDEnd;
 
@@ -142,9 +147,8 @@ namespace KBS2.GPS
                     furthestPoint = tempDEnd;
                     closestPointToDestination = road.End;
                 }
-
-                // verste afstand t.o.v  klant
-                var distanceToDestination = VectorUtil.Distance(closestPointToDestination, car.Destination.Location);
+                
+                var distanceToDestination = MathUtil.Distance(closestPointToDestination, car.Destination.Location);
 
                 if(distanceToDestination < shortestDistance)
                 {
@@ -156,6 +160,18 @@ namespace KBS2.GPS
             }
             
             return new Destination { Road = selectedRoad, Location = selectDestination};
+        }
+
+        public static DirectionCar GetDirectionToRoad(Vector point, Road road)
+        {
+            if (road.IsXRoad())
+            {
+                return road.Start.Y < point.Y ? DirectionCar.North : DirectionCar.South;
+            }
+            else
+            {
+                return road.Start.X < point.X ? DirectionCar.West : DirectionCar.East;
+            }
         }
     }
 }

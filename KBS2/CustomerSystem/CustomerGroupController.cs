@@ -77,7 +77,7 @@ namespace KBS2.CustomerSystem
         }
 
         public void Update() {
-            var buitenRange = Group.Customers.Any(c => VectorUtil.Distance(c.Location, Group.Location) > GroupRadius);
+            var buitenRange = Group.Customers.Any(c => MathUtil.Distance(c.Location, Group.Location) > GroupRadius);
             
             if(!buitenRange && !requestedCar)
             {
