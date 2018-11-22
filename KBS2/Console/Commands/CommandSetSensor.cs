@@ -35,10 +35,10 @@ namespace KBS2.Console.Commands
             });
             
             foreach(var car in carWithModels)
-            {
+            {/*
                 car.Sensors.RemoveAll(s => s.Direction == side && s.);
 
-                car.Sensors.Add()
+                car.Sensors.Add()*/
             }
 
             return "";
@@ -88,13 +88,13 @@ namespace KBS2.Console.Commands
                             .ToList()
                             .Find(type => type.Name == sensorName);
 
-            foreach (var sensor in Sensor.SENSORS)
+            /*foreach (var sensor in Sensor.SENSORS)
             {
                 if (sensor.Type == sensorType)
                 {
-                    return sensor.Creator(car, direction, range);
+                    return sensor.Create(car, direction, range);
                 }
-            }     
+            }    */ 
 
         }
 

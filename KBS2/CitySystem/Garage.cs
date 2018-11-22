@@ -34,7 +34,7 @@ namespace KBS2.CitySystem
             }
 
             var location = new Vector(x, y);
-            var car = new Car(id, model, location, new List<Sensor>(), Direction, 10, 20);
+            var car = model.CreateCar(id, location, Direction);
             Vector destination;
             switch (Direction)
             {
