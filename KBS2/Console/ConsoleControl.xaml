@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="48" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="TextBoxInput" x:FieldModifier="public" Grid.Column="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" KeyDown="HandleInputKeyDown">
+            <TextBox x:Name="TextBoxInput" x:FieldModifier="public" Grid.Column="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" PreviewKeyDown="HandleInputKeyDown">
                 <TextBox.Style>
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                         <Style.Resources>
