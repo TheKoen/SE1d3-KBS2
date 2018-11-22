@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace KBS2.Console.Commands
 {
+    [CommandMetadata("Sensors")]
     class CommandsSensors : ICommand
     {
         public IEnumerable<char> Run(params string[] args)

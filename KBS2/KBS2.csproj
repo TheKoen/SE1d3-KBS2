@@ -76,6 +76,7 @@
     <Compile Include="Console\Commands\CommandExport.cs" />
     <Compile Include="Console\Commands\CommandGet.cs" />
     <Compile Include="Console\Commands\CommandMap.cs" />
+    <Compile Include="Console\Commands\CommandMetadata.cs" />
     <Compile Include="Console\Commands\CommandProperties.cs" />
     <Compile Include="Console\Commands\CommandSet.cs" />
     <Compile Include="Console\Commands\CommandsSensors.cs" />
