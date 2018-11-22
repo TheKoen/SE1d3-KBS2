@@ -115,5 +115,55 @@ namespace KBS2.GPS
             return new Destination();
 
         }
+
+        public static double CalculateDistance(Vector start, Vector end)
+        {
+            var road = NearestRoad(start);
+
+            var distance1 = MathUtil.Distance(start, road.Start);
+            var distance2 = MathUtil.Distance(end, road.End);
+
+            if(distance1 > distance2){
+
+            }
+            return 0;
+        }
+
+        private static double ExploreIntersection(Intersection intersection, Road source, Vector end, Road target, double distance)
+        {
+            var closestDistance = double.MaxValue;
+            
+            foreach (var road in intersection.GetRoads())
+            {
+                if (road.Equals(target))
+                {
+                    return distance + MathUtil.Distance(intersection.Location, end);
+                }              
+            }
+            var intersections = FindNextIntersections(intersection);
+            var closestIntersection = double.MaxValue;
+            Intersection intersectionNext = null;
+            foreach (var next in intersections)
+            {
+                var dist = MathUtil.Distance(next.Location, end);
+                if(dist < closestIntersection)
+                {
+                    closestIntersection = dist;
+                    intersectionNext = next;
+                }
+            }
+
+            if(intersectionNext == null)
+            {
+                throw new Exception("Route is impossible.");
+            }
+            distance += MathUtil.Distance(intersection.Location, intersectionNext.Location);
+            return ExploreIntersection(intersectionNext, source, end, target, distance);
+        }
+
+        public static List<Intersection> FindNextIntersections(Intersection intersection)
+        {
+            return new List<Intersection>();
+        }
     }
 }
