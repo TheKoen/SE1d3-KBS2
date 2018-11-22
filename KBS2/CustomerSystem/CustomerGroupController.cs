@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using KBS2.CitySystem;
 using KBS2.GPS;
@@ -12,14 +13,17 @@ namespace KBS2.CustomerSystem
         public static readonly int GroupDistanceFromRoad = 10;
         public static readonly int GroupRadius = 30;
         public CustomerGroup Group { get; set; }
-       
+
+        public bool requestedCar = false;
+
+
         public CustomerGroupController(CustomerGroup group)
         {
             Group = group;
             var road = GPSSystem.NearestRoad(group.Location);
             MoveToNearestRoad(road);
             Group.RoadsNear = GPSSystem.GetRoadsInRange(Group.Location, GroupRadius);
-            //Order car
+           
         }
 
         /// <summary>
@@ -73,7 +77,14 @@ namespace KBS2.CustomerSystem
         }
 
         public void Update() {
-
+            var buitenRange = Group.Customers.Any(c => MathUtil.Distance(c.Location, Group.Location) > GroupRadius);
+            
+            if(!buitenRange && !requestedCar)
+            {
+                var road = GPSSystem.NearestRoad(Group.Destination.Location);
+                GPSSystem.RequestCar(new CarSystem.Destination { Location = Group.Destination.Location, Road = road }, Group);
+                requestedCar = true;
+            }
         }
     }
 }
