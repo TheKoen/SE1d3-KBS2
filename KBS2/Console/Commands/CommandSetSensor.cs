@@ -14,51 +14,67 @@ namespace KBS2.Console.Commands
     {
         public IEnumerable<char> Run(params string[] args)
         {
-            if (args.Length < 4) { throw new InvalidParametersException(); };
+            if (args.Length < 4) { throw new InvalidParametersException("Invalid command usage, should be : Sensor add {model} {side} {sensor} [range]"); };
 
-            if (args[0] == "set") { throw new InvalidParametersException(); };
+            if (args[0] != "add") { throw new InvalidParametersException("Invalid command useage, should be : Sensor add {model} {side} {sensor} [range]"); };
 
-            var model = stringToCarModel(args[1]);
-            var side = stringToDirection(args[2]);
-            var sensor = args[3];
+            CarModel model;
+            Direction side;
+            CreateSensor sensorFactory;
 
-            var carWithModels = CitySystem.City.Instance.Cars.FindAll(car =>
-            {
-                if (car.Model == model)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                };
-            });
-            
-            foreach(var car in carWithModels)
-            {/*
-                car.Sensors.RemoveAll(s => s.Direction == side && s.);
-
-                car.Sensors.Add()*/
-            }
-
-            return "";
-        }
-
-        /// <summary>
-        /// Convert string to CarModel
-        /// </summary>
-        /// <param name="carModel">string with carModel</param>
-        /// <returns>Carmodel from string</returns>
-        private static CarModel stringToCarModel(string carModel)
-        {
             try
             {
-                return (CarModel)Enum.Parse(typeof(CarModel), carModel);
+                model = CarModel.Get(args[1]);
+            }
+            catch(Exception e)
+            {
+                throw new InvalidParametersException("Invalid command: Model doesn't exist.");
+            }
+            try
+            {
+                side = stringToDirection(args[2]);
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new InvalidParametersException("Invalid command: Side is wrong used.");
             }
+            try
+            {
+                sensorFactory = GetSensor(args[3]);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidParametersException("Invalid command: Could not create sensor.");
+            }
+            var range = 0;
+            if(args.Length == 5)
+            {
+                try
+                {
+                    range = int.Parse(args[4]);
+                }
+                catch(Exception e)
+                {
+                    throw new InvalidParametersException("Invalid command: Could not parse range.");
+                }
+            }
+
+            var sensor = new SensorPrototype
+            {
+                Direction = side,
+                Range = range,
+                Create = sensorFactory
+            };
+
+            model.Sensors.Add(sensor);
+
+            CitySystem.City.Instance.Cars
+                .FindAll(car => car.Model == model)
+                .ForEach(car => car.Sensors.Add(sensor.Create(car, sensor.Direction, sensor.Range)));
+
+
+
+            return $"Added sensor {args[3]} to {model.Name}";
         }
 
         /// <summary>
@@ -81,24 +97,17 @@ namespace KBS2.Console.Commands
         /// <summary>
         /// Create a sensor out of a string
         /// </summary>
-        /// <returns>the create sensor</returns>
-        private static void CreateSensor(string sensorName, Car car, Direction direction, int range)
+        /// <returns>the gettten sensor</returns>
+        private static CreateSensor GetSensor(string sensorName)
         {
             var sensorType = GetSensorsClasses()
                             .ToList()
                             .Find(type => type.Name == sensorName);
 
-            /*foreach (var sensor in Sensor.SENSORS)
-            {
-                if (sensor.Type == sensorType)
-                {
-                    return sensor.Create(car, direction, range);
-                }
-            }    */ 
-
+            return Sensor.SENSORS[sensorType];
         }
 
-
+        
         /// <summary>
         /// Get all Sensors in Namespace ActiveSensors en PassiveSensors
         /// </summary>

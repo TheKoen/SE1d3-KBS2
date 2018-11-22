@@ -39,15 +39,17 @@ namespace KBS2.CarSystem
                 Direction = Direction.Right,
                 Create = Sensor.SENSORS[typeof(LineSensor)]
             }
-        });
+        }, "TestModel");
 
         public List<SensorPrototype> Sensors { get; }
         public double MaxSpeed { get; }
+        public string Name { get; }
 
-        public CarModel(double maxSpeed, List<SensorPrototype> sensors)
+        public CarModel(double maxSpeed, List<SensorPrototype> sensors, string name)
         {
             MaxSpeed = maxSpeed;
             Sensors = sensors;
+            Name = name;
         }
 
         public Car CreateCar(int id, Vector location, DirectionCar direction)

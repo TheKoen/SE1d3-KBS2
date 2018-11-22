@@ -68,6 +68,7 @@ namespace KBS2
             CommandHandler.RegisterCommand("Export", new CommandExport());
             CommandHandler.RegisterCommand("Set", new CommandSet());
             CommandHandler.RegisterCommand("Map", new CommandMap());
+            CommandHandler.RegisterCommand("Sensor", new CommandSetSensor());
 
             // Console logic
             MainConsole.SendCommand += (sender, args) =>
