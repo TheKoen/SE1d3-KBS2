@@ -74,6 +74,7 @@
     <Compile Include="CitySystem\CityParser.cs" />
     <Compile Include="CitySystem\IEntity.cs" />
     <Compile Include="Console\Commands\CommandExport.cs" />
+    <Compile Include="Console\Commands\CommandGet.cs" />
     <Compile Include="Console\Commands\CommandMap.cs" />
     <Compile Include="Console\Commands\CommandSet.cs" />
     <Compile Include="Console\Commands\CommandsSensors.cs" />

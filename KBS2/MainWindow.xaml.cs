@@ -44,6 +44,7 @@ namespace KBS2
             // Registering commands
             CommandHandler.RegisterCommand("Export", new CommandExport());
             CommandHandler.RegisterCommand("Set", new CommandSet());
+            CommandHandler.RegisterCommand("Get", new CommandGet());
             CommandHandler.RegisterCommand("Map", new CommandMap());
             CommandHandler.RegisterCommand("Sensor", new CommandsSensors());
             
