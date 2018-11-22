@@ -35,34 +35,11 @@ namespace KBS2
             InitializeComponent();
 
             Console = MainConsole;
-            
-            var file = new XmlDocument();
-            file.LoadXml("<City>\n\n" +
-                         "<Roads>\n" +
-                         "  <Road Start=\"200,0\" End=\"200,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"0,400\" End=\"800,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"200,200\" End=\"800,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"200,300\" End=\"800,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"600,0\" End=\"600,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"400,200\" End=\"400,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"600,300\" End=\"600,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "</Roads>\n\n" +
-                         "<Buildings>\n" +
-                         "  <Building Location=\"250,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"300,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"350,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"400,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"450,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"520,140\" Size=\"80\"></Building>\n" +
-                         "  <Building Location=\"340,250\" Size=\"50\"></Building>\n" +
-                         "  <Building Location=\"260,250\" Size=\"50\"></Building>\n" +
-                         "</Buildings>\n\n" +
-                         "<Intersections>\n" +
-                         "  <Intersection Location =\"35,13\" Size=\"5\"></Intersection>\n" +
-                         "</Intersections>\n\n" +
-                         "</City>");
 
-            CityParser.MakeCity(file);
+            // Loading Xml file in Debug folder
+            var xmlCity = new XmlDocument();
+            xmlCity.Load("testcity.xml");
+            CityParser.MakeCity(xmlCity);
 
             // Registering commands
             CommandHandler.RegisterCommand("Export", new CommandExport());
