@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Threading;
+using KBS2.Console;
 using KBS2.Util;
 using Math = System.Math;
 
@@ -10,12 +12,10 @@ namespace KBS2
     public class MainLoop
     {
         private Property tickRate = new Property(30);
-        public int TickRate {
-            get => tickRate.Value;
-            set => tickRate.Value = value;
-        }
+        public int TickRate => tickRate.Value;
 
         private DispatcherTimer timer;
+        private int secondTicks;
 
         private event Update UpdateEvent;
 
@@ -27,6 +27,7 @@ namespace KBS2
             };
             timer.Tick += Update;
             tickRate.PropertyChanged += OnTickrateChange;
+            CommandHandler.RegisterProperty("tickRate", ref tickRate);
         }
 
         public void Subscribe(Update subscriber)
@@ -44,14 +45,22 @@ namespace KBS2
             timer.Stop();
         }
 
-        public void OnTickrateChange(object source, CustomPropertyChangedArgs args)
+        private void OnTickrateChange(object source, CustomPropertyChangedArgs args)
         {
+            MainWindow.Console.Print($"Changing TickRate to {args.ValueAfter}Hz");
             timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));
         }
 
         private void Update(object source, EventArgs args)
         {
             UpdateEvent?.Invoke();
+
+            secondTicks++;
+            if (secondTicks == 30)
+            {
+                MainWindow.Console.TestMap();
+                secondTicks = 0;
+            }
         }
 
         private static int CalculateInterval(int tickRate)

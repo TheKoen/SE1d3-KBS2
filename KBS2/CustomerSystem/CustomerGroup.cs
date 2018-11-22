@@ -23,6 +23,7 @@ namespace KBS2.CustomerSystem
             Location = start.Location;
             Destination = destination;
             Controller = new CustomerGroupController(this);
+            MainWindow.Loop.Subscribe(Controller.Update);
         }
     }
 }

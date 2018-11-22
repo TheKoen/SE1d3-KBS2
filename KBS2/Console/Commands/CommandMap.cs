@@ -22,7 +22,11 @@ namespace KBS2.Console.Commands
                 for (var x = 0; x < 800; x += 10)
                 {
                     var vector = new Vector(x, y);
-                    if (GPSSystem.GetRoad(vector) != null)
+                    if (IsCustomer(vector))
+                    {
+                        builder.Append('$');
+                    }
+                    else if (GPSSystem.GetRoad(vector) != null)
                     {
                         builder.Append('#');
                     }
@@ -40,6 +44,19 @@ namespace KBS2.Console.Commands
             }
 
             return builder.ToString();
+        }
+
+        private static bool IsCustomer(Vector point)
+        {
+            foreach (var customer in City.Instance.Customers)
+            {
+                if (MathUtil.Distance(customer.Location, point) < 10)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static bool IsBuilding(Vector point)

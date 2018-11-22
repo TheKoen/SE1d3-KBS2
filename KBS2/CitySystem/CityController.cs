@@ -22,14 +22,9 @@ namespace KBS2.CitySystem
 
         public void Update()
         {
-            if (City.Customers.Count < City.CustomerCount && Random.Next(20) == 1)
+            if (City.Customers.Count < City.CustomerCount && Random.Next(5) == 1)
             {
                 SpawnCustomerGroup();
-            }
-
-            if (City.Cars.Count < City.AvailableCars)
-            {
-                SpawnCar();
             }
         }
 
@@ -57,18 +52,6 @@ namespace KBS2.CitySystem
             var group = new CustomerGroup(groupSize, building, target);
 
             City.AddGroup(group);
-        }
-
-        public void SpawnCar()
-        {
-            var garages = City.Buildings
-                .FindAll(building => building is Garage)
-                .Select(building => (Garage) building)
-                .ToList();
-            var garage = garages[Random.Next(garages.Count)];
-            var model = CarModel.TestModel; //TODO: Select model based on settings
-
-            garage.SpawnCar(CAR_ID++, model);
         }
     }
 }
