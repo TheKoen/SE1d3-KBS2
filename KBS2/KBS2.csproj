@@ -76,6 +76,7 @@
     <Compile Include="Console\Commands\CommandExport.cs" />
     <Compile Include="Console\Commands\CommandMap.cs" />
     <Compile Include="Console\Commands\CommandSet.cs" />
+    <Compile Include="Console\Commands\CommandSetSensor.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\EmptyCommandException.cs" />
     <Compile Include="Exceptions\InvalidParametersException.cs" />

@@ -1,9 +1,27 @@
-﻿using System;
+﻿using KBS2.CarSystem.Sensors.PassiveSensors;
+using System;
 
 namespace KBS2.CarSystem.Sensors
 {
+    public delegate Sensor CreateSensor(Car car, Direction direction, int range);
+    public struct SensorCreator
+    {
+        public Type Type;
+        public CreateSensor Creator;
+    }
+
     public abstract class Sensor
     {
+
+        public static SensorCreator[] SENSORS =
+        {
+            new SensorCreator
+            {
+                Type = typeof(EntityRadar),
+                Creator = (car, Direction, range) => new EntityRadar(car, range)
+            }
+        };
+
         public Car Car { get; }
         public Direction Direction { get; }
 
