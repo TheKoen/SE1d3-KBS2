@@ -14,7 +14,7 @@ namespace UnitTests.CommandSystem
         {
             // Checking if the command gets registered correctly
             CommandHandler.RegisterCommand("UnitTest", new UnitTestCommand());
-            Assert.Contains("UnitTest", CommandHandler.GetCommandNames());
+            Assert.Contains("unittest", CommandHandler.GetCommandNames());
             Assert.Throws(typeof(KeyExistsException),
                 () => CommandHandler.RegisterCommand("UnitTest", new UnitTestCommand()));
         }
@@ -27,6 +27,7 @@ namespace UnitTests.CommandSystem
             Assert.Throws(typeof(EmptyCommandException), () => CommandHandler.HandleInput("   "));
             Assert.Throws(typeof(UnknownCommandException), () => CommandHandler.HandleInput("Bla bla"));
             Assert.DoesNotThrow(() => result = CommandHandler.HandleInput("UnitTest Test result"));
+            Assert.DoesNotThrow(() => result = CommandHandler.HandleInput("unittest Test result"));
             Assert.AreEqual("Test result", result);
         }
     }
