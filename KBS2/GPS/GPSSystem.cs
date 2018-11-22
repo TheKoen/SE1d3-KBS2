@@ -122,17 +122,19 @@ namespace KBS2.GPS
 
             var distance1 = MathUtil.Distance(start, road.Start);
             var distance2 = MathUtil.Distance(end, road.End);
+            var target = NearestRoad(end);
 
             if(distance1 > distance2){
-
+                return ExploreIntersection(FindIntersection(road.Start), road, end, target, 0.0);
             }
-            return 0;
+            else
+            {
+                return ExploreIntersection(FindIntersection(road.End), road, end, target, 0.0);
+            }
         }
 
         private static double ExploreIntersection(Intersection intersection, Road source, Vector end, Road target, double distance)
         {
-            var closestDistance = double.MaxValue;
-            
             foreach (var road in intersection.GetRoads())
             {
                 if (road.Equals(target))
@@ -140,11 +142,17 @@ namespace KBS2.GPS
                     return distance + MathUtil.Distance(intersection.Location, end);
                 }              
             }
+
             var intersections = FindNextIntersections(intersection);
             var closestIntersection = double.MaxValue;
             Intersection intersectionNext = null;
+
             foreach (var next in intersections)
             {
+                if (next.Equals(intersection))
+                {
+                    continue;
+                }
                 var dist = MathUtil.Distance(next.Location, end);
                 if(dist < closestIntersection)
                 {
@@ -164,6 +172,11 @@ namespace KBS2.GPS
         public static List<Intersection> FindNextIntersections(Intersection intersection)
         {
             return new List<Intersection>();
+        }
+
+        public static Intersection FindIntersection(Vector location)
+        {
+            return null;
         }
     }
 }
