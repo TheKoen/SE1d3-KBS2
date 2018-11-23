@@ -76,6 +76,7 @@
     <Compile Include="Console\CommandRegistrar.cs" />
     <Compile Include="Console\Commands\CommandExport.cs" />
     <Compile Include="Console\Commands\CommandGet.cs" />
+    <Compile Include="Console\Commands\CommandHelp.cs" />
     <Compile Include="Console\Commands\CommandMap.cs" />
     <Compile Include="Console\Commands\CommandMetadataAttribute.cs" />
     <Compile Include="Console\Commands\CommandProperties.cs" />

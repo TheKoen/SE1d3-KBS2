@@ -76,6 +76,15 @@ namespace KBS2.Console
         }
 
         /// <summary>
+        /// Gets every registered <see cref="ICommand"/>
+        /// </summary>
+        /// <returns><see cref="List{Type}"/> of commands</returns>
+        public static List<Type> GetCommands()
+        {
+            return commandList;
+        }
+
+        /// <summary>
         /// Gets the name of every registered <see cref="Property"/>
         /// </summary>
         /// <returns><see cref="Dictionary{String,Property}"/> of properties</returns>
