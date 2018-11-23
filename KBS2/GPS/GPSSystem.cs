@@ -131,24 +131,12 @@ namespace KBS2.GPS
 
                     return new Destination {Road = road, Location = target};
                 }
-
-                var furthestPoint = 0d;
+               
                 var tempDStart = MathUtil.Distance(road.Start, car.Location);
                 var tempDEnd = MathUtil.Distance(road.End, car.Location);
 
-                furthestPoint = (tempDStart > tempDEnd) ? tempDStart : tempDEnd;
-
-                if (tempDStart > tempDEnd)
-                {
-                    furthestPoint = tempDStart;
-                    closestPointToDestination = road.Start;
-                }
-                else
-                {
-                    furthestPoint = tempDEnd;
-                    closestPointToDestination = road.End;
-                }
-
+                closestPointToDestination = tempDStart > tempDEnd ? road.Start : road.End;
+                
                 var distanceToDestination = MathUtil.Distance(closestPointToDestination, car.Destination.Location);
 
                 if (distanceToDestination < shortestDistance)
@@ -158,8 +146,7 @@ namespace KBS2.GPS
                     selectDestination = closestPointToDestination;
                 }
             }
-
-            return new Destination {Road = selectedRoad, Location = selectDestination};
+            return new Destination { Road = selectedRoad, Location = selectDestination};
         }
 
         public static DirectionCar GetDirectionToRoad(Vector point, Road road)

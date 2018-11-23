@@ -43,6 +43,18 @@ namespace UnitTests.Util
             return this;
         }
 
+        public CityBuilder Intersection(Vector location, int size)
+        {
+            City.Intersections.Add(new Intersection(location, size));
+            return this;
+        }
+
+        public CityBuilder Intersection(Intersection intersection)
+        {
+            City.Intersections.Add(intersection);
+            return this;
+        }
+
         public City Build()
         {
             return City;
