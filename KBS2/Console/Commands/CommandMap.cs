@@ -10,6 +10,9 @@ using KBS2.Util;
 
 namespace KBS2.Console.Commands
 {
+    [CommandMetadata("map",
+        Description = "Shows a downscaled representation of the current city",
+        AutoRegister = true)]
     public class CommandMap : ICommand
     {
         public IEnumerable<char> Run(params string[] args)

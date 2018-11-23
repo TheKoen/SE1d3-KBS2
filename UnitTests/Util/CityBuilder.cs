@@ -11,7 +11,7 @@ namespace UnitTests.Util
 {
     public class CityBuilder
     {
-        private City City { get; set; }
+        private City City { get; }
 
         public CityBuilder()
         {
@@ -40,6 +40,18 @@ namespace UnitTests.Util
         public CityBuilder Building(Building building)
         {
             City.Buildings.Add(building);
+            return this;
+        }
+
+        public CityBuilder Intersection(Vector location, int size)
+        {
+            City.Intersections.Add(new Intersection(location, size));
+            return this;
+        }
+
+        public CityBuilder Intersection(Intersection intersection)
+        {
+            City.Intersections.Add(intersection);
             return this;
         }
 

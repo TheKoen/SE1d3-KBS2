@@ -11,6 +11,14 @@ using System.Windows.Media;
 
 namespace KBS2.Console.Commands
 {
+    [CommandMetadata("sensors",
+        Description = "Manages sensors",
+        Usages = new []
+        {
+            "sensors remove <model> <side> <sensor>",
+            "sensors add <model> <side> <sensor> [range]"
+        },
+        AutoRegister = true)]
     class CommandsSensors : ICommand
     {
         private List<SensorPrototype> listPotentialRemoved;

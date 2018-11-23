@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
+using ICommand = KBS2.Console.ICommand;
 
 namespace KBS2
 {
@@ -64,11 +65,10 @@ namespace KBS2
 
             CityParser.MakeCity(file);
 
+            Loop.Start();
+
             // Registering commands
-            CommandHandler.RegisterCommand("Export", new CommandExport());
-            CommandHandler.RegisterCommand("Set", new CommandSet());
-            CommandHandler.RegisterCommand("Map", new CommandMap());
-            CommandHandler.RegisterCommand("Sensor", new CommandsSensors());
+            CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");
             
             // Console logic
             MainConsole.SendCommand += (sender, args) =>
@@ -78,6 +78,7 @@ namespace KBS2
                 try
                 {
                     var output = CommandHandler.HandleInput(input);
+                    if (output == null) return;
                     MainConsole.Print(output);
                 }
                 catch (CommandException exception)

@@ -37,7 +37,7 @@ namespace KBS2.CustomerSystem
             if (Customer.Group == null) return false;
             var cL = Customer.Location;
 
-            var delta = new Vector(location.X - cL.X, location.Y - cL.X);
+            var delta = new Vector(location.X - cL.X, location.Y - cL.Y);
             delta.Normalize();
             var target = Vector.Add(Customer.Location, delta);
             
