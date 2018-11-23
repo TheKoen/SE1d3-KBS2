@@ -11,12 +11,12 @@ using System.Windows.Media;
 
 namespace KBS2.Console.Commands
 {
-    [CommandMetadata("sensors",
+    [CommandMetadata("sensor",
         Description = "Manages sensors",
         Usages = new []
         {
-            "sensors remove <model> <side> <sensor>",
-            "sensors add <model> <side> <sensor> [range]"
+            "sensor remove <model> [side] [sensor]",
+            "sensor add <model> <side> <sensor> [range]"
         },
         AutoRegister = true)]
     class CommandsSensors : ICommand
@@ -50,7 +50,7 @@ namespace KBS2.Console.Commands
         /// <returns></returns>
         private IEnumerable<char> RemoveSensor(params string[] args)
         {
-            if (args.Length < 3 && args.Length != 2) { throw new InvalidParametersException("Invalid command usage, should be : Sensor Remove {model} [side] [sensor]"); };
+            if (args.Length < 3 && args.Length != 2) { throw new InvalidParametersException("Invalid command usage, should be : sensor remove <model> [side] [sensor] [sensor]"); };
 
             CarModel model;
             Direction side;
@@ -144,9 +144,9 @@ namespace KBS2.Console.Commands
         /// <returns></returns>
         private IEnumerable<char> AddSensor(params string[] args)
         {
-            if (args.Length < 4) { throw new InvalidParametersException("Invalid command usage, should be : Sensor add {model} {side} {sensor} [range]"); };
+            if (args.Length < 4) { throw new InvalidParametersException("Invalid command usage, should be : sensor add <model> <side> <sensor> [range]"); };
 
-            if (args[0] != "add") { throw new InvalidParametersException("Invalid command useage, should be : Sensor add {model} {side} {sensor} [range]"); };
+            if (args[0] != "add") { throw new InvalidParametersException("Invalid command useage, should be : sensor add <model> <side> <sensor> [range]"); };
 
             CarModel model;
             Direction side;
