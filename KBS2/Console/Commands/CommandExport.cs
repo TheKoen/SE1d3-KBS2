@@ -7,7 +7,8 @@ using KBS2.Exceptions;
 namespace KBS2.Console.Commands
 {
     [CommandMetadata("Export",
-        Description = "Exports the contents of the console to a file")]
+        Description = "Exports the contents of the console to a file",
+        AutoRegister = true)]
     public class CommandExport : ICommand
     {
         public IEnumerable<char> Run(params string[] args)

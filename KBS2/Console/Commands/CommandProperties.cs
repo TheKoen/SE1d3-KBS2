@@ -5,7 +5,8 @@ namespace KBS2.Console.Commands
 {
     [CommandMetadata("Properties",
         Aliases = new string[] { "Prop" },
-        Description = "Shows a list of all currently registered Properties")]
+        Description = "Shows a list of all currently registered Properties",
+        AutoRegister = true)]
     public class CommandProperties : ICommand
     {
         public IEnumerable<char> Run(params string[] args)

@@ -9,7 +9,8 @@ using KBS2.Util;
 namespace KBS2.Console.Commands
 {
     [CommandMetadata("Set",
-        Description = "Sets the value of a Property")]
+        Description = "Sets the value of a Property",
+        AutoRegister = true)]
     public class CommandSet : ICommand
     {
         private static Regex _vectorRegex = new Regex(@"^(?<posX>-?\d+|-?\d*\.\d+),\s?(?<posY>-?\d+|-?\d*\.\d+)$");
