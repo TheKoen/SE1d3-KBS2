@@ -84,8 +84,8 @@ namespace UnitTests.GPS
         }
 
         [TestCase(35, 85, DirectionCar.North, 90, 60, 2, 3, 0, 90, 75)]
-        [TestCase(45, 5, DirectionCar.West, 45, 90, 5, 0, 3, 35, 70)] // Jochem's droom
-        [TestCase()]
+        [TestCase(45, 5, DirectionCar.West, 45, 90, 5, 0, 3, 35, 70)] 
+        [TestCase(35, 85, DirectionCar.North, 90, 60, 2, 2, 0, 102.5, 60)]
         public void GetDirection(double cX, double cY, DirectionCar direction, double dX, double dY, int road, int destRoad, int intersection, double eX, double eY)
         {
             var roads = new Road[]{
@@ -124,8 +124,10 @@ namespace UnitTests.GPS
             car.Destination = new Destination { Location = new Vector(dX, dY), Road = roads[destRoad] };
 
             var carDestination = GPSSystem.GetDirection(car, intersections[intersection]);
-
-            Assert.AreEqual(carDestination, new Destination {Location = new Vector(eX, eY), Road = roads[road]});
+            
+            Assert.AreEqual(eX, carDestination.Location.X, 0.01);
+            Assert.AreEqual(eY, carDestination.Location.Y, 0.01);
+            Assert.AreEqual(roads[road], carDestination.Road);
         }
     }
 }
