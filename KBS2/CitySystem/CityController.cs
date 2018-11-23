@@ -26,11 +26,6 @@ namespace KBS2.CitySystem
             {
                 SpawnCustomerGroup();
             }
-
-            if (City.Cars.Count < City.AvailableCars)
-            {
-                SpawnCar();
-            }
         }
 
         public List<IEntity> GetEntities()

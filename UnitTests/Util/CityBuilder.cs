@@ -11,7 +11,7 @@ namespace UnitTests.Util
 {
     public class CityBuilder
     {
-        private City City { get; set; }
+        private City City { get; }
 
         public CityBuilder()
         {

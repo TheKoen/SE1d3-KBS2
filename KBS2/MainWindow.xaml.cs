@@ -64,6 +64,8 @@ namespace KBS2
 
             CityParser.MakeCity(file);
 
+            Loop.Start();
+
             // Registering commands
             CommandHandler.RegisterCommand("Export", new CommandExport());
             CommandHandler.RegisterCommand("Properties", new CommandProperties());
