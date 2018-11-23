@@ -11,7 +11,13 @@ using System.Threading.Tasks;
 
 namespace KBS2.Console.Commands
 {
-    [CommandMetadata("Sensors",
+    [CommandMetadata("sensors",
+        Description = "Manages sensors",
+        Usages = new []
+        {
+            "sensors remove <model> <side> <sensor>",
+            "sensors add <model> <side> <sensor> [range]"
+        },
         AutoRegister = true)]
     class CommandsSensors : ICommand
     {

@@ -68,9 +68,6 @@ namespace KBS2
             // Registering commands
             CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");
             
-            CommandHandler.RegisterCommand("Map", new CommandMap());
-            CommandHandler.RegisterCommand("Sensor", new CommandsSensors());
-            
             // Console logic
             MainConsole.SendCommand += (sender, args) =>
             {
@@ -79,6 +76,7 @@ namespace KBS2
                 try
                 {
                     var output = CommandHandler.HandleInput(input);
+                    if (output == null) return;
                     MainConsole.Print(output);
                 }
                 catch (CommandException exception)

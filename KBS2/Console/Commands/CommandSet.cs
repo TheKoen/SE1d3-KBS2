@@ -8,8 +8,9 @@ using KBS2.Util;
 
 namespace KBS2.Console.Commands
 {
-    [CommandMetadata("Set",
+    [CommandMetadata("set",
         Description = "Sets the value of a Property",
+        Usages = new [] { "set <property> <value>" },
         AutoRegister = true)]
     public class CommandSet : ICommand
     {

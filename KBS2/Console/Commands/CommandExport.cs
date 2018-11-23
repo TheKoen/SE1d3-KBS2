@@ -6,8 +6,9 @@ using KBS2.Exceptions;
 
 namespace KBS2.Console.Commands
 {
-    [CommandMetadata("Export",
+    [CommandMetadata("export",
         Description = "Exports the contents of the console to a file",
+        Usages = new [] { "export <file>" },
         AutoRegister = true)]
     public class CommandExport : ICommand
     {

@@ -3,8 +3,8 @@ using System.Text;
 
 namespace KBS2.Console.Commands
 {
-    [CommandMetadata("Properties",
-        Aliases = new string[] { "Prop" },
+    [CommandMetadata("properties",
+        Aliases = new string[] { "props" },
         Description = "Shows a list of all currently registered Properties",
         AutoRegister = true)]
     public class CommandProperties : ICommand

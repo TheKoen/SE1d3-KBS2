@@ -23,7 +23,7 @@ namespace KBS2.Console
                 // Registering the command if it has AutoRegister set
                 var attr = (CommandMetadataAttribute)Attribute.GetCustomAttribute(type, typeof(CommandMetadataAttribute));
                 if (attr.AutoRegister)
-                    CommandHandler.RegisterCommand(attr.Key, (ICommand)Activator.CreateInstance(type));
+                    CommandHandler.RegisterCommand(type);
             }
         }
     }
