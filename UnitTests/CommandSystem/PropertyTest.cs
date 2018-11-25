@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using KBS2.Console;
+using KBS2.Exceptions;
 using KBS2.Util;
 using NUnit.Framework;
 

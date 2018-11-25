@@ -27,18 +27,16 @@ namespace KBS2.Console.Commands
             {
                 throw new InvalidParametersException("Invalid command usage, you can use remove and add");
             }
-            if(args[0] == "add")
+            
+            switch (args[0])
             {
-                return AddSensor(args);
+                case "add":
+                    return AddSensor(args);
+                case "remove":
+                    return RemoveSensor(args);
+                default:
+                    throw new InvalidParametersException("Invalid command usage, you can use remove and add");
             }
-            else if(args[0] == "remove")
-            {
-                return RemoveSensor(args);
-            }
-            else
-            {
-                throw new InvalidParametersException("Invalid command usage, you can use remove and add");
-            }           
         }
         
         private IEnumerable<char> RemoveSensor(params string[] args)
@@ -52,15 +50,15 @@ namespace KBS2.Console.Commands
             {
                 model = CarModel.Get(args[1]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidParametersException("Invalid command: Model doesn't exist.");
             }
             try
             {
-                side = StringConverters.stringToDirection(args[2]);
+                side = StringConverters.StringToDirection(args[2]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidParametersException("Invalid command: Side is wrong used.");
             }
@@ -68,13 +66,13 @@ namespace KBS2.Console.Commands
             {
                 sensorFactory = StringConverters.GetSensor(args[3]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidParametersException("Invalid command: Could not create sensor.");
             }
             var count = model.Sensors
                 .FindAll(sensor => sensor.GetType().Equals(sensorFactory.GetType()) && sensor.Direction == side)
-                .Count();
+                .Count;
             model.Sensors.RemoveAll(sensor => sensor.GetType().Equals(sensorFactory.GetType()) && sensor.Direction == side);
 
             return $"Removed {count} sensors.";
@@ -82,9 +80,9 @@ namespace KBS2.Console.Commands
 
         private IEnumerable<char> AddSensor(params string[] args)
         {
-            if (args.Length < 4) { throw new InvalidParametersException("Invalid command usage, should be : Sensor add {model} {side} {sensor} [range]"); };
+            if (args.Length < 4) { throw new InvalidParametersException("Invalid command usage, should be : sensor add {model} {side} {sensor} [range]"); }
 
-            if (args[0] != "add") { throw new InvalidParametersException("Invalid command useage, should be : Sensor add {model} {side} {sensor} [range]"); };
+            if (args[0] != "add") { throw new InvalidParametersException("Invalid command usage, should be : sensor add {model} {side} {sensor} [range]"); }
 
             CarModel model;
             Direction side;
@@ -94,15 +92,15 @@ namespace KBS2.Console.Commands
             {
                 model = CarModel.Get(args[1]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidParametersException("Invalid command: Model doesn't exist.");
             }
             try
             {
-                side = StringConverters.stringToDirection(args[2]);
+                side = StringConverters.StringToDirection(args[2]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidParametersException("Invalid command: Side is wrong used.");
             }
@@ -110,7 +108,7 @@ namespace KBS2.Console.Commands
             {
                 sensorFactory = StringConverters.GetSensor(args[3]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidParametersException("Invalid command: Could not create sensor.");
             }
@@ -121,7 +119,7 @@ namespace KBS2.Console.Commands
                 {
                     range = int.Parse(args[4]);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new InvalidParametersException("Invalid command: Could not parse range.");
                 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CitySystem;
 using KBS2.GPS;
-using KBS2.Util;
 
 namespace KBS2.Console.Commands
 {

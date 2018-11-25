@@ -19,8 +19,8 @@ namespace KBS2.Console
         // Gets invoked when a command is sent by the user
         public event SendCommandHandler SendCommand;
 
-        private LinkedList<string> _inputHistory = new LinkedList<string>();
-        private Queue<string> _outputHistory = new Queue<string>();
+        private readonly LinkedList<string> _inputHistory = new LinkedList<string>();
+        private readonly Queue<string> _outputHistory = new Queue<string>();
         private int _inputHistoryCapacity = 32;
         private int _outputHistoryCapacity = 256;
         private int _inputHistoryIndex = -1;

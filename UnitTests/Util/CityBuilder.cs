@@ -15,7 +15,7 @@ namespace UnitTests.Util
 
         public CityBuilder()
         {
-            CommandHandler.Reset();
+            CommandHandler.ResetProperties();
             City = new City();
         }
 

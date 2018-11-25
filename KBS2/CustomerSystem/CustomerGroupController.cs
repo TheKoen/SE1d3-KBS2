@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using KBS2.CitySystem;
 using KBS2.GPS;
@@ -14,7 +12,7 @@ namespace KBS2.CustomerSystem
         public static readonly int GroupRadius = 30;
         public CustomerGroup Group { get; set; }
 
-        public bool requestedCar = false;
+        public bool RequestedCar;
 
 
         public CustomerGroupController(CustomerGroup group)
@@ -23,7 +21,6 @@ namespace KBS2.CustomerSystem
             var road = GPSSystem.NearestRoad(group.Location);
             MoveToNearestRoad(road);
             Group.RoadsNear = GPSSystem.GetRoadsInRange(Group.Location, GroupRadius);
-           
         }
 
         /// <summary>
@@ -43,7 +40,7 @@ namespace KBS2.CustomerSystem
         /// <returns>Returns true if the road is underneath and false if the road is above the current customer position.</returns>
         public bool CheckHorizontalRoadPosition(Road road)
         {
-            return (Group.Location.Y - road.Start.Y) < 0;
+            return Group.Location.Y - road.Start.Y < 0;
         }
 
         /// <summary>
@@ -53,7 +50,7 @@ namespace KBS2.CustomerSystem
         /// <returns>Returns true if the road is right and false if the road is left of the current customer position.</returns>
         public bool CheckVerticalRoadPosition(Road road)
         {
-            return (Group.Location.X - road.Start.X) < 0;
+            return Group.Location.X - road.Start.X < 0;
         }
 
         /// <summary>
@@ -65,26 +62,24 @@ namespace KBS2.CustomerSystem
             if (CheckRoadOrientation(road))
             {
                 Group.Location = CheckHorizontalRoadPosition(road)
-                    ? new Vector(Group.Location.X, road.Start.Y - (road.Width / 2.0) - GroupDistanceFromRoad)
-                    : new Vector(Group.Location.X, road.Start.Y + (road.Width / 2.0) + GroupDistanceFromRoad);
+                    ? new Vector(Group.Location.X, road.Start.Y - road.Width / 2.0 - GroupDistanceFromRoad)
+                    : new Vector(Group.Location.X, road.Start.Y + road.Width / 2.0 + GroupDistanceFromRoad);
             }
             else
             {
                 Group.Location = CheckVerticalRoadPosition(road)
-                    ? new Vector(road.Start.X - (road.Width / 2.0) - GroupDistanceFromRoad, Group.Location.Y)
-                    : new Vector(road.Start.X + (road.Width / 2.0) + GroupDistanceFromRoad, Group.Location.Y);
+                    ? new Vector(road.Start.X - road.Width / 2.0 - GroupDistanceFromRoad, Group.Location.Y)
+                    : new Vector(road.Start.X + road.Width / 2.0 + GroupDistanceFromRoad, Group.Location.Y);
             }
         }
 
         public void Update() {
             var buitenRange = Group.Customers.Any(c => MathUtil.Distance(c.Location, Group.Location) > GroupRadius);
-            
-            if(!buitenRange && !requestedCar)
-            {
-                var road = GPSSystem.NearestRoad(Group.Destination.Location);
-                GPSSystem.RequestCar(new CarSystem.Destination { Location = Group.Destination.Location, Road = road }, Group);
-                requestedCar = true;
-            }
+
+            if (buitenRange || RequestedCar) return;
+            var road = GPSSystem.NearestRoad(Group.Destination.Location);
+            GPSSystem.RequestCar(new CarSystem.Destination { Location = Group.Destination.Location, Road = road }, Group);
+            RequestedCar = true;
         }
     }
 }

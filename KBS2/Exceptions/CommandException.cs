@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace KBS2.Utilities
+namespace KBS2.Exceptions
 {
     public abstract class CommandException : Exception, ISerializable
     {

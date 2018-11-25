@@ -33,7 +33,7 @@ namespace KBS2.CustomerSystem
 
         public List<Vector> GetPoints()
         {
-            return new List<Vector>()
+            return new List<Vector>
             {
                 Location
             };

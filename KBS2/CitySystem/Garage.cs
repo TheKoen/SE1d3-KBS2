@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using KBS2.CarSystem;
-using KBS2.CarSystem.Sensors;
 
 namespace KBS2.CitySystem
 {
@@ -26,11 +24,11 @@ namespace KBS2.CitySystem
             if (road.IsXRoad())
             {
                 x = Location.X;
-                y = Location.Y > road.Start.Y ? road.Start.Y + (road.Width / 4d) : road.Start.Y - (road.Width / 4d);
+                y = Location.Y > road.Start.Y ? road.Start.Y + road.Width / 4d : road.Start.Y - road.Width / 4d;
             } else
             {
                 y = Location.Y;
-                x = Location.X > road.Start.X ? road.Start.X + (road.Width / 4d) : road.Start.X - (road.Width / 4d);
+                x = Location.X > road.Start.X ? road.Start.X + road.Width / 4d : road.Start.X - road.Width / 4d;
             }
 
             var location = new Vector(x, y);
