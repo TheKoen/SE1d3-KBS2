@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.CustomerSystem;
 using KBS2.GPS;
 using KBS2.Util;
 
@@ -17,21 +19,35 @@ namespace KBS2.Console.Commands
     {
         private static bool running;
         private static int secondTick;
+        private static bool active;
+
+        static CommandMap()
+        {
+            active = true;
+            var thread = new Thread(() =>
+            {
+                while (active)
+                {
+                    if (running)
+                    {
+                        Update();
+                    }
+                    Thread.Sleep(10);
+                }
+            }) {Name = "DisplayMap Thread"};
+            thread.Start();
+        }
+
+        public static void Stop()
+        {
+            active = false;
+        }
 
         public IEnumerable<char> Run(params string[] args)
         {
-            if (!running)
-            {
-                MainWindow.Loop.Subscribe(Update);
-            }
-            else
-            {
-                MainWindow.Loop.Unsubscribe(Update);
-            }
-
             running = !running;
 
-            return "Toggling map renderer...";
+            return $"Turning map renderer {(running ? "on" : "off")}...";
         }
 
         private static void Update()
@@ -79,12 +95,12 @@ namespace KBS2.Console.Commands
                 builder.Append('\n');
             }
 
-            MainWindow.Console.Print(builder.ToString());
+            //MainWindow.Console.Print(builder.ToString());
         }
 
         private static bool IsCustomer(Vector point)
         {
-            foreach (var customer in City.Instance.Customers)
+            foreach (var customer in new List<Customer>(City.Instance.Customers))
             {
                 if (MathUtil.Distance(customer.Location, point) < 10)
                 {
@@ -97,7 +113,7 @@ namespace KBS2.Console.Commands
 
         private static bool IsBuilding(Vector point)
         {
-            foreach (var building in City.Instance.Buildings)
+            foreach (var building in new List<Building>(City.Instance.Buildings))
             {
                 var location = building.Location;
                 var size = building.Size / 2d;
