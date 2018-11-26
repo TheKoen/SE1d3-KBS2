@@ -2,6 +2,7 @@
 .idea/*
 .vs/*
 *.sln.DotSettings.user
+*.csproj.DotSettings
 KBS2/obj/*
 KBS2/bin/*
 UnitTests/obj/*

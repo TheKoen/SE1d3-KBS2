@@ -72,5 +72,11 @@ namespace KBS2
                 }
             };
         }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // Focuses the TextBox inside the console on load
+            MainConsole.TextBoxInput.Focus();
+        }
     }
 }
