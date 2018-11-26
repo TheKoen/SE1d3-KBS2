@@ -5,6 +5,7 @@ using KBS2.Utilities;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
+using ICommand = KBS2.Console.ICommand;
 
 namespace KBS2
 {
@@ -53,11 +54,11 @@ namespace KBS2
             // Start the main loop
             Loop.Start();
 
-            // Registering commands
-            CommandHandler.RegisterCommand("Export", new CommandExport());
-            CommandHandler.RegisterCommand("Set", new CommandSet());
-            CommandHandler.RegisterCommand("Map", new CommandMap());
+            Loop.Start();
 
+            // Registering commands
+            CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");
+            
             // Console logic
             MainConsole.SendCommand += (sender, args) =>
             {
@@ -66,6 +67,7 @@ namespace KBS2
                 try
                 {
                     var output = CommandHandler.HandleInput(input);
+                    if (output == null) return;
                     MainConsole.Print(output);
                 }
                 catch (CommandException exception)

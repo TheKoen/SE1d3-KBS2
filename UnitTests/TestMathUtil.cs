@@ -16,8 +16,6 @@ namespace UnitTests
     {
         [TestCase(100, 0, 20, 20, 20)]
         [TestCase(0, 100, 20, 20, 20)]
-        [TestCase(0, 100, -20, -20, 20)]
-        [TestCase(100, 0, -20, -20, 20)]
         public void TestDistanceToRoad(double rx, double ry, double px, double py, double expected)
         {
             var road = new Road(new Vector(0, 0), new Vector(rx, ry), 10, 100);

@@ -47,16 +47,8 @@ namespace KBS2.GPS
 
         public static List<Road> GetRoadsInRange(Vector location, int range)
         {
-            var roads = new List<Road>
-            {
-                GetRoad(new Vector(location.X + range, location.Y)),
-                GetRoad(new Vector(location.X - range, location.Y)),
-                GetRoad(new Vector(location.X, location.Y + range)),
-                GetRoad(new Vector(location.X, location.Y + range)),
-                GetRoad(new Vector(location.X, location.Y))
-            };
-            roads.RemoveAll(road => road == null);
-            return roads.Distinct().ToList();
+            return City.Instance.Roads
+                .FindAll(road => MathUtil.DistanceToRoad(location, road) <= range);
         }
 
         public static Road NearestRoad(Vector location)
@@ -73,6 +65,7 @@ namespace KBS2.GPS
                 closestDistance = distance;
                 closestRoad = road;
             }
+
             return closestRoad;
         }
 
@@ -82,7 +75,7 @@ namespace KBS2.GPS
             var city = City.Instance;
             var garages = city.Buildings
                 .FindAll(building => building is Garage)
-                .Select(building => (Garage)building)
+                .Select(building => (Garage) building)
                 .Where(g => g.AvailableCars > 0)
                 .ToList();
 
@@ -92,28 +85,150 @@ namespace KBS2.GPS
             foreach (Garage garage in garages)
             {
                 var tempDistance = MathUtil.Distance(group.Location, garage.Location);
-                if(tempDistance < nearestDistance)
+                if (tempDistance < nearestDistance)
                 {
                     nearestGarage = garage;
                     nearestDistance = tempDistance;
                 }
             }
 
-            // Nearest garage sends car  *OPTIONAL*(if available car applies to group needs)
             var car = nearestGarage.SpawnCar(CityController.CAR_ID++, CarModel.TestModel);
             car.Destination = destination;
-
         }
 
         public static Destination GetDirection(Car car, Intersection intersection)
         {
-            // Car uses Nearest Neighbor Algorithm and Distance to customer to receive direction.
-            // Check with connected roads
-            // from dest point -> End point of road
-            
-            //intersection returns dictionary with DirectionCar, Roads
-            return new Destination();
+            var roadsAtInteresection = intersection.GetRoads();
+            var roads = new List<Road>();
 
+            foreach (var road in roadsAtInteresection)
+            {
+                if (!car.CurrentRoad.Equals(road)) roads.Add(road);
+            }
+
+            Vector closestPointToDestination;
+            var shortestDistance = double.MaxValue;
+            Road selectedRoad = null;
+            var selectDestination = new Vector();
+
+            foreach (var road in roads)
+            {
+                if (road.Equals(car.Destination.Road))
+                {
+                    var destination = car.Destination;
+                    var distance = MathUtil.DistanceToRoad(destination.Location, road) - road.Width / 4d;
+                    var direction = GetDirectionToRoad(destination.Location, road);
+                    var delta = Vector.Multiply(direction.GetDirection(), distance);
+                    var target = Vector.Add(destination.Location, delta);
+
+                    return new Destination {Road = road, Location = target};
+                }
+               
+                var tempDStart = MathUtil.Distance(road.Start, car.Location);
+                var tempDEnd = MathUtil.Distance(road.End, car.Location);
+
+                closestPointToDestination = tempDStart > tempDEnd ? road.Start : road.End;
+                
+                var distanceToDestination = MathUtil.Distance(closestPointToDestination, car.Destination.Location);
+
+                if (distanceToDestination < shortestDistance)
+                {
+                    shortestDistance = distanceToDestination;
+                    selectedRoad = road;
+                    selectDestination = closestPointToDestination;
+                }
+            }
+            return new Destination { Road = selectedRoad, Location = selectDestination};
+        }
+
+        public static DirectionCar GetDirectionToRoad(Vector point, Road road)
+        {
+            if (road.IsXRoad())
+            {
+                return road.Start.Y < point.Y ? DirectionCar.North : DirectionCar.South;
+            }
+            else
+            {
+                return road.Start.X < point.X ? DirectionCar.West : DirectionCar.East;
+            }
+        }
+
+        public static double CalculateDistance(Vector start, Vector end)
+        {
+            var road = NearestRoad(start);
+
+            var distance1 = MathUtil.Distance(start, road.Start);
+            var distance2 = MathUtil.Distance(end, road.End);
+            var target = NearestRoad(end);
+
+            return ExploreIntersection(distance1 > distance2
+                    ? FindIntersection(road.Start)
+                    : FindIntersection(road.End),
+                end, target, 0.0);
+        }
+
+        private static double ExploreIntersection(Intersection intersection, Vector end, Road target, double distance)
+        {
+            foreach (var road in intersection.GetRoads())
+            {
+                if (road.Equals(target))
+                {
+                    return distance + MathUtil.Distance(intersection.Location, end);
+                }
+            }
+
+            var intersections = FindNextIntersections(intersection);
+            var closestIntersection = double.MaxValue;
+            Intersection intersectionNext = null;
+
+            foreach (var next in intersections)
+            {
+                if (next.Equals(intersection))
+                {
+                    continue;
+                }
+
+                var dist = MathUtil.Distance(next.Location, end);
+                if (dist < closestIntersection)
+                {
+                    closestIntersection = dist;
+                    intersectionNext = next;
+                }
+            }
+
+            if (intersectionNext == null)
+            {
+                throw new Exception("Route is impossible.");
+            }
+
+            distance += MathUtil.Distance(intersection.Location, intersectionNext.Location);
+            return ExploreIntersection(intersectionNext, end, target, distance);
+        }
+
+        public static List<Intersection> FindNextIntersections(Intersection intersection)
+        {
+            var list = new List<Intersection>();
+            var roads = intersection.GetRoads();
+            foreach (var road in roads)
+            {
+                list.Add(MathUtil.Distance(intersection.Location, road.Start) >
+                         MathUtil.Distance(intersection.Location, road.End)
+                    ? FindIntersection(road.Start)
+                    : FindIntersection(road.End));
+            }
+
+            return list;
+        }
+
+        public static Intersection FindIntersection(Vector location)
+        {
+            return City.Instance.Intersections.Find(intersection =>
+            {
+                var size = intersection.Size / 2d;
+                var point = intersection.Location;
+                return point.X >= location.X - size && point.X <= location.X + size &&
+                       point.Y >= location.Y - size && point.Y <= location.Y + size;
+            });
         }
     }
 }

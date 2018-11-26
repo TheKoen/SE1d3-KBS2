@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -19,14 +18,44 @@ namespace KBS2.Console
 
         // Gets invoked when a command is sent by the user
         public event SendCommandHandler SendCommand;
-        
-        private Queue<string> _outputHistory = new Queue<string>();
 
+        private LinkedList<string> _inputHistory = new LinkedList<string>();
+        private Queue<string> _outputHistory = new Queue<string>();
+        private int _inputHistoryCapacity = 32;
+        private int _outputHistoryCapacity = 256;
+        private int _inputHistoryIndex = -1;
+
+        public int InputHistoryCapacity
+        {
+            get => _inputHistoryCapacity;
+            set
+            {
+                if (value < 1) throw new IndexOutOfRangeException("History capacity may not be less than 1");
+                _inputHistoryCapacity = value;
+                while (_inputHistory.Count > _inputHistoryCapacity)
+                    _inputHistory.RemoveFirst();
+                if (_inputHistoryIndex >= _inputHistoryCapacity)
+                    _inputHistoryIndex = -1;
+            }
+        }
+
+        public int OutputHistoryCapacity
+        {
+            get => _outputHistoryCapacity;
+            set
+            {
+                if (value < 1) throw new IndexOutOfRangeException("History capacity may not be less than 1");
+                _outputHistoryCapacity = value;
+                while (_outputHistory.Count > _outputHistoryCapacity)
+                    _outputHistory.Dequeue();
+            }
+        }
+        
         public ConsoleControl()
         {
             InitializeComponent();
-
-            ButtonSend.Click += HandleSendButton;
+            
+            ButtonSend.Click += HandleSend;
         }
 
         public void TestMap()
@@ -34,12 +63,16 @@ namespace KBS2.Console
             SendCommand?.Invoke(this, new SendCommandArgs("Map"));
         }
 
-        private void HandleSendButton(object sender, RoutedEventArgs args)
+        private void HandleSend(object sender, RoutedEventArgs args)
         {
             // Getting the command from the TextBox and invoking the SendCommand event
             var command = TextBoxInput.Text.Trim();
             SendCommand?.Invoke(this, new SendCommandArgs(command));
+            if (_inputHistory.Count >= _inputHistoryCapacity)
+                _inputHistory.RemoveFirst();
+            _inputHistory.AddLast(command);
             TextBoxInput.Text = string.Empty;
+            _inputHistoryIndex = -1;
         }
 
         /// <summary>
@@ -49,7 +82,7 @@ namespace KBS2.Console
         /// <param name="color">The color to print the text with, is White by default</param>
         public void Print(IEnumerable<char> text, Color? color = null)
         {
-            var stringText = $"[{DateTime.Now:hh:mm:ss}] {string.Join("", text)}";
+            var stringText = $"[{DateTime.Now:HH:mm:ss}] {string.Join("", text)}";
 
             // Adding newline at the beginning when there already is input in the TextBlock
             if (TextBlockOutput.Inlines.Count > 0)
@@ -63,6 +96,8 @@ namespace KBS2.Console
             ScrollViewerOutput.ScrollToBottom();
             
             // Adding the output to the output history
+            if (_outputHistory.Count >= _outputHistoryCapacity)
+                _outputHistory.Dequeue();
             _outputHistory.Enqueue(stringText);
         }
 
@@ -74,10 +109,47 @@ namespace KBS2.Console
 
         private void HandleInputKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter) return;
-
-            // Same functionality as a Click event from ButtonSend
-            HandleSendButton(sender, new RoutedEventArgs());
+            LinkedListNode<string> current;
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    // Sending input
+                    HandleSend(sender, new RoutedEventArgs());
+                    break;
+                case Key.Up:
+                    // Getting the next value in the input history
+                    if (_inputHistory.Count <= _inputHistoryIndex + 1) break;
+                    ++_inputHistoryIndex;
+                    
+                    current = _inputHistory.Last;
+                    // Finding the correct element in the input history
+                    for (var i = 0; i < _inputHistoryIndex; ++i)
+                        current = current.Previous;
+                    TextBoxInput.Text = current.Value;
+                    // Making sure the caret is in the correct position
+                    TextBoxInput.CaretIndex = current.Value.Length;
+                    break;
+                case Key.Down:
+                    // Getting the previous value in the input history
+                    if (_inputHistoryIndex <= -1) break;
+                    --_inputHistoryIndex;
+                    
+                    if (_inputHistoryIndex <= -1)
+                    {
+                        // Clearing the TextBox when we're back at index -1
+                        TextBoxInput.Text = string.Empty;
+                        break;
+                    }
+                    
+                    current = _inputHistory.Last;
+                    // Finding the correct element in the input history
+                    for (var i = 0; i < _inputHistoryIndex; ++i)
+                        current = current.Previous;
+                    TextBoxInput.Text = current.Value;
+                    // Making sure the caret is in the correct position
+                    TextBoxInput.CaretIndex = current.Value.Length;
+                    break;
+            }
         }
     }
 }
