@@ -30,7 +30,7 @@ namespace KBS2.Console.Commands
                     {
                         Update();
                     }
-                    Thread.Sleep(10);
+                    Thread.Sleep(20);
                 }
             }) {Name = "DisplayMap Thread"};
             thread.Start();
@@ -93,7 +93,7 @@ namespace KBS2.Console.Commands
                 builder.Append('\n');
             }
 
-            //MainWindow.Console.Print(builder.ToString());
+            MainWindow.Console.Print(builder.ToString());
         }
 
         private static bool IsCustomer(Vector point)
