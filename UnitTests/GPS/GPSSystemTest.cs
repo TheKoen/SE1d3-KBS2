@@ -18,7 +18,8 @@ namespace UnitTests.GPS
     [TestFixture]
     class GPSSystemTest
     {
-        [TestCase(0, 0, 100, 0, 100, 100, 200, 100, 0, 50)] // get road location
+        [TestCase(0, 0, 100, 0, 100, 100, 200, 100, 0, 50)]
+        // get road location
         public void GetRoadTest(int x1b, int y1b, int x1e, int y1e, int x2b, int y2b, int x2e, int y2e, int sx, int sy)
         {
             var road1 = new Road(new Vector(x1b, y1b), new Vector(x1e, y1e), 20, 100);
@@ -36,12 +37,13 @@ namespace UnitTests.GPS
             else
             {
                 Assert.Fail();
-            }  
+            }
         }
-        
-        [TestCase(0, 0, 0, 100, 100, 0, 100, 100, 0, 0)] // road 1 is nearest road
-        [TestCase(0, 0, 0, 100, 0, 150, 0, 250, 0, 100)] //
-        public void NearestRoadTest(int x1b, int y1b, int x1e, int y1e, int x2b, int y2b, int x2e, int y2e, int ex, int ey)
+
+        [TestCase(0, 0, 0, 100, 100, 0, 100, 100, 0, 0)]
+        [TestCase(0, 0, 0, 100, 0, 150, 0, 250, 10, 110)]
+        public void NearestRoadTest(int x1b, int y1b, int x1e, int y1e, int x2b, int y2b, int x2e, int y2e, int ex,
+            int ey)
         {
             var road1 = new Road(new Vector(x1b, y1b), new Vector(x1e, y1e), 20, 100);
             var road2 = new Road(new Vector(x2b, y2b), new Vector(x2e, y2e), 20, 100);
@@ -74,7 +76,7 @@ namespace UnitTests.GPS
 
             var group = new CustomerGroup(1, building, building);
 
-            GPSSystem.RequestCar(new Destination { Road = road, Location = building.Location }, group);
+            GPSSystem.RequestCar(new Destination {Road = road, Location = building.Location}, group);
 
             Assert.IsNotEmpty(city.Cars);
 
@@ -84,17 +86,19 @@ namespace UnitTests.GPS
         }
 
         [TestCase(35, 85, DirectionCar.North, 90, 60, 2, 3, 0, 90, 75)]
-        [TestCase(45, 5, DirectionCar.West, 45, 90, 5, 0, 3, 35, 70)] 
+        [TestCase(45, 5, DirectionCar.West, 45, 90, 5, 0, 3, 35, 70)]
         [TestCase(35, 85, DirectionCar.North, 90, 60, 2, 2, 0, 102.5, 60)]
-        public void GetDirection(double cX, double cY, DirectionCar direction, double dX, double dY, int road, int destRoad, int intersection, double eX, double eY)
+        public void GetDirectionTest(double cX, double cY, DirectionCar direction, double dX, double dY, int road,
+            int destRoad, int intersection, double eX, double eY)
         {
-            var roads = new Road[]{
-             new Road(new Vector(35, 80), new Vector( 35, 100), 10, 0),
-             new Road(new Vector(0, 75), new Vector(30, 75), 10, 0),
-             new Road(new Vector(40, 75), new Vector(90, 75), 10, 0),
-             new Road(new Vector(95, 70), new Vector(95, 10), 10, 0),
-             new Road(new Vector(40, 5), new Vector(90, 5), 10, 0),
-             new Road(new Vector(35, 10), new Vector(35, 70), 10, 0)
+            var roads = new Road[]
+            {
+                new Road(new Vector(35, 80), new Vector(35, 100), 10, 0),
+                new Road(new Vector(0, 75), new Vector(30, 75), 10, 0),
+                new Road(new Vector(40, 75), new Vector(90, 75), 10, 0),
+                new Road(new Vector(95, 70), new Vector(95, 10), 10, 0),
+                new Road(new Vector(40, 5), new Vector(90, 5), 10, 0),
+                new Road(new Vector(35, 10), new Vector(35, 70), 10, 0)
             };
 
             var intersections = new Intersection[]
@@ -104,7 +108,7 @@ namespace UnitTests.GPS
                 new Intersection(new Vector(95, 5), 10),
                 new Intersection(new Vector(35, 5), 10)
             };
-            
+
             var city = new CityBuilder()
                 .Road(roads[0])
                 .Road(roads[1])
@@ -121,13 +125,94 @@ namespace UnitTests.GPS
             var car = new Car(1, CarModel.TestModel, new Vector(cX, cY), new List<Sensor>(), direction, 5, 5);
             city.Cars.Add(car);
 
-            car.Destination = new Destination { Location = new Vector(dX, dY), Road = roads[destRoad] };
+            car.Destination = new Destination {Location = new Vector(dX, dY), Road = roads[destRoad]};
 
             var carDestination = GPSSystem.GetDirection(car, intersections[intersection]);
-            
+
+            Assert.AreEqual(roads[road], carDestination.Road);
             Assert.AreEqual(eX, carDestination.Location.X, 0.01);
             Assert.AreEqual(eY, carDestination.Location.Y, 0.01);
-            Assert.AreEqual(roads[road], carDestination.Road);
+        }
+
+        [TestCase(100, 105, 0, true)]
+        [TestCase(100, 95, 0, true)]
+        [TestCase(105, 105, 0, true)]
+        [TestCase(95, 95, 0, true)]
+        [TestCase(95, 100, 0, true)]
+        [TestCase(105, 100, 0, true)]
+        [TestCase(100, 106, 0, false)]
+        [TestCase(106, 105, 0, false)]
+        [TestCase(105, 106, 0, false)]
+        [TestCase(94, 100, 0, false)]
+        [TestCase(205, 205, 2, true)]
+        [TestCase(200, 206, 2, false)]
+        [TestCase(200, 200, 2, true)]
+        public void FindIntersectionTest(double tX, double tY, int expected, bool correct)
+        {
+            var intersections = new[]
+            {
+                new Intersection(new Vector(100, 100), 10),
+                new Intersection(new Vector(100, 200), 10),
+                new Intersection(new Vector(200, 200), 10),
+                new Intersection(new Vector(200, 100), 10)
+            };
+
+            var city = new CityBuilder()
+                .Intersection(intersections[0])
+                .Intersection(intersections[1])
+                .Intersection(intersections[2])
+                .Intersection(intersections[3])
+                .Road(new Road(new Vector(100, 105), new Vector(100, 195), 10, 100))
+                .Road(new Road(new Vector(105, 100), new Vector(195, 100), 10, 100))
+                .Road(new Road(new Vector(105, 200), new Vector(195, 200), 10, 100))
+                .Road(new Road(new Vector(200, 105), new Vector(200, 195), 10, 100))
+                .Build();
+
+            var intersection = GPSSystem.FindIntersection(new Vector(tX, tY));
+
+            if (correct)
+            {
+                Assert.AreEqual(intersections[expected], intersection);
+            }
+            else
+            {
+                Assert.AreNotEqual(intersections[expected], intersection);
+            }
+        }
+
+        [TestCase(0, new[]{1, 3})]
+        [TestCase(1, new[]{0, 2})]
+        [TestCase(2, new[]{1, 3})]
+        [TestCase(3, new[]{0, 2})]
+        public void FindNextIntersections(int start, int[] expected)
+        {
+            var intersections = new[]
+            {
+                new Intersection(new Vector(100, 100), 10),
+                new Intersection(new Vector(100, 200), 10),
+                new Intersection(new Vector(200, 200), 10),
+                new Intersection(new Vector(200, 100), 10)
+            };
+
+            var city = new CityBuilder()
+                .Road(new Road(new Vector(100, 105), new Vector(100, 195), 10, 100))
+                .Road(new Road(new Vector(105, 100), new Vector(195, 100), 10, 100))
+                .Road(new Road(new Vector(105, 200), new Vector(195, 200), 10, 100))
+                .Road(new Road(new Vector(200, 105), new Vector(200, 195), 10, 100))
+                .Intersection(intersections[0])
+                .Intersection(intersections[1])
+                .Intersection(intersections[2])
+                .Intersection(intersections[3])
+                .Build();
+
+            var result = GPSSystem.FindNextIntersections(intersections[start]).ToList();
+
+            Assert.AreEqual(expected.Length, result.Count);
+
+            foreach (var index in expected)
+            {
+                Assert.Contains(intersections[index], result);
+            }
         }
     }
 }

@@ -19,13 +19,35 @@ namespace KBS2.Util
 
         public static double DistanceToRoad(Vector point, Road road)
         {
-            var axialDistance = road.IsXRoad()
-                ? Math.Abs(road.Start.X - point.X)
-                : Math.Abs(road.Start.Y - point.Y);
+            return LineToPointDistance(road.Start, road.End, point);
+        }
 
-            var directDistance = Distance(point, road.Start);
+        public static double DotProduct(Vector pointA, Vector pointB, Vector pointC)
+        {
+            var AB = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
+            var BC = new Vector(pointC.X - pointB.X, pointC.Y - pointB.Y);
+            return AB.X * BC.X + AB.Y * BC.Y;
+        }
 
-            return Math.Sqrt(Math.Pow(directDistance, 2) - Math.Pow(axialDistance, 2));
+        public static double CrossProduct(Vector pointA, Vector pointB, Vector pointC)
+        {
+            var AB = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
+            var AC = new Vector(pointC.X - pointA.X, pointC.Y - pointA.Y);
+            return AB.X * AC.Y - AB.Y * AC.Y;
+        }
+
+        public static double LineToPointDistance(Vector pointA, Vector pointB, Vector pointC)
+        {
+            var dist = CrossProduct(pointA, pointB, pointC) / Distance(pointA, pointB);
+            var dot1 = DotProduct(pointA, pointB, pointC);
+            if (dot1 > 0)
+                return Distance(pointB, pointC);
+
+            var dot2 = DotProduct(pointB, pointA, pointC);
+            if (dot2 > 0)
+                return Distance(pointA, pointC);
+
+            return Math.Abs(dist);
         }
     }
 }

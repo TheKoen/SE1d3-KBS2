@@ -47,16 +47,8 @@ namespace KBS2.GPS
 
         public static List<Road> GetRoadsInRange(Vector location, int range)
         {
-            var roads = new List<Road>
-            {
-                GetRoad(new Vector(location.X + range, location.Y)),
-                GetRoad(new Vector(location.X - range, location.Y)),
-                GetRoad(new Vector(location.X, location.Y + range)),
-                GetRoad(new Vector(location.X, location.Y + range)),
-                GetRoad(new Vector(location.X, location.Y))
-            };
-            roads.RemoveAll(road => road == null);
-            return roads.Distinct().ToList();
+            return City.Instance.Roads
+                .FindAll(road => MathUtil.DistanceToRoad(location, road) <= range);
         }
 
         public static Road NearestRoad(Vector location)
@@ -216,7 +208,8 @@ namespace KBS2.GPS
         public static List<Intersection> FindNextIntersections(Intersection intersection)
         {
             var list = new List<Intersection>();
-            foreach (var road in intersection.GetRoads())
+            var roads = intersection.GetRoads();
+            foreach (var road in roads)
             {
                 list.Add(MathUtil.Distance(intersection.Location, road.Start) >
                          MathUtil.Distance(intersection.Location, road.End)
@@ -229,7 +222,13 @@ namespace KBS2.GPS
 
         public static Intersection FindIntersection(Vector location)
         {
-            return City.Instance.Intersections.Find(intersection => intersection.Location.Equals(location));
+            return City.Instance.Intersections.Find(intersection =>
+            {
+                var size = intersection.Size / 2d;
+                var point = intersection.Location;
+                return point.X >= location.X - size && point.X <= location.X + size &&
+                       point.Y >= location.Y - size && point.Y <= location.Y + size;
+            });
         }
     }
 }
