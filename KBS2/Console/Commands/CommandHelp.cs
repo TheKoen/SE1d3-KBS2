@@ -25,7 +25,7 @@ namespace KBS2.Console.Commands
             {
                 // Showing a list of commands with their descriptions
                 output.Append("Commands:");
-                commands.ForEach(c => output.Append($"\n{c.Key} : {c.Description}"));
+                commands.OrderBy(c => c.Key).ToList().ForEach(c => output.Append($"\n{c.Key} : {c.Description}"));
                 return output.ToString();
             }
 
