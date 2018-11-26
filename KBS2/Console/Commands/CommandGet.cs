@@ -4,8 +4,10 @@ using KBS2.Exceptions;
 
 namespace KBS2.Console.Commands
 {
-    [CommandMetadata("Get",
-        Description = "Gets the value of a Property")]
+    [CommandMetadata("get",
+        Description = "Gets the value of a Property",
+        Usages = new [] { "get <property>" },
+        AutoRegister = true)]
     public class CommandGet : ICommand
     {
         public IEnumerable<char> Run(params string[] args)
