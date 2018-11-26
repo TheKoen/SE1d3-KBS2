@@ -21,9 +21,11 @@ namespace KBS2.CustomerSystem
             Age = age;
             Building = building;
             Moral = 25;
-            Controller = new CustomerController(this);
             Group = group;
             Mood = CustomerSystem.Moral.Happy;
+            
+            Controller = new CustomerController(this);
+            MainWindow.Loop.Subscribe(Controller.Update);
         }
 
         public Vector GetLocation()

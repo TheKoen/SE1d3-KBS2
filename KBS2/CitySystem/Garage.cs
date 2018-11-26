@@ -9,7 +9,7 @@ namespace KBS2.CitySystem
     public class Garage : Building
     {
         public DirectionCar Direction { get; }
-        public int AvailableCars { get; set; }
+        public int AvailableCars { get; set; } = 5;
 
         public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
         {
@@ -34,7 +34,7 @@ namespace KBS2.CitySystem
             }
 
             var location = new Vector(x, y);
-            var car = new Car(id, model, location, new List<Sensor>(), Direction, 10, 20);
+            var car = model.CreateCar(id, location, Direction);
             Vector destination;
             switch (Direction)
             {

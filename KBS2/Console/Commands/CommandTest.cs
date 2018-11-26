@@ -3,6 +3,8 @@ using System.Runtime.Serialization;
 
 namespace KBS2.Console.Commands
 {
+    [CommandMetadata("Test",
+        Description = "Runs a test ─=≡Σᕕ( ͡° ͜ʖ ͡°)ᕗ")]
     public class CommandTest : ICommand
     {
         public IEnumerable<char> Run(params string[] args) =>
