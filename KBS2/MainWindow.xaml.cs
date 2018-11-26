@@ -36,25 +36,17 @@ namespace KBS2
                          "  <Road Start=\"600,300\" End=\"600,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
                          "</Roads>\n\n" +
                          "<Buildings>\n" +
-                         "  <Building Location=\"250,160\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"300,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"350,160\" Size=\"40\"></Building>\n" +
+                         "  <Building Location=\"350,60\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"400,160\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"450,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"520,140\" Size=\"80\"></Building>\n" +
-                         "  <Building Location=\"340,250\" Size=\"50\"></Building>\n" +
-                         "  <Building Location=\"260,250\" Size=\"50\"></Building>\n" +
+                         "  <Building Location=\"300,250\" Size=\"50\"></Building>\n" +
                          "</Buildings>\n\n" +
                          "<Intersections>\n" +
                          "  <Intersection Location =\"35,13\" Size=\"5\"></Intersection>\n" +
                          "</Intersections>\n\n" +
                          "</City>");
             CityParser.MakeCity(file);
-            
-            // Start the main loop
-            Loop.Start();
-
-            Loop.Start();
 
             // Registering commands
             CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");

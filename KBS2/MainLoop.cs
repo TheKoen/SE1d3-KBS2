@@ -15,7 +15,6 @@ namespace KBS2
         public int TickRate => tickRate.Value;
 
         private DispatcherTimer timer;
-        private int secondTicks;
 
         private event Update UpdateEvent;
 
@@ -35,6 +34,11 @@ namespace KBS2
             UpdateEvent += subscriber;
         }
 
+        public void Unsubscribe(Update subscriber)
+        {
+            UpdateEvent -= subscriber;
+        }
+
         public void Start()
         {
             timer.Start();
@@ -43,6 +47,11 @@ namespace KBS2
         public void Stop()
         {
             timer.Stop();
+        }
+
+        public bool IsRunning()
+        {
+            return timer.IsEnabled;
         }
 
         private void OnTickrateChange(object source, CustomPropertyChangedArgs args)
@@ -54,13 +63,6 @@ namespace KBS2
         private void Update(object source, EventArgs args)
         {
             UpdateEvent?.Invoke();
-
-            secondTicks++;
-            if (secondTicks == 30)
-            {
-                MainWindow.Console.TestMap();
-                secondTicks = 0;
-            }
         }
 
         private static int CalculateInterval(int tickRate)

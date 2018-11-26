@@ -28,6 +28,12 @@ namespace KBS2.CitySystem
             }
         }
 
+        public void Reset()
+        {
+            City.Customers.Clear();
+            City.Cars.Clear();
+        }
+
         public List<IEntity> GetEntities()
         {
             return new List<IEntity>()

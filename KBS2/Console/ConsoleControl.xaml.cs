@@ -58,11 +58,6 @@ namespace KBS2.Console
             ButtonSend.Click += HandleSend;
         }
 
-        public void TestMap()
-        {
-            SendCommand?.Invoke(this, new SendCommandArgs("Map"));
-        }
-
         private void HandleSend(object sender, RoutedEventArgs args)
         {
             // Getting the command from the TextBox and invoking the SendCommand event

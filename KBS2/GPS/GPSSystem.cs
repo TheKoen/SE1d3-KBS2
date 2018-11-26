@@ -82,7 +82,7 @@ namespace KBS2.GPS
             Garage nearestGarage = null;
             var nearestDistance = double.MaxValue;
 
-            foreach (Garage garage in garages)
+            foreach (var garage in garages)
             {
                 var tempDistance = MathUtil.Distance(group.Location, garage.Location);
                 if (tempDistance < nearestDistance)
@@ -91,6 +91,8 @@ namespace KBS2.GPS
                     nearestDistance = tempDistance;
                 }
             }
+
+            if (nearestGarage == null) return;
 
             var car = nearestGarage.SpawnCar(CityController.CAR_ID++, CarModel.TestModel);
             car.Destination = destination;
