@@ -98,7 +98,6 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
-    <Compile Include="GPS\TSP.cs" />
     <Compile Include="MainLoop.cs" />
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
     <Compile Include="Util\Property.cs" />

@@ -31,13 +31,13 @@ namespace KBS2.Console.Commands
 
             running = !running;
 
-            return "Displaying map...";
+            return "Toggling map renderer...";
         }
 
         private static void Update()
         {
             secondTick++;
-            if (secondTick == 5)
+            if (secondTick == 10)
             {
                 secondTick = 0;
                 PrintMap();
@@ -54,7 +54,11 @@ namespace KBS2.Console.Commands
                 for (var x = 0; x < 800; x += 10)
                 {
                     var vector = new Vector(x, y);
-                    if (GPSSystem.GetRoad(vector) != null)
+                    if (GPSSystem.FindIntersection(vector) != null)
+                    {
+                        builder.Append('%');
+                    }
+                    else if (GPSSystem.GetRoad(vector) != null)
                     {
                         builder.Append('#');
                     }

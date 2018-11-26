@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using KBS2.Console;
 using KBS2.Util;
@@ -15,6 +16,7 @@ namespace KBS2
         public int TickRate => tickRate.Value;
 
         private DispatcherTimer timer;
+        private int exceptionCount;
 
         private event Update UpdateEvent;
 
@@ -62,7 +64,28 @@ namespace KBS2
 
         private void Update(object source, EventArgs args)
         {
-            UpdateEvent?.Invoke();
+            var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            try
+            {
+                UpdateEvent?.Invoke();
+            }
+            catch (Exception e)
+            {
+                MainWindow.Console.Print($"Exception in main loop: {e}", Colors.Red);
+
+                exceptionCount++;
+                if (exceptionCount > 2)
+                {
+                    Stop();
+                    MainWindow.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
+                }
+            }
+            var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
+            var interval = CalculateInterval(tickRate.Value);
+            if (taken > interval)
+            {
+                MainWindow.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
+            }
         }
 
         private static int CalculateInterval(int tickRate)

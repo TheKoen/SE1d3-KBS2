@@ -9,7 +9,11 @@ namespace KBS2.CitySystem
     {
         public static City MakeCity(XmlDocument city)
         {
-            CommandHandler.Reset();
+            var properties = CommandHandler.GetProperties();
+            if (properties.ContainsKey("availableCars"))
+            {
+                CommandHandler.Reset();
+            }
 
             var cityObject = new City();
 
