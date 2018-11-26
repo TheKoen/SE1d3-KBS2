@@ -12,12 +12,14 @@ namespace KBS2
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static readonly MainLoop Loop = new MainLoop();
+        public static readonly MainLoop Loop = new MainLoop("main");
+        public static readonly MainLoop CommandLoop = new MainLoop("command");
         public static ConsoleControl Console { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            CommandLoop.Start();
 
             Console = MainConsole;
             

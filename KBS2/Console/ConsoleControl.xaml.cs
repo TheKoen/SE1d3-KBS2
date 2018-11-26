@@ -24,6 +24,7 @@ namespace KBS2.Console
         private int _inputHistoryCapacity = 32;
         private int _outputHistoryCapacity = 256;
         private int _inputHistoryIndex = -1;
+        private Queue<Tuple<IEnumerable<char>, Color?>> _printQueue = new Queue<Tuple<IEnumerable<char>, Color?>>();
 
         public int InputHistoryCapacity
         {
@@ -56,6 +57,7 @@ namespace KBS2.Console
             InitializeComponent();
             
             ButtonSend.Click += HandleSend;
+            MainWindow.CommandLoop.Subscribe(PrintQueue);
         }
 
         private void HandleSend(object sender, RoutedEventArgs args)
@@ -77,23 +79,33 @@ namespace KBS2.Console
         /// <param name="color">The color to print the text with, is White by default</param>
         public void Print(IEnumerable<char> text, Color? color = null)
         {
-            var stringText = $"[{DateTime.Now:HH:mm:ss}] {string.Join("", text)}";
+            _printQueue.Enqueue(new Tuple<IEnumerable<char>, Color?>(text, color));
+        }
 
-            // Adding newline at the beginning when there already is input in the TextBlock
-            if (TextBlockOutput.Inlines.Count > 0)
-                TextBlockOutput.Inlines.Add(new Run("\r\n"));
-            // Adding a piece of text with a color into the TextBlock
-            TextBlockOutput.Inlines.Add(
-                new Run(stringText)
-                { Foreground = new SolidColorBrush(color ?? Colors.White) }
-            );
-            // Scrolling to the bottom of the ScrollViewer so that the user always sees the new text
-            ScrollViewerOutput.ScrollToBottom();
+        private void PrintQueue()
+        {
+            while (_printQueue.Count > 0)
+            {
+                var queued = _printQueue.Dequeue();
+                
+                var stringText = $"[{DateTime.Now:HH:mm:ss}] {string.Join("", queued.Item1)}";
+
+                // Adding newline at the beginning when there already is input in the TextBlock
+                if (TextBlockOutput.Inlines.Count > 0)
+                    TextBlockOutput.Inlines.Add(new Run("\r\n"));
+                // Adding a piece of text with a color into the TextBlock
+                TextBlockOutput.Inlines.Add(
+                    new Run(stringText)
+                        { Foreground = new SolidColorBrush(queued.Item2 ?? Colors.White) }
+                );
+                // Scrolling to the bottom of the ScrollViewer so that the user always sees the new text
+                ScrollViewerOutput.ScrollToBottom();
             
-            // Adding the output to the output history
-            if (_outputHistory.Count >= _outputHistoryCapacity)
-                _outputHistory.Dequeue();
-            _outputHistory.Enqueue(stringText);
+                // Adding the output to the output history
+                if (_outputHistory.Count >= _outputHistoryCapacity)
+                    _outputHistory.Dequeue();
+                _outputHistory.Enqueue(stringText);
+            }
         }
 
         /// <summary>
