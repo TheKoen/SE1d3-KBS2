@@ -12,6 +12,8 @@ namespace KBS2
 
     public class MainLoop
     {
+        private string Name { get; set; }
+        
         private Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
 
@@ -20,15 +22,16 @@ namespace KBS2
 
         private event Update UpdateEvent;
 
-        public MainLoop()
+        public MainLoop(string name)
         {
+            Name = name;
             timer = new DispatcherTimer
             {
                 Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(TickRate))
             };
             timer.Tick += Update;
             tickRate.PropertyChanged += OnTickrateChange;
-            CommandHandler.RegisterProperty("tickRate", ref tickRate);
+            CommandHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
         }
 
         public void Subscribe(Update subscriber)

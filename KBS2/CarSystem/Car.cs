@@ -65,6 +65,8 @@ namespace KBS2.CarSystem
         /// <param name="location">Location of this car</param>
         /// <param name="sensors">List with sensors for this car</param>
         /// <param name="direction">Direction the car is facing</param>
+        /// <param name="width"></param>
+        /// <param name="length"></param>
         public Car(int id, CarModel model, Vector location, List<Sensor> sensors, DirectionCar direction, int width, int length)
         {
             Id = id;
@@ -100,7 +102,7 @@ namespace KBS2.CarSystem
         {
             if(Direction == DirectionCar.North || Direction == DirectionCar.South)
             {
-                return new List<Vector>()
+                return new List<Vector>
                 {
                     new Vector(Location.X + Width/2.0, Location.Y),
                     new Vector(Location.X - Width/2.0, Location.Y),
@@ -108,16 +110,14 @@ namespace KBS2.CarSystem
                     new Vector(Location.X, Location.Y - Length/2)
                 };
             }
-            else
+
+            return new List<Vector>
             {
-                return new List<Vector>()
-                {
-                    new Vector(Location.X + Length/2.0, Location.Y),
-                    new Vector(Location.X - Length/2.0, Location.Y),
-                    new Vector(Location.X, Location.Y + Width/2),
-                    new Vector(Location.X, Location.Y - Width/2)
-                };
-            }
+                new Vector(Location.X + Length/2.0, Location.Y),
+                new Vector(Location.X - Length/2.0, Location.Y),
+                new Vector(Location.X, Location.Y + Width/2),
+                new Vector(Location.X, Location.Y - Width/2)
+            };
         }
     }
 }

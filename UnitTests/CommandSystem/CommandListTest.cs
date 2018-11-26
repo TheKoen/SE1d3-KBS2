@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using KBS2.Console;
 using KBS2.Console.Commands;
-using KBS2.Utilities;
+using KBS2.Exceptions;
 using NUnit.Framework;
 using ICommand = KBS2.Console.ICommand;
 

@@ -7,6 +7,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         /// <summary>
         ///     Create a lineSensor of a car
         /// </summary>
+        /// <param name="car"></param>
         /// <param name="direction">Side where the sensor is located</param>
         public LineSensor(Car car, Direction direction) : base(car, direction)
         {

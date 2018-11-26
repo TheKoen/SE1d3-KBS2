@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using KBS2.CitySystem;
 using KBS2.Exceptions;
-using KBS2.Utilities;
 
 namespace KBS2.Console.Commands
 {

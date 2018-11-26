@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace KBS2.Console.Commands
 {

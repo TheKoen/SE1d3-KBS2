@@ -7,12 +7,12 @@ namespace KBS2.CustomerSystem
 {
     public class CustomerController
     {
-        private static Random Random = new Random();
+        private static readonly Random Random = new Random();
 
         public Customer Customer { get; set; }
-        private bool Walking = false;
-        private Vector Direction;
-        private int Delay;
+        private bool walking;
+        private Vector direction;
+        private int delay;
 
         public CustomerController(Customer customer)
         {
@@ -51,9 +51,9 @@ namespace KBS2.CustomerSystem
             return true;
         }
 
-        public void MoodChange(double Moral)
+        public void MoodChange(double moral)
         {
-            switch (Moral)
+            switch (moral)
             {
                 case 20:
                 case 19:
@@ -61,7 +61,7 @@ namespace KBS2.CustomerSystem
                 case 17:
                 case 16:
                 case 15:
-                    Customer.Mood = CustomerSystem.Moral.Neutral;
+                    Customer.Mood = Moral.Neutral;
                     return;
 
                 case 14:
@@ -69,7 +69,7 @@ namespace KBS2.CustomerSystem
                 case 12:
                 case 11:
                 case 10:
-                    Customer.Mood = CustomerSystem.Moral.Annoyed;
+                    Customer.Mood = Moral.Annoyed;
                     return;
 
                 case 9:
@@ -77,14 +77,14 @@ namespace KBS2.CustomerSystem
                 case 7:
                 case 6:
                 case 5:
-                    Customer.Mood = CustomerSystem.Moral.Sad;
+                    Customer.Mood = Moral.Sad;
                     return;
 
                 case 4:
                 case 3:
                 case 2:
                 case 1:
-                    Customer.Mood = CustomerSystem.Moral.Mad;
+                    Customer.Mood = Moral.Mad;
                     return;
 
                 case 0:
@@ -92,7 +92,7 @@ namespace KBS2.CustomerSystem
                     return;
 
                 default:
-                    Customer.Mood = CustomerSystem.Moral.Happy;
+                    Customer.Mood = Moral.Happy;
                     return;
 
             }
@@ -104,20 +104,20 @@ namespace KBS2.CustomerSystem
             Customer.Moral = Customer.Moral - 0.01;
             if (Customer.Moral < 0) Customer.Moral = 0;
 
-            if (Delay > 0)
+            if (delay > 0)
             {
-                Delay--;
+                delay--;
                 return;
             }
             
-            if(Walking && !Direction.Equals(Customer.Location))
+            if(walking && !direction.Equals(Customer.Location))
             {
-                if (!MoveTowardsLocation(Direction))
+                if (!MoveTowardsLocation(direction))
                 {
-                    Walking = false;
+                    walking = false;
                 }
 
-                Walking = Direction.Equals(Customer.Location) ? true : false;
+                walking = direction.Equals(Customer.Location);
             }
             else if (WhereIsMyGroup() >= 10)
             {
@@ -127,14 +127,14 @@ namespace KBS2.CustomerSystem
             {
                 if(Random.Next(0, 5) == 1)
                 {
-                    Delay = Random.Next(50, 500);
+                    delay = Random.Next(50, 500);
                 }
                 else
                 {
-                    Walking = true;
+                    walking = true;
                     var x = Random.Next(-10, 10);
                     var y = Random.Next(-10, 10);
-                    Direction = new Vector(x, y);
+                    direction = new Vector(x, y);
                 }
             }
         }

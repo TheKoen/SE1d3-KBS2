@@ -166,10 +166,8 @@ namespace KBS2.GPS
             {
                 return road.Start.Y < point.Y ? DirectionCar.North : DirectionCar.South;
             }
-            else
-            {
-                return road.Start.X < point.X ? DirectionCar.West : DirectionCar.East;
-            }
+
+            return road.Start.X < point.X ? DirectionCar.West : DirectionCar.East;
         }
 
         public static double CalculateDistance(Vector start, Vector end)
@@ -218,17 +216,12 @@ namespace KBS2.GPS
 
             foreach (var next in intersections)
             {
-                if (next == null || next.Equals(intersection))
-                {
-                    continue;
-                }
+                if ( next == null || next.Equals(intersection)) continue;
 
                 var dist = MathUtil.Distance(next.Location, end);
-                if (dist < closestIntersection)
-                {
-                    closestIntersection = dist;
-                    intersectionNext = next;
-                }
+                if (!(dist < closestIntersection)) continue;
+                closestIntersection = dist;
+                intersectionNext = next;
             }
 
             if (cycles++ == 10)

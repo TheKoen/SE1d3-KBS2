@@ -12,7 +12,7 @@ namespace KBS2.CitySystem
             var properties = CommandHandler.GetProperties();
             if (properties.ContainsKey("availableCars"))
             {
-                CommandHandler.Reset();
+                CommandHandler.ResetProperties();
             }
 
             var cityObject = new City();
@@ -69,18 +69,16 @@ namespace KBS2.CitySystem
         {
             var loc = ParseLocation(node.Attributes["Location"].InnerText);
             var size = int.Parse(node.Attributes["Size"].InnerText);
-            //checking the type of building
-            if(node.Name == "Building")
+            
+            switch (node.Name)
             {
-                return new Building(loc, size);
-            }
-            else if(node.Name == "Garage")
-            {
-                return new Garage(loc, size, DirectionCar.North);
-            }
-            else
-            {
-                return null;
+                //checking the type of building
+                case "Building":
+                    return new Building(loc, size);
+                case "Garage":
+                    return new Garage(loc, size, DirectionCar.North);
+                default:
+                    return null;
             }
         }
 

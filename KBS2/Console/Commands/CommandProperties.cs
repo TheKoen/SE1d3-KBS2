@@ -4,7 +4,7 @@ using System.Text;
 namespace KBS2.Console.Commands
 {
     [CommandMetadata("properties",
-        Aliases = new string[] { "props" },
+        Aliases = new[] { "props" },
         Description = "Shows a list of all currently registered Properties",
         AutoRegister = true)]
     public class CommandProperties : ICommand
