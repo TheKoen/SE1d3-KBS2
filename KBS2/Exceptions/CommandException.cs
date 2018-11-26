@@ -3,13 +3,13 @@ using System.Runtime.Serialization;
 
 namespace KBS2.Exceptions
 {
-    public abstract class CommandException : Exception, ISerializable
+    public class CommandException : Exception, ISerializable
     {
-        protected CommandException()
+        public CommandException()
         {
         }
 
-        protected CommandException(string message) : base(message)
+        public CommandException(string message) : base(message)
         {
         }
     }

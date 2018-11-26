@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
+using KBS2.Console;
 using KBS2.Util;
 using Math = System.Math;
 
@@ -10,12 +13,10 @@ namespace KBS2
     public class MainLoop
     {
         private Property tickRate = new Property(30);
-        public int TickRate {
-            get => tickRate.Value;
-            set => tickRate.Value = value;
-        }
+        public int TickRate => tickRate.Value;
 
         private DispatcherTimer timer;
+        private int exceptionCount;
 
         private event Update UpdateEvent;
 
@@ -27,11 +28,17 @@ namespace KBS2
             };
             timer.Tick += Update;
             tickRate.PropertyChanged += OnTickrateChange;
+            CommandHandler.RegisterProperty("tickRate", ref tickRate);
         }
 
         public void Subscribe(Update subscriber)
         {
             UpdateEvent += subscriber;
+        }
+
+        public void Unsubscribe(Update subscriber)
+        {
+            UpdateEvent -= subscriber;
         }
 
         public void Start()
@@ -44,14 +51,41 @@ namespace KBS2
             timer.Stop();
         }
 
-        public void OnTickrateChange(object source, CustomPropertyChangedArgs args)
+        public bool IsRunning()
         {
+            return timer.IsEnabled;
+        }
+
+        private void OnTickrateChange(object source, CustomPropertyChangedArgs args)
+        {
+            MainWindow.Console.Print($"Changing TickRate to {args.ValueAfter}Hz");
             timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));
         }
 
         private void Update(object source, EventArgs args)
         {
-            UpdateEvent?.Invoke();
+            var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            try
+            {
+                UpdateEvent?.Invoke();
+            }
+            catch (Exception e)
+            {
+                MainWindow.Console.Print($"Exception in main loop: {e}", Colors.Red);
+
+                exceptionCount++;
+                if (exceptionCount > 2)
+                {
+                    Stop();
+                    MainWindow.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
+                }
+            }
+            var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
+            var interval = CalculateInterval(tickRate.Value);
+            if (taken > interval)
+            {
+                MainWindow.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
+            }
         }
 
         private static int CalculateInterval(int tickRate)

@@ -14,7 +14,6 @@ namespace KBS2
     {
         public static readonly MainLoop Loop = new MainLoop();
         public static ConsoleControl Console { get; private set; }
-        public City City { get; set; }
 
         public MainWindow()
         {
@@ -22,35 +21,47 @@ namespace KBS2
 
             Console = MainConsole;
             
+            // Create a City
             var file = new XmlDocument();
             file.LoadXml("<City>\n\n" +
                          "<Roads>\n" +
-                         "  <Road Start=\"200,0\" End=\"200,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"0,400\" End=\"800,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"200,200\" End=\"800,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"200,300\" End=\"800,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"200,0\" End=\"200,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"200,200\" End=\"200,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"200,300\" End=\"200,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"200,400\" End=\"200,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"200,200\" End=\"400,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"400,200\" End=\"600,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"600,200\" End=\"800,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"200,300\" End=\"400,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"400,300\" End=\"600,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"600,300\" End=\"800,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"0,400\" End=\"200,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"200,400\" End=\"600,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"600,400\" End=\"800,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
                          "  <Road Start=\"600,0\" End=\"600,200\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
                          "  <Road Start=\"400,200\" End=\"400,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
-                         "  <Road Start=\"600,300\" End=\"600,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"600,300\" End=\"600,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"600,600\" End=\"600,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
                          "</Roads>\n\n" +
                          "<Buildings>\n" +
-                         "  <Building Location=\"250,160\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"300,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"350,160\" Size=\"40\"></Building>\n" +
+                         //"  <Building Location=\"350,60\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"400,160\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"450,160\" Size=\"40\"></Building>\n" +
-                         "  <Building Location=\"520,140\" Size=\"80\"></Building>\n" +
-                         "  <Building Location=\"340,250\" Size=\"50\"></Building>\n" +
-                         "  <Building Location=\"260,250\" Size=\"50\"></Building>\n" +
+                         "  <Building Location=\"250,250\" Size=\"40\"></Building>\n" +
                          "</Buildings>\n\n" +
                          "<Intersections>\n" +
-                         "  <Intersection Location =\"35,13\" Size=\"5\"></Intersection>\n" +
+                         "  <Intersection Location =\"200,200\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"400,200\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"600,200\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"200,300\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"400,300\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"600,300\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"200,400\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"600,400\" Size=\"20\"></Intersection>\n" +
                          "</Intersections>\n\n" +
                          "</City>");
-
             CityParser.MakeCity(file);
-
-            Loop.Start();
 
             // Registering commands
             CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");

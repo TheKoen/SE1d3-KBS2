@@ -58,7 +58,6 @@ namespace KBS2.Console
             ButtonSend.Click += HandleSend;
         }
 
-
         private void HandleSend(object sender, RoutedEventArgs args)
         {
             // Getting the command from the TextBox and invoking the SendCommand event

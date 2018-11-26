@@ -59,6 +59,10 @@ namespace KBS2.CustomerSystem
         /// <param name="road"></param>
         public void MoveToNearestRoad(Road road)
         {
+            if (road == null)
+            {
+                return;
+            }
             if (CheckRoadOrientation(road))
             {
                 Group.Location = CheckHorizontalRoadPosition(road)

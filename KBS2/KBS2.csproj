@@ -74,6 +74,7 @@
     <Compile Include="CitySystem\CityParser.cs" />
     <Compile Include="CitySystem\IEntity.cs" />
     <Compile Include="Console\CommandRegistrar.cs" />
+    <Compile Include="Console\Commands\CommandTime.cs" />
     <Compile Include="Console\Commands\CommandExport.cs" />
     <Compile Include="Console\Commands\CommandGet.cs" />
     <Compile Include="Console\Commands\CommandHelp.cs" />
@@ -97,7 +98,6 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
-    <Compile Include="GPS\TSP.cs" />
     <Compile Include="MainLoop.cs" />
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
     <Compile Include="Util\Property.cs" />
