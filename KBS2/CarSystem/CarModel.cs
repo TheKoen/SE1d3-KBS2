@@ -20,6 +20,7 @@ namespace KBS2.CarSystem
         {
             new SensorPrototype
             {
+                Direction = Direction.Global,
                 Range = 40,
                 Create = Sensor.Sensors[typeof(EntityRadar)]
             },

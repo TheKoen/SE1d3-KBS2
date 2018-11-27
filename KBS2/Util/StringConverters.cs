@@ -39,6 +39,22 @@ namespace KBS2.Util
         }
 
         /// <summary>
+        /// returns a List with names of all the sensors in this assembly
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetSensors()
+        {
+            var items = GetSensorsClasses();
+            var list = new List<string>();
+
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+            return list;
+        }
+
+        /// <summary>
         /// Get all Sensors in Namespace ActiveSensors en PassiveSensors
         /// </summary>
         /// <returns>return all Types of Sensors</returns>
@@ -48,8 +64,8 @@ namespace KBS2.Util
             const string nameSpaceSensors2 = "KBS2.CarSystem.Sensors.PassiveSensors";
             return
                 Assembly.GetExecutingAssembly().GetTypes()
-                    .Where(t => string.Equals(t.Namespace, nameSpaceSensors1, StringComparison.Ordinal)
-                                || string.Equals(t.Namespace, nameSpaceSensors2, StringComparison.Ordinal))
+                    .Where(t => String.Equals(t.Namespace, nameSpaceSensors1, StringComparison.Ordinal) || String.Equals(t.Namespace, nameSpaceSensors2, StringComparison.Ordinal))
+                    .Where(t => !t.Name.Contains("Controller") && !t.Name.Contains("DisplayClass"))
                     .ToArray();
         }
     }
