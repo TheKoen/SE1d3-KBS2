@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using KBS2.CarSystem;
 using KBS2.Console;
 using KBS2.CustomerSystem;
 using KBS2.Util;
@@ -11,10 +10,10 @@ namespace KBS2.CitySystem
 {
     public class CityController
     {
-        public static readonly Random Random = new Random();
         public static int CAR_ID;
 
-        private Property customerSpawnRate = new Property(0.2F);
+        private static readonly Random Random = new Random();
+        private readonly Property customerSpawnRate = new Property(0.2F);
 
         private City City { get; }
 

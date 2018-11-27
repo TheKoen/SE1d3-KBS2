@@ -4,10 +4,6 @@ using KBS2.Exceptions;
 using KBS2.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KBS2.Console.Commands
 {
@@ -41,7 +37,7 @@ namespace KBS2.Console.Commands
         
         private IEnumerable<char> RemoveSensor(params string[] args)
         {
-            if (args.Length < 3) { throw new InvalidParametersException("Invalid command usage, should be : Sensor Remove {model} {side} {sensor}"); };
+            if (args.Length < 3) { throw new InvalidParametersException("Invalid command usage, should be : Sensor Remove {model} {side} {sensor}"); }
 
             CarModel model;
             Direction side;
@@ -71,9 +67,9 @@ namespace KBS2.Console.Commands
                 throw new InvalidParametersException("Invalid command: Could not create sensor.");
             }
             var count = model.Sensors
-                .FindAll(sensor => sensor.GetType().Equals(sensorFactory.GetType()) && sensor.Direction == side)
+                .FindAll(sensor => sensor.GetType() == sensorFactory.GetType() && sensor.Direction == side)
                 .Count;
-            model.Sensors.RemoveAll(sensor => sensor.GetType().Equals(sensorFactory.GetType()) && sensor.Direction == side);
+            model.Sensors.RemoveAll(sensor => sensor.GetType() == sensorFactory.GetType() && sensor.Direction == side);
 
             return $"Removed {count} sensors.";
         }

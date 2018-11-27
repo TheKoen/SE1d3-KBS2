@@ -18,8 +18,8 @@ namespace UnitTests.Console
         private ConsoleControl _console;
         private Regex _printMethodRegex;
 
-        private bool _sendCommandEventTestPassed = false;
-        private bool _inputHistoryIndexTestPassed = false;
+        private bool _sendCommandEventTestPassed;
+        private bool _inputHistoryIndexTestPassed;
         
         [SetUp]
         public void Init()

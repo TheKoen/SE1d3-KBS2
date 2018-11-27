@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace KBS2.Exceptions
 {
-    public class TypeMismatchException : SystemException, ISerializable
+    public class TypeMismatchException : SystemException
     {
         public TypeMismatchException()
         {

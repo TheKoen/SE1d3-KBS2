@@ -10,7 +10,7 @@ namespace KBS2
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public static readonly MainLoop Loop = new MainLoop("main");
         public static readonly MainLoop CommandLoop = new MainLoop("command");

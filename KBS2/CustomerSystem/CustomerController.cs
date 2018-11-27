@@ -53,48 +53,19 @@ namespace KBS2.CustomerSystem
 
         public void MoodChange(double moral)
         {
-            switch (moral)
+            if (moral < 20)
+                Customer.Mood = Moral.Happy;
+            else if (moral >= 20 && moral <= 15)
+                Customer.Mood = Moral.Neutral;
+            else if (moral >= 14 && moral <= 10)
+                Customer.Mood = Moral.Annoyed;
+            else if (moral >= 9 && moral <= 5)
+                Customer.Mood = Moral.Sad;
+            else if (moral >= 4 && moral <= 1)
+                Customer.Mood = Moral.Mad;
+            else
             {
-                case 20:
-                case 19:
-                case 18:
-                case 17:
-                case 16:
-                case 15:
-                    Customer.Mood = Moral.Neutral;
-                    return;
-
-                case 14:
-                case 13:
-                case 12:
-                case 11:
-                case 10:
-                    Customer.Mood = Moral.Annoyed;
-                    return;
-
-                case 9:
-                case 8:
-                case 7:
-                case 6:
-                case 5:
-                    Customer.Mood = Moral.Sad;
-                    return;
-
-                case 4:
-                case 3:
-                case 2:
-                case 1:
-                    Customer.Mood = Moral.Mad;
-                    return;
-
-                case 0:
-                    // Cancel order.
-                    return;
-
-                default:
-                    Customer.Mood = Moral.Happy;
-                    return;
-
+                // Cancel order
             }
         }
 

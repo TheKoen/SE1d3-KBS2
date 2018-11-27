@@ -24,16 +24,16 @@ namespace KBS2.Util
 
         public static double DotProduct(Vector pointA, Vector pointB, Vector pointC)
         {
-            var AB = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
-            var BC = new Vector(pointC.X - pointB.X, pointC.Y - pointB.Y);
-            return AB.X * BC.X + AB.Y * BC.Y;
+            var ab = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
+            var bc = new Vector(pointC.X - pointB.X, pointC.Y - pointB.Y);
+            return ab.X * bc.X + ab.Y * bc.Y;
         }
 
         public static double CrossProduct(Vector pointA, Vector pointB, Vector pointC)
         {
-            var AB = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
-            var AC = new Vector(pointC.X - pointA.X, pointC.Y - pointA.Y);
-            return AB.X * AC.Y - AB.Y * AC.Y;
+            var ab = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
+            var ac = new Vector(pointC.X - pointA.X, pointC.Y - pointA.Y);
+            return ab.X * ac.Y - ab.Y * ac.Y;
         }
 
         public static double LineToPointDistance(Vector pointA, Vector pointB, Vector pointC)
@@ -44,10 +44,7 @@ namespace KBS2.Util
                 return Distance(pointB, pointC);
 
             var dot2 = DotProduct(pointB, pointA, pointC);
-            if (dot2 > 0)
-                return Distance(pointA, pointC);
-
-            return Math.Abs(dist);
+            return dot2 > 0 ? Distance(pointA, pointC) : Math.Abs(dist);
         }
     }
 }

@@ -13,13 +13,13 @@ namespace KBS2.GPS
 {
     public class GPSSystem
     {
-        private static Property startingPrice = new Property(1.50);
-        private static Property pricePerKilometer = new Property(1.00);
+        private static readonly Property StartingPrice = new Property(1.50);
+        private static readonly Property PricePerKilometer = new Property(1.00);
 
         static GPSSystem()
         {
-            CommandHandler.RegisterProperty("startingPrice", ref startingPrice);
-            CommandHandler.RegisterProperty("pricePerKilometer", ref pricePerKilometer);
+            CommandHandler.RegisterProperty("startingPrice", ref StartingPrice);
+            CommandHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
         }
 
         /// <summary>
@@ -101,11 +101,9 @@ namespace KBS2.GPS
             foreach (var garage in garages)
             {
                 var tempDistance = MathUtil.Distance(group.Location, garage.Location);
-                if (tempDistance < nearestDistance)
-                {
-                    nearestGarage = garage;
-                    nearestDistance = tempDistance;
-                }
+                if (!(tempDistance < nearestDistance)) continue;
+                nearestGarage = garage;
+                nearestDistance = tempDistance;
             }
 
             if (nearestGarage == null) return;
@@ -124,7 +122,6 @@ namespace KBS2.GPS
                 if (!car.CurrentRoad.Equals(road)) roads.Add(road);
             }
 
-            Vector closestPointToDestination;
             var shortestDistance = double.MaxValue;
             Road selectedRoad = null;
             var selectDestination = new Vector();
@@ -145,16 +142,14 @@ namespace KBS2.GPS
                 var tempDStart = MathUtil.Distance(road.Start, car.Location);
                 var tempDEnd = MathUtil.Distance(road.End, car.Location);
 
-                closestPointToDestination = tempDStart > tempDEnd ? road.Start : road.End;
+                var closestPointToDestination = tempDStart > tempDEnd ? road.Start : road.End;
 
                 var distanceToDestination = MathUtil.Distance(closestPointToDestination, car.Destination.Location);
 
-                if (distanceToDestination < shortestDistance)
-                {
-                    shortestDistance = distanceToDestination;
-                    selectedRoad = road;
-                    selectDestination = closestPointToDestination;
-                }
+                if (!(distanceToDestination < shortestDistance)) continue;
+                shortestDistance = distanceToDestination;
+                selectedRoad = road;
+                selectDestination = closestPointToDestination;
             }
 
             return new Destination {Road = selectedRoad, Location = selectDestination};
@@ -269,7 +264,7 @@ namespace KBS2.GPS
 
         public static double CalculatePrice(double distance)
         {
-            return startingPrice.Value + distance / 100.0 * pricePerKilometer.Value;
+            return StartingPrice.Value + distance / 100.0 * PricePerKilometer.Value;
         }
     }
 }

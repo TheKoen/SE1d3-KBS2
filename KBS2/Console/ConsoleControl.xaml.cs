@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,7 +10,7 @@ namespace KBS2.Console
     /// <summary>
     /// Interaction logic for ConsoleControl.xaml
     /// </summary>
-    public partial class ConsoleControl : UserControl
+    public partial class ConsoleControl
     {
 
         public delegate void SendCommandHandler(ConsoleControl sender, SendCommandArgs args);
@@ -24,7 +23,7 @@ namespace KBS2.Console
         private int _inputHistoryCapacity = 32;
         private int _outputHistoryCapacity = 256;
         private int _inputHistoryIndex = -1;
-        private Queue<Tuple<IEnumerable<char>, Color?>> _printQueue = new Queue<Tuple<IEnumerable<char>, Color?>>();
+        private readonly Queue<Tuple<IEnumerable<char>, Color?>> _printQueue = new Queue<Tuple<IEnumerable<char>, Color?>>();
 
         public int InputHistoryCapacity
         {
@@ -131,7 +130,8 @@ namespace KBS2.Console
                     current = _inputHistory.Last;
                     // Finding the correct element in the input history
                     for (var i = 0; i < _inputHistoryIndex; ++i)
-                        current = current.Previous;
+                        current = current?.Previous;
+                    if (current == null) throw new NullReferenceException();
                     TextBoxInput.Text = current.Value;
                     // Making sure the caret is in the correct position
                     TextBoxInput.CaretIndex = current.Value.Length;
@@ -151,7 +151,8 @@ namespace KBS2.Console
                     current = _inputHistory.Last;
                     // Finding the correct element in the input history
                     for (var i = 0; i < _inputHistoryIndex; ++i)
-                        current = current.Previous;
+                        current = current?.Previous;
+                    if (current == null) throw new NullReferenceException();
                     TextBoxInput.Text = current.Value;
                     // Making sure the caret is in the correct position
                     TextBoxInput.CaretIndex = current.Value.Length;
