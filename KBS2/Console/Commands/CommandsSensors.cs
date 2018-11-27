@@ -4,6 +4,8 @@ using KBS2.Exceptions;
 using KBS2.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Media;
 
 namespace KBS2.Console.Commands
 {
@@ -24,7 +26,7 @@ namespace KBS2.Console.Commands
         {
             if(args.Length == 0)
             {
-                throw new InvalidParametersException("Invalid command usage, you can use remove and add");
+                throw new InvalidParametersException("Invalid command usage, you can use remove,add en types");
             }
             if(args[0] == "add")
             {
@@ -40,7 +42,7 @@ namespace KBS2.Console.Commands
             }
             else
             {
-                throw new InvalidParametersException("Invalid command usage, you can use remove and add");
+                throw new InvalidParametersException("Invalid command usage, you can use remove, add types");
             }           
         }
         
@@ -76,7 +78,7 @@ namespace KBS2.Console.Commands
             {
                 try
                 {
-                    side = StringConverters.stringToDirection(args[2]);
+                    side = StringConverters.StringToDirection(args[2]);
                 }
                 catch (Exception e)
                 {
@@ -155,7 +157,7 @@ namespace KBS2.Console.Commands
         {
             for (int i = 0; i < listPotentialRemoved.Count; i++)
             {
-                var name = Sensor.SENSORS.FirstOrDefault(sensor => sensor.Value.Equals(listPotentialRemoved[i].Create)).Key.Name;
+                var name = Sensor.Sensors.FirstOrDefault(sensor => sensor.Value.Equals(listPotentialRemoved[i].Create)).Key.Name;
                 MainWindow.Console.Print($"{i+1}. Name: {name}, Side: {listPotentialRemoved[i].Direction.ToString()}");
             }
             MainWindow.Console.Print("0. remove all.");
