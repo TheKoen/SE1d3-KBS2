@@ -51,7 +51,11 @@ namespace KBS2.CustomerSystem
             return true;
         }
 
-        public void MoodChange(double moral)
+        /// <summary>
+        /// Change the moral of a customer
+        /// </summary>
+        /// <param name="Moral"></param>
+        public void MoodChange(double Moral)
         {
             if (moral > 20)
                 Customer.Mood = Moral.Happy;
