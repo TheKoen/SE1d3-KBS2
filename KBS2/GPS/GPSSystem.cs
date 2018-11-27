@@ -15,11 +15,14 @@ namespace KBS2.GPS
     {
         private static Property StartingPrice = new Property(1.50);
         private static Property PricePerKilometer = new Property(1.00);
+        private static Property availableModel = new Property("TestModel");
+        private static CarModel AvailableModel => CarModel.Get(availableModel.Value);
 
         public static void Setup()
         {
             CommandHandler.RegisterProperty("startingPrice", ref StartingPrice);
             CommandHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+            CommandHandler.RegisterProperty("availableModel", ref availableModel);
         }
 
         /// <summary>
@@ -116,7 +119,7 @@ namespace KBS2.GPS
 
             if (nearestGarage == null) return;
 
-            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, CarModel.TestModel);
+            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, AvailableModel);
             car.Destination = destination;
         }
 
