@@ -14,11 +14,34 @@ namespace UnitTests
     [TestFixture]
     public class TestMathUtil
     {
-        [TestCase(100, 0, 20, 20, 20)]
-        [TestCase(0, 100, 20, 20, 20)]
+        [TestCase(200, 100, 100, 100, 0)]
+        [TestCase(100, 200, 100, 100, 0)]
+        [TestCase(100, 0, 100, 100, 0)]
+        [TestCase(0, 100, 100, 100, 0)]
+
+        [TestCase(200, 100, 0, 0, 141.42)]
+        [TestCase(100, 200, 0, 0, 141.42)]
+        [TestCase(100, 0, 0, 0, 100)]
+        [TestCase(0, 100, 0, 0, 100)]
+
+        [TestCase(200, 100, 200, 0, 100)]
+        [TestCase(100, 200, 200, 0, 141.42)]
+        [TestCase(100, 0, 200, 0, 100)]
+        [TestCase(0, 100, 200, 0, 141.42)]
+
+        [TestCase(200, 100, 200, 200, 100)]
+        [TestCase(100, 200, 200, 200, 100)]
+        [TestCase(100, 0, 200, 200, 141.42)]
+        [TestCase(0, 100, 200, 200, 141.42)]
+
+
+        [TestCase(200, 100, 0, 200, 141.42)]
+        [TestCase(100, 200, 0, 200, 100)]
+        [TestCase(100, 0, 0, 200, 141.42)]
+        [TestCase(0, 100, 0, 200, 100)]
         public void TestDistanceToRoad(double rx, double ry, double px, double py, double expected)
         {
-            var road = new Road(new Vector(0, 0), new Vector(rx, ry), 10, 100);
+            var road = new Road(new Vector(100, 100), new Vector(rx, ry), 10, 100);
             var point = new Vector(px, py);
 
             var distance = MathUtil.DistanceToRoad(point, road);

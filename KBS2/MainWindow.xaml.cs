@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using KBS2.Exceptions;
+using KBS2.GPS;
 
 namespace KBS2
 {
@@ -22,6 +23,8 @@ namespace KBS2
             CommandLoop.Start();
 
             Console = MainConsole;
+
+            GPSSystem.Setup();
             
             // Create a City
             var file = new XmlDocument();
@@ -44,13 +47,14 @@ namespace KBS2
                          "  <Road Start=\"400,200\" End=\"400,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
                          "  <Road Start=\"600,300\" End=\"600,400\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
                          "  <Road Start=\"600,600\" End=\"600,450\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
+                         "  <Road Start=\"800,200\" End=\"800,300\" Width=\"20\" MaxSpeed=\"50\"></Road>\n" +
                          "</Roads>\n\n" +
                          "<Buildings>\n" +
                          "  <Building Location=\"300,160\" Size=\"40\"></Building>\n" +
-                         //"  <Building Location=\"350,60\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"400,160\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"450,160\" Size=\"40\"></Building>\n" +
                          "  <Building Location=\"250,250\" Size=\"40\"></Building>\n" +
+                         "  <Building Location=\"640,360\" Size=\"40\"></Building>\n" +
                          "</Buildings>\n\n" +
                          "<Intersections>\n" +
                          "  <Intersection Location =\"200,200\" Size=\"20\"></Intersection>\n" +
@@ -61,6 +65,8 @@ namespace KBS2
                          "  <Intersection Location =\"600,300\" Size=\"20\"></Intersection>\n" +
                          "  <Intersection Location =\"200,400\" Size=\"20\"></Intersection>\n" +
                          "  <Intersection Location =\"600,400\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"800,200\" Size=\"20\"></Intersection>\n" +
+                         "  <Intersection Location =\"800,300\" Size=\"20\"></Intersection>\n" +
                          "</Intersections>\n\n" +
                          "</City>");
             CityParser.MakeCity(file);

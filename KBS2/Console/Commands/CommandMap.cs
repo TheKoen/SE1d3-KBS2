@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,11 +13,11 @@ namespace KBS2.Console.Commands
 {
     [CommandMetadata("map",
         Description = "Shows a downscaled representation of the current city",
-        AutoRegister = true)]
+        AutoRegister = true,
+        Usages = new[] {"map [loop]"})]
     public class CommandMap : ICommand
     {
         private static bool running;
-        private static int secondTick;
         private static bool active;
 
         static CommandMap()
@@ -28,9 +29,10 @@ namespace KBS2.Console.Commands
                 {
                     if (running)
                     {
-                        Update();
+                        PrintMap();
                     }
-                    Thread.Sleep(20);
+
+                    Thread.Sleep(400);
                 }
             }) {Name = "DisplayMap Thread"};
             thread.Start();
@@ -43,19 +45,14 @@ namespace KBS2.Console.Commands
 
         public IEnumerable<char> Run(params string[] args)
         {
-            running = !running;
-
-            return $"Turning map renderer {(running ? "on" : "off")}...";
-        }
-
-        private static void Update()
-        {
-            secondTick++;
-            if (secondTick == 10)
+            if (args.Length == 1 && args[0].Equals("loop"))
             {
-                secondTick = 0;
-                PrintMap();
+                running = !running;
+                return $"Turning map renderer {(running ? "on" : "off")}...";
             }
+
+            PrintMap();
+            return "Rendered map.";
         }
 
         private static void PrintMap()

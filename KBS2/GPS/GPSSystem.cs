@@ -16,7 +16,7 @@ namespace KBS2.GPS
         private static Property startingPrice = new Property(1.50);
         private static Property pricePerKilometer = new Property(1.00);
 
-        static GPSSystem()
+        public static void Setup()
         {
             CommandHandler.RegisterProperty("startingPrice", ref startingPrice);
             CommandHandler.RegisterProperty("pricePerKilometer", ref pricePerKilometer);
@@ -59,7 +59,11 @@ namespace KBS2.GPS
         public static List<Road> GetRoadsInRange(Vector location, int range)
         {
             return City.Instance.Roads
-                .FindAll(road => MathUtil.DistanceToRoad(location, road) <= range);
+                .FindAll(road =>
+                {
+                    var dist = MathUtil.DistanceToRoad(location, road);
+                    return dist <= range;
+                });
         }
 
         public static Road NearestRoad(Vector location)
@@ -82,10 +86,14 @@ namespace KBS2.GPS
 
         public static void RequestCar(Destination destination, CustomerGroup group)
         {
-            var distance = CalculateDistance(group.Location, destination.Location);
-            var price = CalculatePrice(distance);
-            MainWindow.Console.Print(
-                $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: {price:C2}");
+            try
+            {
+                var distance = CalculateDistance(group.Location, destination.Location);
+                var price = CalculatePrice(distance);
+                MainWindow.Console.Print(
+                    $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}");
+            }
+            catch (Exception) { }
 
             // Look to nearest Garage.
             var city = City.Instance;
@@ -183,7 +191,7 @@ namespace KBS2.GPS
                 return ExploreIntersection(distance1 > distance2
                         ? FindIntersection(road.End)
                         : FindIntersection(road.Start),
-                    end, target, 0.0, 0);
+                    end, target, 0.0, 0, new List<Intersection>());
             }
             catch (Exception)
             {
@@ -193,7 +201,7 @@ namespace KBS2.GPS
         }
 
         private static double ExploreIntersection(Intersection intersection, Vector end, Road target, double distance,
-            int cycles)
+            int cycles, ICollection<Intersection> past)
         {
             if (intersection == null)
             {
@@ -201,6 +209,8 @@ namespace KBS2.GPS
                     Colors.Yellow);
                 return distance;
             }
+
+            past.Add(intersection);
 
             foreach (var road in intersection.GetRoads())
             {
@@ -214,9 +224,11 @@ namespace KBS2.GPS
             var closestIntersection = double.MaxValue;
             Intersection intersectionNext = null;
 
+            //MainWindow.Console.Print($"Arrived at intersection {intersection.Location}. Found {intersections.Count} options. Evaluating...");
+
             foreach (var next in intersections)
             {
-                if ( next == null || next.Equals(intersection)) continue;
+                if (next == null || past.Contains(next)) continue;
 
                 var dist = MathUtil.Distance(next.Location, end);
                 if (!(dist < closestIntersection)) continue;
@@ -224,7 +236,7 @@ namespace KBS2.GPS
                 intersectionNext = next;
             }
 
-            if (cycles++ == 10)
+            if (cycles++ == 20)
             {
                 throw new Exception("Route is impossible.");
             }
@@ -235,7 +247,7 @@ namespace KBS2.GPS
             }
 
             distance += MathUtil.Distance(intersection.Location, intersectionNext.Location);
-            return ExploreIntersection(intersectionNext, end, target, distance, cycles);
+            return ExploreIntersection(intersectionNext, end, target, distance, cycles, past);
         }
 
         public static List<Intersection> FindNextIntersections(Intersection intersection)

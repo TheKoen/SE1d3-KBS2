@@ -19,35 +19,30 @@ namespace KBS2.Util
 
         public static double DistanceToRoad(Vector point, Road road)
         {
-            return LineToPointDistance(road.Start, road.End, point);
+            return ShortestDistance(road.Start, road.End, point);
         }
 
-        public static double DotProduct(Vector pointA, Vector pointB, Vector pointC)
+        private static double ShortestDistance(Vector lineStart, Vector lineEnd, Vector point)
         {
-            var AB = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
-            var BC = new Vector(pointC.X - pointB.X, pointC.Y - pointB.Y);
-            return AB.X * BC.X + AB.Y * BC.Y;
-        }
+            var px = lineEnd.X - lineStart.X;
+            var py = lineEnd.Y - lineStart.Y;
+            var temp = (px * px) + (py * py);
+            var u = ((point.X - lineStart.X) * px + (point.Y - lineStart.Y) * py) / (temp);
+            if (u > 1)
+            {
+                u = 1;
+            }
+            else if (u < 0)
+            {
+                u = 0;
+            }
+            var x = lineStart.X + u * px;
+            var y = lineStart.Y + u * py;
 
-        public static double CrossProduct(Vector pointA, Vector pointB, Vector pointC)
-        {
-            var AB = new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y);
-            var AC = new Vector(pointC.X - pointA.X, pointC.Y - pointA.Y);
-            return AB.X * AC.Y - AB.Y * AC.Y;
-        }
-
-        public static double LineToPointDistance(Vector pointA, Vector pointB, Vector pointC)
-        {
-            var dist = CrossProduct(pointA, pointB, pointC) / Distance(pointA, pointB);
-            var dot1 = DotProduct(pointA, pointB, pointC);
-            if (dot1 > 0)
-                return Distance(pointB, pointC);
-
-            var dot2 = DotProduct(pointB, pointA, pointC);
-            if (dot2 > 0)
-                return Distance(pointA, pointC);
-
-            return Math.Abs(dist);
+            var dx = x - point.X;
+            var dy = y - point.Y;
+            var dist = Math.Sqrt(dx * dx + dy * dy);
+            return dist;
         }
     }
 }

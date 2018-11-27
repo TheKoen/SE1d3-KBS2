@@ -62,6 +62,7 @@ namespace UnitTests.Console
         {
             // Printing the input and getting the output from the console
             _console.Print(input);
+            _console.PrintQueue();
             var output = _console.GetOutputHistory().Last();
             
             // Checking if the format of the output is correct

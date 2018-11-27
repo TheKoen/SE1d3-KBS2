@@ -82,7 +82,7 @@ namespace KBS2.Console
             _printQueue.Enqueue(new Tuple<IEnumerable<char>, Color?>(text, color));
         }
 
-        private void PrintQueue()
+        public void PrintQueue()
         {
             while (_printQueue.Count > 0)
             {
