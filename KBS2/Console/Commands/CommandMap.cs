@@ -15,7 +15,36 @@ namespace KBS2.Console.Commands
         AutoRegister = true)]
     public class CommandMap : ICommand
     {
+        private static bool running;
+        private static int secondTick;
+
         public IEnumerable<char> Run(params string[] args)
+        {
+            if (!running)
+            {
+                MainWindow.Loop.Subscribe(Update);
+            }
+            else
+            {
+                MainWindow.Loop.Unsubscribe(Update);
+            }
+
+            running = !running;
+
+            return "Displaying map...";
+        }
+
+        private static void Update()
+        {
+            secondTick++;
+            if (secondTick == 5)
+            {
+                secondTick = 0;
+                PrintMap();
+            }
+        }
+
+        private static void PrintMap()
         {
             var builder = new StringBuilder();
             builder.Append('\n');
@@ -28,6 +57,10 @@ namespace KBS2.Console.Commands
                     if (GPSSystem.GetRoad(vector) != null)
                     {
                         builder.Append('#');
+                    }
+                    else if (IsCustomer(vector))
+                    {
+                        builder.Append('$');
                     }
                     else if (IsBuilding(vector))
                     {
@@ -42,7 +75,20 @@ namespace KBS2.Console.Commands
                 builder.Append('\n');
             }
 
-            return builder.ToString();
+            MainWindow.Console.Print(builder.ToString());
+        }
+
+        private static bool IsCustomer(Vector point)
+        {
+            foreach (var customer in City.Instance.Customers)
+            {
+                if (MathUtil.Distance(customer.Location, point) < 10)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static bool IsBuilding(Vector point)

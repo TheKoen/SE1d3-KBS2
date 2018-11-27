@@ -26,7 +26,8 @@ namespace KBS2.CustomerSystem
         public double WhereIsMyGroup()
         {
             if (Customer.Group == null) return 0;
-            return MathUtil.Distance(Customer.Group.Location, Customer.Location);
+            var distance = MathUtil.Distance(Customer.Group.Location, Customer.Location);
+            return distance;
         }
 
         /// <summary>
@@ -118,7 +119,7 @@ namespace KBS2.CustomerSystem
 
                 Walking = Direction.Equals(Customer.Location) ? true : false;
             }
-            else if (WhereIsMyGroup() >= 40)
+            else if (WhereIsMyGroup() >= 10)
             {
                 MoveTowardsLocation(Customer.Group.Location);
             }
