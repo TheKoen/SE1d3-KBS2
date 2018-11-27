@@ -16,7 +16,8 @@ namespace KBS2.Console.Commands
         Usages = new []
         {
             "sensor remove <model> [side] [sensor]",
-            "sensor add <model> <side> <sensor> [range]"
+            "sensor add <model> <side> <sensor> [range]",
+            "sensor types"
         },
         AutoRegister = true)]
     class CommandsSensors : ICommand
@@ -36,6 +37,10 @@ namespace KBS2.Console.Commands
             else if(args[0] == "remove")
             {
                 return RemoveSensor(args);
+            }
+            else if(args[0] == "types")
+            {
+                return printTypes(args);
             }
             else
             {
@@ -97,7 +102,22 @@ namespace KBS2.Console.Commands
                 return $"Removed {count} {args[3]} sensors.";
             }
         }
+        private string printTypes(string[] args)
+        {
+            var items = StringConverters.GetSensors();
+            foreach(var item in items)
+            {
+                MainWindow.Console.Print(item);
+            }
 
+            return "";
+        }
+
+        /// <summary>
+        /// removes the sensor by the event SendCommand
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args">command given</param>
         private void removeSensors(ConsoleControl sender, SendCommandArgs args)
         {
             try
@@ -127,6 +147,9 @@ namespace KBS2.Console.Commands
             }
         }
 
+        /// <summary>
+        /// prints the options you can remove from a car model
+        /// </summary>
         private void printListPotentialRemoved()
         {
             for (int i = 0; i < listPotentialRemoved.Count; i++)
