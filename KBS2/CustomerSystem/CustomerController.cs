@@ -53,15 +53,15 @@ namespace KBS2.CustomerSystem
 
         public void MoodChange(double moral)
         {
-            if (moral < 20)
+            if (moral > 20)
                 Customer.Mood = Moral.Happy;
-            else if (moral >= 20 && moral <= 15)
+            else if (moral <= 20 && moral >= 15)
                 Customer.Mood = Moral.Neutral;
-            else if (moral >= 14 && moral <= 10)
+            else if (moral <= 14 && moral >= 10)
                 Customer.Mood = Moral.Annoyed;
-            else if (moral >= 9 && moral <= 5)
+            else if (moral <= 9 && moral >= 5)
                 Customer.Mood = Moral.Sad;
-            else if (moral >= 4 && moral <= 1)
+            else if (moral <= 4 && moral >= 1)
                 Customer.Mood = Moral.Mad;
             else
             {
