@@ -74,7 +74,7 @@ namespace KBS2.Console.Commands
             {
                 printListPotentialRemoved();
                 MainWindow.Console.SendCommand += removeSensors;
-                return "";
+                return null;
             }
             else
             {
@@ -115,7 +115,7 @@ namespace KBS2.Console.Commands
                 MainWindow.Console.Print(item);
             }
 
-            return "";
+            return null;
         }
 
         /// <summary>
