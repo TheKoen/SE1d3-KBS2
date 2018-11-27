@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using KBS2.Console;
@@ -14,10 +13,10 @@ namespace KBS2
     {
         private string Name { get; set; }
         
-        private Property tickRate = new Property(30);
+        private readonly Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
 
-        private DispatcherTimer timer;
+        private readonly DispatcherTimer timer;
         private int exceptionCount;
 
         private event Update UpdateEvent;

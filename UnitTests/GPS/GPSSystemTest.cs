@@ -91,7 +91,7 @@ namespace UnitTests.GPS
         public void GetDirectionTest(double cX, double cY, DirectionCar direction, double dX, double dY, int road,
             int destRoad, int intersection, double eX, double eY)
         {
-            var roads = new Road[]
+            var roads = new[]
             {
                 new Road(new Vector(35, 80), new Vector(35, 100), 10, 0),
                 new Road(new Vector(0, 75), new Vector(30, 75), 10, 0),
@@ -101,7 +101,7 @@ namespace UnitTests.GPS
                 new Road(new Vector(35, 10), new Vector(35, 70), 10, 0)
             };
 
-            var intersections = new Intersection[]
+            var intersections = new[]
             {
                 new Intersection(new Vector(35, 75), 10),
                 new Intersection(new Vector(95, 75), 10),

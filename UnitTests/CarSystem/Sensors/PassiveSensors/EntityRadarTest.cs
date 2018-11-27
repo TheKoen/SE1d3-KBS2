@@ -1,12 +1,6 @@
 ﻿using KBS2.CarSystem;
-using KBS2.CarSystem.Sensors.ActiveSensors;
-using KBS2.CitySystem;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CarSystem.Sensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;

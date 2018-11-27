@@ -11,7 +11,7 @@ namespace KBS2.CarSystem
 {
     public class Car : IEntity
     {
-        public const double DEFAULT_MAX_SPEED = 60;
+        public const double DefaultMaxSpeed = 60;
 
         public int Id { get; set; }
 
@@ -86,7 +86,7 @@ namespace KBS2.CarSystem
             this.direction = new Property(direction);
             CommandHandler.RegisterProperty($"car{id}.direction", ref this.direction);
 
-            maxSpeed = new Property(DEFAULT_MAX_SPEED);
+            maxSpeed = new Property(DefaultMaxSpeed);
             CommandHandler.RegisterProperty($"car{id}.maxSpeed", ref maxSpeed);
 
             this.model = new Property(model);
@@ -104,19 +104,19 @@ namespace KBS2.CarSystem
             {
                 return new List<Vector>
                 {
-                    new Vector(Location.X + Width/2.0, Location.Y),
-                    new Vector(Location.X - Width/2.0, Location.Y),
-                    new Vector(Location.X, Location.Y + Length/2),
-                    new Vector(Location.X, Location.Y - Length/2)
+                    new Vector(Location.X + Width / 2.0, Location.Y),
+                    new Vector(Location.X - Width / 2.0, Location.Y),
+                    new Vector(Location.X, Location.Y + Length / 2.0),
+                    new Vector(Location.X, Location.Y - Length / 2.0)
                 };
             }
 
             return new List<Vector>
             {
-                new Vector(Location.X + Length/2.0, Location.Y),
-                new Vector(Location.X - Length/2.0, Location.Y),
-                new Vector(Location.X, Location.Y + Width/2),
-                new Vector(Location.X, Location.Y - Width/2)
+                new Vector(Location.X + Length / 2.0, Location.Y),
+                new Vector(Location.X - Length / 2.0, Location.Y),
+                new Vector(Location.X, Location.Y + Width / 2.0),
+                new Vector(Location.X, Location.Y - Width / 2.0)
             };
         }
     }

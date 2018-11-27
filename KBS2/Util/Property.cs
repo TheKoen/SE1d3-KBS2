@@ -1,5 +1,4 @@
 ﻿using System;
-using KBS2.Console;
 using KBS2.Exceptions;
 
 namespace KBS2.Util
@@ -17,7 +16,8 @@ namespace KBS2.Util
             set
             {
                 if (value.GetType() != PropertyType)
-                    throw new TypeMismatchException($"Cannot assign value of type \"{value.GetType().Name}\" to Property of type\"{PropertyType.Name}\"");
+                    throw new TypeMismatchException(
+                        $"Cannot assign value of type \"{value.GetType().Name}\" to Property of type\"{PropertyType.Name}\"");
                 PropertyChanged?.Invoke(this, new CustomPropertyChangedArgs(_value, value));
                 _value = value;
             }

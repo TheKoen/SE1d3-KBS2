@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace KBS2.Exceptions
 {
-    public class KeyExistsException : SystemException, ISerializable
+    public class KeyExistsException : SystemException
     {
         public KeyExistsException()
         {

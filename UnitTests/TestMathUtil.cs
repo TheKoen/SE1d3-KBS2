@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using KBS2.CitySystem;
 using KBS2.Util;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace UnitTests
 {

@@ -13,10 +13,10 @@ namespace UnitTests.Util
 
     public class CarBuilder
     {
-        public static int ID = 0;
+        public static int ID;
 
         private Vector location;
-        private List<CreateSensor> sensors = new List<CreateSensor>();
+        private readonly List<CreateSensor> sensors = new List<CreateSensor>();
         private DirectionCar direction;
         private CarModel model = CarModel.TestModel;
         private int width;

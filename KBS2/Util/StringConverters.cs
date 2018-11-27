@@ -35,7 +35,7 @@ namespace KBS2.Util
                             .ToList()
                             .Find(type => type.Name == sensorName);
 
-            return Sensor.SENSORS[sensorType];
+            return Sensor.Sensors[sensorType];
         }
 
         /// <summary>

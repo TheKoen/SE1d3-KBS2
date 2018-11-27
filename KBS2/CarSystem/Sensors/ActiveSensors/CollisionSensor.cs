@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using KBS2.CitySystem;
-using KBS2.Util;
 
 namespace KBS2.CarSystem.Sensors.ActiveSensors
 {
