@@ -17,6 +17,12 @@ namespace KBS2.Util
             return Math.Sqrt(Math.Pow(pointA.X - pointB.X, 2) + Math.Pow(pointA.Y - pointB.Y, 2));
         }
 
+        /// <summary>
+        /// reutrns the distance form a point to a road
+        /// </summary>
+        /// <param name="point">Vetor point</param>
+        /// <param name="road">Road road</param>
+        /// <returns>double distance</returns>
         public static double DistanceToRoad(Vector point, Road road)
         {
             return LineToPointDistance(road.Start, road.End, point);

@@ -51,6 +51,10 @@ namespace KBS2.CustomerSystem
             return true;
         }
 
+        /// <summary>
+        /// Change the moral of a customer
+        /// </summary>
+        /// <param name="Moral"></param>
         public void MoodChange(double Moral)
         {
             switch (Moral)

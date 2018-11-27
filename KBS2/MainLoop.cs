@@ -29,42 +29,75 @@ namespace KBS2
             CommandHandler.RegisterProperty("tickRate", ref tickRate);
         }
 
+        /// <summary>
+        /// subscribe to UpdateEvent
+        /// </summary>
+        /// <param name="subscriber"></param>
         public void Subscribe(Update subscriber)
         {
             UpdateEvent += subscriber;
         }
 
+        /// <summary>
+        /// Unsubscribe to UpdateEvent
+        /// </summary>
+        /// <param name="subscriber"></param>
         public void Unsubscribe(Update subscriber)
         {
             UpdateEvent -= subscriber;
         }
 
+        /// <summary>
+        /// Start the loop
+        /// </summary>
         public void Start()
         {
             timer.Start();
         }
 
+        /// <summary>
+        /// Stop the loop
+        /// </summary>
         public void Stop()
         {
             timer.Stop();
         }
 
+        /// <summary>
+        /// returns true if loop is running.
+        /// </summary>
+        /// <returns></returns>
         public bool IsRunning()
         {
             return timer.IsEnabled;
         }
 
+        /// <summary>
+        /// Event if the tickrate changes
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="args"></param>
         private void OnTickrateChange(object source, CustomPropertyChangedArgs args)
         {
             MainWindow.Console.Print($"Changing TickRate to {args.ValueAfter}Hz");
             timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));
         }
 
+        /// <summary>
+        /// Called every Tick
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="args"></param>
         private void Update(object source, EventArgs args)
         {
             UpdateEvent?.Invoke();
         }
 
+        /// <summary>
+        /// Calculates Interval of the Loop
+        /// </summary>
+        /// <param name="tickRate"></param>
+        /// <returns></returns>
         private static int CalculateInterval(int tickRate)
         {
             return (int) Math.Round(1000.0 / tickRate);

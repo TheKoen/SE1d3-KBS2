@@ -45,12 +45,23 @@ namespace KBS2.GPS
             return null;
         }
 
+        /// <summary>
+        /// returns the Roads in range
+        /// </summary>
+        /// <param name="location">Vector point</param>
+        /// <param name="range">int range</param>
+        /// <returns>List<Road> roads</returns>
         public static List<Road> GetRoadsInRange(Vector location, int range)
         {
             return City.Instance.Roads
                 .FindAll(road => MathUtil.DistanceToRoad(location, road) <= range);
         }
 
+        /// <summary>
+        /// returns the nearest road
+        /// </summary>
+        /// <param name="location">Vector location</param>
+        /// <returns>Road road</returns>
         public static Road NearestRoad(Vector location)
         {
             var city = City.Instance;
@@ -69,6 +80,11 @@ namespace KBS2.GPS
             return closestRoad;
         }
 
+        /// <summary>
+        /// Request a car 
+        /// </summary>
+        /// <param name="destination">destination the group want to go</param>
+        /// <param name="group">group who request a car</param>
         public static void RequestCar(Destination destination, CustomerGroup group)
         {
             // Look to nearest Garage.
@@ -98,6 +114,12 @@ namespace KBS2.GPS
             car.Destination = destination;
         }
 
+        /// <summary>
+        /// returns the direction of a car
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="intersection"></param>
+        /// <returns></returns>
         public static Destination GetDirection(Car car, Intersection intersection)
         {
             var roadsAtInteresection = intersection.GetRoads();

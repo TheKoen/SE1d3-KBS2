@@ -102,6 +102,11 @@ namespace KBS2.Console.Commands
                 return $"Removed {count} {args[3]} sensors.";
             }
         }
+        /// <summary>
+        /// prints all types of sensors
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private string printTypes(string[] args)
         {
             var items = StringConverters.GetSensors();
