@@ -18,8 +18,8 @@ namespace UnitTests.Console
         private ConsoleControl _console;
         private Regex _printMethodRegex;
 
-        private bool _sendCommandEventTestPassed = false;
-        private bool _inputHistoryIndexTestPassed = false;
+        private bool _sendCommandEventTestPassed;
+        private bool _inputHistoryIndexTestPassed;
         
         [SetUp]
         public void Init()
@@ -62,6 +62,7 @@ namespace UnitTests.Console
         {
             // Printing the input and getting the output from the console
             _console.Print(input);
+            _console.PrintQueue();
             var output = _console.GetOutputHistory().Last();
             
             // Checking if the format of the output is correct

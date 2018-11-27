@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KBS2.Util
 {
@@ -15,7 +13,7 @@ namespace KBS2.Util
         /// </summary>
         /// <param name="directionSensor">string with direction</param>
         /// <returns>Direction from string</returns>
-        public static Direction stringToDirection(string directionSensor)
+        public static Direction StringToDirection(string directionSensor)
         {
             try
             {
@@ -37,20 +35,37 @@ namespace KBS2.Util
                             .ToList()
                             .Find(type => type.Name == sensorName);
 
-            return Sensor.SENSORS[sensorType];
+            return Sensor.Sensors[sensorType];
+        }
+
+        /// <summary>
+        /// returns a List with names of all the sensors in this assembly
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetSensors()
+        {
+            var items = GetSensorsClasses();
+            var list = new List<string>();
+
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+            return list;
         }
 
         /// <summary>
         /// Get all Sensors in Namespace ActiveSensors en PassiveSensors
         /// </summary>
         /// <returns>return all Types of Sensors</returns>
-        private static Type[] GetSensorsClasses()
+        private static IEnumerable<Type> GetSensorsClasses()
         {
-            string nameSpaceSensors1 = "KBS2.CarSystem.Sensors.ActiveSensors";
-            string nameSpaceSensors2 = "KBS2.CarSystem.Sensors.PassiveSensors";
+            const string nameSpaceSensors1 = "KBS2.CarSystem.Sensors.ActiveSensors";
+            const string nameSpaceSensors2 = "KBS2.CarSystem.Sensors.PassiveSensors";
             return
                 Assembly.GetExecutingAssembly().GetTypes()
                     .Where(t => String.Equals(t.Namespace, nameSpaceSensors1, StringComparison.Ordinal) || String.Equals(t.Namespace, nameSpaceSensors2, StringComparison.Ordinal))
+                    .Where(t => !t.Name.Contains("Controller") && !t.Name.Contains("DisplayClass"))
                     .ToArray();
         }
     }

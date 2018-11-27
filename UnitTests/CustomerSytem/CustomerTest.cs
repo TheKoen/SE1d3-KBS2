@@ -1,6 +1,5 @@
 ﻿using KBS2.CustomerSystem;
 using NUnit.Framework;
-using System;
 using System.Windows;
 using KBS2.CitySystem;
 using KBS2.Util;
@@ -18,9 +17,9 @@ namespace UnitTests.CustomerSytem
         [TestCase(21, Moral.Mad)]
         public void TestMoral(int time, Moral expected)
         {
-            var customer = new Customer(new System.Windows.Vector(0,0), 6, null, null);
+            var customer = new Customer(new Vector(0,0), 6, null, null);
 
-            for(int i = 0; i < time * 100; i++)
+            for(var i = 0; i < time * 100; i++)
             {
                 customer.Controller.Update();
             }
@@ -39,6 +38,7 @@ namespace UnitTests.CustomerSytem
         public void TestMoveTowardsLocation(double tx, double ty, double time)
         {
             var building = new Building(new Vector(100, 100), 1);
+            // TODO: Is it correct that this variable is not used?
             var city = new CityBuilder()
                 .Building(building)
                 .Build();

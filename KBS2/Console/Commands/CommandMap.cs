@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.CustomerSystem;
 using KBS2.GPS;
 using KBS2.Util;
 
@@ -12,36 +12,46 @@ namespace KBS2.Console.Commands
 {
     [CommandMetadata("map",
         Description = "Shows a downscaled representation of the current city",
-        AutoRegister = true)]
+        AutoRegister = true,
+        Usages = new[] {"map [loop]"})]
     public class CommandMap : ICommand
     {
         private static bool running;
-        private static int secondTick;
+        private static bool active;
+
+        static CommandMap()
+        {
+            active = true;
+            var thread = new Thread(() =>
+            {
+                while (active)
+                {
+                    if (running)
+                    {
+                        PrintMap();
+                    }
+
+                    Thread.Sleep(400);
+                }
+            }) {Name = "DisplayMap Thread"};
+            thread.Start();
+        }
+
+        public static void Stop()
+        {
+            active = false;
+        }
 
         public IEnumerable<char> Run(params string[] args)
         {
-            if (!running)
+            if (args.Length == 1 && args[0].Equals("loop"))
             {
-                MainWindow.Loop.Subscribe(Update);
-            }
-            else
-            {
-                MainWindow.Loop.Unsubscribe(Update);
+                running = !running;
+                return $"Turning map renderer {(running ? "on" : "off")}...";
             }
 
-            running = !running;
-
-            return "Displaying map...";
-        }
-
-        private static void Update()
-        {
-            secondTick++;
-            if (secondTick == 5)
-            {
-                secondTick = 0;
-                PrintMap();
-            }
+            PrintMap();
+            return "Rendered map.";
         }
 
         private static void PrintMap()
@@ -54,7 +64,11 @@ namespace KBS2.Console.Commands
                 for (var x = 0; x < 800; x += 10)
                 {
                     var vector = new Vector(x, y);
-                    if (GPSSystem.GetRoad(vector) != null)
+                    if (GPSSystem.FindIntersection(vector) != null)
+                    {
+                        builder.Append('%');
+                    }
+                    else if (GPSSystem.GetRoad(vector) != null)
                     {
                         builder.Append('#');
                     }
@@ -80,7 +94,7 @@ namespace KBS2.Console.Commands
 
         private static bool IsCustomer(Vector point)
         {
-            foreach (var customer in City.Instance.Customers)
+            foreach (var customer in new List<Customer>(City.Instance.Customers))
             {
                 if (MathUtil.Distance(customer.Location, point) < 10)
                 {
@@ -93,7 +107,7 @@ namespace KBS2.Console.Commands
 
         private static bool IsBuilding(Vector point)
         {
-            foreach (var building in City.Instance.Buildings)
+            foreach (var building in new List<Building>(City.Instance.Buildings))
             {
                 var location = building.Location;
                 var size = building.Size / 2d;

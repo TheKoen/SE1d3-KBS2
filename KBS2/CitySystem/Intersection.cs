@@ -1,5 +1,4 @@
-﻿using KBS2.CarSystem;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using KBS2.GPS;
 

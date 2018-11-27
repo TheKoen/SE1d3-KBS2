@@ -9,7 +9,7 @@ namespace KBS2.CarSystem.Sensors
 
     public abstract class Sensor
     {
-        public static Dictionary<Type, CreateSensor> SENSORS = new Dictionary<Type, CreateSensor>
+        public static readonly Dictionary<Type, CreateSensor> Sensors = new Dictionary<Type, CreateSensor>
         {
             {typeof(EntityRadar), (car, direction, range) => new EntityRadar(car, range)},
             {typeof(CollisionSensor), (car, direction, range) => new CollisionSensor(car, direction, range)},
@@ -19,17 +19,17 @@ namespace KBS2.CarSystem.Sensors
         public Car Car { get; }
         public Direction Direction { get; }
 
-        private SensorController controller;
+        private SensorController _controller;
 
         public SensorController Controller
         {
-            get => controller;
+            get => _controller;
             protected set
             {
-                if (controller != null) throw new InvalidOperationException("Controller is already set!");
+                if (_controller != null) throw new InvalidOperationException("Controller is already set!");
 
-                controller = value;
-                MainWindow.Loop.Subscribe(controller.Update);
+                _controller = value;
+                MainWindow.Loop.Subscribe(_controller.Update);
             }
         }
 

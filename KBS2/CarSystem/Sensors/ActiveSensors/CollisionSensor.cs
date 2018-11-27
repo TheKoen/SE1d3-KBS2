@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using KBS2.CitySystem;
-using KBS2.Util;
 
 namespace KBS2.CarSystem.Sensors.ActiveSensors
 {
@@ -41,12 +40,12 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         /// </summary>
         /// <param name="sensorDir">the Direction of a sensor</param>
         /// <returns>a list of cars in range</returns>
-        private List<IEntity> GetEntitiesInRange(DirectionCar sensorDir)
+        private List<IEntity> GetEntitiesInRange(DirectionCar sensorDir) // TODO: Why is sensorDir not used?
         {
             var car = Sensor.Car;
             var range = Math.Min(car.CurrentRoad.Width / 4.0, Sensor.Range);
             var direction = car.Direction.RotateTo(Sensor.Direction);
-            var add = Vector.Multiply(direction, (car.Length / 2.0 + range / 2.0));
+            var add = Vector.Multiply(direction, car.Length / 2.0 + range / 2.0);
             var center = Vector.Add(car.Location, add);
 
             return City.Instance.Controller.GetEntitiesInRange(center, range)

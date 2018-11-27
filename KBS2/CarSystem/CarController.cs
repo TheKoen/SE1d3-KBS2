@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using KBS2.CarSystem.Sensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
 using KBS2.CustomerSystem;
@@ -43,7 +41,7 @@ namespace KBS2.CarSystem
         /// Add customers to the car
         /// </summary>
         /// <param name="customers">List with customers that needs to be added</param>
-        public void AddCustomers(List<Customer> customers)
+        public void AddCustomers(IEnumerable<Customer> customers)
         {
             foreach (var item in customers)
             {

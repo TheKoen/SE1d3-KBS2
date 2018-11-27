@@ -10,6 +10,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         /// <summary>
         ///     EntityRadar radar checks for entities in range
         /// </summary>
+        /// <param name="car"></param>
         /// <param name="range">range of the radar</param>
         public EntityRadar(Car car, double range) : base(car, Direction.Global)
         {

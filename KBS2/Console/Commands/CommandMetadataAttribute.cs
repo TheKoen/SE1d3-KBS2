@@ -15,7 +15,7 @@ namespace KBS2.Console.Commands
         }
         public string Description { get; set; } = string.Empty;
         public string[] Usages { get; set; }
-        public bool AutoRegister { get; set; } = false;
+        public bool AutoRegister { get; set; }
 
         public CommandMetadataAttribute(string key)
         {

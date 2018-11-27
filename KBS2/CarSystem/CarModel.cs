@@ -20,24 +20,25 @@ namespace KBS2.CarSystem
         {
             new SensorPrototype
             {
+                Direction = Direction.Global,
                 Range = 40,
-                Create = Sensor.SENSORS[typeof(EntityRadar)]
+                Create = Sensor.Sensors[typeof(EntityRadar)]
             },
             new SensorPrototype
             {
                 Direction = Direction.Front,
                 Range = 20,
-                Create = Sensor.SENSORS[typeof(CollisionSensor)]
+                Create = Sensor.Sensors[typeof(CollisionSensor)]
             },
             new SensorPrototype
             {
                 Direction = Direction.Left,
-                Create = Sensor.SENSORS[typeof(LineSensor)]
+                Create = Sensor.Sensors[typeof(LineSensor)]
             },
             new SensorPrototype
             {
                 Direction = Direction.Right,
-                Create = Sensor.SENSORS[typeof(LineSensor)]
+                Create = Sensor.Sensors[typeof(LineSensor)]
             }
         }, "TestModel");
 
