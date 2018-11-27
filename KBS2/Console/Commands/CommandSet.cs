@@ -64,8 +64,8 @@ namespace KBS2.Console.Commands
             try
             {
                 output = new Vector(
-                    double.Parse(vectorMatches.Groups["posX"].Value),
-                    double.Parse(vectorMatches.Groups["posY"].Value)
+                    double.Parse(vectorMatches.Groups["posX"].Value, CultureInfo.InvariantCulture),
+                    double.Parse(vectorMatches.Groups["posY"].Value, CultureInfo.InvariantCulture)
                 );
             }
             catch (OverflowException oe)
@@ -90,7 +90,7 @@ namespace KBS2.Console.Commands
             float output;
             try
             {
-                output = float.Parse(floatMatches.Groups["value"].Value);
+                output = float.Parse(floatMatches.Groups["value"].Value, CultureInfo.InvariantCulture);
             }
             catch (OverflowException oe)
             {
@@ -114,7 +114,7 @@ namespace KBS2.Console.Commands
             double output;
             try
             {
-                output = double.Parse(doubleMatches.Groups["value"].Value);
+                output = double.Parse(doubleMatches.Groups["value"].Value, CultureInfo.InvariantCulture);
             }
             catch (OverflowException oe)
             {
