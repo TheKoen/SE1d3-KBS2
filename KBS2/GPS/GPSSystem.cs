@@ -13,8 +13,8 @@ namespace KBS2.GPS
 {
     public class GPSSystem
     {
-        private static readonly Property StartingPrice = new Property(1.50);
-        private static readonly Property PricePerKilometer = new Property(1.00);
+        private static Property StartingPrice = new Property(1.50);
+        private static Property PricePerKilometer = new Property(1.00);
 
         public static void Setup()
         {
