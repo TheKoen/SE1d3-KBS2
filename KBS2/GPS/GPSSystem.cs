@@ -7,6 +7,7 @@ using KBS2.CarSystem;
 using KBS2.CitySystem;
 using KBS2.Console;
 using KBS2.CustomerSystem;
+using KBS2.GPS.TSP;
 using KBS2.Util;
 
 namespace KBS2.GPS
@@ -24,6 +25,19 @@ namespace KBS2.GPS
             CommandHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
             CommandHandler.RegisterProperty("availableModel", ref availableModel);
         }
+         
+        /// <summary>
+        /// Calcute the path from start to end with specific algortime
+        /// </summary>
+        /// <param name="start">start position</param>
+        /// <param name="end">end position</param>
+        /// <param name="algoritme">Wich algoritme to use</param>
+        /// <returns>a List with all roads to take</returns>
+        public List<Road> CalculatePath(Vector start, Vector end, EnumAlgoritmes algoritme)            
+        {
+            
+        }
+
 
         /// <summary>
         /// returns a road located at this location
