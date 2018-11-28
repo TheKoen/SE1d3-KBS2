@@ -10,6 +10,6 @@ namespace KBS2.GPS.TSP
 {
     interface ITSPAlogritme
     {
-        List<Road> CalculatePath(Vector start, Vector end)
+        List<Road> CalculatePath(Vector start, Vector end);
     }
 }

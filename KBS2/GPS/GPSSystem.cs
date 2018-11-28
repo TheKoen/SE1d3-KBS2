@@ -26,19 +26,7 @@ namespace KBS2.GPS
             CommandHandler.RegisterProperty("availableModel", ref availableModel);
         }
          
-        /// <summary>
-        /// Calcute the path from start to end with specific algortime
-        /// </summary>
-        /// <param name="start">start position</param>
-        /// <param name="end">end position</param>
-        /// <param name="algoritme">Wich algoritme to use</param>
-        /// <returns>a List with all roads to take</returns>
-        public List<Road> CalculatePath(Vector start, Vector end, EnumAlgoritmes algoritme)            
-        {
-            
-        }
-
-
+        
         /// <summary>
         /// returns a road located at this location
         /// </summary>
@@ -311,6 +299,21 @@ namespace KBS2.GPS
                        point.Y >= location.Y - size && point.Y <= location.Y + size;
             });
             return interserction;
+        }
+
+        /// <summary>
+        /// Find the intersections of a road
+        /// </summary>
+        /// <param name="road">road you want to explore</param>
+        /// <returns>List with found Intersections</returns>
+        public static List<Intersection> FindIntersectionsRoad(Road road)
+        {
+            var listIntersections = new List<Intersection>();
+
+            listIntersections.Add(FindIntersection(road.Start));
+            listIntersections.Add(FindIntersection(road.End));
+
+            return listIntersections;
         }
 
         public static double CalculatePrice(double distance)
