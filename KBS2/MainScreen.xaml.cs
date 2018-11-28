@@ -22,6 +22,11 @@ namespace KBS2
         public MainScreen()
         {
             InitializeComponent();
+            foreach(var test in Console.CommandHandler.GetProperties())
+            {
+                
+            }
+            
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
