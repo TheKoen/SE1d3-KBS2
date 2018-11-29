@@ -100,6 +100,10 @@
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
     <Compile Include="MainLoop.cs" />
+    <Compile Include="ModelDesigner\CarDesign.cs" />
+    <Compile Include="ModelDesigner\ModelDesigner.xaml.cs">
+      <DependentUpon>ModelDesigner.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
     <Compile Include="Util\Property.cs" />
     <Compile Include="Util\MathUtil.cs" />
@@ -128,6 +132,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ModelDesigner\ModelDesigner.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -155,6 +160,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

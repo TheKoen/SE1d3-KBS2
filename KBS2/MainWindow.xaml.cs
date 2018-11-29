@@ -20,6 +20,13 @@ namespace KBS2
         public MainWindow()
         {
             InitializeComponent();
+
+            Loaded += (sender, args) =>
+            {
+                var designer = new ModelDesigner.ModelDesigner();
+                designer.ShowDialog();
+            };
+            
             CommandLoop.Start();
 
             Console = MainConsole;
