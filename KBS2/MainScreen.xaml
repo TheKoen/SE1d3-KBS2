@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KBS2"
         mc:Ignorable="d"
-        Title="Selfdriving Car Simulation" Height="700" Width="1300" WindowStartupLocation="CenterScreen">
+        Title="Selfdriving Car Simulation" Height="700" Width="1300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid >
 
         <Canvas x:Name="CanvasMain" HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951" Background="#FFEB1010"/>
@@ -13,46 +13,42 @@
 
             <TabItem x:Name="TabItemSimulation" Header="Simulation" Margin="-2,-2,-20,-2" >
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="230*"/>
-                        <ColumnDefinition Width="111*"/>
-                    </Grid.ColumnDefinitions>
 
 
                     <Button x:Name="BtnSelect" Content="Select City" HorizontalAlignment="Left" Margin="22,18,0,0" VerticalAlignment="Top" Width="73" Height="26" Click="BtnSelect_Click" />
-                    <TextBox x:Name="TBCity" HorizontalAlignment="Left" Height="26" Margin="113,18,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="128" Grid.ColumnSpan="2"/>
-                    <Button x:Name="BtnLoad" Content="Load" HorizontalAlignment="Left" Margin="32.8,18,0,0" VerticalAlignment="Top" Width="65" Height="26" Click="BtnLoad_Click" Grid.Column="1"/>
+                    <TextBox x:Name="TBCity" HorizontalAlignment="Left" Height="26" Margin="113,18,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="128" IsReadOnly="True"/>
+                    <Button x:Name="BtnLoad" Content="Load" HorizontalAlignment="Left" Margin="265,18,0,0" VerticalAlignment="Top" Width="65" Height="26" Click="BtnLoad_Click"/>
 
 
-                    <Label Content="City: Swolle" HorizontalAlignment="Left" Margin="121,49,0,0" VerticalAlignment="Top" Width="168" FontSize="18" Grid.ColumnSpan="2"/>
+                    <Label Content="City: Swolle" HorizontalAlignment="Left" Margin="121,49,0,0" VerticalAlignment="Top" Width="168" FontSize="18"/>
                     <Label Content="Roads:" HorizontalAlignment="Left" Margin="48,83,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.036,0.406"/>
                     <Label Content="Intersections:" HorizontalAlignment="Left" Margin="48,109,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.036,0.406"/>
                     <Label Content="Buildings:" HorizontalAlignment="Left" Margin="48,135,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.036,0.406"/>
                     <Label Content="Garages:" HorizontalAlignment="Left" Margin="48,160,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.036,0.406"/>
-                    <Label x:Name="LabelSimulationRoad" Content="Label" HorizontalAlignment="Left" Margin="139,83,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationIntersection" Content="Label" HorizontalAlignment="Left" Margin="139,109,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationBuilding" Content="Label" HorizontalAlignment="Left" Margin="139,134,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationGarage" Content="Label" HorizontalAlignment="Left" Margin="139,160,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
+                    <Label x:Name="LabelSimulationRoad" Content="Label" HorizontalAlignment="Left" Margin="139,83,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationIntersection" Content="Label" HorizontalAlignment="Left" Margin="139,109,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationBuilding" Content="Label" HorizontalAlignment="Left" Margin="139,134,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationGarage" Content="Label" HorizontalAlignment="Left" Margin="139,160,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
 
 
-                    <Label Content="Customers" HorizontalAlignment="Left" Margin="121,182,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <Label Content="Customers" HorizontalAlignment="Left" Margin="121,182,0,0" VerticalAlignment="Top" FontSize="18" Grid.ColumnSpan="2"/>
                     <Label Content="Amount:" HorizontalAlignment="Left" Margin="48,216,0,0" VerticalAlignment="Top"/>
                     <Label Content="Succesful rides:" HorizontalAlignment="Left" Margin="48,242,0,0" VerticalAlignment="Top"/>
                     <Label Content="Rides cancelled:" HorizontalAlignment="Left" Margin="48,268,0,0" VerticalAlignment="Top" Width="98"/>
                     <Label Content="Deaths:" HorizontalAlignment="Left" Margin="48,293,0,0" VerticalAlignment="Top" Width="91"/>
-                    <Label x:Name="LabelSimulationAmountCostumer" Content="Label" HorizontalAlignment="Left" Margin="139,216,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationSuccesfulRides" Content="Label" HorizontalAlignment="Left" Margin="139,242,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationRidesCancelled" Content="Label" HorizontalAlignment="Left" Margin="139,266,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.016,0.609" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationDeaths" Content="Label" HorizontalAlignment="Left" Margin="139,289,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
+                    <Label x:Name="LabelSimulationAmountCostumer" Content="Label" HorizontalAlignment="Left" Margin="139,216,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationSuccesfulRides" Content="Label" HorizontalAlignment="Left" Margin="139,242,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationRidesCancelled" Content="Label" HorizontalAlignment="Left" Margin="139,266,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.016,0.609" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationDeaths" Content="Label" HorizontalAlignment="Left" Margin="139,289,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
 
 
                     <Label Content="Cars" HorizontalAlignment="Left" Margin="121,315,0,0" VerticalAlignment="Top" FontSize="18"/>
                     <Label Content="Amount:" HorizontalAlignment="Left" Margin="48,348,0,0" VerticalAlignment="Top"/>
                     <Label Content="Not in use:" HorizontalAlignment="Left" Margin="48,374,0,0" VerticalAlignment="Top" Width="94"/>
                     <Label Content="Driving:" HorizontalAlignment="Left" Margin="49,399,0,0" VerticalAlignment="Top" Width="90"/>
-                    <Label x:Name="LabelSimulationAmountCars" Content="Label" HorizontalAlignment="Left" Margin="139,349,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationNotInUse" Content="Label" HorizontalAlignment="Left" Margin="139,374,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
-                    <Label x:Name="LabelSimulationDriving" Content="Label" HorizontalAlignment="Left" Margin="139,400,0,0" VerticalAlignment="Top" Width="150" Background="White" Grid.ColumnSpan="2"/>
+                    <Label x:Name="LabelSimulationAmountCars" Content="Label" HorizontalAlignment="Left" Margin="139,349,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationNotInUse" Content="Label" HorizontalAlignment="Left" Margin="139,374,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationDriving" Content="Label" HorizontalAlignment="Left" Margin="139,400,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
 
 
                     <Label Content="Price" HorizontalAlignment="Left" Margin="121,431,0,0" VerticalAlignment="Top" FontSize="18"/>
@@ -60,22 +56,24 @@
 
 
                     <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="40,514,0,0" VerticalAlignment="Top" Width="70" Height="40" Background="#FF1BE72C" Click="BtnStart_Click"/>
-                    <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="138,514,0,0" VerticalAlignment="Top" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click"/>
-                    <Button x:Name="BtnStop" Content="Stop" HorizontalAlignment="Left" Margin="3.8,514,0,0" VerticalAlignment="Top" Width="66" Height="40" Background="Red" Click="BtnStop_Click" Grid.Column="1"/>
-                    <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="96,567,0,0" VerticalAlignment="Top" Height="57" Width="153" FontSize="36" Grid.ColumnSpan="2"/>
+                    <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="139,514,0,0" VerticalAlignment="Top" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click"/>
+                    <Button x:Name="BtnStop" Content="Stop" HorizontalAlignment="Left" Margin="236,514,0,0" VerticalAlignment="Top" Width="66" Height="40" Background="Red" Click="BtnStop_Click"/>
+                    <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="96,567,0,0" VerticalAlignment="Top" Height="57" Width="153" FontSize="36" />
 
 
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemInfo" Header="Info" Margin="20,-2,-60,-2">
-                <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0"/>
+                <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
+                    <Canvas HorizontalAlignment="Left" Height="100" Margin="118,212,0,0" VerticalAlignment="Top" Width="100"/>
+                </Grid>
 
             </TabItem>
             <TabItem x:Name="TabItemSettings" Header="Settings" Margin="60,-2,-90,-2">
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
-                    <Canvas x:Name="CanvasSettingsTab" HorizontalAlignment="Left" Height="300" Margin="0,200,0,0" VerticalAlignment="Top" Width="338" Background="#FF229127">
+                    <Canvas x:Name="CanvasSettingsTab" HorizontalAlignment="Left" Height="642" VerticalAlignment="Top" Width="338" Background="#FF229127">
                         <StackPanel x:Name="StackPanelSettings">
-                            
+
                         </StackPanel>
                     </Canvas>
 
@@ -87,17 +85,17 @@
             </TabItem>
             <TabItem Header="Results" Margin="90,-2,-125,-2">
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
-                    <Button x:Name="BtnImport" Content="Import" HorizontalAlignment="Left" Margin="25,22,0,0" VerticalAlignment="Top" Width="75"/>
-                    <Button x:Name="BtnLoadResult" Content="Load" HorizontalAlignment="Left" Margin="230,22,0,0" VerticalAlignment="Top" Width="75"/>
-                    <Button x:Name="BtnShowLatest" Content="Show Latest" HorizontalAlignment="Left" Margin="247,66,0,0" VerticalAlignment="Top" Width="75"/>
-                    <Button x:Name="BtnShow" Content="Show" HorizontalAlignment="Left" Margin="167,66,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="BtnImport" Content="Import" HorizontalAlignment="Left" Margin="25,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnImport_Click"/>
+                    <Button x:Name="BtnLoadResult" Content="Load" HorizontalAlignment="Left" Margin="230,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnLoadResult_Click"/>
+                    <Button x:Name="BtnShowLatest" Content="Show Latest" HorizontalAlignment="Left" Margin="247,66,0,0" VerticalAlignment="Top" Width="75" Click="BtnShowLatest_Click"/>
+                    <Button x:Name="BtnShow" Content="Show" HorizontalAlignment="Left" Margin="167,66,0,0" VerticalAlignment="Top" Width="75" Click="BtnShow_Click"/>
                     <Label x:Name="LabelResultsSimID" Content="Sim ID:" HorizontalAlignment="Left" Margin="25,66,0,0" VerticalAlignment="Top" Height="26" Width="47"/>
                     <TextBox x:Name="TBResult" HorizontalAlignment="Left" Height="20" Margin="105,22,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                     <TextBox x:Name="TBSimID" HorizontalAlignment="Left" Height="20" Margin="105,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="42"/>
-                    <Button x:Name="BtnSaveSim" Content="Save Results" HorizontalAlignment="Left" Margin="42,585,0,0" VerticalAlignment="Top" Width="92" Height="32">
+                    <Button x:Name="BtnSaveSim" Content="Save Results" HorizontalAlignment="Left" Margin="42,585,0,0" VerticalAlignment="Top" Width="92" Height="32" Click="BtnSaveSim_Click">
                         <Button.ToolTip>Pressing this button saves the results in our database.</Button.ToolTip>
                     </Button>
-                    <Button x:Name="BtnExport" Content="Export log" HorizontalAlignment="Left" Margin="213,584,0,0" VerticalAlignment="Top"  Width="92" Height="33"/>
+                    <Button x:Name="BtnExport" Content="Export log" HorizontalAlignment="Left" Margin="213,584,0,0" VerticalAlignment="Top"  Width="92" Height="33" Click="BtnExport_Click"/>
                     <ScrollViewer HorizontalAlignment="Left" Height="482" Margin="10,97,0,0" VerticalAlignment="Top" Width="320">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
