@@ -105,6 +105,7 @@
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
     <Compile Include="Util\StringConverters.cs" />
+    <Compile Include="Util\TextBoxProperties.cs" />
     <Page Include="Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
