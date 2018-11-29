@@ -8,15 +8,14 @@ using KBS2.CitySystem;
 using KBS2.CustomerSystem;
 using KBS2.Util;
 
-namespace KBS2.GPS.TSP
+namespace KBS2.GPS.TSP.CustomerOrder
 {
-    public class NearestNeighbour : TSPAlgoritme
+    public class NearestNeighbour : CustomerOrderAlgoritme
     {
-        protected override List<Road> CalculatePath(Vector start, Vector end, List<CustomerGroup> customers)
+        protected override List<CustomerGroup> CalculateOrder(Vector start, Vector end, List<CustomerGroup> customers)
         {
             var order = CalculateOrderCustomers(start, customers);
-            throw new NotImplementedException("not done yet");           
-
+            return order;        
         }
 
         /// <summary>
@@ -84,8 +83,9 @@ namespace KBS2.GPS.TSP
                 {
                     // new found intersections 
                     var lastIntersectionOfPath = path.Intersections.Last();
+                                                           
                     var newFoundIntersections = GPSSystem.FindNextIntersections(lastIntersectionOfPath);
-
+                                      
                     // add the path of every new intersetion to the new ListPath
                     foreach(var intersection in newFoundIntersections)
                     {
@@ -111,6 +111,6 @@ namespace KBS2.GPS.TSP
 
             }
             return null;
-        } 
+        }
     }
 }

@@ -99,12 +99,13 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
-    <Compile Include="GPS\TSP\Dijkstra.cs" />
+    <Compile Include="GPS\TSP\CustomerOrder\NearestNeighbour2.cs" />
+    <Compile Include="GPS\TSP\Route\RouteAlgoritme.cs" />
+    <Compile Include="GPS\TSP\Route\Dijkstra.cs" />
     <Compile Include="GPS\TSP\EnumAlgoritmes.cs" />
-    <Compile Include="GPS\TSP\ITSPAlogritme.cs" />
-    <Compile Include="GPS\TSP\NearestNeighbour.cs" />
+    <Compile Include="GPS\TSP\CustomerOrder\NearestNeighbour.cs" />
     <Compile Include="GPS\TSP\Path.cs" />
-    <Compile Include="GPS\TSP\TSPAlgoritme.cs" />
+    <Compile Include="GPS\TSP\CustomerOrder\CustomerOrderAlgoritme.cs" />
     <Compile Include="MainLoop.cs" />
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
     <Compile Include="Util\Property.cs" />

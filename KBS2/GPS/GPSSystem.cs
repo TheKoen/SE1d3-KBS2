@@ -272,6 +272,11 @@ namespace KBS2.GPS
             return ExploreIntersection(intersectionNext, end, target, distance, cycles, past);
         }
 
+        /// <summary>
+        /// Find the next intersection of an intersection
+        /// </summary>
+        /// <param name="intersection">intersection to use</param>
+        /// <returns>List with the found intersections</returns>
         public static List<Intersection> FindNextIntersections(Intersection intersection)
         {
             var list = new List<Intersection>();
@@ -286,6 +291,30 @@ namespace KBS2.GPS
 
             list.RemoveAll(intersect => intersect == null || intersect.Equals(intersection));
 
+            return list;
+        }
+        
+        /// <summary>
+        /// Find the next intersection of an intersection in a specific city
+        /// </summary>
+        /// <param name="intersection"></param>
+        /// <param name="city"></param>
+        /// <returns></returns>
+        public static List<Intersection> FindNextIntersections(Intersection intersection, City city)
+        {
+            var list = new List<Intersection>();
+            var roads = city.Roads.FindAll(r => r.Start == intersection.Location || r.End == intersection.Location);
+            foreach (var road in roads)
+            {
+                if(road.Start == intersection.Location)
+                {
+                    list.Add(city.Intersections.Find(i => i.Location == road.End));
+                }
+                else
+                {
+                    list.Add(city.Intersections.Find(i => i.Location == road.Start));
+                }
+            }
             return list;
         }
 

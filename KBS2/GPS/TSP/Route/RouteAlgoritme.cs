@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace KBS2.GPS.TSP
+namespace KBS2.GPS.TSP.Route
 {
-    public abstract class TSPAlgoritme
+    abstract class RouteAlgoritme
     {
-        protected abstract List<Road> CalculatePath(Vector start, Vector end, List<CustomerGroup> customers);
+        public abstract List<Road> CalculatePath(Vector start, CustomerGroup customer);
     }
 }

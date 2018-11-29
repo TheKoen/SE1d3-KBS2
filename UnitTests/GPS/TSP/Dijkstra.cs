@@ -33,7 +33,9 @@ namespace UnitTests.GPS.TSP
                 .Road(new Road(new Vector(0, 100), new Vector(100, 100), 10, 100))
                 .Build();
 
-            var route = NearestNeighbour.CalculateRouteToCustomerGroup(new Vector(0, 50), customer3);
+            //var route = NearestNeighbour.CalculateRouteToCustomerGroup(new Vector(0, 50), customer3);
+
+
         }
     }
 }
