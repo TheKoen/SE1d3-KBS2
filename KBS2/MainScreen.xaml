@@ -8,10 +8,10 @@
         Title="Selfdriving Car Simulation" Height="700" Width="1300" WindowStartupLocation="CenterScreen">
     <Grid >
 
-        <Canvas HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951" Background="#FFEB1010"/>
-        <TabControl HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" Background="#FF0015FF">
+        <Canvas x:Name="CanvasMain" HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951" Background="#FFEB1010"/>
+        <TabControl x:Name="TabControlMain" HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" Background="#FF0015FF">
 
-            <TabItem Header="Simulation" Margin="-2,-2,-20,-2" >
+            <TabItem x:Name="TabItemSimulation" Header="Simulation" Margin="-2,-2,-20,-2" >
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="230*"/>
@@ -67,20 +67,25 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Info" Margin="20,-2,-60,-2">
+            <TabItem x:Name="TabItemInfo" Header="Info" Margin="20,-2,-60,-2">
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0"/>
 
             </TabItem>
-            <TabItem Header="Settings" Margin="60,-2,-90,-2">
+            <TabItem x:Name="TabItemSettings" Header="Settings" Margin="60,-2,-90,-2">
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
+                    <Canvas x:Name="CanvasSettingsTab" HorizontalAlignment="Left" Height="300" Margin="0,200,0,0" VerticalAlignment="Top" Width="338" Background="#FF229127">
+                        <StackPanel x:Name="StackPanelSettings">
+                            
+                        </StackPanel>
+                    </Canvas>
 
 
-                    
-                    
+
+
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Results" Margin="90,-2,-125,-2">
+            <TabItem x:Name="TabItemResults" Header="Results" Margin="90,-2,-125,-2">
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0"/>
 
             </TabItem>

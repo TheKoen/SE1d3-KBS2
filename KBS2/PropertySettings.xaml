@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="KBS2.PropertySettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KBS2"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="450">
+    <Grid Background="#FFFF8383" Margin="0,0,45.6,0.4">
+        <Label x:Name="LabelPropertyName" Content="PropertyName" HorizontalAlignment="Left" VerticalAlignment="Top" Height="29" Width="194"/>
+        <Label x:Name="LabelCurrentValue" Content="CurrentValue" HorizontalAlignment="Left" Margin="180,0,0,0" VerticalAlignment="Top" Width="37" Height="30"/>
+        <Label x:Name="LabelNewValue" Content="NewValue" HorizontalAlignment="Left" Margin="374,48,0,-46.6" VerticalAlignment="Top" Width="69" Height="29"/>
+        <TextBox x:Name="TBNewValue" HorizontalAlignment="Left" Height="30" Margin="222,0,0,0" TextWrapping="Wrap" Text="Change here" VerticalAlignment="Top" Width="182"/>
+
+    </Grid>
+</UserControl>
