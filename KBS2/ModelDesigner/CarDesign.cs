@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using KBS2.CarSystem;
 using KBS2.CarSystem.Sensors;
-using KBS2.CarSystem.Sensors.ActiveSensors;
-using KBS2.CarSystem.Sensors.PassiveSensors;
 
 namespace KBS2.ModelDesigner
 {
@@ -147,5 +143,8 @@ namespace KBS2.ModelDesigner
 
         public void RemoveSensor(SensorPrototype sensorPrototype) =>
             SensorList.Remove(sensorPrototype);
+        
+        public CarModel GetAsModel(string name, double maxSpeed) =>
+            new CarModel(maxSpeed, SensorList, name);
     }
 }
