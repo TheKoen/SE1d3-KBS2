@@ -8,7 +8,14 @@
         Title="Selfdriving Car Simulation" Height="700" Width="1300" WindowStartupLocation="CenterScreen">
     <Grid >
 
-        <Canvas HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951" Background="#FFEB1010"/>
+        <Canvas HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951">
+            <Canvas.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FF930101" Offset="1"/>
+                </LinearGradientBrush>
+            </Canvas.Background>
+        </Canvas>
         <TabControl HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" Background="#FF0015FF">
             <TabItem Header="Simulation" Margin="-2,-2,-20,-2" >
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
@@ -53,7 +60,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Info" Margin="20,-2,-60,-2">
-                <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0"/>
+                <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
+                    <Canvas x:Name="CanvasInfo" HorizontalAlignment="Left" Height="642" VerticalAlignment="Top" Width="340"/>
+                </Grid>
 
             </TabItem>
             <TabItem Header="Settings" Margin="60,-2,-90,-2">
@@ -61,7 +70,114 @@
 
             </TabItem>
             <TabItem Header="Results" Margin="90,-2,-125,-2">
-                <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0"/>
+                <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
+                    <Button x:Name="BtnImport" Content="Import" HorizontalAlignment="Left" Margin="25,22,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="BtnLoadResult" Content="Load" HorizontalAlignment="Left" Margin="230,22,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="BtnShowLatest" Content="Show Latest" HorizontalAlignment="Left" Margin="247,66,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="BtnShow" Content="Show" HorizontalAlignment="Left" Margin="167,66,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Label x:Name="LabelResultsSimID" Content="Sim ID:" HorizontalAlignment="Left" Margin="25,66,0,0" VerticalAlignment="Top" Height="26" Width="47"/>
+                    <TextBox x:Name="TBResult" HorizontalAlignment="Left" Height="20" Margin="105,22,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                    <TextBox x:Name="TBSimID" HorizontalAlignment="Left" Height="20" Margin="105,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="42"/>
+                    <Button x:Name="BtnSaveSim" Content="Save Results" HorizontalAlignment="Left" Margin="42,585,0,0" VerticalAlignment="Top" Width="92" Height="32">
+                        <Button.ToolTip>Pressing this button saves the results in our database.</Button.ToolTip>
+                    </Button>
+                    <Button x:Name="BtnExport" Content="Export log" HorizontalAlignment="Left" Margin="213,584,0,0" VerticalAlignment="Top"  Width="92" Height="33"/>
+                    <ScrollViewer HorizontalAlignment="Left" Height="482" Margin="10,97,0,0" VerticalAlignment="Top" Width="320">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="City:" Width="150" FontWeight="Bold" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Customers" Width="150"/>
+                                <Label x:Name="LabelResultCustomer" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Cars" Width="150"/>
+                                <Label  x:Name="LabelResultCars" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Customers:" Width="150" FontWeight="Bold" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Total" Width="150"/>
+                                <Label x:Name="LabelResultTotalCustomers" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Avarage age" Width="150"/>
+                                <Label  x:Name="LabelResultAvgAge" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Requests" Width="150"/>
+                                <Label x:Name="LabelResultRequests" Content=""  Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Cancellation" Width="150"/>
+                                <Label x:Name="LabelResultCancel" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Deaths" Width="150"/>
+                                <Label x:Name="LabelResultDeaths" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Rides" Width="150"/>
+                                <Label x:Name="LabelResultRide" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Distance Total" Width="150"/>
+                                <Label x:Name="LabelResultDistanceTotal" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Distance Avarage" Width="150"/>
+                                <Label x:Name="LabelResultDistanceAvarage" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Avarage Moral" Width="150"/>
+                                <Label x:Name="LabelResultAvgMoral" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Cars:" Width="150" FontWeight="Bold" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Total" Width="150"/>
+                                <Label x:Name="LabelResultTotalCars" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Distance total" Width="150"/>
+                                <Label x:Name="LabelResultDistanceTotalCar" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Distance Avarage" Width="150"/>
+                                <Label x:Name="LabelResultDistanceAvarageCustomers" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Avarage customers per car" Width="150"/>
+                                <Label x:Name="LabelResultAvgCustomers" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Avarage review rating" Width="150"/>
+                                <Label x:Name="LabelResultAvgReviewRating" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Price:" Width="150" FontWeight="Bold" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Total Earned" Width="150"/>
+                                <Label x:Name="LabelResultTotalEarned" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Avarage price per ride" Width="150"/>
+                                <Label x:Name="LabelResultAvgPrice" Content="" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Time:" Width="150" FontWeight="Bold" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Time elapsed" Width="150"/>
+                                <Label x:Name="LabelResultTimeElapsed" Content="" Width="150"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
 
             </TabItem>
         </TabControl>
