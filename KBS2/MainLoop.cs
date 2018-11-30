@@ -101,20 +101,20 @@ namespace KBS2
             }
             catch (Exception e)
             {
-                MainWindow.Console.Print($"Exception in main loop: {e}", Colors.Red);
+                //MainWindow.Console.Print($"Exception in main loop: {e}", Colors.Red);
 
                 exceptionCount++;
                 if (exceptionCount > 2)
                 {
                     Stop();
-                    MainWindow.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
+                    //MainWindow.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
                 }
             }
             var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
             var interval = CalculateInterval(tickRate.Value);
             if (taken > interval)
             {
-                MainWindow.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
+                //MainWindow.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
             }
         }
 

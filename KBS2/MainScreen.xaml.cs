@@ -1,18 +1,7 @@
 ﻿using KBS2.CitySystem;
 using KBS2.Console;
 using KBS2.GPS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Xml;
 using System.IO;
 
@@ -65,27 +54,38 @@ namespace KBS2
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
-            // Create a City
             var file = new XmlDocument();
             file.Load(filePath);
             CityParser.MakeCity(file);
+            //Teken stad. :^)
+            var city = City.Instance;
 
+            BtnStart.IsEnabled = true;
+            BtnPause.IsEnabled = true;
+            BtnStop.IsEnabled = true;
+            LabelSimulationRoad.Content = city.Roads.Count;
+            LabelSimulationIntersection.Content = city.Intersections.Count;
+            LabelSimulationBuilding.Content = city.Buildings.Count;
+            LabelSimulationAmountCostumer.Content = city.Customers.Count;
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             Loop.Start();
+            LabelStateSim.Content = "Start pressed";
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             Loop.Stop();
+
+            LabelStateSim.Content = "Pause pressed";
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-
             Loop.Stop();
+            LabelStateSim.Content = "Stop pressed";
             City.Instance.Controller.Reset();
         }
 
@@ -129,6 +129,11 @@ namespace KBS2
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+        public void Update()
+        {
+            LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
+            InitializeComponent();
         }
     }
 }
