@@ -5,7 +5,6 @@ using System.Windows;
 using KBS2.CarSystem.Sensors;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
-using KBS2.CustomerSystem;
 using KBS2.Util;
 
 namespace KBS2.CarSystem
@@ -79,7 +78,8 @@ namespace KBS2.CarSystem
         /// <returns>true if there are any Sensors of type T on the specified side</returns>
         public bool HasSensors<T>(Direction side = Direction.Global) where T : Sensor
         {
-            return Car.Sensors.Any(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side));
+            return Car.Sensors
+                .Any(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side));
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace KBS2.CarSystem
                 var distanceToRight = GetSensors<LineSensor>(Direction.Right).First().Distance;
 
                 // Check if we're too far to the right side of the lane.
-                if (distanceToLeft > distanceToRight && velocity.X < maxLaneDeviation)
+                if (distanceToRight - distanceToLeft > maxLaneDeviation)
                 {
                     //Rotate to the left if possible.
                     if (yaw > -maxInLaneRotation)
@@ -139,7 +139,7 @@ namespace KBS2.CarSystem
                     }
                 }
                 // Check if we're too far to the left side of the lane.
-                else if (distanceToRight > distanceToLeft && velocity.X > -maxLaneDeviation)
+                else if (distanceToLeft - distanceToRight > maxLaneDeviation)
                 {
                     //Rotate to the right if possible.
                     if (yaw < maxInLaneRotation)
