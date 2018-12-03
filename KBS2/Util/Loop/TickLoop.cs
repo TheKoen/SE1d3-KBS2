@@ -1,34 +1,23 @@
 ﻿using System;
 using System.Windows.Media;
-using System.Windows.Threading;
 using KBS2.Console;
-using KBS2.Util;
-using Math = System.Math;
 
-namespace KBS2
+namespace KBS2.Util.Loop
 {
-    public delegate void Update();
-
-    public class MainLoop
+    public abstract class TickLoop
     {
-        private string Name { get; set; }
-        
+        private string Name { get; }
+
         private readonly Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
 
-        private readonly DispatcherTimer timer;
-        private int exceptionCount;
-
         private event Update UpdateEvent;
 
-        public MainLoop(string name)
+        private int exceptionCount;
+
+        protected TickLoop(string name)
         {
             Name = name;
-            timer = new DispatcherTimer
-            {
-                Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(TickRate))
-            };
-            timer.Tick += Update;
             tickRate.PropertyChanged += OnTickrateChange;
             CommandHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
         }
@@ -54,67 +43,54 @@ namespace KBS2
         /// <summary>
         /// Start the loop
         /// </summary>
-        public void Start()
-        {
-            timer.Start();
-        }
+        public abstract void Start();
 
         /// <summary>
         /// Stop the loop
         /// </summary>
-        public void Stop()
-        {
-            timer.Stop();
-        }
+        public abstract void Stop();
 
         /// <summary>
         /// returns true if loop is running.
         /// </summary>
         /// <returns></returns>
-        public bool IsRunning()
-        {
-            return timer.IsEnabled;
-        }
+        public abstract bool IsRunning();
 
         /// <summary>
         /// Event if the tickrate changes
         /// </summary>
         /// <param name="source"></param>
         /// <param name="args"></param>
-        private void OnTickrateChange(object source, CustomPropertyChangedArgs args)
-        {
-            MainWindow.Console.Print($"Changing TickRate to {args.ValueAfter}Hz");
-            timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));
-        }
+        protected abstract void OnTickrateChange(object source, CustomPropertyChangedArgs args);
 
         /// <summary>
         /// Called every Tick
         /// </summary>
         /// <param name="source"></param>
         /// <param name="args"></param>
-        private void Update(object source, EventArgs args)
+        protected void Update(object source, EventArgs args)
         {
             var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             try
             {
                 UpdateEvent?.Invoke();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                //MainWindow.Console.Print($"Exception in main loop: {e}", Colors.Red);
+                App.Console.Print($"Exception in main loop: {exception}", Colors.Red);
 
                 exceptionCount++;
                 if (exceptionCount > 2)
                 {
                     Stop();
-                    //MainWindow.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
+                    App.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
                 }
             }
             var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
             var interval = CalculateInterval(tickRate.Value);
             if (taken > interval)
             {
-                //MainWindow.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
+                App.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
             }
         }
 
@@ -123,9 +99,9 @@ namespace KBS2
         /// </summary>
         /// <param name="tickRate"></param>
         /// <returns></returns>
-        private static int CalculateInterval(int tickRate)
+        protected static int CalculateInterval(int tickRate)
         {
-            return (int) Math.Round(1000.0 / tickRate);
+            return (int)Math.Round(1000.0 / tickRate);
         }
     }
 }

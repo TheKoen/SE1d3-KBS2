@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using KBS2.Util;
 using System.Collections.Generic;
+using KBS2.Util.Loop;
 
 namespace KBS2
 {
@@ -14,8 +15,8 @@ namespace KBS2
     /// </summary>
     public partial class MainScreen : Window
     {
-        public static readonly MainLoop Loop = new MainLoop("main");
-        public static readonly MainLoop CommandLoop = new MainLoop("command");
+        public static readonly TickLoop Loop = new ThreadLoop("main");
+        public static readonly TickLoop CommandLoop = new MainLoop("command");
         public List<PropertySettings> PropertyLabels = new List<PropertySettings>(); 
 
         private string filePath;
