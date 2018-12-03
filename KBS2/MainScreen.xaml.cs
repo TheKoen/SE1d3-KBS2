@@ -138,5 +138,26 @@ namespace KBS2
         {
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
         }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            /*
+            CommandHandler.ModifyProperty("startingPrice", PropertySettings.TBCurrentValue.ToString());
+            
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            */
+        }
+
+        private void BtnDefault_Click(object sender, RoutedEventArgs e)
+        {
+            CommandHandler.ResetProperties();
+        }
     }
 }

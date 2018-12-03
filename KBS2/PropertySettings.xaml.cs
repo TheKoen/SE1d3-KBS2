@@ -36,14 +36,8 @@ namespace KBS2
 
         public string CurrentValue
         {
-            get => LabelCurrentValue.Content.ToString();
-            set => LabelCurrentValue.Content = value;
+            get => TBCurrentValue.Text.ToString();
+            set => TBCurrentValue.Text = value;
         } 
-
-        public string NewValue
-        {
-            get => LabelNewValue.Content.ToString();
-            set => LabelNewValue.Content = value;
-        }
     }
 }
