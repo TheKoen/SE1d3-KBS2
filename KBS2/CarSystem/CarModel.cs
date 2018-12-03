@@ -1,17 +1,34 @@
-﻿using KBS2.CarSystem.Sensors;
+﻿using System;
+using KBS2.CarSystem.Sensors;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
 
 namespace KBS2.CarSystem
 {
-    public struct SensorPrototype
+    [Serializable]
+    public struct SensorPrototype : ISerializable
     {
         public Direction Direction;
         public int Range;
         public CreateSensor Create;
+
+        public SensorPrototype(SerializationInfo info, StreamingContext context)
+        {
+            Direction = (Direction) info.GetValue("direction", typeof(Direction));
+            Range = (int) info.GetValue("range", typeof(int));
+            Create = (CreateSensor) info.GetValue("create", typeof(CreateSensor));
+        }
+        
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("direction", Direction, typeof(Direction));
+            info.AddValue("range", Range, typeof(int));
+            info.AddValue("create", Create, typeof(CreateSensor));
+        }
     }
 
     public class CarModel

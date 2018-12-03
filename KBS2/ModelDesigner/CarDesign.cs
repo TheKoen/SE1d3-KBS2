@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Media;
 using KBS2.CarSystem;
@@ -8,10 +9,9 @@ using KBS2.CarSystem.Sensors;
 
 namespace KBS2.ModelDesigner
 {
-    public class CarDesign
+    [Serializable]
+    public class CarDesign : ISerializable
     {
-        private ModelDesigner _parent;
-
         public int CarWidth { get; set; } = 10;
         public int CarHeight { get; set; } = 5;
         
@@ -132,9 +132,15 @@ namespace KBS2.ModelDesigner
             }
         }
 
-        public CarDesign(ModelDesigner parent)
+        public CarDesign()
         {
-            _parent = parent;
+        }
+
+        public CarDesign(SerializationInfo info, StreamingContext context)
+        {
+            CarWidth = (int) info.GetValue("width", typeof(int));
+            CarHeight = (int) info.GetValue("height", typeof(int));
+            SensorList = (List<SensorPrototype>) info.GetValue("sensors", typeof(List<SensorPrototype>));
         }
 
 
@@ -146,5 +152,12 @@ namespace KBS2.ModelDesigner
         
         public CarModel GetAsModel(string name, double maxSpeed) =>
             new CarModel(maxSpeed, SensorList, name);
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("width", CarWidth, typeof(int));
+            info.AddValue("height", CarHeight, typeof(int));
+            info.AddValue("sensors", SensorList, typeof(List<SensorPrototype>));
+        }
     }
 }
