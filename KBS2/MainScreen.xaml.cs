@@ -57,15 +57,22 @@ namespace KBS2
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
+            //Loads the city file and parses the information into a City.
             var file = new XmlDocument();
             file.Load(filePath);
             CityParser.MakeCity(file);
-            //Teken stad. :^)
             var city = City.Instance;
+            
+            createPropertyList();
 
+            //Enables buttons and tabs so the user can acces them.
             BtnStart.IsEnabled = true;
             BtnPause.IsEnabled = true;
             BtnStop.IsEnabled = true;
+            TabItemSettings.IsEnabled = true;
+            TabItemResults.IsEnabled = true;
+
+            //Fills in the current City information that is needed.
             LabelSimulationRoad.Content = city.Roads.Count;
             LabelSimulationIntersection.Content = city.Intersections.Count;
             LabelSimulationBuilding.Content = city.Buildings.Count;
@@ -92,6 +99,7 @@ namespace KBS2
             LabelStateSim.Content = "Stop pressed";
             City.Instance.Controller.Reset();
         }
+
 
         public void createPropertyList()
         {
@@ -160,7 +168,8 @@ namespace KBS2
         public void Update()
         {
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
-            createPropertyList();
+            LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
+            
         }
     }
 }
