@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using KBS2.Exceptions;
+using CommandSystem;
+using CommandSystem.Exceptions;
 
 namespace KBS2.Console.Commands
 {
@@ -32,7 +33,7 @@ namespace KBS2.Console.Commands
             // Finding the given command
             var selected = commands.Where(c => c.Aliases.Contains(args[0]) || c.Key == args[0]).ToList();
             if (selected.Count < 1)
-                throw new InvalidParametersException($"Unknown command \"{args[0]}\"");
+                throw new CommandInputException($"Unknown command \"{args[0]}\"");
             if (selected.Count > 1)
                 throw new Exception("There should never be multiple commands with the same key or aliases");
             var command = selected[0];

@@ -3,7 +3,8 @@ using KBS2.Console;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
-using KBS2.Exceptions;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2.GPS;
 
 namespace KBS2
@@ -20,6 +21,13 @@ namespace KBS2
         public MainWindow()
         {
             InitializeComponent();
+
+            Loaded += (sender, args) =>
+            {
+                var designer = new ModelDesigner.ModelDesigner();
+                designer.ShowDialog();
+            };
+            
             CommandLoop.Start();
 
             Console = MainConsole;

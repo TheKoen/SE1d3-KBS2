@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem.Sensors;
 using KBS2.CitySystem;
-using KBS2.Console;
 using KBS2.CustomerSystem;
 using KBS2.GPS;
-using KBS2.Util;
 
 namespace KBS2.CarSystem
 {
@@ -81,16 +80,16 @@ namespace KBS2.CarSystem
             MainWindow.Loop.Subscribe(Controller.Update);
 
             this.location = new Property(location);
-            CommandHandler.RegisterProperty($"car{id}.location", ref this.location);
+            PropertyHandler.RegisterProperty($"car{id}.location", ref this.location);
 
             this.direction = new Property(direction);
-            CommandHandler.RegisterProperty($"car{id}.direction", ref this.direction);
+            PropertyHandler.RegisterProperty($"car{id}.direction", ref this.direction);
 
             maxSpeed = new Property(DefaultMaxSpeed);
-            CommandHandler.RegisterProperty($"car{id}.maxSpeed", ref maxSpeed);
+            PropertyHandler.RegisterProperty($"car{id}.maxSpeed", ref maxSpeed);
 
             this.model = new Property(model);
-            CommandHandler.RegisterProperty($"car{id}.model", ref this.model);
+            PropertyHandler.RegisterProperty($"car{id}.model", ref this.model);
         }
 
         public Vector GetLocation()

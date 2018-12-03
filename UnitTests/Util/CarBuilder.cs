@@ -18,7 +18,7 @@ namespace UnitTests.Util
         private Vector location;
         private readonly List<CreateSensor> sensors = new List<CreateSensor>();
         private DirectionCar direction;
-        private CarModel model = CarModel.TestModel;
+        private CarModel model = CarModel.Get("TestModel");
         private int width;
         private int length;
 

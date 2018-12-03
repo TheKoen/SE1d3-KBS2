@@ -81,6 +81,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
+      <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
+      <Name>CommandSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KBS2\KBS2.csproj">
       <Project>{6525e0c2-870f-4569-b84b-69c061bd28db}</Project>
       <Name>KBS2</Name>
