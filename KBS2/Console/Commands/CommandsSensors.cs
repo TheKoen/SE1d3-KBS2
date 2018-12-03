@@ -1,11 +1,12 @@
 ﻿using KBS2.CarSystem;
 using KBS2.CarSystem.Sensors;
-using KBS2.Exceptions;
 using KBS2.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+using CommandSystem;
+using CommandSystem.Exceptions;
 
 namespace KBS2.Console.Commands
 {
@@ -26,7 +27,7 @@ namespace KBS2.Console.Commands
         {
             if(args.Length == 0)
             {
-                throw new InvalidParametersException("Invalid command usage, you can use remove,add en types");
+                throw new CommandInputException("Invalid command usage, you can use remove, add and types");
             }
             if(args[0] == "add")
             {
@@ -42,7 +43,7 @@ namespace KBS2.Console.Commands
             }
             else
             {
-                throw new InvalidParametersException("Invalid command usage, you can use remove, add types");
+                throw new CommandInputException("Invalid command usage, you can use remove, add types");
             }           
         }
         
@@ -53,7 +54,7 @@ namespace KBS2.Console.Commands
         /// <returns></returns>
         private IEnumerable<char> RemoveSensor(params string[] args)
         {
-            if (args.Length < 3 && args.Length != 2) { throw new InvalidParametersException("Invalid command usage, should be : sensor remove <model> [side] [sensor] [sensor]"); };
+            if (args.Length < 3 && args.Length != 2) { throw new CommandInputException("Invalid command usage, should be : sensor remove <model> [side] [sensor] [sensor]"); };
 
             CarModel model;
             Direction side;
@@ -64,7 +65,7 @@ namespace KBS2.Console.Commands
             }
             catch (Exception e)
             {
-                throw new InvalidParametersException("Invalid command: Model doesn't exist.");
+                throw new CommandInputException("Invalid command: Model doesn't exist.");
             }
             listPotentialRemoved = model.Sensors;
             var countSensorsModel = model.Sensors.Count;
@@ -82,7 +83,7 @@ namespace KBS2.Console.Commands
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidParametersException("Invalid command: Side is wrong used.");
+                    throw new CommandInputException("Invalid command: Side is wrong used.");
                 }
                 try
                 {
@@ -90,7 +91,7 @@ namespace KBS2.Console.Commands
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidParametersException("Invalid command: Could not create sensor.");
+                    throw new CommandInputException("Invalid command: Could not create sensor.");
                 }
                 var count = model.Sensors
                 .FindAll(sensor => sensor.Create.Equals(sensorFactory) && side == sensor.Direction)
@@ -170,9 +171,9 @@ namespace KBS2.Console.Commands
         /// <returns></returns>
         private IEnumerable<char> AddSensor(params string[] args)
         {
-            if (args.Length < 4) { throw new InvalidParametersException("Invalid command usage, should be : sensor add <model> <side> <sensor> [range]"); };
+            if (args.Length < 4) { throw new CommandInputException("Invalid command usage, should be : sensor add <model> <side> <sensor> [range]"); };
 
-            if (args[0] != "add") { throw new InvalidParametersException("Invalid command useage, should be : sensor add <model> <side> <sensor> [range]"); };
+            if (args[0] != "add") { throw new CommandInputException("Invalid command useage, should be : sensor add <model> <side> <sensor> [range]"); };
 
             CarModel model;
             Direction side;
@@ -184,7 +185,7 @@ namespace KBS2.Console.Commands
             }
             catch (Exception)
             {
-                throw new InvalidParametersException("Invalid command: Model doesn't exist.");
+                throw new CommandInputException("Invalid command: Model doesn't exist.");
             }
             try
             {
@@ -192,7 +193,7 @@ namespace KBS2.Console.Commands
             }
             catch (Exception)
             {
-                throw new InvalidParametersException("Invalid command: Side is wrong used.");
+                throw new CommandInputException("Invalid command: Side is wrong used.");
             }
             try
             {
@@ -200,7 +201,7 @@ namespace KBS2.Console.Commands
             }
             catch (Exception)
             {
-                throw new InvalidParametersException("Invalid command: Could not create sensor.");
+                throw new CommandInputException("Invalid command: Could not create sensor.");
             }
             var range = 0;
             if (args.Length == 5)
@@ -211,7 +212,7 @@ namespace KBS2.Console.Commands
                 }
                 catch (Exception)
                 {
-                    throw new InvalidParametersException("Invalid command: Could not parse range.");
+                    throw new CommandInputException("Invalid command: Could not parse range.");
                 }
             }
 

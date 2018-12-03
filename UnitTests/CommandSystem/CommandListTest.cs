@@ -1,32 +1,39 @@
+using System;
 using System.Collections.Generic;
-using KBS2.Console;
-using KBS2.Console.Commands;
+using System.Linq;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2.Exceptions;
 using NUnit.Framework;
-using ICommand = KBS2.Console.ICommand;
 
 namespace UnitTests.CommandSystem
 {
     [TestFixture]
     public class CommandListTest
     {
+        private bool _registerCommandTestRan;
+        
         [Test, Order(1)]
         public void RegisterCommand()
         {
             // Checking if the command gets registered correctly
             CommandHandler.RegisterCommand(typeof(UnitTestCommand));
-            Assert.Contains("unittest", CommandHandler.GetCommandNames());
-            Assert.Throws(typeof(KeyExistsException),
+            Assert.Contains("unittest", CommandHandler.GetCommandNames().ToArray());
+            Assert.Throws(typeof(CommandHandlerException),
                 () => CommandHandler.RegisterCommand(typeof(UnitTestCommand)));
+            _registerCommandTestRan = true;
         }
 
         [Test, Order(2)]
         public void RunCommand()
         {
+            if (!_registerCommandTestRan)
+                Assert.Inconclusive("RegisterCommand did not run yet.\nMake sure to test on CommandListTest instead of RunCommand.");
+            
             // Checking if the command runs successfully and throws properly
             IEnumerable<char> result = string.Empty;
-            Assert.Throws(typeof(EmptyCommandException), () => CommandHandler.HandleInput("   "));
-            Assert.Throws(typeof(UnknownCommandException), () => CommandHandler.HandleInput("Bla bla"));
+            Assert.Throws(typeof(CommandInputException), () => CommandHandler.HandleInput("   "));
+            Assert.Throws(typeof(CommandInputException), () => CommandHandler.HandleInput("Bla bla"));
             Assert.DoesNotThrow(() => result = CommandHandler.HandleInput("UnitTest Test result"));
             Assert.DoesNotThrow(() => result = CommandHandler.HandleInput("unittest Test result"));
             Assert.AreEqual("Test result", result);

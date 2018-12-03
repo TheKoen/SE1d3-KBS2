@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Threading;
-using KBS2.Console;
+using CommandSystem.PropertyManagement;
 using KBS2.Util;
 using Math = System.Math;
 
@@ -30,7 +30,7 @@ namespace KBS2
             };
             timer.Tick += Update;
             tickRate.PropertyChanged += OnTickrateChange;
-            CommandHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
+            PropertyHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace KBS2
         /// </summary>
         /// <param name="source"></param>
         /// <param name="args"></param>
-        private void OnTickrateChange(object source, CustomPropertyChangedArgs args)
+        private void OnTickrateChange(object source, UserPropertyChangedArgs args)
         {
             MainWindow.Console.Print($"Changing TickRate to {args.ValueAfter}Hz");
             timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));

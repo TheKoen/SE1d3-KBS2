@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
-using KBS2.Exceptions;
-using KBS2.Util;
+using CommandSystem;
+using CommandSystem.Exceptions;
+using CommandSystem.PropertyManagement;
 
 namespace KBS2.Console.Commands
 {
@@ -22,7 +23,7 @@ namespace KBS2.Console.Commands
         
         public IEnumerable<char> Run(params string[] args)
         {
-            if (args.Length <= 1) throw new InvalidParametersException();
+            if (args.Length <= 1) throw new CommandInputException("Invalid parameters");
             
             var prop = args[0];
             var val = new string[args.Length - 1];
@@ -44,7 +45,7 @@ namespace KBS2.Console.Commands
             output = TestString(ref _stringRegex, prop, val);
             if (output != string.Empty) return output;
             
-            throw new InvalidParametersException($"Could not parse input");
+            throw new CommandInputException($"Could not parse input");
         }
 
 
@@ -70,7 +71,7 @@ namespace KBS2.Console.Commands
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, $"{output.X}, {output.Y}");
         }
@@ -94,7 +95,7 @@ namespace KBS2.Console.Commands
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, output.ToString(CultureInfo.InvariantCulture));
         }
@@ -118,7 +119,7 @@ namespace KBS2.Console.Commands
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, output.ToString(CultureInfo.InvariantCulture));
         }
@@ -142,7 +143,7 @@ namespace KBS2.Console.Commands
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, output.ToString());
         }
@@ -171,21 +172,21 @@ namespace KBS2.Console.Commands
         /// <param name="output">Value to set</param>
         /// <param name="outputStringRep"><see cref="String"/> representation of the value</param>
         /// <returns>Output message</returns>
-        /// <exception cref="InvalidParametersException">Error message</exception>
+        /// <exception cref="CommandInputException">Error message</exception>
         private static string TryModifyProperty(string prop, dynamic output, string outputStringRep)
         {
             try
             {
-                CommandHandler.ModifyProperty(prop, output);
+                PropertyHandler.ModifyProperty(prop, output);
                 return $"Property \"{prop}\" set as ({outputStringRep})";
             }
-            catch (KeyNotFoundException)
+            catch (PropertyHandlerException)
             {
-                throw new InvalidParametersException($"Unknown property \"{prop}\"");
+                throw new CommandInputException($"Unknown property \"{prop}\"");
             }
             catch (TypeMismatchException)
             {
-                throw new InvalidParametersException($"Property \"{prop}\" is not of type {output.GetType().Name}");
+                throw new CommandInputException($"Property \"{prop}\" is not of type {output.GetType().Name}");
             }
         }
     }
