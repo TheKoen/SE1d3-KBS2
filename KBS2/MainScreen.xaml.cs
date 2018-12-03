@@ -4,6 +4,9 @@ using KBS2.GPS;
 using System.Windows;
 using System.Xml;
 using System.IO;
+using KBS2.Util;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KBS2
 {
@@ -100,17 +103,18 @@ namespace KBS2
             City.Instance.Controller.Reset();
         }
 
-
+        //creates a label for every property.
         public void createPropertyList()
-        {
+        { 
             StackPanelSettings.Children.Clear();
             var properties = CommandHandler.GetProperties();
             foreach (var property in properties)
             {
                 var propname = property.Key.ToString();
                 var propvalue = property.Value.Value.ToString();
-                
-                StackPanelSettings.Children.Add(new PropertySettings(propname, propvalue));
+
+                var prop = new PropertySettings(propname, propvalue);
+                StackPanelSettings.Children.Add(prop);
             }
         }
 
@@ -143,26 +147,38 @@ namespace KBS2
         {
 
         }
-        
+
+        //Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
-        {
-            /*
-            CommandHandler.ModifyProperty("startingPrice", PropertySettings.TBCurrentValue.ToString());
-            
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            */
+        { 
+            foreach (var child in StackPanelSettings.Children)
+            {
+                var propertyControl = (PropertySettings)child;
+
+                var name = propertyControl.LabelPropertyName.Content.ToString();
+                var property = CommandHandler.GetProperties().Where(p => p.Key == name).First();
+
+                if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
+                {
+                    var value = propertyControl.TBCurrentValue.Text;
+                    CommandHandler.HandleInput($"set { name } { value }");
+                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
+                }
+            }
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
-            CommandHandler.ResetProperties();
+            CommandHandler.ModifyProperty("main.tickRate", 30);
+            CommandHandler.ModifyProperty("command.tickRate", 30);
+            CommandHandler.ModifyProperty("startingPrice", 1.50);
+            CommandHandler.ModifyProperty("pricePerKilometer", 1.00);
+            CommandHandler.ModifyProperty("customerSpawnRate", 0.2f);
+            CommandHandler.ModifyProperty("availableCars", 10);
+            CommandHandler.ModifyProperty("customerCount", 10);
+            CommandHandler.ModifyProperty("globalSpeedLimit", -1);
+            CommandHandler.ModifyProperty("avgGroupSize", 10);
+            createPropertyList();
         }
 
         public void Update()
