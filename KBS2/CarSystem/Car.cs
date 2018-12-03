@@ -29,6 +29,13 @@ namespace KBS2.CarSystem
             set => direction.Value = value;
         }
 
+        private Property rotation;
+        public Vector Rotation
+        {
+            get => rotation.Value;
+            set => rotation.Value = value;
+        }
+
         private Property maxSpeed;
         public double MaxSpeed
         {
@@ -85,6 +92,9 @@ namespace KBS2.CarSystem
 
             this.direction = new Property(direction);
             CommandHandler.RegisterProperty($"car{id}.direction", ref this.direction);
+
+            rotation = new Property(direction.GetVector());
+            CommandHandler.RegisterProperty($"car{id}.rotation", ref rotation);
 
             maxSpeed = new Property(DefaultMaxSpeed);
             CommandHandler.RegisterProperty($"car{id}.maxSpeed", ref maxSpeed);
