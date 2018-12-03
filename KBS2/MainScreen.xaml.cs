@@ -96,21 +96,20 @@ namespace KBS2
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             Loop.Start();
-            LabelStateSim.Content = "Start pressed";
+            App.Console.Print("Start pressed");
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             Loop.Stop();
-
-            LabelStateSim.Content = "Pause pressed";
+            App.Console.Print("Pause pressed");
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
             Loop.Stop();
-            LabelStateSim.Content = "Stop pressed";
             City.Instance.Controller.Reset();
+            App.Console.Print("Reset pressed");
         }
 
         //creates a label for every property.
