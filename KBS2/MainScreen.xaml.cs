@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using KBS2.Util;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace KBS2
 {
@@ -16,7 +17,6 @@ namespace KBS2
     {
         public static readonly MainLoop Loop = new MainLoop("main");
         public static readonly MainLoop CommandLoop = new MainLoop("command");
-        public List<PropertySettings> PropertyLabels = new List<PropertySettings>(); 
 
         private string filePath;
 
@@ -65,6 +65,7 @@ namespace KBS2
             CityParser.MakeCity(file);
             //Teken stad. :^)
             var city = City.Instance;
+            createPropertyList();
 
             BtnStart.IsEnabled = true;
             BtnPause.IsEnabled = true;
@@ -108,7 +109,6 @@ namespace KBS2
 
                 var prop = new PropertySettings(propname, propvalue);
                 StackPanelSettings.Children.Add(prop);
-                PropertyLabels.Add(prop);
             }
         }
 
@@ -145,30 +145,33 @@ namespace KBS2
         //Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         { 
-            foreach (var property in PropertyLabels)
+            foreach (var child in StackPanelSettings.Children)
             {
-                if (property.TBCurrentValue.Text != property.CurrentValue)
+                var propertyControl = (PropertySettings)child;
+
+                var name = propertyControl.LabelPropertyName.Content.ToString();
+                var property = CommandHandler.GetProperties().Where(p => p.Key == name).First();
+
+                if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
                 {
-                    var name = property.LabelPropertyName.ToString();
-                    var value = property.TBCurrentValue.Text;
-                    CommandHandler.ModifyProperty(name, value);
-                    property.CurrentValue = property.TBCurrentValue.Text;
+                    var value = propertyControl.TBCurrentValue.Text;
+                    CommandHandler.HandleInput($"set { name } { value }");
+                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
                 }
             }
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
-            CommandHandler.ModifyProperty("customerSpawnRate", 0.1);
             CommandHandler.ModifyProperty("main.tickRate", 30);
             CommandHandler.ModifyProperty("command.tickRate", 30);
             CommandHandler.ModifyProperty("startingPrice", 1.50);
             CommandHandler.ModifyProperty("pricePerKilometer", 1.00);
+            CommandHandler.ModifyProperty("customerSpawnRate", 0.2f);
             CommandHandler.ModifyProperty("availableCars", 10);
-            CommandHandler.ModifyProperty("avgGroupSize", 10);
             CommandHandler.ModifyProperty("customerCount", 10);
-            
-            
+            CommandHandler.ModifyProperty("globalSpeedLimit", -1);
+            CommandHandler.ModifyProperty("avgGroupSize", 10);
             createPropertyList();
         }
 
