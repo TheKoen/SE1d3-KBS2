@@ -17,6 +17,12 @@ namespace KBS2.Util
         private Canvas Canvas { get; }
         private Vector Location { get; set; }
 
+        /// <summary>
+        /// Create a spriterender for a GameObject
+        /// </summary>
+        /// <param name="sprite">image</param>
+        /// <param name="location">location</param>
+        /// <param name="canvas">canvas where it needs to be drawn on</param>
         public SpriteRenderer(Image sprite, Vector location, Canvas canvas)
         {
             Canvas = canvas;
@@ -38,6 +44,9 @@ namespace KBS2.Util
             Canvas.SetLeft(Sprite, Location.X - Size.X);
         }
 
+        /// <summary>
+        /// Remove the sprite from canvas en unsubscribe from loop
+        /// </summary>
         public void Destroy()
         {
             Canvas.Children.Remove(Sprite);
@@ -45,12 +54,20 @@ namespace KBS2.Util
             MainWindow.Loop.Unsubscribe(this.Update);
         }
 
+        /// <summary>
+        /// change the sprite
+        /// </summary>
+        /// <param name="image">image</param>
         public void ChangeSprite(BitmapImage image)
         {
             Sprite.Source = image;
             Size = new Vector((int)(Sprite.Width / 2), (int)(Sprite.Height / 2));
         }
 
+        /// <summary>
+        /// Rotate the sprite
+        /// </summary>
+        /// <param name="angle">double angle</param>
         public void Rotate(double angle)
         {
             Sprite.RenderTransform = new RotateTransform(angle, Size.X, Size.Y);
