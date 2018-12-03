@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
+using KBS2.Visual.Controls;
 
 namespace KBS2
 {
@@ -65,22 +66,27 @@ namespace KBS2
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
-            //Loads the city file and parses the information into a City.
+            // Loads the city file and parses the information into a City.
             var file = new XmlDocument();
             file.Load(filePath);
             CityParser.MakeCity(file);
             var city = City.Instance;
-            
+            foreach(var Road in city.Roads)
+            {
+                RoadControl rc = new RoadControl(Road.Start, Road.End, Road.Width);
+                CanvasMain.Children.Add(rc);
+            }
+
             createPropertyList();
 
-            //Enables buttons and tabs so the user can acces them.
+            // Enables buttons and tabs so the user can acces them.
             BtnStart.IsEnabled = true;
             BtnPause.IsEnabled = true;
             BtnStop.IsEnabled = true;
             TabItemSettings.IsEnabled = true;
             TabItemResults.IsEnabled = true;
 
-            //Fills in the current City information that is needed.
+            // Fills in the current City information that is needed.
             LabelSimulationRoad.Content = city.Roads.Count;
             LabelSimulationIntersection.Content = city.Intersections.Count;
             LabelSimulationBuilding.Content = city.Buildings.Count;
@@ -108,7 +114,7 @@ namespace KBS2
             City.Instance.Controller.Reset();
         }
 
-        //creates a label for every property.
+        // Creates a label for every property.
         public void createPropertyList()
         { 
             StackPanelSettings.Children.Clear();
@@ -153,13 +159,14 @@ namespace KBS2
 
         }
 
-        //Method for saving the new values the user has filled in in the Settings tab.
+        // Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
-        { 
+        {
+            string s = null;
+            string y = null;
             foreach (var child in StackPanelSettings.Children)
             {
                 var propertyControl = (PropertySettings)child;
-
                 var name = propertyControl.LabelPropertyName.Content.ToString();
                 var property = CommandHandler.GetProperties().First(p => p.Key == name);
 
@@ -169,7 +176,18 @@ namespace KBS2
                     CommandHandler.HandleInput($"set { name } { value }");
                     propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
                 }
+         
+                if (propertyControl.LabelPropertyName.Content.ToString() == "startingPrice")
+                {              
+                    s = propertyControl.TBCurrentValue.Text.ToString();
+                }
+
+                if (propertyControl.LabelPropertyName.Content.ToString() == "pricePerKilometer")
+                {
+                   y = propertyControl.TBCurrentValue.Text.ToString();   
+                }
             }
+            LabelSimulationPriceFormula.Content = $" {s} + {y} * km";
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)

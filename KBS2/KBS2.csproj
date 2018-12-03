@@ -113,6 +113,9 @@
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
     <Compile Include="Util\StringConverters.cs" />
+    <Compile Include="Visual\Controls\RoadControl.xaml.cs">
+      <DependentUpon>RoadControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CarInfoUserControl.xaml.cs">
       <DependentUpon>CarInfoUserControl.xaml</DependentUpon>
     </Compile>
@@ -146,6 +149,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Visual\Controls\RoadControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\CarInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,8 +198,6 @@
   <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Visual\Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
