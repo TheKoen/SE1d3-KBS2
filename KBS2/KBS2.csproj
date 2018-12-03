@@ -198,5 +198,8 @@
   <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Visual\Controls\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
