@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using KBS2.Util;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
@@ -17,9 +18,8 @@ namespace KBS2
     /// </summary>
     public partial class MainScreen : Window
     {
-        public static readonly TickLoop Loop = new ThreadLoop("main");
+        public static readonly TickLoop Loop = new MainLoop("main");
         public static readonly TickLoop CommandLoop = new MainLoop("command");
-        public List<PropertySettings> PropertyLabels = new List<PropertySettings>();
 
         private ConsoleWindow consoleWindow;
 
@@ -36,6 +36,12 @@ namespace KBS2
 
             // Showing list of properties in settings tab
             Loaded += (sender, args) => createPropertyList();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            consoleWindow.AllowClose = true;
+            consoleWindow.Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
@@ -194,7 +200,14 @@ namespace KBS2
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            consoleWindow.Show();
+            if (consoleWindow.IsVisible)
+            {
+                consoleWindow.Hide();
+            }
+            else
+            {
+                consoleWindow.Show();
+            }
         }
     }
 }

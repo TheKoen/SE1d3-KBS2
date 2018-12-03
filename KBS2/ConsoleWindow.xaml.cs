@@ -22,6 +22,8 @@ namespace KBS2
     /// </summary>
     public partial class ConsoleWindow : Window
     {
+        public bool AllowClose = false;
+
         public ConsoleWindow()
         {
             InitializeComponent();
@@ -51,8 +53,11 @@ namespace KBS2
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;
-            Hide();
+            if (!AllowClose)
+            {
+                e.Cancel = true;
+                Hide();
+            }
         }
     }
 }
