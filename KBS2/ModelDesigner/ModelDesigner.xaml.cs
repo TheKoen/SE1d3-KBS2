@@ -1,44 +1,99 @@
+using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows;
 using KBS2.CarSystem;
+using Microsoft.Win32;
 
 namespace KBS2.ModelDesigner
 {
     public partial class ModelDesigner
     {
-        private CarDesign _currentDesign = null;
-        private static IFormatter _formatter = new BinaryFormatter();
+        // File extension for model exports
+        private const string ModelFileExtension = "carmdl";
+        
+        private CarDesign _currentDesign = new CarDesign();
+        private static readonly IFormatter Formatter = new BinaryFormatter();
         
         public ModelDesigner()
         {
             InitializeComponent();
 
-            ButtonExport.Click += (sender, args) => ExportDesign(_currentDesign, "exports/export.txt");
+            ButtonExport.Click += (sender, args) =>
+            {
+                var fileDialog = new SaveFileDialog
+                {
+                    AddExtension = true,
+                    DefaultExt = $".{ModelFileExtension}",
+                    Filter = $"Car Model File|*.{ModelFileExtension}",
+                    InitialDirectory = Environment.CurrentDirectory,
+                    CheckPathExists = true,
+                    OverwritePrompt = true,
+                    Title = "Export Car Model"
+                };
+
+                // Exporting the current model, unless the user cancels the dialog
+                if (fileDialog.ShowDialog() != true) return;
+                ExportDesign(_currentDesign, fileDialog.FileName);
+            };
             ButtonImport.Click += (sender, args) =>
             {
-                _currentDesign = ImportDesign("exports/export.txt");
+                var fileDialog = new OpenFileDialog
+                {
+                    Filter = $"Car Model Files|*.{ModelFileExtension}|All Files|*.*",
+                    InitialDirectory = Environment.CurrentDirectory,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    Title = "Import Car Model"
+                };
+
+                // Importing the selected model, unless the user cancels the dialog
+                if (fileDialog.ShowDialog() != true) return;
+                _currentDesign = ImportDesign(fileDialog.FileName) ?? _currentDesign;
                 DesignDisplay.Source = _currentDesign?.Brush;
             };
-            
-            //_currentDesign = DesignFromModel(CarModel.Get("TestModel"));
             
             DesignDisplay.Source = _currentDesign?.Brush;
         }
 
 
+        /// <summary>
+        /// Exports the given <see cref="CarDesign"/> to the given file
+        /// </summary>
+        /// <param name="design">The <see cref="CarDesign"/> to export</param>
+        /// <param name="filename">The file to export to</param>
         private static void ExportDesign(CarDesign design, string filename)
         {
+            // Creating the file, or overwriting it if it already exists
             var stream = new FileStream(filename, FileMode.Create);
-                
-            _formatter.Serialize(stream, design);
+            
+            // Serializing the design into the file
+            Formatter.Serialize(stream, design);
             stream.Close();
         }
 
+        /// <summary>
+        /// Imports a <see cref="CarDesign"/> from a given file
+        /// </summary>
+        /// <param name="filename">The file to import from</param>
+        /// <returns>The imported <see cref="CarDesign"/></returns>
         private static CarDesign ImportDesign(string filename)
         {
             var stream = new FileStream(filename, FileMode.Open);
-            return (CarDesign) _formatter.Deserialize(stream);
+            try
+            {
+                return (CarDesign) Formatter.Deserialize(stream);
+            }
+            catch (SerializationException se)
+            {
+                MessageBox.Show($"Invalid {ModelFileExtension} file, could not import \"{filename}\"");
+                return null;
+            }
+            finally
+            {
+                stream.Close();
+            }
         }
         
         private static CarDesign DesignFromModel(CarModel model)
