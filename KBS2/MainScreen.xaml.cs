@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
+using KBS2.Visual.Controls;
 
 namespace KBS2
 {
@@ -72,7 +73,7 @@ namespace KBS2
             var city = City.Instance;
             
             createPropertyList();
-
+            drawCity(city);
             //Enables buttons and tabs so the user can acces them.
             BtnStart.IsEnabled = true;
             BtnPause.IsEnabled = true;
@@ -191,6 +192,21 @@ namespace KBS2
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
             LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
             
+        }
+
+        private void BtnConsole_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public void drawCity(City city)
+        {
+            foreach (var building in city.Buildings)
+            {
+                BuildingControl b = new BuildingControl(building.Location, building.Size);
+                
+                CanvasMain.Children.Add(b);
+            }
         }
     }
 }

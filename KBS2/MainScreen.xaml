@@ -61,6 +61,7 @@
                     <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="139,514,0,0" VerticalAlignment="Top" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click" IsEnabled="False"/>
                     <Button x:Name="BtnStop" Content="Stop" HorizontalAlignment="Left" Margin="236,514,0,0" VerticalAlignment="Top" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
                     <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="96,567,0,0" VerticalAlignment="Top" Height="57" Width="153" FontSize="36" />
+                    <Button x:Name="BtnConsole" Content="Open Console" HorizontalAlignment="Left" Margin="10,612,0,0" VerticalAlignment="Top" Width="81" Click="BtnConsole_Click"/>
 
 
                 </Grid>
