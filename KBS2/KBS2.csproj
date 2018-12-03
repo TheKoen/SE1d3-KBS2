@@ -73,6 +73,9 @@
     <Compile Include="CitySystem\CityController.cs" />
     <Compile Include="CitySystem\CityParser.cs" />
     <Compile Include="CitySystem\IEntity.cs" />
+    <Compile Include="ConsoleWindow.xaml.cs">
+      <DependentUpon>ConsoleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Console\CommandRegistrar.cs" />
     <Compile Include="Console\Commands\CommandLoad.cs" />
     <Compile Include="Console\Commands\CommandTime.cs" />
@@ -116,12 +119,19 @@
     <Compile Include="Visual\Controls\BuildingControl.xaml.cs">
       <DependentUpon>BuildingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Visual\Controls\RoadControl.xaml.cs">
+      <DependentUpon>RoadControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CarInfoUserControl.xaml.cs">
       <DependentUpon>CarInfoUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="ConsoleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,6 +160,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Visual\Controls\BuildingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\RoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

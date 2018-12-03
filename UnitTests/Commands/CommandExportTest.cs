@@ -26,7 +26,10 @@ namespace UnitTests.Commands
         [SetUp]
         public void Init()
         {
-            typeof(MainWindow).GetProperty("Console")?.SetValue(null, new ConsoleControl());
+            var console = new ConsoleControl();
+            typeof(MainWindow).GetProperty("Console")?.SetValue(null, console);
+
+            App.Console = console;
             
             File.Create(Filename1).Close();
 

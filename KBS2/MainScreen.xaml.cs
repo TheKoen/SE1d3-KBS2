@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using KBS2.Util;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
@@ -18,26 +19,30 @@ namespace KBS2
     /// </summary>
     public partial class MainScreen : Window
     {
-        public static readonly TickLoop Loop = new ThreadLoop("main");
+        public static readonly TickLoop Loop = new MainLoop("main");
         public static readonly TickLoop CommandLoop = new MainLoop("command");
-        public List<PropertySettings> PropertyLabels = new List<PropertySettings>(); 
+
+        private ConsoleWindow consoleWindow;
 
         private string filePath;
 
         public MainScreen()
         {
+            consoleWindow = new ConsoleWindow();
             
             InitializeComponent();
             Loop.Subscribe(Update);
             CommandLoop.Start();
             GPSSystem.Setup();
-            
-
-            // Registering commands
-            CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");
 
             // Showing list of properties in settings tab
             Loaded += (sender, args) => createPropertyList();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            consoleWindow.AllowClose = true;
+            consoleWindow.Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
@@ -66,12 +71,17 @@ namespace KBS2
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
-            //Loads the city file and parses the information into a City.
+            // Loads the city file and parses the information into a City.
             var file = new XmlDocument();
             file.Load(filePath);
             CityParser.MakeCity(file);
             var city = City.Instance;
-            
+            foreach(var Road in city.Roads)
+            {
+                RoadControl rc = new RoadControl(Road.Start, Road.End, Road.Width);
+                CanvasMain.Children.Add(rc);
+            }
+
             createPropertyList();
             drawCity(city);
             //Enables buttons and tabs so the user can acces them.
@@ -81,7 +91,7 @@ namespace KBS2
             TabItemSettings.IsEnabled = true;
             TabItemResults.IsEnabled = true;
 
-            //Fills in the current City information that is needed.
+            // Fills in the current City information that is needed.
             LabelSimulationRoad.Content = city.Roads.Count;
             LabelSimulationIntersection.Content = city.Intersections.Count;
             LabelSimulationBuilding.Content = city.Buildings.Count;
@@ -92,24 +102,23 @@ namespace KBS2
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             Loop.Start();
-            LabelStateSim.Content = "Start pressed";
+            App.Console.Print("Start pressed");
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             Loop.Stop();
-
-            LabelStateSim.Content = "Pause pressed";
+            App.Console.Print("Pause pressed");
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
             Loop.Stop();
-            LabelStateSim.Content = "Stop pressed";
             City.Instance.Controller.Reset();
+            App.Console.Print("Reset pressed");
         }
 
-        //creates a label for every property.
+        // Creates a label for every property.
         public void createPropertyList()
         { 
             StackPanelSettings.Children.Clear();
@@ -154,13 +163,14 @@ namespace KBS2
 
         }
 
-        //Method for saving the new values the user has filled in in the Settings tab.
+        // Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
-        { 
+        {
+            string s = null;
+            string y = null;
             foreach (var child in StackPanelSettings.Children)
             {
                 var propertyControl = (PropertySettings)child;
-
                 var name = propertyControl.LabelPropertyName.Content.ToString();
                 var property = CommandHandler.GetProperties().First(p => p.Key == name);
 
@@ -170,7 +180,18 @@ namespace KBS2
                     CommandHandler.HandleInput($"set { name } { value }");
                     propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
                 }
+         
+                if (propertyControl.LabelPropertyName.Content.ToString() == "startingPrice")
+                {              
+                    s = propertyControl.TBCurrentValue.Text.ToString();
+                }
+
+                if (propertyControl.LabelPropertyName.Content.ToString() == "pricePerKilometer")
+                {
+                   y = propertyControl.TBCurrentValue.Text.ToString();   
+                }
             }
+            LabelSimulationPriceFormula.Content = $" {s} + {y} * km";
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
@@ -192,6 +213,18 @@ namespace KBS2
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
             LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
             
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (consoleWindow.IsVisible)
+            {
+                consoleWindow.Hide();
+            }
+            else
+            {
+                consoleWindow.Show();
+            }
         }
 
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
