@@ -95,7 +95,8 @@ namespace KBS2
 
         public void createPropertyList()
         {
-            var properties = Console.CommandHandler.GetProperties();
+            StackPanelSettings.Children.Clear();
+            var properties = CommandHandler.GetProperties();
             foreach (var property in properties)
             {
                 var propname = property.Key.ToString();
@@ -134,11 +135,7 @@ namespace KBS2
         {
 
         }
-        public void Update()
-        {
-            LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
-        }
-
+        
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             /*
@@ -158,6 +155,12 @@ namespace KBS2
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
             CommandHandler.ResetProperties();
+        }
+
+        public void Update()
+        {
+            LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
+            createPropertyList();
         }
     }
 }
