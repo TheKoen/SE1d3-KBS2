@@ -89,7 +89,7 @@ namespace KBS2.Console.Commands
                 builder.Append('\n');
             }
 
-            MainWindow.Console.Print(builder.ToString());
+            App.Console.Print(builder.ToString());
         }
 
         private static bool IsCustomer(Vector point)

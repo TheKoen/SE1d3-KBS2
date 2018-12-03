@@ -15,8 +15,8 @@ namespace KBS2.Console.Commands
     public class CommandSet : ICommand
     {
         private static Regex _vectorRegex = new Regex(@"^(?<posX>-?\d+|-?\d*\.\d+),\s?(?<posY>-?\d+|-?\d*\.\d+)$");
-        private static Regex _floatRegex = new Regex(@"^(?<value>-?\d*\.\d+)f$");
-        private static Regex _doubleRegex = new Regex(@"^(?:(?<value>-?\d*\.\d+)(?:d?)|(?<value>-?\d+)d)$");
+        private static Regex _floatRegex = new Regex(@"^(?<value>-?\d*\.?\d+)f$");
+        private static Regex _doubleRegex = new Regex(@"^(?:(?<value>-?\d*\.?\d+)(?:d?)|(?<value>-?\d+)d)$");
         private static Regex _intRegex = new Regex(@"^(?<value>-?\d+)$");
         private static Regex _stringRegex = new Regex(@"^""(?<value>.*)""$");
         
@@ -28,17 +28,32 @@ namespace KBS2.Console.Commands
             var val = new string[args.Length - 1];
             Array.Copy(args, 1, val, 0, val.Length);
 
+            string output;
+
+            try
+            {
+                // Testing for float
+                output = TestFloat(ref _floatRegex, prop, val);
+                if (output != string.Empty) return output;
+            }
+            catch (InvalidParametersException)
+            {
+                try
+                {
+                    // Testing for double
+                    output = TestDouble(ref _doubleRegex, prop, val);
+                    if (output != string.Empty) return output;
+                }
+                catch (InvalidParametersException)
+                {
+                    // Testing for int
+                    output = TestInt(ref _intRegex, prop, val);
+                    if (output != string.Empty) return output;
+                }
+            }
+
             // Testing for Vector
-            var output = TestVector(ref _vectorRegex, prop, val);
-            if (output != string.Empty) return output;
-            // Testing for float
-            output = TestFloat(ref _floatRegex, prop, val);
-            if (output != string.Empty) return output;
-            // Testing for double
-            output = TestDouble(ref _doubleRegex, prop, val);
-            if (output != string.Empty) return output;
-            // Testing for int
-            output = TestInt(ref _intRegex, prop, val);
+            output = TestVector(ref _vectorRegex, prop, val);
             if (output != string.Empty) return output;
             // Testing for string
             output = TestString(ref _stringRegex, prop, val);

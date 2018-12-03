@@ -27,7 +27,7 @@ namespace KBS2.Console.Commands
             {
                 using (var sw = File.CreateText(filename))
                 {
-                    foreach (var line in MainWindow.Console.GetOutputHistory())
+                    foreach (var line in App.Console.GetOutputHistory())
                     {
                         sw.WriteLine(line);
                     }

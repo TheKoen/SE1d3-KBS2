@@ -71,7 +71,7 @@ namespace KBS2.Console.Commands
             if (args.Length == 2)
             {
                 printListPotentialRemoved();
-                MainWindow.Console.SendCommand += removeSensors;
+                App.Console.SendCommand += removeSensors;
                 return null;
             }
             else
@@ -110,7 +110,7 @@ namespace KBS2.Console.Commands
             var items = StringConverters.GetSensors();
             foreach(var item in items)
             {
-                MainWindow.Console.Print(item);
+                App.Console.Print(item);
             }
 
             return null;
@@ -129,24 +129,24 @@ namespace KBS2.Console.Commands
                 if(i == 0)
                 {
                     listPotentialRemoved.Clear();
-                    MainWindow.Console.Print("Sensors removed");
+                    App.Console.Print("Sensors removed");
                 }
                 else if(i <= listPotentialRemoved.Count)
                 {
                     listPotentialRemoved.RemoveAt(i-1);
-                    MainWindow.Console.Print($"Sensor {i} removed");
+                    App.Console.Print($"Sensor {i} removed");
                 }
                 else
                 {
-                    MainWindow.Console.SendCommand -= removeSensors;
-                    MainWindow.Console.Print("Please give a digit, given", Colors.Red);
+                    App.Console.SendCommand -= removeSensors;
+                    App.Console.Print("Please give a digit, given", Colors.Red);
                 }
-                MainWindow.Console.SendCommand -= removeSensors;
+                App.Console.SendCommand -= removeSensors;
             }
             catch(Exception e)
             {
-                MainWindow.Console.SendCommand -= removeSensors;
-                MainWindow.Console.Print("Could not parse: Please give a digit", Colors.Red);
+                App.Console.SendCommand -= removeSensors;
+                App.Console.Print("Could not parse: Please give a digit", Colors.Red);
             }
         }
 
@@ -158,9 +158,9 @@ namespace KBS2.Console.Commands
             for (int i = 0; i < listPotentialRemoved.Count; i++)
             {
                 var name = Sensor.Sensors.FirstOrDefault(sensor => sensor.Value.Equals(listPotentialRemoved[i].Create)).Key.Name;
-                MainWindow.Console.Print($"{i+1}. Name: {name}, Side: {listPotentialRemoved[i].Direction.ToString()}");
+                App.Console.Print($"{i+1}. Name: {name}, Side: {listPotentialRemoved[i].Direction.ToString()}");
             }
-            MainWindow.Console.Print("0. remove all.");
+            App.Console.Print("0. remove all.");
         }
 
         /// <summary>

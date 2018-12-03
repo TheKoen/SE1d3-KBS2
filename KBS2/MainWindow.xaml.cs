@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Xml;
 using KBS2.Exceptions;
 using KBS2.GPS;
+using KBS2.Util.Loop;
 
 namespace KBS2
 {
@@ -15,14 +16,13 @@ namespace KBS2
     {
         //public static readonly MainLoop Loop = new MainLoop("main");
         public static readonly MainLoop CommandLoop = new MainLoop("command");
-        public static ConsoleControl Console { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
             CommandLoop.Start();
 
-            Console = MainConsole;
+            App.Console = MainConsole;
 
             GPSSystem.Setup();
 
