@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using KBS2.Util;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
@@ -18,26 +19,30 @@ namespace KBS2
     /// </summary>
     public partial class MainScreen : Window
     {
-        public static readonly TickLoop Loop = new ThreadLoop("main");
+        public static readonly TickLoop Loop = new MainLoop("main");
         public static readonly TickLoop CommandLoop = new MainLoop("command");
-        public List<PropertySettings> PropertyLabels = new List<PropertySettings>(); 
+
+        private ConsoleWindow consoleWindow;
 
         private string filePath;
 
         public MainScreen()
         {
+            consoleWindow = new ConsoleWindow();
             
             InitializeComponent();
             Loop.Subscribe(Update);
             CommandLoop.Start();
             GPSSystem.Setup();
-            
-
-            // Registering commands
-            CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");
 
             // Showing list of properties in settings tab
             Loaded += (sender, args) => createPropertyList();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            consoleWindow.AllowClose = true;
+            consoleWindow.Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
@@ -97,21 +102,20 @@ namespace KBS2
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             Loop.Start();
-            LabelStateSim.Content = "Start pressed";
+            App.Console.Print("Start pressed");
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             Loop.Stop();
-
-            LabelStateSim.Content = "Pause pressed";
+            App.Console.Print("Pause pressed");
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
             Loop.Stop();
-            LabelStateSim.Content = "Stop pressed";
             City.Instance.Controller.Reset();
+            App.Console.Print("Reset pressed");
         }
 
         // Creates a label for every property.
@@ -209,6 +213,18 @@ namespace KBS2
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
             LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
             
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (consoleWindow.IsVisible)
+            {
+                consoleWindow.Hide();
+            }
+            else
+            {
+                consoleWindow.Show();
+            }
         }
     }
 }

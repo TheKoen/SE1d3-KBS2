@@ -8,9 +8,7 @@
         Title="Selfdriving Car Simulation" Height="700" Width="1300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid >
 
-        <Canvas x:Name="CanvasMain" HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951">
-            <Label x:Name="LabelStateSim" Content="helpme" Canvas.Left="369" Canvas.Top="228"/>
-        </Canvas>
+        <Canvas x:Name="CanvasMain" HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951"/>
         <TabControl x:Name="TabControlMain" HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" Background="#FF0015FF">
 
             <TabItem x:Name="TabItemSimulation" Header="Simulation" Margin="-2,-2,-20,-2" >
@@ -59,8 +57,9 @@
 
                     <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="40,514,0,0" VerticalAlignment="Top" Width="70" Height="40" Background="#FF1BE72C" Click="BtnStart_Click" IsEnabled="False"/>
                     <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="139,514,0,0" VerticalAlignment="Top" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnStop" Content="Stop" HorizontalAlignment="Left" Margin="236,514,0,0" VerticalAlignment="Top" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnStop" Content="Reset" HorizontalAlignment="Left" Margin="236,514,0,0" VerticalAlignment="Top" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
                     <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="96,567,0,0" VerticalAlignment="Top" Height="57" Width="153" FontSize="36" />
+                    <Button x:Name="button" Content="Console" HorizontalAlignment="Left" Margin="280,613,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click"/>
 
 
                 </Grid>
