@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
+using KBS2.Exceptions;
 
 namespace KBS2.CarSystem
 {
@@ -33,31 +34,35 @@ namespace KBS2.CarSystem
 
     public class CarModel
     {
-        public static readonly CarModel TestModel = new CarModel(100, new List<SensorPrototype>
+        
+        private static readonly List<CarModel> CarModelList = new List<CarModel>
         {
-            new SensorPrototype
+            new CarModel(100, new List<SensorPrototype>
             {
-                Direction = Direction.Global,
-                Range = 40,
-                Create = Sensor.Sensors[typeof(EntityRadar)]
-            },
-            new SensorPrototype
-            {
-                Direction = Direction.Front,
-                Range = 20,
-                Create = Sensor.Sensors[typeof(CollisionSensor)]
-            },
-            new SensorPrototype
-            {
-                Direction = Direction.Left,
-                Create = Sensor.Sensors[typeof(LineSensor)]
-            },
-            new SensorPrototype
-            {
-                Direction = Direction.Right,
-                Create = Sensor.Sensors[typeof(LineSensor)]
-            }
-        }, "TestModel");
+                new SensorPrototype
+                {
+                    Direction = Direction.Global,
+                    Range = 40,
+                    Create = Sensor.Sensors[typeof(EntityRadar)]
+                },
+                new SensorPrototype
+                {
+                    Direction = Direction.Front,
+                    Range = 20,
+                    Create = Sensor.Sensors[typeof(CollisionSensor)]
+                },
+                new SensorPrototype
+                {
+                    Direction = Direction.Left,
+                    Create = Sensor.Sensors[typeof(LineSensor)]
+                },
+                new SensorPrototype
+                {
+                    Direction = Direction.Right,
+                    Create = Sensor.Sensors[typeof(LineSensor)]
+                }
+            }, "TestModel")
+        };
 
         public List<SensorPrototype> Sensors { get; }
         public double MaxSpeed { get; }
@@ -82,7 +87,28 @@ namespace KBS2.CarSystem
 
         public static CarModel Get(string name)
         {
-            return (CarModel)typeof(CarModel).GetField(name).GetValue(null);
+            if (!Contains(name))
+                throw new KeyNotFoundException($"Car model \"{name}\" does not exist");
+            return CarModelList.Last(m => m.Name.Equals(name));
+        }
+
+        public static void Set(CarModel model)
+        {
+            if (Contains(model.Name))
+                throw new KeyExistsException($"Car model \"{model.Name}\" already exists");
+            CarModelList.Add(model);
+        }
+
+        public static bool Contains(string name)
+        {
+            return CarModelList.Select(m => m.Name).Contains(name);
+        }
+
+        public static void Remove(string name)
+        {
+            if (!Contains(name))
+                throw new KeyNotFoundException($"Car model \"{name}\" does not exist");
+            CarModelList.RemoveAll(m => m.Name == name);
         }
     }
 }

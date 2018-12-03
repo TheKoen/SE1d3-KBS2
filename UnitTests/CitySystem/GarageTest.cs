@@ -24,7 +24,7 @@ namespace UnitTests.CitySystem
             var garage = new Garage(new Vector(gx, gy), 20, direction);
             city.Buildings.Add(garage);
 
-            var car = garage.SpawnCar(0, CarModel.TestModel);
+            var car = garage.SpawnCar(0, CarModel.Get("TestModel"));
 
             Assert.AreEqual(new Vector(ex, ey), car.Location);
         }
