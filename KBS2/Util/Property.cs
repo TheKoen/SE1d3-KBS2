@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using KBS2.Exceptions;
 
 namespace KBS2.Util
@@ -22,7 +23,7 @@ namespace KBS2.Util
                 _value = value;
             }
         }
-        
+
         public Property(object value)
         {
             if (value == null) throw new ArgumentNullException();

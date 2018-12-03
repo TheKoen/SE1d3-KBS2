@@ -121,5 +121,26 @@ namespace KBS2
                 StackPanelSettings.Children.Add(new PropertySettings(propname, propvalue));
             }
         }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            /*
+            CommandHandler.ModifyProperty("startingPrice", PropertySettings.TBCurrentValue.ToString());
+            
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            CommandHandler.ModifyProperty(, );
+            */
+        }
+
+        private void BtnDefault_Click(object sender, RoutedEventArgs e)
+        {
+            CommandHandler.ResetProperties();
+        }
     }
 }
