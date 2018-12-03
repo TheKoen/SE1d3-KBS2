@@ -96,6 +96,7 @@ namespace KBS2
             City.Instance.Controller.Reset();
         }
 
+        //creates a label for every property.
         public void createPropertyList()
         { 
             StackPanelSettings.Children.Clear();
@@ -140,28 +141,34 @@ namespace KBS2
         {
 
         }
-        
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
-        {
 
+        //Method for saving the new values the user has filled in in the Settings tab.
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        { 
             foreach (var property in PropertyLabels)
             {
                 if (property.TBCurrentValue.Text != property.CurrentValue)
                 {
                     var name = property.LabelPropertyName.ToString();
                     var value = property.TBCurrentValue.Text;
-
-                    property.CurrentValue = property.TBCurrentValue.Text;
-
                     CommandHandler.ModifyProperty(name, value);
-
+                    property.CurrentValue = property.TBCurrentValue.Text;
                 }
             }
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
-            CommandHandler.ResetProperties();
+            CommandHandler.ModifyProperty("customerSpawnRate", 0.1);
+            CommandHandler.ModifyProperty("main.tickRate", 30);
+            CommandHandler.ModifyProperty("command.tickRate", 30);
+            CommandHandler.ModifyProperty("startingPrice", 1.50);
+            CommandHandler.ModifyProperty("pricePerKilometer", 1.00);
+            CommandHandler.ModifyProperty("availableCars", 10);
+            CommandHandler.ModifyProperty("avgGroupSize", 10);
+            CommandHandler.ModifyProperty("customerCount", 10);
+            
+            
             createPropertyList();
         }
 

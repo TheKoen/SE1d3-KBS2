@@ -83,7 +83,6 @@ namespace KBS2
         /// <param name="args"></param>
         private void OnTickrateChange(object source, CustomPropertyChangedArgs args)
         {
-            MainWindow.Console.Print($"Changing TickRate to {args.ValueAfter}Hz");
             timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));
         }
 
