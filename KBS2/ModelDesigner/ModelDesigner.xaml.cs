@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
+using System.Windows.Controls;
 using KBS2.CarSystem;
+using KBS2.CarSystem.Sensors;
 using Microsoft.Win32;
 
 namespace KBS2.ModelDesigner
@@ -19,7 +23,16 @@ namespace KBS2.ModelDesigner
         public ModelDesigner()
         {
             InitializeComponent();
+            
+            DesignDisplay.Source = _currentDesign?.Brush;
+            SetSensorList(_currentDesign.GetSensors());
 
+            ButtonNew.Click += (sender, args) =>
+            {
+                _currentDesign = new CarDesign();
+                DesignDisplay.Source = _currentDesign.Brush;
+                SetSensorList(_currentDesign.GetSensors());
+            };
             ButtonExport.Click += (sender, args) =>
             {
                 var fileDialog = new SaveFileDialog
@@ -52,9 +65,25 @@ namespace KBS2.ModelDesigner
                 if (fileDialog.ShowDialog() != true) return;
                 _currentDesign = ImportDesign(fileDialog.FileName) ?? _currentDesign;
                 DesignDisplay.Source = _currentDesign?.Brush;
+                SetSensorList(_currentDesign.GetSensors());
             };
-            
-            DesignDisplay.Source = _currentDesign?.Brush;
+
+            ButtonNewSensor.Click += (sender, args) =>
+            {
+                var window = new SensorCreationWindow();
+                window.ShowDialog();
+
+                if (!window.Success) return;
+                var sensor = new SensorPrototype
+                {
+                    Direction = window.SensorDirection,
+                    Range = window.SensorRange,
+                    Create = Sensor.Sensors[window.SensorType]
+                };
+                _currentDesign.AddSensor(sensor);
+                DesignDisplay.Source = _currentDesign?.Brush;
+                SetSensorList(_currentDesign.GetSensors());
+            };
         }
 
 
@@ -105,6 +134,39 @@ namespace KBS2.ModelDesigner
             }
 
             return newDesign;
+        }
+
+        private void SetSensorList(IEnumerable<SensorPrototype> list)
+        {
+            StackPanelSensors.Children.Clear();
+            
+            foreach (var sensor in list)
+            {
+                var label0 = new Label {Content = sensor.Direction};
+                var label1 = new Label {Content = sensor.Range};
+                var label2 = new Label {Content = Sensor.Sensors.First(s => s.Value.Method.GetHashCode() == sensor.Create.Method.GetHashCode()).Key.Name};
+                label0.SetValue(Grid.ColumnProperty, 0);
+                label1.SetValue(Grid.ColumnProperty, 1);
+                label2.SetValue(Grid.ColumnProperty, 2);
+                
+                var grid = new Grid
+                {
+                    ColumnDefinitions =
+                    {
+                        new ColumnDefinition {Width = new GridLength(40)},
+                        new ColumnDefinition {Width = new GridLength(30)},
+                        new ColumnDefinition {Width = new GridLength(110)}
+                    },
+                    Children =
+                    {
+                        label0,
+                        label1,
+                        label2
+                    }
+                };
+
+                StackPanelSensors.Children.Add(grid);
+            }
         }
     }
 }

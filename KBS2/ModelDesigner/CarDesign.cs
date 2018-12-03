@@ -150,6 +150,9 @@ namespace KBS2.ModelDesigner
         public void RemoveSensor(SensorPrototype sensorPrototype) =>
             SensorList.Remove(sensorPrototype);
         
+        public List<SensorPrototype> GetSensors() =>
+            new List<SensorPrototype>(SensorList);
+        
         public CarModel GetAsModel(string name, double maxSpeed) =>
             new CarModel(maxSpeed, SensorList, name);
 

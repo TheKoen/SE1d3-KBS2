@@ -104,6 +104,9 @@
     <Compile Include="ModelDesigner\ModelDesigner.xaml.cs">
       <DependentUpon>ModelDesigner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ModelDesigner\SensorCreationWindow.xaml.cs">
+      <DependentUpon>SensorCreationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
     <Compile Include="Util\Property.cs" />
     <Compile Include="Util\MathUtil.cs" />
@@ -134,6 +137,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ModelDesigner\ModelDesigner.xaml" />
+    <Page Include="ModelDesigner\SensorCreationWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
