@@ -21,6 +21,7 @@ namespace KBS2
         {
             
             InitializeComponent();
+            Loop.Subscribe(Update);
             CommandLoop.Start();
             GPSSystem.Setup();
             
@@ -34,9 +35,11 @@ namespace KBS2
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".xml";
-            dlg.Filter = "XML documents (.xml)|*.xml";
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".xml",
+                Filter = "XML documents (.xml)|*.xml"
+            };
 
             // Display OpenFileDialog by calling ShowDialog method
             var result = dlg.ShowDialog();
@@ -66,6 +69,7 @@ namespace KBS2
             LabelSimulationRoad.Content = city.Roads.Count;
             LabelSimulationIntersection.Content = city.Intersections.Count;
             LabelSimulationBuilding.Content = city.Buildings.Count;
+            LabelSimulationGarage.Content = city.Buildings.FindAll(building => building is Garage).Count;
             LabelSimulationAmountCostumer.Content = city.Customers.Count;
         }
 
@@ -133,7 +137,6 @@ namespace KBS2
         public void Update()
         {
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
-            InitializeComponent();
         }
     }
 }
