@@ -13,7 +13,6 @@ namespace KBS2
 
         public App()
         {
-            Console = new ConsoleControl();
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)

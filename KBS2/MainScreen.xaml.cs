@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using KBS2.Util;
 using System.Collections.Generic;
+using System.Linq;
 using KBS2.Util.Loop;
 
 namespace KBS2
@@ -157,7 +158,7 @@ namespace KBS2
                 var propertyControl = (PropertySettings)child;
 
                 var name = propertyControl.LabelPropertyName.Content.ToString();
-                var property = CommandHandler.GetProperties().Where(p => p.Key == name).First();
+                var property = CommandHandler.GetProperties().First(p => p.Key == name);
 
                 if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
                 {
