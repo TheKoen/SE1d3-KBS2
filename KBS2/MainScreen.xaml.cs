@@ -57,7 +57,9 @@ namespace KBS2
                 // Open document
                 var fileName = dlg.FileName;
                 filePath = fileName;
-                TBCity.Text = Path.GetFileNameWithoutExtension(fileName);
+                var cityname = Path.GetFileNameWithoutExtension(fileName);
+                TBCity.Text = cityname;
+                CityName.Content = "City : " + cityname.First().ToString().ToUpper() + cityname.Substring(1);
             }
         }
 
