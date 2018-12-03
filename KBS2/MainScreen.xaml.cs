@@ -4,6 +4,8 @@ using KBS2.GPS;
 using System.Windows;
 using System.Xml;
 using System.IO;
+using KBS2.Util;
+using System.Collections.Generic;
 
 namespace KBS2
 {
@@ -14,6 +16,7 @@ namespace KBS2
     {
         public static readonly MainLoop Loop = new MainLoop("main");
         public static readonly MainLoop CommandLoop = new MainLoop("command");
+        public List<PropertySettings> PropertyLabels = new List<PropertySettings>(); 
 
         private string filePath;
 
@@ -94,15 +97,17 @@ namespace KBS2
         }
 
         public void createPropertyList()
-        {
+        { 
             StackPanelSettings.Children.Clear();
             var properties = CommandHandler.GetProperties();
             foreach (var property in properties)
             {
                 var propname = property.Key.ToString();
                 var propvalue = property.Value.Value.ToString();
-                
-                StackPanelSettings.Children.Add(new PropertySettings(propname, propvalue));
+
+                var prop = new PropertySettings(propname, propvalue);
+                StackPanelSettings.Children.Add(prop);
+                PropertyLabels.Add(prop);
             }
         }
 
@@ -138,23 +143,26 @@ namespace KBS2
         
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            CommandHandler.ModifyProperty("startingPrice", PropertySettings.TBCurrentValue.ToString());
-            
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            CommandHandler.ModifyProperty(, );
-            */
+
+            foreach (var property in PropertyLabels)
+            {
+                if (property.TBCurrentValue.Text != property.CurrentValue)
+                {
+                    var name = property.LabelPropertyName.ToString();
+                    var value = property.TBCurrentValue.Text;
+
+                    property.CurrentValue = property.TBCurrentValue.Text;
+
+                    CommandHandler.ModifyProperty(name, value);
+
+                }
+            }
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
             CommandHandler.ResetProperties();
+            createPropertyList();
         }
 
         public void Update()
