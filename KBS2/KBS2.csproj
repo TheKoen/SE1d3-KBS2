@@ -99,7 +99,7 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
-    <Compile Include="MainLoop.cs" />
+    <Compile Include="Util\Loop\MainLoop.cs" />
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
@@ -107,6 +107,8 @@
       <DependentUpon>PropertySettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
+    <Compile Include="Util\Loop\ThreadLoop.cs" />
+    <Compile Include="Util\Loop\TickLoop.cs" />
     <Compile Include="Util\Property.cs" />
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />

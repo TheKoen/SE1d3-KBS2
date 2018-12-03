@@ -7,6 +7,8 @@ using System.IO;
 using KBS2.Util;
 using System.Collections.Generic;
 using System.Linq;
+using KBS2.Util.Loop;
+using System.Linq;
 
 namespace KBS2
 {
@@ -15,8 +17,9 @@ namespace KBS2
     /// </summary>
     public partial class MainScreen : Window
     {
-        public static readonly MainLoop Loop = new MainLoop("main");
-        public static readonly MainLoop CommandLoop = new MainLoop("command");
+        public static readonly TickLoop Loop = new ThreadLoop("main");
+        public static readonly TickLoop CommandLoop = new MainLoop("command");
+        public List<PropertySettings> PropertyLabels = new List<PropertySettings>(); 
 
         private string filePath;
 
@@ -158,7 +161,7 @@ namespace KBS2
                 var propertyControl = (PropertySettings)child;
 
                 var name = propertyControl.LabelPropertyName.Content.ToString();
-                var property = CommandHandler.GetProperties().Where(p => p.Key == name).First();
+                var property = CommandHandler.GetProperties().First(p => p.Key == name);
 
                 if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
                 {
