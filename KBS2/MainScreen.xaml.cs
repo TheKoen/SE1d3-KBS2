@@ -19,21 +19,20 @@ namespace KBS2
     {
         public static readonly TickLoop Loop = new ThreadLoop("main");
         public static readonly TickLoop CommandLoop = new MainLoop("command");
-        public List<PropertySettings> PropertyLabels = new List<PropertySettings>(); 
+        public List<PropertySettings> PropertyLabels = new List<PropertySettings>();
+
+        private ConsoleWindow consoleWindow;
 
         private string filePath;
 
         public MainScreen()
         {
+            consoleWindow = new ConsoleWindow();
             
             InitializeComponent();
             Loop.Subscribe(Update);
             CommandLoop.Start();
             GPSSystem.Setup();
-            
-
-            // Registering commands
-            CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");
 
             // Showing list of properties in settings tab
             Loaded += (sender, args) => createPropertyList();
@@ -189,6 +188,11 @@ namespace KBS2
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
             LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
             
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            consoleWindow.Show();
         }
     }
 }
