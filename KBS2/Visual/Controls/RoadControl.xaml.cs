@@ -28,9 +28,9 @@ namespace KBS2.Visual.Controls
             this.Width = length;
             this.Height = width;
 
-            Road road = new Road(Vector );
+            Road road = new Road(start, end, width, 100);
 
-            if (IsXRoad)
+            if (road.IsXRoad())
             {
                 RenderTransform = new RotateTransform(-90);
             }
