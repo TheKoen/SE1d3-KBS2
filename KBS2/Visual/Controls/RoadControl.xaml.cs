@@ -30,17 +30,18 @@ namespace KBS2.Visual.Controls
 
             Road road = new Road(start, end, width, 100);
 
-            if (road.IsXRoad())
+            if (!road.IsXRoad())
             {
                 RenderTransform = new RotateTransform(-90);
             }
+
             if ((start.X + start.Y) < (end.X + end.Y))
             {
-                Margin = new Thickness(start.X, start.Y, 0, 0);
+                Margin = new Thickness(start.X, end.Y, 0, 0);
             }
             else
             {
-                Margin = new Thickness(end.X, end.Y, 0, 0);
+                Margin = new Thickness(end.X, start.Y, 0, 0);
             }
             InitializeComponent();
         }

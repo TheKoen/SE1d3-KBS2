@@ -166,8 +166,8 @@ namespace KBS2
         // Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            string s = null;
-            string y = null;
+            string s = "1,5";
+            string y = "1";
             foreach (var child in StackPanelSettings.Children)
             {
                 var propertyControl = (PropertySettings)child;
