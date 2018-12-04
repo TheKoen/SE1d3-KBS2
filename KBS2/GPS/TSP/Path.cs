@@ -11,7 +11,7 @@ namespace KBS2.GPS.TSP
     class Path
     {
         public List<Intersection> Intersections { get; set; } = new List<Intersection>();
-        public double Length { get; set; } = 0;
+        public double Length { get; set; }
         public Vector Start { get; set; }
         public Vector End { get; set; }
         
@@ -20,6 +20,7 @@ namespace KBS2.GPS.TSP
             Start = start;
             End = end;
             Intersections.Add(intersection);
+            Length = 0;
             CalculateDistance();
         }
         
@@ -43,7 +44,7 @@ namespace KBS2.GPS.TSP
         public double CalculateDistance()
         {
             var currentLocation = Start;
-
+            
             foreach(var intersection in Intersections)
             {
                 Length += Util.MathUtil.Distance(currentLocation, intersection.Location);

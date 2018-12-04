@@ -26,12 +26,12 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
     /// </summary>
     internal class EntityRadarController : SensorController
     {
-        public EntityRadarController(EntityRadar radar)
+        public EntityRadar Radar { get; set; }
+        public EntityRadarController(EntityRadar radar) : base(radar)
         {
             Radar = radar;
         }
-
-        public EntityRadar Radar { get; set; }
+        
 
         /// <summary>
         ///     Checks for entities in range of the radar

@@ -17,6 +17,14 @@ namespace UnitTests.GPS.TSP
         [TestCase()]
         public void DijkstraTest1()
         {
+            var city = new CityBuilder()
+                .Road(new Road(new Vector(0, 0), new Vector(0, 100), 10, 100))
+                .Road(new Road(new Vector(0, 0), new Vector(100, 0), 10, 100))
+                .Road(new Road(new Vector(0, 100), new Vector(100, 100), 10, 100))
+                .Intersection(new Intersection(new Vector(0,100), 10))
+                .Intersection(new Intersection(new Vector(100, 0), 10))
+                .Build();
+
             var customerGroupBuilder = new List<CustomerGroupBuilder>()
             {
                 new CustomerGroupBuilder(new Vector(0, 0), new Vector(0, 0)),
@@ -26,11 +34,7 @@ namespace UnitTests.GPS.TSP
 
             var customer3 = customerGroupBuilder[2].CustomerGroup;
 
-            var city = new CityBuilder()
-                .Road(new Road(new Vector(0, 0), new Vector(0, 100), 10, 100))
-                .Road(new Road(new Vector(0, 0), new Vector(100, 0), 10, 100))
-                .Road(new Road(new Vector(0, 100), new Vector(100, 100), 10, 100))
-                .Build();
+            
 
             var estimatedRoads = new List<Road>()
             {

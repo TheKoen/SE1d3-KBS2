@@ -59,10 +59,6 @@ namespace KBS2.GPS.TSP.Route
                         {
                             return newPath.PathToRoadList();
                         }
-                        else
-                        {
-                            throw new Exception("roads are not horizontal or vertical");
-                        }
                     }
                 }
                 // set the new list

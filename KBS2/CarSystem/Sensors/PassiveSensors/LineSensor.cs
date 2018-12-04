@@ -22,13 +22,11 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
     /// </summary>
     internal class LineSensorController : SensorController
     {
-        public LineSensorController(LineSensor sensor)
-        {
+        public LineSensor Sensor { get; set; }
+        public LineSensorController(LineSensor sensor) : base(sensor) {
             Sensor = sensor;
         }
-
-        public LineSensor Sensor { get; set; }
-
+        
 
         /// <summary>
         ///     Updates the distance to a line of a lane

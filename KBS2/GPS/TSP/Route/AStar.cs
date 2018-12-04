@@ -26,6 +26,8 @@ namespace KBS2.GPS.TSP.Route
             {
                 listPaths.Add(new Path(start, group.Location, item));
             }
+            // order list
+            orderListByPriority(ref listPaths);
 
             // loop until the end is found
             while (true)
@@ -48,10 +50,6 @@ namespace KBS2.GPS.TSP.Route
                     if ((endRoad.End == intersection.Location || endRoad.Start == intersection.Location) && (endRoad.End == lastIntersectionOfPath.Location || endRoad.Start == lastIntersectionOfPath.Location))
                     {
                         return newPath.PathToRoadList();
-                    }
-                    else
-                    {
-                        throw new Exception("roads are not horizontal or vertical");
                     }
                 }
                 listPaths.RemoveAt(0);

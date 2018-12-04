@@ -59,6 +59,9 @@
     <Compile Include="CarSystem\Destination.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadar.cs" />
     <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
+    <Compile Include="CityDesigner\CityDesigner.xaml.cs">
+      <DependentUpon>CityDesigner.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CitySystem\Building.cs" />
     <Compile Include="CarSystem\Car.cs" />
     <Compile Include="CarSystem\CarController.cs" />
@@ -114,6 +117,10 @@
     <Compile Include="Console\Commands\CommandTest.cs" />
     <Compile Include="Util\SpriteRenderer.cs" />
     <Compile Include="Util\StringConverters.cs" />
+    <Page Include="CityDesigner\CityDesigner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
