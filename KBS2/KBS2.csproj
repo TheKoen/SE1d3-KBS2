@@ -62,6 +62,8 @@
     <Compile Include="CityDesigner\CityDesignerWindow.xaml.cs">
       <DependentUpon>CityDesignerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CityDesigner\ObjectHandler.cs" />
+    <Compile Include="CityDesigner\Tools.cs" />
     <Compile Include="CitySystem\Building.cs" />
     <Compile Include="CarSystem\Car.cs" />
     <Compile Include="CarSystem\CarController.cs" />

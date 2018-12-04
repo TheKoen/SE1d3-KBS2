@@ -10,9 +10,13 @@
         Title="CityDesignerWindow" Height="700" Width="1300">
 
     <Grid Background="#FFBFBFBF">
-        <Canvas x:Name="Canvas" HorizontalAlignment="Left" Height="671" Margin="247,0,0,0" VerticalAlignment="Top" Width="1035" Background="#FFE0E0E0" MouseMove="MouseOnCanvasEventHandler">
-            <Popup x:Name="PopupCanvas">
-                <TextBlock>Je moeder</TextBlock>
+        <Canvas x:Name="Canvas" HorizontalAlignment="Left" Height="670" Margin="247,0,0,0" VerticalAlignment="Top" Width="1035" Background="#FFE0E0E0" 
+                PreviewMouseMove="MouseMovesOnCanvasEventHandler"
+                PreviewMouseLeftButtonDown="MouseClicksOnCanvasEventHandler"
+                MouseLeave="MouseLeaveCanvasEventHandler"
+                MouseRightButtonDown="MouseRightCanvasEventHandler">
+            <Popup x:Name="PopupCanvas" AllowsTransparency="True">
+                <TextBlock x:Name="PopupTextBlock" Background="#FF898989" Foreground="White" OpacityMask="#FF3C3C3C" Margin="2,1"/>
             </Popup>
         </Canvas>
         <DockPanel x:Name="Dock" HorizontalAlignment="Left"  Height="671" LastChildFill="False" VerticalAlignment="Top" Width="247" Background="#FF151414" Grid.Row="10" Grid.Column="1">
@@ -21,9 +25,13 @@
                 <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" Margin="77,106,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="SaveButton_Click"/>
                 <TextBox x:Name="FileName" HorizontalAlignment="Left" Height="23" Margin="10,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" IsEnabled="False"/>
                 <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" Margin="77,135,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="LoadButton_Click"/>
+                <TextBox x:Name="X" HorizontalAlignment="Left" Height="23" Margin="10,199,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" IsEnabled="False"/>
+                <TextBox x:Name="Y" HorizontalAlignment="Left" Height="23" Margin="10,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" IsEnabled="False"/>
+                <Button x:Name="RoadButton" Content="Road" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="ChangeTool"/>
+                <Button x:Name="BuildingButton" Content="Building" HorizontalAlignment="Left" Margin="10,348,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="ChangeTool"/>
+                <Button x:Name="CursorButton" Content="Cursor" HorizontalAlignment="Left" Margin="160,348,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="ChangeTool"/>
+                <Button x:Name="IntersectionButton" Content="Intersection" HorizontalAlignment="Left" Margin="160,299,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="ChangeTool"/>
             </Grid>
-
-
         </DockPanel>
 
     </Grid>

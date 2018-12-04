@@ -20,11 +20,25 @@ namespace KBS2.CityDesigner
     /// </summary>
     public partial class CityDesignerWindow : Window
     {
+        public ObjectHandler Creator { get; set; }
+
+        public Tools Tool = Tools.Cursor;
+
+
+
         public CityDesignerWindow()
         {
             InitializeComponent();
+            Creator = new ObjectHandler(Canvas, this);
         }
 
+
+
+        /// <summary>
+        /// Save a city
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             // check 
@@ -38,6 +52,11 @@ namespace KBS2.CityDesigner
 
         }
 
+        /// <summary>
+        /// Load a City
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
             //load window
@@ -51,14 +70,112 @@ namespace KBS2.CityDesigner
             }
         }
 
-        private void MouseOnCanvasEventHandler(object sender, MouseEventArgs e)
-        {
-            PopupCanvas.IsOpen = true;
 
-            PopupCanvas.HorizontalOffset = Mouse.GetPosition(this).X;
-            PopupCanvas.VerticalOffset = Mouse.GetPosition(this).Y;
-            Canvas.ToolTip = Mouse.GetPosition(this).ToString();
+        private void ChangeTool(object sender, RoutedEventArgs e)
+        {
+            if(e.Source == RoadButton)
+            {
+                //set tool
+                Tool = Tools.Road;
+
+                // set the buttons active and not active
+                BuildingButton.IsEnabled = true;
+                IntersectionButton.IsEnabled = true;
+                CursorButton.IsEnabled = true;
+                RoadButton.IsEnabled = false;
+            }
+            if(e.Source == CursorButton)
+            {
+                //set tool
+                Tool = Tools.Cursor;
+
+                // set the buttons active and not active
+                BuildingButton.IsEnabled = true;
+                IntersectionButton.IsEnabled = true;
+                CursorButton.IsEnabled = false;
+                RoadButton.IsEnabled = true;
+            }
+            if(e.Source == BuildingButton)
+            {
+                //set tool
+                Tool = Tools.Building;
+
+                // set the buttons active and not active
+                BuildingButton.IsEnabled = false;
+                IntersectionButton.IsEnabled = true;
+                CursorButton.IsEnabled = true;
+                RoadButton.IsEnabled = true;
+            }
+            if(e.Source == IntersectionButton)
+            {
+                //set tool
+                Tool = Tools.Intersection;
+
+                // set the buttons active and not active
+                BuildingButton.IsEnabled = true;
+                IntersectionButton.IsEnabled = false;
+                CursorButton.IsEnabled = true;
+                RoadButton.IsEnabled = true;
+            }
+        }
+        
+
+        
+
+        private bool leftButtonWasPressed;
+        private void MouseMovesOnCanvasEventHandler(object sender, MouseEventArgs e)
+        {
             
+            // cursor popup Point
+            if (!PopupCanvas.IsOpen) { PopupCanvas.IsOpen = true; }    
+            var x = (int)e.MouseDevice.GetPosition(Canvas).X;
+            var y = (int)e.MouseDevice.GetPosition(Canvas).Y;
+            X.Text = x.ToString();
+            Y.Text = y.ToString();
+            PopupCanvas.HorizontalOffset = (int)e.MouseDevice.GetPosition(this).X;
+            PopupCanvas.VerticalOffset = (int)e.MouseDevice.GetPosition(this).Y;
+            PopupTextBlock.Text = e.MouseDevice.GetPosition(this).ToString();
+
+            
+            //drawing 
+
+            // drawing Ghost Building
+            if (Tool == Tools.Building) { Creator.DrawBuilding(sender, e); }
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                leftButtonWasPressed = true;
+                // drawing Ghost Road
+                if(Tool == Tools.Road) { Creator.DrawRoad(sender, e); }
+                
+            }
+            if (e.LeftButton == MouseButtonState.Released && leftButtonWasPressed == true)
+            {
+                leftButtonWasPressed = false;
+                // drawing Real Road
+                if (Tool == Tools.Road) { Creator.CreateRoad(); }
+            }
+           
+        }
+
+        private void MouseClicksOnCanvasEventHandler(object sender, MouseEventArgs e)
+        {
+            if (Tool == Tools.Building) { Creator.CreateBuilding(); }
+        }
+
+        private void MouseLeaveCanvasEventHandler(object sender, MouseEventArgs e)
+        {
+            //invisible Popup dit doet raar met als je nog wel op het canvas zit voor some reason
+            //PopupCanvas.IsOpen = false;
+
+            //remove ghost items when leaving canvas
+            Creator.RemoveFakes();
+        }
+
+        private void MouseRightCanvasEventHandler(object sender, MouseEventArgs e)
+        {
+            //Get data of Object
+            Creator.GetData();
         }
     }
 }
