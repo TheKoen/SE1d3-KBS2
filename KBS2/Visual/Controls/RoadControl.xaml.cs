@@ -1,4 +1,5 @@
-﻿using KBS2.Util;
+﻿using KBS2.CitySystem;
+using KBS2.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,12 @@ namespace KBS2.Visual.Controls
             this.Width = length;
             this.Height = width;
 
+            Road road = new Road(Vector );
+
+            if (IsXRoad)
+            {
+                RenderTransform = new RotateTransform(-90);
+            }
             if ((start.X + start.Y) < (end.X + end.Y))
             {
                 Margin = new Thickness(start.X, start.Y, 0, 0);
