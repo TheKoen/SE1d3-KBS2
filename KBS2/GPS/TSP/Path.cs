@@ -31,6 +31,15 @@ namespace KBS2.GPS.TSP
             CalculateDistance();
         }
 
+        /// <summary>
+        /// calculates the distance from end Intersection to the End location
+        /// </summary>
+        /// <returns></returns>
+        public double CalculateDistanceToEnd()
+        {
+            return Util.MathUtil.Distance(Intersections.Last().Location, End);
+        }
+
         public double CalculateDistance()
         {
             var currentLocation = Start;

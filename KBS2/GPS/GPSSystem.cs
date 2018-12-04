@@ -168,7 +168,7 @@ namespace KBS2.GPS
                     var destination = car.Destination;
                     var distance = MathUtil.DistanceToRoad(destination.Location, road) - road.Width / 4d;
                     var direction = GetDirectionToRoad(destination.Location, road);
-                    var delta = Vector.Multiply(direction.GetDirection(), distance);
+                    var delta = Vector.Multiply(direction.GetVector(), distance);
                     var target = Vector.Add(destination.Location, delta);
 
                     return new Destination {Road = road, Location = target};

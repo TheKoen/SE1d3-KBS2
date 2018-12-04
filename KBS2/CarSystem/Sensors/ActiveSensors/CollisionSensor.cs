@@ -17,22 +17,17 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
 
     internal class CollisionSensorController : SensorController
     {
-        public CollisionSensorController(CollisionSensor sensor)
-        {
-            Sensor = sensor;
-        }
-
-        public CollisionSensor Sensor { get; set; }
+        public CollisionSensorController(CollisionSensor sensor) : base(sensor) { }
 
         public override void Update()
         {
             var carDir = Sensor.Car.Direction;
             var sensorDir = GetAbsoluteDirection(carDir);
-            Sensor.Entities = GetEntitiesInRange(sensorDir);
+            var entities = GetEntitiesInRange(sensorDir);
 
-            if (GetEntitiesInRange(sensorDir).Count == 0) return;
+            if (entities.Count == 0) return;
 
-            Sensor.CallEvent();
+            ((CollisionSensor) Sensor).CallEvent(new CollisionSensorEventArgs(((CollisionSensor)Sensor), entities));
         }
 
         /// <summary>
@@ -59,7 +54,8 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
         /// <returns>direction for the sensor</returns>
         private DirectionCar GetAbsoluteDirection(DirectionCar carDir)
         {
-            switch (Sensor.Direction) {
+            switch (Sensor.Direction)
+            {
                 case Direction.Front:
                     return carDir;
                 case Direction.Back:
@@ -71,6 +67,16 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
                 default:
                     throw new ArgumentException($"Unknown direction {Sensor.Direction}");
             }
+        }
+    }
+
+    internal class CollisionSensorEventArgs : SensorEventArgs
+    {
+        public List<IEntity> EntitiesInRange { get; }
+
+        public CollisionSensorEventArgs(ActiveSensor sensor, List<IEntity> entitiesInRange) : base(sensor)
+        {
+            EntitiesInRange = entitiesInRange;
         }
     }
 }

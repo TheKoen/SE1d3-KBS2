@@ -25,7 +25,7 @@ namespace KBS2.GPS.TSP.Route
 
             var listPaths = new List<Path>();
 
-            // if the starroad equals to the endRoad
+            // if the startroad equals to the endRoad
             if (startRoad == endRoad) { return new List<Road> { startRoad }; };
 
             //add the first two intersections of the startRoad to the PathList;

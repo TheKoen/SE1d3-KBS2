@@ -5,13 +5,11 @@ namespace KBS2.CarSystem.Sensors
 {
     public class SensorEventArgs
     {
-        public SensorEventArgs(ActiveSensor sensor, List<IEntity> entitiesInRange)
+        public ActiveSensor Sensor { get; }
+
+        public SensorEventArgs(ActiveSensor sensor)
         {
             Sensor = sensor;
-            EntitiesInRange = entitiesInRange;
         }
-
-        public ActiveSensor Sensor { get; set; }
-        public List<IEntity> EntitiesInRange { get; set; }
     }
 }

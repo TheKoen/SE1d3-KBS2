@@ -100,6 +100,7 @@
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
     <Compile Include="GPS\TSP\CustomerOrder\NearestNeighbour2.cs" />
+    <Compile Include="GPS\TSP\Route\AStar.cs" />
     <Compile Include="GPS\TSP\Route\RouteAlgoritme.cs" />
     <Compile Include="GPS\TSP\Route\Dijkstra.cs" />
     <Compile Include="GPS\TSP\EnumAlgoritmes.cs" />
