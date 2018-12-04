@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using KBS2.CarSystem;
 using KBS2.CarSystem.Sensors;
 using Microsoft.Win32;
@@ -14,6 +17,8 @@ namespace KBS2.ModelDesigner
 {
     public partial class ModelDesigner
     {
+        private static readonly Regex NotNumberRegex = new Regex("[^0-9\\.]+");
+        
         // File extension for model exports
         private const string ModelFileExtension = "carmdl";
         
@@ -32,6 +37,37 @@ namespace KBS2.ModelDesigner
                 _currentDesign = new CarDesign();
                 DesignDisplay.Source = _currentDesign.Brush;
                 SetSensorList(_currentDesign.GetSensors());
+                TextBoxDesignName.Text = string.Empty;
+                TextBoxMaxSpeed.Text = string.Empty;
+            };
+            ButtonSave.Click += (sender, args) =>
+            {
+                var name = TextBoxDesignName.Text.Trim();
+                if (name.Equals(string.Empty))
+                {
+                    MessageBox.Show("Please give the design a name");
+                    return;
+                }
+
+                if (CarModel.Contains(name))
+                {
+                    MessageBox.Show($"A model with the name \"{name}\" already exists");
+                    return;
+                }
+
+                double maxSpeed;
+                try
+                {
+                    maxSpeed = double.Parse(TextBoxMaxSpeed.Text);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Bad input for Speed");
+                    return;
+                }
+                
+                CarModel.Set(new CarModel(maxSpeed, _currentDesign.GetSensors(), name));
+                MessageBox.Show($"Model \"{name}\" was successfully added to the simulation");
             };
             ButtonExport.Click += (sender, args) =>
             {
@@ -49,6 +85,18 @@ namespace KBS2.ModelDesigner
                 // Exporting the current model, unless the user cancels the dialog
                 if (fileDialog.ShowDialog() != true) return;
                 ExportDesign(_currentDesign, fileDialog.FileName);
+            };
+            ButtonLoad.Click += (sender, args) =>
+            {
+                var window = new ModelPickerWindow();
+                window.ShowDialog();
+                
+                if (!window.Success) return;
+                _currentDesign = DesignFromModel(window.SelectedModel);
+                DesignDisplay.Source = _currentDesign.Brush;
+                SetSensorList(_currentDesign.GetSensors());
+                TextBoxDesignName.Text = window.SelectedModel.Name;
+                TextBoxMaxSpeed.Text = window.SelectedModel.MaxSpeed.ToString(CultureInfo.InvariantCulture);
             };
             ButtonImport.Click += (sender, args) =>
             {
@@ -82,6 +130,19 @@ namespace KBS2.ModelDesigner
                 };
                 _currentDesign.AddSensor(sensor);
                 DesignDisplay.Source = _currentDesign?.Brush;
+                SetSensorList(_currentDesign.GetSensors());
+            };
+            ButtonRemoveSensor.Click += (sender, args) =>
+            {
+                var window = new SensorPickerWindow
+                {
+                    SensorList = new List<SensorPrototype>(_currentDesign.GetSensors())
+                };
+                window.ShowDialog();
+                
+                if (!window.Success) return;
+                _currentDesign.RemoveSensor(window.SelectedSensor);
+                DesignDisplay.Source = _currentDesign.Brush;
                 SetSensorList(_currentDesign.GetSensors());
             };
         }
@@ -138,35 +199,16 @@ namespace KBS2.ModelDesigner
 
         private void SetSensorList(IEnumerable<SensorPrototype> list)
         {
-            StackPanelSensors.Children.Clear();
-            
-            foreach (var sensor in list)
-            {
-                var label0 = new Label {Content = sensor.Direction};
-                var label1 = new Label {Content = sensor.Range};
-                var label2 = new Label {Content = Sensor.Sensors.First(s => s.Value.Method.GetHashCode() == sensor.Create.Method.GetHashCode()).Key.Name};
-                label0.SetValue(Grid.ColumnProperty, 0);
-                label1.SetValue(Grid.ColumnProperty, 1);
-                label2.SetValue(Grid.ColumnProperty, 2);
-                
-                var grid = new Grid
-                {
-                    ColumnDefinitions =
-                    {
-                        new ColumnDefinition {Width = new GridLength(40)},
-                        new ColumnDefinition {Width = new GridLength(30)},
-                        new ColumnDefinition {Width = new GridLength(110)}
-                    },
-                    Children =
-                    {
-                        label0,
-                        label1,
-                        label2
-                    }
-                };
+            var sensorList = list.Select(sensor => string.Format("{0} ({1}, {2})",
+                Sensor.Sensors.First(s => s.Value.Method.GetHashCode() == sensor.Create.Method.GetHashCode()).Key.Name,
+                sensor.Direction, sensor.Range)).ToList();
 
-                StackPanelSensors.Children.Add(grid);
-            }
+            ItemsControlSensors.ItemsSource = sensorList;
+        }
+
+        private void TextBoxMaxSpeed_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = NotNumberRegex.IsMatch(e.Text);
         }
     }
 }
