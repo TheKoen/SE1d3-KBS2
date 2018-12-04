@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace KBS2.GPS.TSP.Route
 {
-    abstract class RouteAlgoritme
+    public abstract class RouteAlgoritme
     {
         public abstract List<Road> CalculatePath(Vector start, CustomerGroup customer);
     }

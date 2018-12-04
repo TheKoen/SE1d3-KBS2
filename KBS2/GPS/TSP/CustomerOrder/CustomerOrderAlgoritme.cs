@@ -11,6 +11,6 @@ namespace KBS2.GPS.TSP.CustomerOrder
 {
     public abstract class CustomerOrderAlgoritme
     {
-        protected abstract List<CustomerGroup> CalculateOrder(Vector start, Vector end, List<CustomerGroup> customers);
+        protected abstract List<CustomerGroup> CalculateOrder(Vector start, List<CustomerGroup> customers);
     }
 }

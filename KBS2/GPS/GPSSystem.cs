@@ -142,7 +142,7 @@ namespace KBS2.GPS
         }
 
         /// <summary>
-        /// returns the direction of a car
+        /// returns 
         /// </summary>
         /// <param name="car"></param>
         /// <param name="intersection"></param>

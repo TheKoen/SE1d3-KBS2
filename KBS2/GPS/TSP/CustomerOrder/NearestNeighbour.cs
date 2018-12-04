@@ -12,7 +12,7 @@ namespace KBS2.GPS.TSP.CustomerOrder
 {
     public class NearestNeighbour : CustomerOrderAlgoritme
     {
-        protected override List<CustomerGroup> CalculateOrder(Vector start, Vector end, List<CustomerGroup> customers)
+        protected override List<CustomerGroup> CalculateOrder(Vector start, List<CustomerGroup> customers)
         {
             var order = CalculateOrderCustomers(start, customers);
             return order;        

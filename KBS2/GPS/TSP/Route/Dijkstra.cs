@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
-using KBS2.GPS.TSP.Route;
 
 namespace KBS2.GPS.TSP.Route
 {
-    class Dijkstra : RouteAlgoritme
+    public class Dijkstra : RouteAlgoritme
     {
         /// <summary>
         /// Calculates the path to the customergroup using Dijkstra algorithm

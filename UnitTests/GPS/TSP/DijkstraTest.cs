@@ -1,5 +1,4 @@
 ﻿using KBS2.CitySystem;
-using KBS2.GPS.TSP;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,14 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using UnitTests.Util;
+using KBS2.GPS.TSP.Route;
 
 namespace UnitTests.GPS.TSP
 {
     [TestFixture]
-    class Dijkstra
+    class DijkstraTest
     {
         [TestCase()]
-        public void DijkstraTest()
+        public void DijkstraTest1()
         {
             var customerGroupBuilder = new List<CustomerGroupBuilder>()
             {
@@ -29,12 +29,18 @@ namespace UnitTests.GPS.TSP
             var city = new CityBuilder()
                 .Road(new Road(new Vector(0, 0), new Vector(0, 100), 10, 100))
                 .Road(new Road(new Vector(0, 0), new Vector(100, 0), 10, 100))
-                .Road(new Road(new Vector(100, 0), new Vector(100, 100), 10, 100))
                 .Road(new Road(new Vector(0, 100), new Vector(100, 100), 10, 100))
                 .Build();
 
-            //var route = NearestNeighbour.CalculateRouteToCustomerGroup(new Vector(0, 50), customer3);
+            var estimatedRoads = new List<Road>()
+            {
+                new Road(new Vector(0, 0), new Vector(0, 100), 10, 100),
+                new Road(new Vector(0, 100), new Vector(100, 100), 10, 100)
+            };
 
+            var route = new Dijkstra().CalculatePath(new Vector(0,0), customer3);
+
+            Assert.AreEqual(estimatedRoads, route);
 
         }
     }

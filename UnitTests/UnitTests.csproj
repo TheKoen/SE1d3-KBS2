@@ -71,7 +71,7 @@
     <Compile Include="CustomerSytem\CustomerGroupTest.cs" />
     <Compile Include="CustomerSytem\CustomerTest.cs" />
     <Compile Include="GPS\GPSSystemTest.cs" />
-    <Compile Include="GPS\TSP\Dijkstra.cs" />
+    <Compile Include="GPS\TSP\DijkstraTest.cs" />
     <Compile Include="GPS\TSP\NearestNeighbourTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestMathUtil.cs" />
