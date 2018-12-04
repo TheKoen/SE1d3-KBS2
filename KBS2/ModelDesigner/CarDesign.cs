@@ -144,17 +144,26 @@ namespace KBS2.ModelDesigner
         }
 
 
+        /// <summary>
+        /// Adds a <see cref="SensorPrototype"/> to the <see cref="List{SensorPrototype}"/> of sensors
+        /// </summary>
+        /// <param name="sensorPrototype">The <see cref="SensorPrototype"/> to add</param>
         public void AddSensor(SensorPrototype sensorPrototype) =>
             SensorList.Add(sensorPrototype);
 
+        /// <summary>
+        /// Removes a <see cref="SensorPrototype"/> from the <see cref="List{SensorPrototype}"/> of sensors
+        /// </summary>
+        /// <param name="sensorPrototype">The <see cref="SensorPrototype"/> to remove</param>
         public void RemoveSensor(SensorPrototype sensorPrototype) =>
             SensorList.Remove(sensorPrototype);
         
+        /// <summary>
+        /// Gets a <see cref="List{SensorPrototype}"/> of <see cref="SensorPrototype"/>s
+        /// </summary>
+        /// <returns>The <see cref="List{SensorPrototype}"/></returns>
         public List<SensorPrototype> GetSensors() =>
             new List<SensorPrototype>(SensorList);
-        
-        public CarModel GetAsModel(string name, double maxSpeed) =>
-            new CarModel(maxSpeed, SensorList, name);
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

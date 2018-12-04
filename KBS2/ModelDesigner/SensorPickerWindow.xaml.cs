@@ -18,6 +18,7 @@ namespace KBS2.ModelDesigner
             set
             {
                 _sensorList = value;
+                // Setting the list of selectable sensors
                 ListBoxSensors.ItemsSource = _sensorList.Select(s => new SensorPrototypeDisplayData(s));
             }
         }
@@ -47,14 +48,14 @@ namespace KBS2.ModelDesigner
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            Close();
         }
 
 
         internal struct SensorPrototypeDisplayData
         {
             public SensorPrototype ThisSensor { get; }
-            public string DisplayText { get; set; }
+            public string DisplayText { get; }
 
             public SensorPrototypeDisplayData(SensorPrototype sensor) : this()
             {

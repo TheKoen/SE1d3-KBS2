@@ -13,6 +13,7 @@ namespace KBS2.ModelDesigner
         {
             InitializeComponent();
 
+            // Setting the list of selectable models
             ListBoxModels.ItemsSource = CarModel.GetAll();
 
             Success = false;

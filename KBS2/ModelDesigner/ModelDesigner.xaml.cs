@@ -29,19 +29,23 @@ namespace KBS2.ModelDesigner
         {
             InitializeComponent();
             
+            // Setting the brush and sensor list for the default design, if it exists
             DesignDisplay.Source = _currentDesign?.Brush;
-            SetSensorList(_currentDesign.GetSensors());
+            SetSensorList(_currentDesign?.GetSensors());
 
             ButtonNew.Click += (sender, args) =>
             {
+                // Setting the design to a fresh one, resetting the brush, and resetting the sensor list
                 _currentDesign = new CarDesign();
                 DesignDisplay.Source = _currentDesign.Brush;
                 SetSensorList(_currentDesign.GetSensors());
+                // Clearing the TextBoxes
                 TextBoxDesignName.Text = string.Empty;
                 TextBoxMaxSpeed.Text = string.Empty;
             };
             ButtonSave.Click += (sender, args) =>
             {
+                // Checking if a name has been given
                 var name = TextBoxDesignName.Text.Trim();
                 if (name.Equals(string.Empty))
                 {
@@ -49,12 +53,14 @@ namespace KBS2.ModelDesigner
                     return;
                 }
 
+                // Checking if a model with that name already exists
                 if (CarModel.Contains(name))
                 {
                     MessageBox.Show($"A model with the name \"{name}\" already exists");
                     return;
                 }
 
+                // Checking if the max speed has been formatted properly
                 double maxSpeed;
                 try
                 {
@@ -66,6 +72,7 @@ namespace KBS2.ModelDesigner
                     return;
                 }
                 
+                // Adding the model to the list for the simulation
                 CarModel.Set(new CarModel(maxSpeed, _currentDesign.GetSensors(), name));
                 MessageBox.Show($"Model \"{name}\" was successfully added to the simulation");
             };
@@ -92,6 +99,7 @@ namespace KBS2.ModelDesigner
                 window.ShowDialog();
                 
                 if (!window.Success) return;
+                // Setting the new design and other properties
                 _currentDesign = DesignFromModel(window.SelectedModel);
                 DesignDisplay.Source = _currentDesign.Brush;
                 SetSensorList(_currentDesign.GetSensors());
@@ -122,6 +130,7 @@ namespace KBS2.ModelDesigner
                 window.ShowDialog();
 
                 if (!window.Success) return;
+                // Adding the new sensor and setting other properties
                 var sensor = new SensorPrototype
                 {
                     Direction = window.SensorDirection,
@@ -141,6 +150,7 @@ namespace KBS2.ModelDesigner
                 window.ShowDialog();
                 
                 if (!window.Success) return;
+                // Removing the selected sensor and setting other properties
                 _currentDesign.RemoveSensor(window.SelectedSensor);
                 DesignDisplay.Source = _currentDesign.Brush;
                 SetSensorList(_currentDesign.GetSensors());
@@ -186,6 +196,11 @@ namespace KBS2.ModelDesigner
             }
         }
         
+        /// <summary>
+        /// Creates a <see cref="CarDesign"/> from a given <see cref="CarModel"/>
+        /// </summary>
+        /// <param name="model">The <see cref="CarModel"/> to be used</param>
+        /// <returns>The new <see cref="CarDesign"/></returns>
         private static CarDesign DesignFromModel(CarModel model)
         {
             var newDesign = new CarDesign();
@@ -197,6 +212,10 @@ namespace KBS2.ModelDesigner
             return newDesign;
         }
 
+        /// <summary>
+        /// Fills the list of <see cref="SensorPrototype"/>s
+        /// </summary>
+        /// <param name="list"><see cref="List{SensorPrototype}"/> to be used</param>
         private void SetSensorList(IEnumerable<SensorPrototype> list)
         {
             var sensorList = list.Select(sensor => string.Format("{0} ({1}, {2})",
