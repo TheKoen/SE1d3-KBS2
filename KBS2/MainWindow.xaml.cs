@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Xml;
 using KBS2.Exceptions;
 using KBS2.GPS;
+using KBS2.CityDesigner;
 
 namespace KBS2
 {
@@ -19,6 +20,10 @@ namespace KBS2
 
         public MainWindow()
         {
+            var window = new CityDesignerWindow();
+            window.InitializeComponent();
+             
+            /**
             InitializeComponent();
             CommandLoop.Start();
 
@@ -90,7 +95,9 @@ namespace KBS2
                     MainConsole.Print(exception.Message, Colors.Red);
                 }
             };
+            **/
         }
+        
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {

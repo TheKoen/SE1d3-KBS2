@@ -1,0 +1,30 @@
+﻿<Window x:Class="KBS2.CityDesigner.CityDesignerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KBS2.CityDesigner"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Title="CityDesignerWindow" Height="700" Width="1300">
+
+    <Grid Background="#FFBFBFBF">
+        <Canvas x:Name="Canvas" HorizontalAlignment="Left" Height="671" Margin="247,0,0,0" VerticalAlignment="Top" Width="1035" Background="#FFE0E0E0" MouseMove="MouseOnCanvasEventHandler">
+            <Popup x:Name="PopupCanvas">
+                <TextBlock>Je moeder</TextBlock>
+            </Popup>
+        </Canvas>
+        <DockPanel x:Name="Dock" HorizontalAlignment="Left"  Height="671" LastChildFill="False" VerticalAlignment="Top" Width="247" Background="#FF151414" Grid.Row="10" Grid.Column="1">
+            <Grid Height="671" VerticalAlignment="Top" Width="244">
+                <Label Content="City Builder"  Height="68" VerticalAlignment="Top" Width="246" Foreground="White" FontSize="36"/>
+                <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" Margin="77,106,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="SaveButton_Click"/>
+                <TextBox x:Name="FileName" HorizontalAlignment="Left" Height="23" Margin="10,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" IsEnabled="False"/>
+                <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" Margin="77,135,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="LoadButton_Click"/>
+            </Grid>
+
+
+        </DockPanel>
+
+    </Grid>
+</Window>
