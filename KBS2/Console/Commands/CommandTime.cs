@@ -17,7 +17,7 @@ namespace KBS2.Console.Commands
                 throw new InvalidParametersException("Command usage: \"time <pause/start/reset>\"");
             }
 
-            var loop = MainWindow.Loop;
+            var loop = MainScreen.Loop;
             var subcommand = args[0].ToLower();
             switch (subcommand)
             {

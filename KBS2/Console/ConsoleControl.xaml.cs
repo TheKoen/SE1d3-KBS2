@@ -56,7 +56,7 @@ namespace KBS2.Console
             InitializeComponent();
             
             ButtonSend.Click += HandleSend;
-            MainWindow.CommandLoop.Subscribe(PrintQueue);
+            MainScreen.CommandLoop.Subscribe(PrintQueue);
         }
 
         private void HandleSend(object sender, RoutedEventArgs args)

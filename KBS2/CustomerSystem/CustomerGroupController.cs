@@ -30,7 +30,6 @@ namespace KBS2.CustomerSystem
         /// <returns>returns true with an horizontal road and false with an vertical road</returns>
         public bool CheckRoadOrientation(Road road)
         {
-            #warning Possible loss of precision
             return road.Start.Y == road.End.Y;
         }
 

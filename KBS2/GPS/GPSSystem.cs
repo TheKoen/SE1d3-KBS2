@@ -111,7 +111,7 @@ namespace KBS2.GPS
             {
                 var distance = CalculateDistance(group.Location, destination.Location);
                 var price = CalculatePrice(distance);
-                MainWindow.Console.Print(
+                App.Console.Print(
                     $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}");
             }
             catch (Exception) { }
@@ -217,7 +217,7 @@ namespace KBS2.GPS
             }
             catch (Exception)
             {
-                MainWindow.Console.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
+                App.Console.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
                 return 0;
             }
         }
@@ -227,7 +227,7 @@ namespace KBS2.GPS
         {
             if (intersection == null)
             {
-                MainWindow.Console.Print("Warning: Found a problem while exporing route: null terminating road",
+                App.Console.Print("Warning: Found a problem while exporing route: null terminating road",
                     Colors.Yellow);
                 return distance;
             }
