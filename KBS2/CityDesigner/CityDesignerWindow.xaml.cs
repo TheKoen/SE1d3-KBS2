@@ -128,7 +128,11 @@ namespace KBS2.CityDesigner
         private bool leftButtonWasPressed;
         private void MouseMovesOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
-            
+            //location mouse on canvas
+            X.Text = ((int)e.GetPosition(Canvas).X).ToString();
+            Y.Text = ((int)e.GetPosition(Canvas).Y).ToString();
+
+
             // drawing Ghost Building
             if (Tool == Tools.Building) { Creator.DrawGhostBuilding(sender, e); }
 
