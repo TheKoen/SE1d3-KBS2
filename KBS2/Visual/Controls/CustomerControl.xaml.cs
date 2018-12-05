@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS2.CustomerSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,9 @@ namespace KBS2.Visual.Controls
     /// </summary>
     public partial class CustomerControl : UserControl
     {
-        public CustomerControl(Vector location)
+        public CustomerControl(Customer c)
         {
-            Margin = new Thickness(location.X, location.Y, 0, 0);
+            Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
             InitializeComponent();
         }
     }

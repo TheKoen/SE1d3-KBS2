@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.Visual.Controls;
 
 namespace KBS2.CustomerSystem
 {
@@ -14,6 +15,7 @@ namespace KBS2.CustomerSystem
         public Building Building { get; set; }
         public CustomerGroup Group { get; set; }
         public Moral Mood { get; set; }
+        public CustomerControl CustomerControl { get; set; }
 
         public Customer(Vector location, int age, Building building, CustomerGroup group)
         {
@@ -23,8 +25,10 @@ namespace KBS2.CustomerSystem
             Moral = 25;
             Group = group;
             Mood = CustomerSystem.Moral.Happy;
-            
+
+            CustomerControl = new CustomerControl(this);
             Controller = new CustomerController(this);
+
             MainScreen.Loop.Subscribe(Controller.Update);
         }
 

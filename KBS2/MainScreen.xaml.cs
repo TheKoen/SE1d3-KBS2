@@ -108,8 +108,7 @@ namespace KBS2
             var city = City.Instance;
             foreach (var Customer in city.Customers)
             {
-                CustomerControl customercontrol = new CustomerControl(Customer.Location);
-                CanvasMain.Children.Add(customercontrol);
+                CanvasMain.Children.Add(Customer.CustomerControl);
             }
 
             foreach (var car in city.Cars)
