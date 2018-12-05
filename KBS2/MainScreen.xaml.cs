@@ -11,6 +11,8 @@ using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
 using KBS2.Visual.Controls;
+using System;
+using KBS2.CarSystem;
 
 namespace KBS2
 {
@@ -25,6 +27,9 @@ namespace KBS2
         private ConsoleWindow consoleWindow;
 
         private string filePath;
+
+        public int Ticks { get; set; }
+        public double SecondsRunning { get; private set; }
 
         public MainScreen()
         {
@@ -208,11 +213,37 @@ namespace KBS2
             createPropertyList();
         }
 
+        public void UpdateTimer()
+        {
+            LabelSimulationTime.Content = SecondsRunning;
+        }
+
+        public double GetSeconds()
+        {
+            return Math.Round(Ticks / 100.0, 2);
+        }
+
         public void Update()
         {
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
             LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
-            
+
+            var city = City.Instance;
+            foreach (var Customer in city.Customers)
+            {
+                CustomerControl customercontrol = new CustomerControl(Customer.Location);
+                CanvasMain.Children.Add(customercontrol);
+            }
+
+            foreach(var car in city.Cars)
+            {
+                CarControl carcontrol = new CarControl(car);
+                CanvasMain.Children.Add(carcontrol);
+            }
+
+            Ticks++;
+            SecondsRunning = GetSeconds();
+            UpdateTimer();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
