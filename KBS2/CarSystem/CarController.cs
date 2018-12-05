@@ -96,6 +96,10 @@ namespace KBS2.CarSystem
 
             // Update the current road with the road at our location.
             Car.CurrentRoad = GPSSystem.GetRoad(Car.Location);
+            if (Car.CurrentRoad == null)
+            {
+                return;
+            }
 
             // Calculate the distance to the local target (usually the next intersection).
             var distanceToTarget = MathUtil.Distance(Car.Location, Car.CurrentTarget);
@@ -153,6 +157,7 @@ namespace KBS2.CarSystem
                         addedRotation -= rotationSpeed;
                     }
                 }
+                // If we're centered on the lane again, rotate the car straight.
                 else if (Math.Abs(yaw) > 0.01)
                 {
                     yaw += yaw < 0 ? rotationSpeed : -rotationSpeed;

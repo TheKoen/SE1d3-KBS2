@@ -33,6 +33,11 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         /// </summary>
         public override void Update()
         {
+            if (Sensor.Car.CurrentRoad == null)
+            {
+                return;
+            }
+
             var currentLoc = Sensor.Car.Location;
             var road = Sensor.Car.CurrentRoad;
             if (road == null) return;
