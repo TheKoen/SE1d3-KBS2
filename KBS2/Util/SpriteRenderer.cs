@@ -35,7 +35,7 @@ namespace KBS2.Util
 
             canvas.Children.Add(Sprite);
 
-            MainWindow.Loop.Subscribe(this.Update);
+            MainScreen.Loop.Subscribe(this.Update);
         }
 
         public void Update()
@@ -51,7 +51,7 @@ namespace KBS2.Util
         {
             Canvas.Children.Remove(Sprite);
 
-            MainWindow.Loop.Unsubscribe(this.Update);
+            MainScreen.Loop.Unsubscribe(this.Update);
         }
 
         /// <summary>

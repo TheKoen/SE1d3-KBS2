@@ -117,7 +117,6 @@
     <Compile Include="GPS\TSP\CustomerOrder\NearestNeighbour.cs" />
     <Compile Include="GPS\TSP\Path.cs" />
     <Compile Include="GPS\TSP\CustomerOrder\CustomerOrderAlgoritme.cs" />
-    <Compile Include="MainLoop.cs" />
     <Compile Include="Util\CustomPropertyChangedArgs.cs" />
     <Compile Include="Util\Loop\ThreadLoop.cs" />
     <Compile Include="Util\Loop\TickLoop.cs" />
@@ -215,9 +214,9 @@
   <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Folder Include="CityDesigner\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
