@@ -34,30 +34,6 @@ namespace KBS2.GPS
         /// <returns>the road that the location is at, if none it returns null</returns>
         public static Road GetRoad(Vector location)
         {
-            /*var roads = City.Instance.Roads;
-
-            foreach (var road in roads)
-            {
-                var laneWidth = road.Width / 2.0;
-                var minX = road.IsXRoad()
-                    ? Math.Min(road.Start.X, road.End.X)
-                    : road.Start.X - laneWidth;
-                var maxX = road.IsXRoad()
-                    ? Math.Max(road.Start.X, road.End.X)
-                    : road.Start.X + laneWidth;
-                var minY = road.IsXRoad()
-                    ? road.Start.Y - laneWidth
-                    : Math.Min(road.Start.Y, road.End.Y);
-                var maxY = road.IsXRoad()
-                    ? road.Start.Y + laneWidth
-                    : Math.Max(road.Start.Y, road.End.Y);
-
-                if (location.X >= minX && location.X <= maxX && location.Y >= minY && location.Y <= maxY)
-                {
-                    return road;
-                }
-            }*/
-
             var roads = GetRoadsInRange(location, 2);
             return roads.Count == 0 ? null : roads.First();
         }
@@ -294,30 +270,6 @@ namespace KBS2.GPS
 
             return list;
         }
-        
-        /// <summary>
-        /// Find the next intersection of an intersection in a specific city
-        /// </summary>
-        /// <param name="intersection"></param>
-        /// <param name="city"></param>
-        /// <returns></returns>
-        public static List<Intersection> FindNextIntersections(Intersection intersection, City city)
-        {
-            var list = new List<Intersection>();
-            var roads = city.Roads.FindAll(r => r.Start == intersection.Location || r.End == intersection.Location);
-            foreach (var road in roads)
-            {
-                if(road.Start == intersection.Location)
-                {
-                    list.Add(city.Intersections.Find(i => i.Location == road.End));
-                }
-                else
-                {
-                    list.Add(city.Intersections.Find(i => i.Location == road.Start));
-                }
-            }
-            return list;
-        }
 
         public static Intersection FindIntersection(Vector location)
         {
@@ -338,12 +290,11 @@ namespace KBS2.GPS
         /// <returns>List with found Intersections</returns>
         public static List<Intersection> FindIntersectionsRoad(Road road)
         {
-            var listIntersections = new List<Intersection>();
-
-            listIntersections.Add(FindIntersection(road.Start));
-            listIntersections.Add(FindIntersection(road.End));
-
-            return listIntersections;
+            return new List<Intersection>
+            {
+                FindIntersection(road.Start),
+                FindIntersection(road.End)
+            }; ;
         }
 
         public static double CalculatePrice(double distance)

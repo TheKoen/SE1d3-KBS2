@@ -82,7 +82,7 @@ namespace UnitTests.CarSystem
         [TestCase(10.0, 58.0, 100.0, 55.0, 50, 100.0, 55.0)]
         [TestCase(10.0, 61.0, 100.0, 55.0, 50, 100.0, 55.0)]
         [TestCase(10.0, 49.0, 100.0, 55.0, 50, 100.0, 55.0)]
-        public void TestUpdate(double carX, double carY, double targetX, double targetY, int cycles, double expectedX, double expectedY)
+        public void TestUpdateStayInLane(double carX, double carY, double targetX, double targetY, int cycles, double expectedX, double expectedY)
         {
             var road = new Road(new Vector(0, 50), new Vector(50, 50), 20, 100);
             var city = new CityBuilder()
