@@ -70,10 +70,19 @@ namespace KBS2.CityDesigner
         {
             Canvas = canvas;
             this.window = window;
+
+            //subscribe CityLoadedEvent
+            CityLoader.SubscribeLoadedCity(LoadedCityToCanvas);
         }
         
         
-        public LoadedCityToCanvas(object sender, )
+        private void LoadedCityToCanvas(object sender, LoadedCityEventArgs e)
+        {
+            Roads = e.Roads;
+            Intersections = e.Intersections;
+            Buildings = e.Buildings;
+            RedrawAllObjects();
+        }
 
         
         public void DrawGhostRoad(object sender, MouseEventArgs e)
@@ -231,7 +240,7 @@ namespace KBS2.CityDesigner
         public void CreateBuilding()
         {
             // add building to BuildingList
-            Buildings.Add(new Building(new Vector(Mouse.GetPosition(Canvas).X, Mouse.GetPosition(Canvas).Y), 50));
+            Buildings.Add(new Building(new Vector((int)Mouse.GetPosition(Canvas).X, (int)Mouse.GetPosition(Canvas).Y), 50));
 
             // create Real building on Canvas out of a copy 
             var copyBuilding = (Rectangle)Clone(realBuilding);
@@ -261,7 +270,7 @@ namespace KBS2.CityDesigner
                     {
                         if(mouseY < road.Start.Y && mouseY > road.End.Y)
                         {
-                            if(mouseX == road.Start.X ||(mouseX >= (road.Start.X + road.Width/2)) && (mouseX <= (road.Start.X - road.Width/2)))
+                            if(mouseX == road.Start.X ||(mouseX <= (road.Start.X + road.Width/2)) && (mouseX >= (road.Start.X - road.Width/2)))
                             {
                                 //display the information about the found road
                                 displayInfoScreenObject(road);
@@ -383,6 +392,8 @@ namespace KBS2.CityDesigner
                 Canvas.Children.Remove(fakeBuilding);
             }
 
+            var stupidIntersectionWihoutRoads = new List<Intersection>();
+
             //draw Intersection 
             foreach (var intersection in Intersections)
             {
@@ -397,6 +408,15 @@ namespace KBS2.CityDesigner
 
                     Canvas.Children.Add(copyIntersection);
                 }
+                else
+                {
+                    stupidIntersectionWihoutRoads.Add(intersection);
+                }                
+            }
+            //delete the intersection without road connected
+            foreach(var intersection in stupidIntersectionWihoutRoads)
+            {
+                Intersections.Remove(intersection);
             }
         }
 

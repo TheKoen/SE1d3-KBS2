@@ -23,7 +23,7 @@ namespace KBS2.CityDesigner
             Instance = this;
         }
 
-        public void LoadCity(string path)
+        public static void LoadCity(string path)
         {
             var _roads = new List<Road>();
             var _intersections = new List<Intersection>();
@@ -107,12 +107,12 @@ namespace KBS2.CityDesigner
             return new Intersection(loc, size);
         }
 
-        public void SubscribeLoadedCity(LoadedCityEventHandler source)
+        public static void SubscribeLoadedCity(LoadedCityEventHandler source)
         {
             LoadedCity += source;
         }
 
-        public void UnsubcribeLoadedCity(LoadedCityEventHandler source)
+        public static void UnsubcribeLoadedCity(LoadedCityEventHandler source)
         {
             LoadedCity -= source;
         }

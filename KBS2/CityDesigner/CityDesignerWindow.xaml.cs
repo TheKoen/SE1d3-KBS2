@@ -48,7 +48,9 @@ namespace KBS2.CityDesigner
             popupWindow.Title = "Save City";
             popupWindow.Filter = "XML file | *.xml";
             popupWindow.ShowDialog();
-                       
+
+
+            CitySaver.SaveCity(popupWindow.FileName, Creator.Roads, Creator.Buildings, Creator.Intersections);
 
         }
 
@@ -67,6 +69,7 @@ namespace KBS2.CityDesigner
             {
                 //set the File name in textBox
                 FileName.Text = System.IO.Path.GetFileNameWithoutExtension(popupWindow.FileName);
+                CityLoader.LoadCity(popupWindow.FileName);
             }
         }
 
