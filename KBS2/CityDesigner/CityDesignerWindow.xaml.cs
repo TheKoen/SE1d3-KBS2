@@ -140,13 +140,13 @@ namespace KBS2.CityDesigner
             //drawing 
 
             // drawing Ghost Building
-            if (Tool == Tools.Building) { Creator.DrawBuilding(sender, e); }
+            if (Tool == Tools.Building) { Creator.DrawGhostBuilding(sender, e); }
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 leftButtonWasPressed = true;
                 // drawing Ghost Road
-                if(Tool == Tools.Road) { Creator.DrawRoad(sender, e); }
+                if(Tool == Tools.Road) { Creator.DrawGhostRoad(sender, e); }
                 
             }
             if (e.LeftButton == MouseButtonState.Released && leftButtonWasPressed == true)
@@ -175,7 +175,24 @@ namespace KBS2.CityDesigner
         private void MouseRightCanvasEventHandler(object sender, MouseEventArgs e)
         {
             //Get data of Object
-            Creator.GetData();
+            Creator.SelectRoad = null;
+            if (Tool == Tools.Cursor) { Creator.GetObject(); }
+        }
+
+        private void MouseEntersCanvasEventHandler(object sneder, MouseEventArgs e)
+        {
+            //Un-Display information 
+            InformationBlockObjects.Visibility = Visibility.Hidden;
+            Creator.SelectRoad = null;
+        }
+
+        private void RemoveObjectButtonEventHandler(object sender, RoutedEventArgs e)
+        {
+            //Remove object hide information
+            Creator.Roads.Remove(Creator.SelectRoad);
+            InformationBlockObjects.Visibility = Visibility.Hidden;
+            Creator.SelectRoad = null;
+            Creator.RedrawAllObjects();
         }
     }
 }
