@@ -304,10 +304,13 @@ namespace KBS2.CityDesigner
                     }
                     if(road.End.X > road.Start.X)
                     {
-                        if (mouseY == road.Start.Y || (mouseY <= (road.Start.Y + road.Width / 2)) && (mouseY >= (road.Start.Y - road.Width / 2)))
+                        if (mouseX < road.End.X && mouseX > road.Start.X)
                         {
-                            //display the information about the found road
-                            displayInfoScreenObject(road);
+                            if (mouseY == road.Start.Y || (mouseY <= (road.Start.Y + road.Width / 2)) && (mouseY >= (road.Start.Y - road.Width / 2)))
+                            {
+                                //display the information about the found road
+                                displayInfoScreenObject(road);
+                            }
                         }
                     }
                 }
