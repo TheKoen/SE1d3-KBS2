@@ -104,6 +104,19 @@ namespace KBS2
         {
             Loop.Start();
             App.Console.Print("Start pressed");
+
+            var city = City.Instance;
+            foreach (var Customer in city.Customers)
+            {
+                CustomerControl customercontrol = new CustomerControl(Customer.Location);
+                CanvasMain.Children.Add(customercontrol);
+            }
+
+            foreach (var car in city.Cars)
+            {
+                CarControl carcontrol = new CarControl(car);
+                CanvasMain.Children.Add(carcontrol);
+            }
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
@@ -223,19 +236,6 @@ namespace KBS2
         {
             LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
             LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
-
-            var city = City.Instance;
-            foreach (var Customer in city.Customers)
-            {
-                CustomerControl customercontrol = new CustomerControl(Customer.Location);
-                CanvasMain.Children.Add(customercontrol);
-            }
-
-            foreach(var car in city.Cars)
-            {
-                CarControl carcontrol = new CarControl(car);
-                CanvasMain.Children.Add(carcontrol);
-            }
 
             Ticks++;
             SecondsRunning = GetSeconds();
