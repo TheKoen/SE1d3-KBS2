@@ -129,19 +129,6 @@ namespace KBS2.CityDesigner
         private void MouseMovesOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
             
-            // cursor popup Point
-            if (!PopupCanvas.IsOpen) { PopupCanvas.IsOpen = true; }    
-            var x = (int)e.MouseDevice.GetPosition(Canvas).X;
-            var y = (int)e.MouseDevice.GetPosition(Canvas).Y;
-            X.Text = x.ToString();
-            Y.Text = y.ToString();
-            PopupCanvas.HorizontalOffset = (int)e.MouseDevice.GetPosition(this).X;
-            PopupCanvas.VerticalOffset = (int)e.MouseDevice.GetPosition(this).Y;
-            PopupTextBlock.Text = e.MouseDevice.GetPosition(this).ToString();
-
-            
-            //drawing 
-
             // drawing Ghost Building
             if (Tool == Tools.Building) { Creator.DrawGhostBuilding(sender, e); }
 
@@ -193,8 +180,10 @@ namespace KBS2.CityDesigner
         {
             //Remove object hide information
             Creator.Roads.Remove(Creator.SelectRoad);
+            Creator.Buildings.Remove(Creator.SelectBuilding);
             InformationBlockObjects.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
+            Creator.SelectBuilding = null;
             Creator.RedrawAllObjects();
         }
     }

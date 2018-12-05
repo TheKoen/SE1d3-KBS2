@@ -64,6 +64,7 @@ namespace KBS2.CityDesigner
 
         //selected items
         public Road SelectRoad { get; set; }
+        public Building SelectBuilding { get; set; }
 
 
         public ObjectHandler(Canvas canvas, CityDesignerWindow window)
@@ -101,6 +102,24 @@ namespace KBS2.CityDesigner
             fakeRoad.X2 = FakeEndPoint.X;
             fakeRoad.Y2 = FakeEndPoint.Y;
             
+            //trying to snap the road to antoher road start point
+            foreach (var road in Roads)
+            {
+                if (Util.MathUtil.Distance(new Vector(startRoad.X, startRoad.Y), road.End) <= snapRange)
+                {
+                    fakeRoad.X1 = road.End.X;
+                    fakeRoad.Y1 = road.End.Y;
+                    
+                    //snapping straight
+
+
+                }
+                else if (Util.MathUtil.Distance(new Vector(startRoad.X, startRoad.Y), road.Start) <= snapRange)
+                {
+                    fakeRoad.X1 = road.Start.X;
+                    fakeRoad.Y1 = road.Start.Y;
+                }
+            }
 
             //trying to snap the road straight 
             if (Math.Abs(fakeRoad.X2 - fakeRoad.X1) <= snapRange)
@@ -113,6 +132,7 @@ namespace KBS2.CityDesigner
             }
 
             
+
             //trying to snap the road to another road end point
             foreach (var road in Roads)
             {
@@ -131,7 +151,7 @@ namespace KBS2.CityDesigner
                     }
 
                 }
-                if (Util.MathUtil.Distance(new Vector(fakeRoad.X2, fakeRoad.Y2), new Vector(road.End.X, road.End.Y)) <= snapRange)
+                else if (Util.MathUtil.Distance(new Vector(fakeRoad.X2, fakeRoad.Y2), new Vector(road.End.X, road.End.Y)) <= snapRange)
                 {
                     fakeRoad.X2 = road.End.X;
                     fakeRoad.Y2 = road.End.Y;
@@ -145,6 +165,7 @@ namespace KBS2.CityDesigner
                     }
                 }
             }
+           
            
             Canvas.Children.Add(fakeRoad);
         }
@@ -316,6 +337,15 @@ namespace KBS2.CityDesigner
                 }
             }
 
+            //check if Cursor is on a Building
+            foreach (var building in Buildings)
+            {
+                if ((mouseX >= building.Location.X - building.Size / 2 || mouseX <= building.Location.X + building.Size / 2) && (mouseY >= building.Location.Y - building.Size / 2 || mouseY <= building.Location.Y - building.Size / 2))
+                {
+                    displayInfoScreenObject(building);
+                }
+            }
+
         }
 
 
@@ -336,7 +366,9 @@ namespace KBS2.CityDesigner
         /// <param name="building"></param>
         private void displayInfoScreenObject(Building building)
         {
-
+            SelectBuilding = building;
+            window.InformationBlockObjects.Visibility = Visibility.Visible;
+            window.TextBoxWidth.Text = building.Size.ToString();
         }
 
 
