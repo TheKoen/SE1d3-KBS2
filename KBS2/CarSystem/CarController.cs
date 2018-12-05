@@ -5,6 +5,7 @@ using System.Windows;
 using KBS2.CarSystem.Sensors;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
+using KBS2.GPS;
 using KBS2.Util;
 
 namespace KBS2.CarSystem
@@ -17,9 +18,9 @@ namespace KBS2.CarSystem
         private const double brakingMultiplier = 1.2;
 
         // Maximum angle the car can rotate in a lane (in degrees).
-        private const double maxInLaneRotation = 15.0;
+        private const double maxInLaneRotation = 5.0;
         // Maximum amount the car can deviate from the lane center.
-        private const double maxLaneDeviation = 0.5;
+        private const double maxLaneDeviation = 0.2;
         // Speed at which the car will rotate (in degrees per tick).
         private const double rotationSpeed = 1.0;
 
@@ -93,6 +94,9 @@ namespace KBS2.CarSystem
                 Init();
             }
 
+            // Update the current road with the road at our location.
+            Car.CurrentRoad = GPSSystem.GetRoad(Car.Location);
+
             // Calculate the distance to the local target (usually the next intersection).
             var distanceToTarget = MathUtil.Distance(Car.Location, Car.CurrentTarget);
             // Calculate the relative yaw (in degrees).
@@ -107,8 +111,10 @@ namespace KBS2.CarSystem
             HandleAccelerate(ref velocity, ref distanceToTarget);
 
             // Update the car's velocity with the result of the handle functions.
-            velocity = MathUtil.RotateVector(velocity, addedRotation);
+            velocity = MathUtil.RotateVector(velocity, -addedRotation);
             Car.Velocity = velocity;
+            Car.Rotation = new Vector(velocity.X, velocity.Y);
+            Car.Rotation.Normalize();
 
             // Update the car's location with the velocity.
             Car.Location = Vector.Add(Car.Location, Car.Velocity);
@@ -120,7 +126,7 @@ namespace KBS2.CarSystem
         /// <param name="velocity">Current velocity of the car</param>
         /// <param name="yaw">Current relative yaw of the car</param>
         /// <param name="addedRotation">Amount of rotation (in degrees) to add</param>
-        private void HandleStayInLane(ref Vector velocity, ref double yaw, ref double addedRotation)
+        public void HandleStayInLane(ref Vector velocity, ref double yaw, ref double addedRotation)
         {
             // Check if the car has LineSensors on the left and right side.
             if (HasSensors<LineSensor>(Direction.Left) && HasSensors<LineSensor>(Direction.Right))
@@ -130,22 +136,26 @@ namespace KBS2.CarSystem
                 var distanceToRight = GetSensors<LineSensor>(Direction.Right).First().Distance;
 
                 // Check if we're too far to the right side of the lane.
-                if (distanceToRight - distanceToLeft > maxLaneDeviation)
+                if (distanceToLeft - distanceToRight >= maxLaneDeviation)
                 {
                     //Rotate to the left if possible.
+                    if (yaw < maxInLaneRotation)
+                    {
+                        addedRotation += rotationSpeed;
+                    }
+                }
+                // Check if we're too far to the left side of the lane.
+                else if (distanceToRight - distanceToLeft >= maxLaneDeviation)
+                {
+                    //Rotate to the right if possible.
                     if (yaw > -maxInLaneRotation)
                     {
                         addedRotation -= rotationSpeed;
                     }
                 }
-                // Check if we're too far to the left side of the lane.
-                else if (distanceToLeft - distanceToRight > maxLaneDeviation)
+                else if (Math.Abs(yaw) > 0.01)
                 {
-                    //Rotate to the right if possible.
-                    if (yaw < maxInLaneRotation)
-                    {
-                        addedRotation += rotationSpeed;
-                    }
+                    yaw += yaw < 0 ? rotationSpeed : -rotationSpeed;
                 }
             }
         }
@@ -155,7 +165,7 @@ namespace KBS2.CarSystem
         /// </summary>
         /// <param name="velocity">Current velocity of the car</param>
         /// <param name="distanceToTarget">Distance to the current local target</param>
-        private void HandleAccelerate(ref Vector velocity, ref double distanceToTarget)
+        public void HandleAccelerate(ref Vector velocity, ref double distanceToTarget)
         {
             // Get the current speed of the car.
             var speed = velocity.Length;

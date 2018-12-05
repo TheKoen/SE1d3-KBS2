@@ -59,6 +59,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarSystem\CarControllerTest.cs" />
     <Compile Include="CarSystem\Sensors\ActiveSensor\CollisionSensorTest.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadarTest.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\LineSensorTest.cs" />
