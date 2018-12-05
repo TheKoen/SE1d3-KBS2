@@ -7,7 +7,6 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using KBS2.CarSystem;
 using KBS2.CarSystem.Sensors;
@@ -31,14 +30,14 @@ namespace KBS2.ModelDesigner
             
             // Setting the brush and sensor list for the default design, if it exists
             DesignDisplay.Source = _currentDesign?.Brush;
-            SetSensorList(_currentDesign?.GetSensors());
+            SetSensorList(_currentDesign?.SensorList);
 
             ButtonNew.Click += (sender, args) =>
             {
                 // Setting the design to a fresh one, resetting the brush, and resetting the sensor list
                 _currentDesign = new CarDesign();
                 DesignDisplay.Source = _currentDesign.Brush;
-                SetSensorList(_currentDesign.GetSensors());
+                SetSensorList(_currentDesign.SensorList);
                 // Clearing the TextBoxes
                 TextBoxDesignName.Text = string.Empty;
                 TextBoxMaxSpeed.Text = string.Empty;
@@ -73,7 +72,7 @@ namespace KBS2.ModelDesigner
                 }
                 
                 // Adding the model to the list for the simulation
-                CarModel.Set(new CarModel(maxSpeed, _currentDesign.GetSensors(), name));
+                CarModel.Set(new CarModel(maxSpeed, _currentDesign.SensorList, name));
                 MessageBox.Show($"Model \"{name}\" was successfully added to the simulation");
             };
             ButtonExport.Click += (sender, args) =>
@@ -102,7 +101,7 @@ namespace KBS2.ModelDesigner
                 // Setting the new design and other properties
                 _currentDesign = DesignFromModel(window.SelectedModel);
                 DesignDisplay.Source = _currentDesign.Brush;
-                SetSensorList(_currentDesign.GetSensors());
+                SetSensorList(_currentDesign.SensorList);
                 TextBoxDesignName.Text = window.SelectedModel.Name;
                 TextBoxMaxSpeed.Text = window.SelectedModel.MaxSpeed.ToString(CultureInfo.InvariantCulture);
             };
@@ -121,7 +120,7 @@ namespace KBS2.ModelDesigner
                 if (fileDialog.ShowDialog() != true) return;
                 _currentDesign = ImportDesign(fileDialog.FileName) ?? _currentDesign;
                 DesignDisplay.Source = _currentDesign?.Brush;
-                SetSensorList(_currentDesign.GetSensors());
+                SetSensorList(_currentDesign.SensorList);
             };
 
             ButtonNewSensor.Click += (sender, args) =>
@@ -137,23 +136,23 @@ namespace KBS2.ModelDesigner
                     Range = window.SensorRange,
                     Create = Sensor.Sensors[window.SensorType]
                 };
-                _currentDesign.AddSensor(sensor);
+                _currentDesign.SensorList.Add(sensor);
                 DesignDisplay.Source = _currentDesign?.Brush;
-                SetSensorList(_currentDesign.GetSensors());
+                SetSensorList(_currentDesign.SensorList);
             };
             ButtonRemoveSensor.Click += (sender, args) =>
             {
                 var window = new SensorPickerWindow
                 {
-                    SensorList = new List<SensorPrototype>(_currentDesign.GetSensors())
+                    SensorList = new List<SensorPrototype>(_currentDesign.SensorList)
                 };
                 window.ShowDialog();
                 
                 if (!window.Success) return;
                 // Removing the selected sensor and setting other properties
-                _currentDesign.RemoveSensor(window.SelectedSensor);
+                _currentDesign.SensorList.Remove(window.SelectedSensor);
                 DesignDisplay.Source = _currentDesign.Brush;
-                SetSensorList(_currentDesign.GetSensors());
+                SetSensorList(_currentDesign.SensorList);
             };
         }
 
@@ -185,7 +184,7 @@ namespace KBS2.ModelDesigner
             {
                 return (CarDesign) Formatter.Deserialize(stream);
             }
-            catch (SerializationException se)
+            catch (SerializationException)
             {
                 MessageBox.Show($"Invalid {ModelFileExtension} file, could not import \"{filename}\"");
                 return null;
@@ -204,10 +203,7 @@ namespace KBS2.ModelDesigner
         private static CarDesign DesignFromModel(CarModel model)
         {
             var newDesign = new CarDesign();
-            foreach (var sensor in model.Sensors)
-            {
-                newDesign.AddSensor(sensor);
-            }
+            newDesign.SensorList.AddRange(model.Sensors);
 
             return newDesign;
         }

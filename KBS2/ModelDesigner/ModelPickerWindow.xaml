@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
         
         <ScrollViewer Grid.Row="0">
-            <ListBox x:Name="ListBoxModels">
+            <ListBox x:Name="ListBoxModels" x:FieldModifier="public">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding Path=Name}" />
@@ -30,8 +30,8 @@
         </ScrollViewer>
         
         <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="ButtonOK" Content="OK" Click="ButtonOK_OnClick" />
-            <Button x:Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" />
+            <Button x:Name="ButtonOK" Content="OK" Click="ButtonOK_OnClick" x:FieldModifier="public" />
+            <Button x:Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" x:FieldModifier="public" />
         </WrapPanel>
     </Grid>
 </Window>
