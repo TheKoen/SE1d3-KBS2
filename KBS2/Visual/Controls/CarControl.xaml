@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="KBS2.Visual.Controls.CarControl"
+             x:Name="CarControlName"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KBS2.Visual.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="65" d:DesignWidth="40">
+    <Grid >
+        <Rectangle Fill="#FFFF2727" HorizontalAlignment="Left" Height="24" Margin="-11,14,0,0" Stroke="Black" VerticalAlignment="Top" Width="51" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.171"/>
+                    <TranslateTransform X="0.2" Y="0.201"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Fill="Black" HorizontalAlignment="Left" Height="2" Margin="-3,12,0,0" Stroke="Black" VerticalAlignment="Top" Width="7" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.171"/>
+                    <TranslateTransform X="26.842" Y="-1.162"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Fill="Black" HorizontalAlignment="Left" Height="2" Margin="27,12,0,0" Stroke="Black" VerticalAlignment="Top" Width="7" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.171"/>
+                    <TranslateTransform X="-2.847" Y="28.438"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Fill="Black" HorizontalAlignment="Left" Height="2" Margin="-3,38,0,0" Stroke="Black" VerticalAlignment="Top" Width="8" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.171"/>
+                    <TranslateTransform X="1.242" Y="-26.838"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Fill="Black" HorizontalAlignment="Left" Height="2" Margin="27,38,0,0" Stroke="Black" VerticalAlignment="Top" Width="8" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.171"/>
+                    <TranslateTransform X="-28.447" Y="2.762"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Fill="#FFA19FFF" HorizontalAlignment="Left" Height="20" Margin="0,16,0,0" Stroke="#FFA19FFF" VerticalAlignment="Top" Width="10" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.171"/>
+                    <TranslateTransform X="9.93" Y="-10.301"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Fill="#FFA19FFF" HorizontalAlignment="Left" Height="20" Margin="24,16,0,0" Stroke="#FFA19FFF" VerticalAlignment="Top" Width="10" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.171"/>
+                    <TranslateTransform X="-14.141" Y="13.699"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+
+    </Grid>
+</UserControl>
