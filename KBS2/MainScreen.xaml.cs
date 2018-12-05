@@ -76,14 +76,10 @@ namespace KBS2
             file.Load(filePath);
             CityParser.MakeCity(file);
             var city = City.Instance;
-            foreach(var Road in city.Roads)
-            {
-                RoadControl rc = new RoadControl(Road.Start, Road.End, Road.Width);
-                CanvasMain.Children.Add(rc);
-            }
+
+            drawCity(city);
 
             createPropertyList();
-            drawCity(city);
             //Enables buttons and tabs so the user can acces them.
             BtnStart.IsEnabled = true;
             BtnPause.IsEnabled = true;
@@ -234,11 +230,24 @@ namespace KBS2
 
         public void drawCity(City city)
         {
+            CanvasMain.Children.Clear();
             foreach (var building in city.Buildings)
             {
                 BuildingControl b = new BuildingControl(building.Location, building.Size);
                 
                 CanvasMain.Children.Add(b);
+            }
+
+            foreach (var road in city.Roads)
+            {
+                RoadControl rc = new RoadControl(road);
+                CanvasMain.Children.Add(rc);
+            }
+
+            foreach (var intersection in city.Intersections)
+            {
+                IntersectionControl ic = new IntersectionControl(intersection);
+                CanvasMain.Children.Add(ic);
             }
         }
     }

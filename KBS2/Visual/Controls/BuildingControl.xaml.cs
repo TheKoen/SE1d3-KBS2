@@ -22,8 +22,8 @@ namespace KBS2.Visual.Controls
     {
         public BuildingControl(Vector location, int size)
         {
-            double correction = size / 2d;
-            Margin = new Thickness(location.X - correction, location.Y - correction, 0, 0);
+            var c = size / 2d;
+            Margin = new Thickness(location.X - c, location.Y - c, 0, 0);
             
             Width = size;
             Height = size;
