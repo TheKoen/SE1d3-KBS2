@@ -71,6 +71,26 @@
                                 <Button x:Name="ButtonLoad" Content="Load" Style="{StaticResource FileButtonsStyle}" />
                                 <Button x:Name="ButtonImport" Content="Import" Style="{StaticResource FileButtonsStyle}" />
                             </WrapPanel>
+                            
+                            <Grid Margin="0, 10, 0, 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                
+                                <Label Grid.Column="0" Grid.Row="0" Content="Name" />
+                                <TextBox x:Name="TextBoxDesignName" Grid.Column="1" Grid.Row="0"
+                                         Style="{StaticResource GhostTextBox}" util:TextBoxProperties.GhostText="Design Name" />
+                        
+                                <Label Grid.Column="0"  Grid.Row="1" Content="Speed" />
+                                <TextBox x:Name="TextBoxMaxSpeed" Grid.Column="1" Grid.Row="1"
+                                         Style="{StaticResource GhostTextBox}" util:TextBoxProperties.GhostText="Max Speed"
+                                         PreviewTextInput="TextBoxMaxSpeed_OnPreviewTextInput" />
+                            </Grid>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
@@ -79,8 +99,15 @@
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <StackPanel HorizontalAlignment="Center">
                             <Button x:Name="ButtonNewSensor" Content="New" />
+                            <Button x:Name="ButtonRemoveSensor" Content="Remove" />
                             
-                            <StackPanel x:Name="StackPanelSensors" HorizontalAlignment="Center" Width="180" Margin="0, 10, 0, 0" />
+                            <ItemsControl x:Name="ItemsControlSensors" HorizontalAlignment="Center" Width="180" Margin="0, 10, 0, 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>

@@ -116,8 +116,14 @@
     <Compile Include="ModelDesigner\ModelDesigner.xaml.cs">
       <DependentUpon>ModelDesigner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ModelDesigner\ModelPickerWindow.xaml.cs">
+      <DependentUpon>ModelPickerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ModelDesigner\SensorCreationWindow.xaml.cs">
       <DependentUpon>SensorCreationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModelDesigner\SensorPickerWindow.xaml.cs">
+      <DependentUpon>SensorPickerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
@@ -163,7 +169,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ModelDesigner\ModelDesigner.xaml" />
+    <Page Include="ModelDesigner\ModelPickerWindow.xaml" />
     <Page Include="ModelDesigner\SensorCreationWindow.xaml" />
+    <Page Include="ModelDesigner\SensorPickerWindow.xaml" />
     <Page Include="Visual\Controls\RoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,9 +220,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\happy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CityDesigner\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
