@@ -11,6 +11,7 @@ namespace UnitTests.CommandSystem
         private bool _valueAndTypeStoredTestPassed = false;
         private bool _eventCalledTestPassed = false;
         
+        [Order(0)]
         [TestCase(int.MaxValue, typeof(int))]
         [TestCase(short.MaxValue, typeof(short))]
         [TestCase(long.MaxValue, typeof(long))]
@@ -29,7 +30,7 @@ namespace UnitTests.CommandSystem
             _valueAndTypeStoredTestPassed = true;
         }
 
-        [Test]
+        [Test, Order(1)]
         public void ShouldStoreProperty_WhenPropertyIsGiven()
         {
             if (!_valueAndTypeStoredTestPassed)
@@ -49,7 +50,7 @@ namespace UnitTests.CommandSystem
             Assert.Throws<ArgumentNullException>(() => new Property(null));
         }
 
-        [Test]
+        [Test, Order(1)]
         public void ShouldInvokePropertyChangedEvent_WhenValueIsChanged()
         {
             if (!_valueAndTypeStoredTestPassed)
@@ -76,7 +77,7 @@ namespace UnitTests.CommandSystem
             _eventCalledTestPassed = true;
         }
 
-        [Test]
+        [Test, Order(1)]
         public void ShouldThrowTypeMismatchException_WhenNewTypeDoesNotMatchPreviousType()
         {
             if (!_valueAndTypeStoredTestPassed)
@@ -87,6 +88,7 @@ namespace UnitTests.CommandSystem
             Assert.Throws<TypeMismatchException>(() => testProperty.Value = 12f);
         }
 
+        [Order(2)]
         [TestCase(0, 1)]
         [TestCase((short) 0, (short) 1)]
         [TestCase(0L, 1L)]
@@ -106,7 +108,7 @@ namespace UnitTests.CommandSystem
             var actual = testProperty.ResetToFirstValue();
             
             Assert.AreEqual(firstValue, testProperty.Value);
-            Assert.AreEqual(newValue, actual);
+            Assert.AreEqual(true, actual);
         }
     }
 }

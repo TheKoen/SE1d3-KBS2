@@ -40,7 +40,7 @@ namespace CommandSystem.PropertyManagement
         /// <returns>True if <see cref="Value"/> was changed</returns>
         public bool ResetToFirstValue()
         {
-            var changed = _value == _firstValue;
+            var changed = _value != _firstValue;
             if (changed) Value = _firstValue;
             return changed;
         }
