@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Windows.Threading;
-using KBS2.Console;
-using Math = System.Math;
 
 namespace KBS2.Util.Loop
 {
-    public delegate void Update();
-
     public class MainLoop : TickLoop
     {
         private readonly DispatcherTimer timer;
 
         public MainLoop(string name) : base(name)
         {
+            // Setup a DispatcherTimer to run on the main thread with the specified tickrate.
             timer = new DispatcherTimer
             {
                 Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(TickRate))
@@ -37,19 +34,16 @@ namespace KBS2.Util.Loop
         }
 
         /// <summary>
-        /// returns true if loop is running.
+        /// Returns true if loop is running.
         /// </summary>
-        /// <returns></returns>
         public override bool IsRunning()
         {
             return timer.IsEnabled;
         }
 
         /// <summary>
-        /// Event if the tickrate changes
+        /// Listen to when the TickRate gets changed and update the DispatcherTimer appropriately.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="args"></param>
         protected override void OnTickrateChange(object source, CustomPropertyChangedArgs args)
         {
             timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));

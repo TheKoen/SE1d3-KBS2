@@ -4,15 +4,29 @@ using KBS2.Console;
 
 namespace KBS2.Util.Loop
 {
+    public delegate void Update();
+
     public abstract class TickLoop
     {
         private string Name { get; }
 
+        /// <summary>
+        /// The tick-rate of this TickLoop.
+        /// Determains how fast this loop has to run (in Hz)
+        /// </summary>
         private readonly Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
 
+        /// <summary>
+        /// The Event that's called ever tick for this loop.
+        /// </summary>
         private event Update UpdateEvent;
 
+        /// <summary>
+        /// The amount of exceptions that occurred in this loop.
+        /// The loop automatically stops logging exceptions when
+        /// this number is more than or equal to 3.
+        /// </summary>
         private int exceptionCount;
 
         protected TickLoop(string name)
@@ -51,9 +65,8 @@ namespace KBS2.Util.Loop
         public abstract void Stop();
 
         /// <summary>
-        /// returns true if loop is running.
+        /// Returns true if loop is running.
         /// </summary>
-        /// <returns></returns>
         public abstract bool IsRunning();
 
         /// <summary>

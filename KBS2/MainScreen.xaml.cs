@@ -21,8 +21,27 @@ namespace KBS2
     /// </summary>
     public partial class MainScreen : Window
     {
-        public static readonly TickLoop Loop = new MainLoop("main");
+        /*
+         * A note on loops:
+         * There's 3 different loops, a CommandLoop, a WPFLoop and an AILoop.
+         * Make sure you understand what they are before subscribing to one!
+         *
+         * The CommandLoop is only used for the Console, and should NEVER be
+         * used for anything else! Just pretend like it doesn't exist and
+         * don't use it.
+         *
+         * The WPFLoop for anything related to the visuals. It's important
+         * for a smooth interaface that this loop runs fast, so DON'T do
+         * anything complicated or time-intensive on there.
+         *
+         * The AILoop is for any AI logic. This is where things like the
+         * customers, car AI, car sensors, etc are supposed to run. Still
+         * needs to run fast, but can more easily deal with irregular
+         * refresh rates.
+         */
         public static readonly TickLoop CommandLoop = new MainLoop("command");
+        public static readonly TickLoop WPFLoop = new MainLoop("main");
+        public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private ConsoleWindow consoleWindow;
 
@@ -36,7 +55,7 @@ namespace KBS2
             consoleWindow = new ConsoleWindow();
             
             InitializeComponent();
-            Loop.Subscribe(Update);
+            WPFLoop.Subscribe(Update);
             CommandLoop.Start();
             GPSSystem.Setup();
 
@@ -102,7 +121,8 @@ namespace KBS2
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            Loop.Start();
+            WPFLoop.Start();
+            AILoop.Start();
             App.Console.Print("Start pressed");
 
             var city = City.Instance;
@@ -120,13 +140,15 @@ namespace KBS2
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
-            Loop.Stop();
+            WPFLoop.Stop();
+            AILoop.Stop();
             App.Console.Print("Pause pressed");
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-            Loop.Stop();
+            WPFLoop.Stop();
+            AILoop.Stop();
             City.Instance.Controller.Reset();
             App.Console.Print("Reset pressed");
         }

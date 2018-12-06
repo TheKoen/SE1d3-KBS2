@@ -29,7 +29,7 @@ namespace KBS2.CustomerSystem
             CustomerControl = new CustomerControl(this);
             Controller = new CustomerController(this);
 
-            MainScreen.Loop.Subscribe(Controller.Update);
+            MainScreen.AILoop.Subscribe(Controller.Update);
         }
 
         public Vector GetLocation()

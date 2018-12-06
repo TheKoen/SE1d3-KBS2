@@ -53,7 +53,7 @@ namespace KBS2.CitySystem
             Customers = new List<Customer>();
 
             Controller = new CityController(this);
-            MainScreen.Loop.Subscribe(Controller.Update);
+            MainScreen.AILoop.Subscribe(Controller.Update);
 
             CommandHandler.RegisterProperty("availableCars", ref availableCars);
             CommandHandler.RegisterProperty("customerCount", ref customerCount);

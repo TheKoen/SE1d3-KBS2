@@ -78,7 +78,7 @@ namespace KBS2.CarSystem
             CurrentRoad = GPSSystem.GetRoad(location);
             
             Controller = new CarController(this);
-            MainScreen.Loop.Subscribe(Controller.Update);
+            MainScreen.AILoop.Subscribe(Controller.Update);
 
             this.location = new Property(location);
             CommandHandler.RegisterProperty($"car{id}.location", ref this.location);
