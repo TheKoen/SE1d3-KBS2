@@ -73,5 +73,12 @@ namespace KBS2.Util
         {
             return Vector.AngleBetween(vector, direction.GetVector());
         }
+
+        public static Vector VelocityToRotation(Vector velocity)
+        {
+            var rotation = new Vector(velocity.X, velocity.Y);
+            rotation.Normalize();
+            return rotation;
+        }
     }
 }

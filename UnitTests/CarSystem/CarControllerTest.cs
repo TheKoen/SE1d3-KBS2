@@ -75,13 +75,46 @@ namespace UnitTests.CarSystem
             Assert.AreEqual(0, velocity.Y, 0.01);
         }
 
-        [TestCase(10.0, 55.0, 100.0, 55.0, 50, 100.0, 55.0)]
-        [TestCase(10.0, 59.0, 100.0, 55.0, 50, 100.0, 55.0)]
-        [TestCase(10.0, 51.0, 100.0, 55.0, 50, 100.0, 55.0)]
-        [TestCase(10.0, 53.0, 100.0, 55.0, 50, 100.0, 55.0)]
-        [TestCase(10.0, 58.0, 100.0, 55.0, 50, 100.0, 55.0)]
-        [TestCase(10.0, 61.0, 100.0, 55.0, 50, 100.0, 55.0)]
-        [TestCase(10.0, 49.0, 100.0, 55.0, 50, 100.0, 55.0)]
+        [TestCase(20.0, 65.0, 1.0, 0.86, 1.0)]
+        [TestCase(20.0, 35.0, 1.0, 0.86, -1.0)]
+        public void TestHandleApproachTarget(double targetX, double targetY, double initialVelocity, double expectedSpeed, double expectedRotation)
+        {
+            var road = new Road(new Vector(0, 50), new Vector(50, 50), 20, 100);
+            var city = new CityBuilder()
+                .Road(road)
+                .Build();
+
+            var car = new CarBuilder()
+                .Location(new Vector(10, 55))
+                .Direction(DirectionCar.East)
+                .Sensor(Car => new LineSensor(Car, Direction.Left))
+                .Sensor(Car => new LineSensor(Car, Direction.Right))
+                .CurrentRoad(road)
+                .Build();
+            car.Destination = new Destination
+            {
+                Location = new Vector(targetX, targetY),
+                Road = road
+            };
+            var controller = car.Controller;
+
+            var velocity = new Vector(initialVelocity, 0.0);
+            var yaw = 0.0;
+            var addedRotation = 0.0;
+
+            controller.HandleApproachTarget(ref velocity, ref yaw, ref addedRotation);
+
+            Assert.AreEqual(expectedSpeed, velocity.Length, 0.01);
+            Assert.AreEqual(expectedRotation, addedRotation, 0.01);
+        }
+
+        [TestCase(10.0, 55.0, 200.0, 55.0, 50, 100.0, 55.0)]
+        [TestCase(10.0, 59.0, 200.0, 55.0, 50, 100.0, 55.0)]
+        [TestCase(10.0, 51.0, 200.0, 55.0, 50, 100.0, 55.0)]
+        [TestCase(10.0, 53.0, 200.0, 55.0, 50, 100.0, 55.0)]
+        [TestCase(10.0, 58.0, 200.0, 55.0, 50, 100.0, 55.0)]
+        [TestCase(10.0, 61.0, 200.0, 55.0, 50, 100.0, 55.0)]
+        [TestCase(10.0, 49.0, 200.0, 55.0, 50, 100.0, 55.0)]
         public void TestUpdateStayInLane(double carX, double carY, double targetX, double targetY, int cycles, double expectedX, double expectedY)
         {
             var road = new Road(new Vector(0, 50), new Vector(50, 50), 20, 100);

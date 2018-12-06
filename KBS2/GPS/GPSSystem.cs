@@ -34,7 +34,7 @@ namespace KBS2.GPS
         /// <returns>the road that the location is at, if none it returns null</returns>
         public static Road GetRoad(Vector location)
         {
-            var roads = GetRoadsInRange(location, 2);
+            var roads = GetRoadsInRange(location, 12);
             return roads.Count == 0 ? null : roads.First();
         }
 

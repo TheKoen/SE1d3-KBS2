@@ -11,10 +11,10 @@ namespace UnitTests.CarSystem.Sensors.PassiveSensors
     [TestFixture]
     class EntityRadarTest
     {
-        [TestCase(0, 0, 50, 0, 100)] // in front
-        [TestCase(0, 0, -50, 0, 100)] // behind
-        [TestCase(0, 0, 0, 50, 100)] // left
-        [TestCase(0, 0, 0, -50, 100)] // right
+        [TestCase(0, 50, 50, 0, 100)] // in front
+        [TestCase(0, 50, -50, 0, 100)] // behind
+        [TestCase(0, 50, 0, 100, 100)] // left
+        [TestCase(0, 50, 0, 0, 100)] // right
         public void TestEntityRadarInRange(double carX, double carY, double secCarX, double secCarY, double range)
         {
             var city = new CityBuilder()
@@ -32,7 +32,7 @@ namespace UnitTests.CarSystem.Sensors.PassiveSensors
                 .Direction(DirectionCar.East)
                 .Build());
             city.Cars.Add(secCar);
-            var sensor = sensorCar.Controller.GetSensors<EntityRadar>(Direction.Global).First();
+            var sensor = sensorCar.Controller.GetSensors<EntityRadar>().First();
 
             sensor.Controller.Update();
 
