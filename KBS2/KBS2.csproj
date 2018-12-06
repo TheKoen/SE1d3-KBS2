@@ -136,6 +136,8 @@
     </Compile>
     <Compile Include="Visual\CustomerRenderHandler.cs" />
     <Compile Include="Visual\IRenderHandler.cs" />
+    <Compile Include="Visual\PropertyDisplayHandler.cs" />
+    <Compile Include="Visual\SimulationControlHandler.cs" />
     <Compile Include="Windows\CarInfoUserControl.xaml.cs">
       <DependentUpon>CarInfoUserControl.xaml</DependentUpon>
     </Compile>
