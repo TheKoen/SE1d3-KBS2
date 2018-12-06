@@ -219,5 +219,18 @@ namespace KBS2.CityDesigner
             }
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
         }
+        
+        private void ChangeMaxSpeedRoadEventHandler(object sender, PropertyChangedEventArgs e)
+        {
+            try
+            {
+                if (Creator.SelectBuilding != null)
+                {
+                    Creator.SelectRoad.MaxSpeed = NumericMaxSpeedRoad.Value;
+                    Creator.RedrawAllObjects();
+                }
+            }
+            catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
+        }
     }
 }

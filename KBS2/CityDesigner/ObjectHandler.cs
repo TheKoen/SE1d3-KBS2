@@ -421,6 +421,7 @@ namespace KBS2.CityDesigner
             SelectRoad = road;
             window.InformationBlockRoad.Visibility = Visibility.Visible;
             window.NumericWidthRoad.Value = road.Width;
+            window.NumericMaxSpeedRoad.Value = road.MaxSpeed;
         }
 
         /// <summary>

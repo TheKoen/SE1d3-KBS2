@@ -8,7 +8,7 @@ namespace KBS2.CitySystem
         public Vector Start { get; }
         public Vector End { get; }
         public int Width { get; set; }
-        public int MaxSpeed { get; }
+        public int MaxSpeed { get; set; }
 
         public Road(Vector start, Vector end, int width, int maxSpeed)
         {
