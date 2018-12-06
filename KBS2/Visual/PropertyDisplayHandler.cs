@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
-using KBS2.Console;
+using CommandSystem;
+using CommandSystem.PropertyManagement;
 using KBS2.GPS;
 
 namespace KBS2.Visual
@@ -23,7 +24,7 @@ namespace KBS2.Visual
         {
             PropertyPanel.Children.Clear();
 
-            var properties = CommandHandler.GetProperties();
+            var properties = PropertyHandler.GetProperties();
             foreach (var property in properties)
             {
                 var propertyName = property.Key;
@@ -35,15 +36,15 @@ namespace KBS2.Visual
 
         public void ResetDefaults()
         {
-            CommandHandler.ModifyProperty("main.tickRate", 30);
-            CommandHandler.ModifyProperty("command.tickRate", 30);
-            CommandHandler.ModifyProperty("startingPrice", 1.50);
-            CommandHandler.ModifyProperty("pricePerKilometer", 1.00);
-            CommandHandler.ModifyProperty("customerSpawnRate", 0.2f);
-            CommandHandler.ModifyProperty("availableCars", 10);
-            CommandHandler.ModifyProperty("customerCount", 10);
-            CommandHandler.ModifyProperty("globalSpeedLimit", -1);
-            CommandHandler.ModifyProperty("avgGroupSize", 10);
+            PropertyHandler.ModifyProperty("main.tickRate", 30);
+            PropertyHandler.ModifyProperty("command.tickRate", 30);
+            PropertyHandler.ModifyProperty("startingPrice", 1.50);
+            PropertyHandler.ModifyProperty("pricePerKilometer", 1.00);
+            PropertyHandler.ModifyProperty("customerSpawnRate", 0.2f);
+            PropertyHandler.ModifyProperty("availableCars", 10);
+            PropertyHandler.ModifyProperty("customerCount", 10);
+            PropertyHandler.ModifyProperty("globalSpeedLimit", -1);
+            PropertyHandler.ModifyProperty("avgGroupSize", 10);
 
             UpdateProperties();
         }
@@ -54,7 +55,7 @@ namespace KBS2.Visual
             {
                 var propertyControl = (PropertySettings)child;
                 var name = propertyControl.LabelPropertyName.Content.ToString();
-                var property = CommandHandler.GetProperties().First(p => p.Key == name);
+                var property = PropertyHandler.GetProperties().First(p => p.Key == name);
 
                 if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
                 {

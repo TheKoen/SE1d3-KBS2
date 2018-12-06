@@ -123,7 +123,6 @@
     </Compile>
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
-    <Compile Include="Util\SpriteRenderer.cs" />
     <Compile Include="Util\StringConverters.cs" />
     <Compile Include="Visual\CityRenderHandler.cs" />
     <Compile Include="Visual\Controls\CarControl.xaml.cs">
@@ -251,7 +250,6 @@
   <ItemGroup>
     <Folder Include="CityDesigner\" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
