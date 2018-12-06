@@ -21,10 +21,20 @@ namespace KBS2.Visual.Controls
     /// </summary>
     public partial class CustomerControl : UserControl
     {
-        public CustomerControl(Customer c)
+
+        public Customer customer;
+
+        public CustomerControl(Customer customer)
         {
-            Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
+            this.customer = customer;
+            Update();
             InitializeComponent();
+            MainScreen.WPFLoop.Subscribe(Update);
+        }
+
+        public void Update()
+        {
+            Margin = new Thickness(customer.Location.X, customer.Location.Y, 0, 0);
         }
     }
 }
