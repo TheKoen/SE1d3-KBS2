@@ -141,6 +141,7 @@
     <Compile Include="Visual\Controls\RoadControl.xaml.cs">
       <DependentUpon>RoadControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Visual\CarRenderHandler.cs" />
     <Compile Include="Visual\CustomerRenderHandler.cs" />
     <Compile Include="Visual\IRenderHandler.cs" />
     <Compile Include="Visual\PropertyDisplayHandler.cs" />

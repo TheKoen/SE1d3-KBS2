@@ -121,7 +121,7 @@ namespace KBS2.CarSystem
             if (distanceToDestination > 10)
             {
                 // Call the handle functions to stay in the lane and accelerate/deccelerate.
-                HandleStayInLane(ref velocity, ref yaw, ref addedRotation);
+                //HandleStayInLane(ref velocity, ref yaw, ref addedRotation);
                 HandleAccelerate(ref velocity, ref distanceToTarget);
             }
             else

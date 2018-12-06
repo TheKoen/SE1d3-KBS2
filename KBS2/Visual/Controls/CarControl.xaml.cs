@@ -1,4 +1,5 @@
 ﻿using KBS2.CarSystem;
+using KBS2.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,17 +25,20 @@ namespace KBS2.Visual.Controls
 
         public Car car { get; set; }
 
-        public CarControl(Car c)
+        public CarControl(Car car)
         {
-            this.car = c;
-            RenderTransform = new RotateTransform();
-            Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
+            this.car = car;            
+            Update();
+            MainScreen.WPFLoop.Subscribe(Update);
             InitializeComponent();
         }
 
-        public void ()
+        public void Update()
         {
-            return ;
+            var rotation = MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
+            App.Console.Print($"Car rotation {rotation} ");
+            RenderTransform = new RotateTransform();
+            Margin = new Thickness(car.Location.X, car.Location.Y, 0, 0);           
         }
     }
 }

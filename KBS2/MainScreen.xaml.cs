@@ -50,6 +50,7 @@ namespace KBS2
 
         public CityRenderHandler CityRenderHandler { get; private set; }
         public CustomerRenderHandler CustomerRenderHandler { get; private set; }
+        public CarRenderHandler CarRenderHandler { get; private set; }
         public SimulationControlHandler SimulationControlHandler { get; private set; }
         public PropertyDisplayHandler PropertyDisplayHandler { get; private set; }
 
@@ -71,6 +72,7 @@ namespace KBS2
 
             CityRenderHandler = new CityRenderHandler(this, CanvasMain);
             CustomerRenderHandler = new CustomerRenderHandler(CanvasMain);
+            CarRenderHandler = new CarRenderHandler(CanvasMain);
             SimulationControlHandler = new SimulationControlHandler(this);
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
 
