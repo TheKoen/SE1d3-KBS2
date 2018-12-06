@@ -109,12 +109,12 @@ namespace KBS2
             //TODO: Draw city.
 
             UpdatePropertyList();
-            //Enables buttons and tabs so the user can acces them.
-            BtnStart.IsEnabled = true;
-            BtnPause.IsEnabled = true;
-            BtnStop.IsEnabled = true;
+            //Enables or disables buttons and tabs so the user can acces them or not.                
             TabItemSettings.IsEnabled = true;
             TabItemResults.IsEnabled = true;
+            BtnStart.IsEnabled = true;
+            BtnPause.IsEnabled = false;
+            BtnStop.IsEnabled = false;
 
             // Fills in the current City information that is needed.
             LabelSimulationRoad.Content = city.Roads.Count;
@@ -128,25 +128,17 @@ namespace KBS2
         {
             WPFLoop.Start();
             AILoop.Start();
+            BtnStart.IsEnabled = false;
+            BtnPause.IsEnabled = true;
+            BtnStop.IsEnabled = true;
             App.Console.Print("Start pressed");
-
-            var city = City.Instance;
-            foreach (var Customer in city.Customers)
-            {
-                CanvasMain.Children.Add(Customer.CustomerControl);
-            }
-
-            foreach (var car in city.Cars)
-            {
-                var carcontrol = new CarControl(car);
-                CanvasMain.Children.Add(carcontrol);
-            }
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             WPFLoop.Stop();
             AILoop.Stop();
+            BtnStart.IsEnabled = true;
             App.Console.Print("Pause pressed");
         }
 
@@ -155,6 +147,7 @@ namespace KBS2
             WPFLoop.Stop();
             AILoop.Stop();
             City.Instance.Controller.Reset();
+            BtnStart.IsEnabled = true;
             App.Console.Print("Reset pressed");
         }
 

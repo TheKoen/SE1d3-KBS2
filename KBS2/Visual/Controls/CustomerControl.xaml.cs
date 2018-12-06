@@ -21,10 +21,19 @@ namespace KBS2.Visual.Controls
     /// </summary>
     public partial class CustomerControl : UserControl
     {
+
+        public Customer c;
+
         public CustomerControl(Customer c)
         {
-            Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
+            this.c = c;
             InitializeComponent();
+            Update();
+        }
+
+        public void Update()
+        {
+            EllipseCustomer.Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
         }
     }
 }

@@ -25,8 +25,7 @@ namespace KBS2.CustomerSystem
             Moral = 25;
             Group = group;
             Mood = CustomerSystem.Moral.Happy;
-
-            CustomerControl = new CustomerControl(this);
+         
             Controller = new CustomerController(this);
 
             MainScreen.AILoop.Subscribe(Controller.Update);
