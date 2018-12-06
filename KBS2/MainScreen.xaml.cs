@@ -39,11 +39,11 @@ namespace KBS2
          * needs to run fast, but can more easily deal with irregular
          * refresh rates.
          */
-        public static readonly TickLoop CommandLoop = new MainLoop("command");
-        public static readonly TickLoop WPFLoop = new MainLoop("main");
+        public static readonly TickLoop CommandLoop = new MainLoop("Command");
+        public static readonly TickLoop WPFLoop = new MainLoop("Main");
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
-        private ConsoleWindow consoleWindow;
+        private readonly ConsoleWindow consoleWindow;
 
         private string filePath;
 

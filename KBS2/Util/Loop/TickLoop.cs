@@ -24,8 +24,8 @@ namespace KBS2.Util.Loop
 
         /// <summary>
         /// The amount of exceptions that occurred in this loop.
-        /// The loop automatically stops logging exceptions when
-        /// this number is more than or equal to 3.
+        /// The loop automatically stops when this number is more
+        /// than or equal to 3. 
         /// </summary>
         private int exceptionCount;
 
@@ -33,11 +33,12 @@ namespace KBS2.Util.Loop
         {
             Name = name;
             tickRate.PropertyChanged += OnTickrateChange;
-            CommandHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
+
+            CommandHandler.RegisterProperty($"{Name.ToLower()}.tickRate", ref tickRate);
         }
 
         /// <summary>
-        /// subscribe to UpdateEvent
+        /// Subscribe to UpdateEvent
         /// </summary>
         /// <param name="subscriber"></param>
         public void Subscribe(Update subscriber)
@@ -77,44 +78,48 @@ namespace KBS2.Util.Loop
         protected abstract void OnTickrateChange(object source, CustomPropertyChangedArgs args);
 
         /// <summary>
-        /// Called every Tick
+        /// Needs to be called every tick by the Update event.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="args"></param>
         protected void Update(object source, EventArgs args)
         {
+            // Get the current time in milliseconds.
             var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
             try
             {
                 UpdateEvent?.Invoke();
             }
             catch (Exception exception)
             {
-                App.Console.Print($"Exception in main loop: {exception}", Colors.Red);
+                // If an exception occurs in an Update call, print it to the console.
+                App.Console?.Print($"Exception in {Name} loop: {exception}", Colors.Red);
 
+                // After 3 exceptions occur we want to stop the loop and warn the user.
                 exceptionCount++;
-                if (exceptionCount > 2)
+                if (exceptionCount >= 3)
                 {
                     Stop();
-                    App.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
+                    App.Console?.Print($"{Name} loop has been stopped due to too many exceptions!", Colors.Red);
                 }
             }
+
+            // Calculate how long the Update calls took and warn the user if we're running slow.
             var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
             var interval = CalculateInterval(tickRate.Value);
             if (taken > interval)
             {
-                App.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
+                App.Console?.Print($"{Name} loop is running {taken - interval}ms behind!", Colors.Yellow);
             }
         }
 
         /// <summary>
-        /// Calculates Interval of the Loop
+        /// Calculates the interval in milliseconds using the specified tick-rate.
         /// </summary>
-        /// <param name="tickRate"></param>
-        /// <returns></returns>
+        /// <param name="tickRate">The tick-rate to calculate the interval for (in Hz)</param>
+        /// <returns>The interval to wait every tick (in milliseconds)</returns>
         protected static int CalculateInterval(int tickRate)
         {
-            return (int)Math.Round(1000.0 / tickRate);
+            return (int) Math.Round(1000.0 / tickRate);
         }
     }
 }
