@@ -65,6 +65,9 @@
     <Compile Include="CityDesigner\CityLoader.cs" />
     <Compile Include="CityDesigner\CitySaver.cs" />
     <Compile Include="CityDesigner\LoadedCityEventArgs.cs" />
+    <Compile Include="CityDesigner\NumericUpDownControl.xaml.cs">
+      <DependentUpon>NumericUpDownControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CityDesigner\ObjectHandler.cs" />
     <Compile Include="CityDesigner\Tools.cs" />
     <Compile Include="CitySystem\Building.cs" />
@@ -123,6 +126,10 @@
     <Compile Include="Util\SpriteRenderer.cs" />
     <Compile Include="Util\StringConverters.cs" />
     <Page Include="CityDesigner\CityDesignerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CityDesigner\NumericUpDownControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

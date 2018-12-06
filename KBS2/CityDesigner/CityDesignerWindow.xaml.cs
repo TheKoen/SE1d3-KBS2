@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace KBS2.CityDesigner
     {
         public ObjectHandler Creator { get; set; }
 
-        public Tools Tool = Tools.Cursor;
+        public Tools Tool { get; set; } = Tools.Cursor;
 
 
 
@@ -33,7 +34,6 @@ namespace KBS2.CityDesigner
         }
 
 
-
         /// <summary>
         /// Save a city
         /// </summary>
@@ -41,17 +41,15 @@ namespace KBS2.CityDesigner
         /// <param name="e"></param>
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // check 
-
+            
             // save window
             var popupWindow = new SaveFileDialog();
             popupWindow.Title = "Save City";
             popupWindow.Filter = "XML file | *.xml";
             popupWindow.ShowDialog();
 
-
+            // save the city
             CitySaver.SaveCity(popupWindow.FileName, Creator.Roads, Creator.Buildings, Creator.Intersections);
-
         }
 
         /// <summary>
@@ -73,7 +71,11 @@ namespace KBS2.CityDesigner
             }
         }
 
-
+        /// <summary>
+        /// Changes the tool when clicked on one of the tools
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChangeTool(object sender, RoutedEventArgs e)
         {
             if(e.Source == RoadButton)
@@ -131,7 +133,7 @@ namespace KBS2.CityDesigner
             //location mouse on canvas
             X.Text = ((int)e.GetPosition(Canvas).X).ToString();
             Y.Text = ((int)e.GetPosition(Canvas).Y).ToString();
-
+            
 
             // drawing Ghost Building
             if (Tool == Tools.Building) { Creator.DrawGhostBuilding(sender, e); }
@@ -159,11 +161,8 @@ namespace KBS2.CityDesigner
 
         private void MouseLeaveCanvasEventHandler(object sender, MouseEventArgs e)
         {
-            //invisible Popup dit doet raar met als je nog wel op het canvas zit voor some reason
-            //PopupCanvas.IsOpen = false;
-
             //remove ghost items when leaving canvas
-            Creator.RemoveFakes();
+            Creator.RemoveGhosts();
         }
 
         private void MouseRightCanvasEventHandler(object sender, MouseEventArgs e)
@@ -176,8 +175,10 @@ namespace KBS2.CityDesigner
         private void MouseEntersCanvasEventHandler(object sneder, MouseEventArgs e)
         {
             //Un-Display information 
-            InformationBlockObjects.Visibility = Visibility.Hidden;
+            InformationBlockRoad.Visibility = Visibility.Hidden;
+            InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
+            Creator.SelectBuilding = null;
         }
 
         private void RemoveObjectButtonEventHandler(object sender, RoutedEventArgs e)
@@ -185,10 +186,39 @@ namespace KBS2.CityDesigner
             //Remove object hide information
             Creator.Roads.Remove(Creator.SelectRoad);
             Creator.Buildings.Remove(Creator.SelectBuilding);
-            InformationBlockObjects.Visibility = Visibility.Hidden;
+            InformationBlockRoad.Visibility = Visibility.Hidden;
+            InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
             Creator.SelectBuilding = null;
             Creator.RedrawAllObjects();
+        }
+
+        private void ChangeWidthRoadEventHandler(object sender, PropertyChangedEventArgs e)
+        {
+            try
+            {
+                if (Creator.SelectRoad != null)
+                {
+                    Creator.SelectRoad.Width = NumericWidthRoad.Value;
+                    Creator.RedrawAllObjects();
+                }
+            }
+            catch(NullReferenceException) { } // because creator does not exist before the first event is fired in XML
+            
+        }
+
+        private void ChangeWidthBuildingEventHandler(object sender, PropertyChangedEventArgs e)
+        {
+            try
+            {
+                if (Creator.SelectBuilding != null)
+                {
+                    
+                    Creator.SelectBuilding.Size = NumericWidthRoad.Value;
+                    Creator.RedrawAllObjects();
+                }
+            }
+            catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
         }
     }
 }

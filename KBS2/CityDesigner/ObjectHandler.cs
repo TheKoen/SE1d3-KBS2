@@ -61,6 +61,7 @@ namespace KBS2.CityDesigner
 
         // snaprange 
         private int snapRange = 20;
+        private int minLengthRoad = 50; 
 
         //selected items
         public Road SelectRoad { get; set; }
@@ -88,6 +89,9 @@ namespace KBS2.CityDesigner
         
         public void DrawGhostRoad(object sender, MouseEventArgs e)
         {
+            int mouseX = (int)Mouse.GetPosition(Canvas).X;
+            int mouseY = (int)Mouse.GetPosition(Canvas).X;
+            
             // set the start point of the road
             if (startRoad == new Point(0, 0)) { startRoad = Mouse.GetPosition(Canvas); }
 
@@ -132,7 +136,6 @@ namespace KBS2.CityDesigner
             }
 
             
-
             //trying to snap the road to another road end point
             foreach (var road in Roads)
             {
@@ -165,8 +168,78 @@ namespace KBS2.CityDesigner
                     }
                 }
             }
-           
-           
+
+            //trying to snap the road to same level as nearby road (not done yet
+
+            if (fakeRoad.X1 == fakeRoad.X2 && fakeRoad.Y1 != fakeRoad.Y2 && Math.Abs(fakeRoad.Y2 - fakeRoad.Y1) >= minLengthRoad) // Y GhostRoad and GhostRoad is minimumlength
+            {
+                var snapRoadStart = Roads.Find(r => Math.Abs(mouseY - r.Start.Y) <= snapRange && !r.IsXRoad()); //find first startNode in snapRange and road is not Xroad 
+                var snapRoadEnd = Roads.Find(r => Math.Abs(mouseY - r.End.Y) <= snapRange && !r.IsXRoad()); //find first endNode in snapRange and road is not Xroad
+                
+                if (snapRoadStart != null) 
+                {
+                    fakeRoad.Y2 = (int)snapRoadStart.Start.Y;
+                    Canvas.Children.Add(new Line()
+                    {
+                        X1 = snapRoadStart.Start.X,
+                        Y1 = snapRoadStart.Start.Y,
+                        X2 = fakeRoad.X2,
+                        Y2 = fakeRoad.Y2,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 4
+                    });
+                }
+                else if (snapRoadEnd != null)
+                {
+                    fakeRoad.Y2 = (int)snapRoadEnd.End.Y;
+                    Canvas.Children.Add(new Line()
+                    {
+                        X1 = snapRoadEnd.End.X,
+                        Y1 = snapRoadEnd.End.Y,
+                        X2 = fakeRoad.X2,
+                        Y2 = fakeRoad.Y2,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 4
+                    });
+                }
+            }
+            else if (fakeRoad.Y1 == fakeRoad.Y2 && fakeRoad.X1 != fakeRoad.X2 && Math.Abs(fakeRoad.X2 - fakeRoad.X1) >= minLengthRoad) // X road and GhostRoad is minimumlength
+            {
+                var snapRoadStart = Roads.Find(r => Math.Abs(mouseX - r.Start.X) <= snapRange && r.IsXRoad());
+                var snapRoadEnd = Roads.Find(r => Math.Abs(mouseX - r.End.X) <= snapRange && r.IsXRoad());
+                
+                if (snapRoadStart != null)
+                {
+                    fakeRoad.X2 = (int)snapRoadStart.Start.X;
+
+                    Canvas.Children.Add(new Line()
+                    {
+                        X1 = snapRoadStart.Start.X,
+                        Y1 = snapRoadStart.Start.Y,
+                        X2 = fakeRoad.X2,
+                        Y2 = fakeRoad.Y2,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 4
+                    });
+
+                }
+                else if (snapRoadEnd != null)
+                {
+                    fakeRoad.X2 = (int)snapRoadEnd.End.X;
+
+                    Canvas.Children.Add(new Line()
+                    {
+                        X1 = snapRoadEnd.End.X,
+                        Y1 = snapRoadEnd.End.Y,
+                        X2 = fakeRoad.X2,
+                        Y2 = fakeRoad.Y2,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 4
+                    });
+                }
+                
+            }
+
             Canvas.Children.Add(fakeRoad);
         }
 
@@ -174,32 +247,35 @@ namespace KBS2.CityDesigner
         {
             startRoad = new Point(0, 0);
 
+            //check if road is long enough
+            if(Util.MathUtil.Distance(new Vector(fakeRoad.X1, fakeRoad.Y1), new Vector(fakeRoad.X2, fakeRoad.Y2)) < minLengthRoad)
+            {
+                RemoveGhosts();
+                return;
+            }
 
             //check if road is vertical or horizontal
             if (fakeRoad.X1 == fakeRoad.X2 || fakeRoad.Y1 == fakeRoad.Y2)
             {
-
-
+                
                 // add road to roadsList
                 Roads.Add(new Road(new Vector((int)fakeRoad.X1, (int)fakeRoad.Y1), new Vector((int)fakeRoad.X2, (int)fakeRoad.Y2), 20, 100));
 
                 // create real road on canvas
-                var l = new Line();
-                l.X1 = (int)fakeRoad.X1;
-                l.Y1 = (int)fakeRoad.Y1;
-                l.X2 = (int)fakeRoad.X2;
-                l.Y2 = (int)fakeRoad.Y2;
-
-                l.Stroke = Brushes.LightBlue;
-                l.StrokeThickness = 20;
-
-                Canvas.Children.Add(l);
+                RedrawAllObjects();
             }
             Canvas.Children.Remove(fakeRoad);
 
             CreateIntersection((int)fakeRoad.X1, (int)fakeRoad.Y1, (int)fakeRoad.X2, (int)fakeRoad.Y2);
         }
 
+        /// <summary>
+        /// Checks if intersection is needed creates it
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
         private void CreateIntersection(int x1, int y1, int x2, int y2)
         {
             // search for Intersection add when not excists and more then one Road is connected
@@ -211,13 +287,7 @@ namespace KBS2.CityDesigner
                 Intersections.Add(new Intersection(new Vector(x1, y1), roadMaxSize));
 
                 // add the intersection to canvas
-                var copyIntersection = (Rectangle)Clone(realIntersection);
-                copyIntersection.Width = roadMaxSize;
-                copyIntersection.Height = roadMaxSize;
-                Canvas.SetTop(copyIntersection, y1 - roadMaxSize / 2);
-                Canvas.SetLeft(copyIntersection, x1 - roadMaxSize / 2);
-
-                Canvas.Children.Add(copyIntersection);
+                RedrawAllObjects();
             }
             // search for Intersection add when not excists and more then one Road is connected
             if (Intersections.Find(i => i.Location == new Vector(x2, y2)) == null && Roads.FindAll(r => r.Start == new Vector(x2, y2) || r.End == new Vector(x2, y2)).Count >= 2)
@@ -226,16 +296,9 @@ namespace KBS2.CityDesigner
                 var roadMaxSize = Roads.FindAll(r => r.Start == new Vector(x2, y2) || r.End == new Vector(x2, y2)).Max(r => r.Width);
                 // add To list if not excist at end of new road
                 Intersections.Add(new Intersection(new Vector(x2, y2), roadMaxSize));
-
+                
                 // add the intersection to canvas
-                var copyIntersection = (Rectangle)Clone(realIntersection);
-                copyIntersection.Width = roadMaxSize;
-                copyIntersection.Height = roadMaxSize;
-                Canvas.SetTop(copyIntersection, y2 - roadMaxSize / 2);
-                Canvas.SetLeft(copyIntersection, x2 - roadMaxSize / 2);
-                Canvas.SetZIndex(copyIntersection, 2);
-
-                Canvas.Children.Add(copyIntersection);
+                RedrawAllObjects();
             }
 
         }
@@ -269,8 +332,9 @@ namespace KBS2.CityDesigner
             Canvas.SetTop(copyBuilding, (int)Mouse.GetPosition(Canvas).Y - realBuilding.Height / 2);
             Canvas.SetLeft(copyBuilding, (int)Mouse.GetPosition(Canvas).X - realBuilding.Width / 2);
 
+            RedrawAllObjects();
 
-            Canvas.Children.Add(copyBuilding);
+            //Canvas.Children.Add(copyBuilding);
 
             Canvas.Children.Remove(fakeBuilding);
         }
@@ -280,8 +344,8 @@ namespace KBS2.CityDesigner
         /// </summary>
         public void GetObject()
         {
-            var mouseX = Mouse.GetPosition(Canvas).X;
-            var mouseY = Mouse.GetPosition(Canvas).Y;
+            var mouseX = (int)Mouse.GetPosition(Canvas).X;
+            var mouseY = (int)Mouse.GetPosition(Canvas).Y;
             //check if Cursor is on Road and check if the location of the cursor is on top of a road
             foreach(var road in Roads)
             {
@@ -295,6 +359,7 @@ namespace KBS2.CityDesigner
                             {
                                 //display the information about the found road
                                 displayInfoScreenObject(road);
+                                return;
                             }
                         }
                     }
@@ -306,6 +371,7 @@ namespace KBS2.CityDesigner
                             {
                                 //display the information about the found road
                                 displayInfoScreenObject(road);
+                                return;
                             }
                         }
                     }
@@ -320,6 +386,7 @@ namespace KBS2.CityDesigner
                             {
                                 //display the information about the found road
                                 displayInfoScreenObject(road);
+                                return;
                             }
                         }
                     }
@@ -331,6 +398,7 @@ namespace KBS2.CityDesigner
                             {
                                 //display the information about the found road
                                 displayInfoScreenObject(road);
+                                return;
                             }
                         }
                     }
@@ -340,15 +408,15 @@ namespace KBS2.CityDesigner
             //check if Cursor is on a Building
             foreach (var building in Buildings)
             {
-                if ((mouseX >= building.Location.X - building.Size / 2 || mouseX <= building.Location.X + building.Size / 2) && (mouseY >= building.Location.Y - building.Size / 2 || mouseY <= building.Location.Y - building.Size / 2))
+                if (mouseX <= building.Location.X + building.Size/2 && mouseX >= building.Location.X - building.Size/2 && mouseY <= building.Location.Y + building.Size/2 && mouseY >= building.Location.Y - building.Size/2)
                 {
                     displayInfoScreenObject(building);
+                    return;
                 }
             }
 
         }
-
-
+        
         /// <summary>
         /// Displays the information about a specific road given by click right click on a road (function GetObject)
         /// </summary>
@@ -356,8 +424,8 @@ namespace KBS2.CityDesigner
         private void displayInfoScreenObject(Road road)
         {
             SelectRoad = road;
-            window.InformationBlockObjects.Visibility = Visibility.Visible;
-            window.TextBoxWidth.Text = road.Width.ToString();
+            window.InformationBlockRoad.Visibility = Visibility.Visible;
+            window.NumericWidthRoad.Value = road.Width;
         }
 
         /// <summary>
@@ -367,8 +435,9 @@ namespace KBS2.CityDesigner
         private void displayInfoScreenObject(Building building)
         {
             SelectBuilding = building;
-            window.InformationBlockObjects.Visibility = Visibility.Visible;
-            window.TextBoxWidth.Text = building.Size.ToString();
+            window.InformationBlockBuilding.Visibility = Visibility.Visible;
+            window.NumericSizeBuilding.Value = SelectBuilding.Size; //selected building loses size ?
+            
         }
 
 
@@ -384,15 +453,19 @@ namespace KBS2.CityDesigner
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
 
-
-        public void RemoveFakes()
+        /// <summary>
+        /// Remove ghosts
+        /// </summary>
+        public void RemoveGhosts()
         {
             Canvas.Children.Remove(fakeBuilding);
             Canvas.Children.Remove(fakeRoad);
 
         }
 
-
+        /// <summary>
+        /// Redraw all objects on Canvas
+        /// </summary>
         public void RedrawAllObjects()
         {
             //clear canvas
@@ -417,7 +490,8 @@ namespace KBS2.CityDesigner
             foreach (var building in Buildings)
             {
                 var copyBuilding = (Rectangle)Clone(realBuilding);
-
+                //copybuilding.height = building.size;
+                //copybuilding.width = building.size;
                 Canvas.SetTop(copyBuilding, (int)building.Location.Y - building.Size / 2);
                 Canvas.SetLeft(copyBuilding, (int)building.Location.X - building.Size / 2);
 
