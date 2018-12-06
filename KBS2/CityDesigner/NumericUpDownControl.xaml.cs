@@ -39,6 +39,7 @@ namespace KBS2.CityDesigner
                 else _value = value;
 
                 TextBoxValue.Text = _value.ToString();
+
                 ValueChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
             }
         }

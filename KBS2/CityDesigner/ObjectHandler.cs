@@ -54,6 +54,14 @@ namespace KBS2.CityDesigner
 
         };
 
+        //values for assistLine
+        private Line assistLine = new Line()
+        {
+            Stroke = Brushes.Black,
+            StrokeThickness = 1,
+            StrokeDashArray = new DoubleCollection() { 2 }
+        };
+
         // items in the city
         public List<Road> Roads = new List<Road>();
         public List<Intersection> Intersections = new List<Intersection>();
@@ -90,12 +98,13 @@ namespace KBS2.CityDesigner
         public void DrawGhostRoad(object sender, MouseEventArgs e)
         {
             int mouseX = (int)Mouse.GetPosition(Canvas).X;
-            int mouseY = (int)Mouse.GetPosition(Canvas).X;
+            int mouseY = (int)Mouse.GetPosition(Canvas).Y;
             
             // set the start point of the road
             if (startRoad == new Point(0, 0)) { startRoad = Mouse.GetPosition(Canvas); }
 
             Canvas.Children.Remove(fakeRoad);
+            Canvas.Children.Remove(assistLine);
 
             // FakeEndPoint
             var FakeEndPoint = Mouse.GetPosition(Canvas);
@@ -179,28 +188,24 @@ namespace KBS2.CityDesigner
                 if (snapRoadStart != null) 
                 {
                     fakeRoad.Y2 = (int)snapRoadStart.Start.Y;
-                    Canvas.Children.Add(new Line()
-                    {
-                        X1 = snapRoadStart.Start.X,
-                        Y1 = snapRoadStart.Start.Y,
-                        X2 = fakeRoad.X2,
-                        Y2 = fakeRoad.Y2,
-                        Stroke = Brushes.Black,
-                        StrokeThickness = 4
-                    });
+
+                    assistLine.X1 = snapRoadStart.Start.X;
+                    assistLine.Y1 = snapRoadStart.Start.Y;
+                    assistLine.X2 = fakeRoad.X2;
+                    assistLine.Y2 = fakeRoad.Y2;
+
+                    Canvas.Children.Add(assistLine);
                 }
                 else if (snapRoadEnd != null)
                 {
                     fakeRoad.Y2 = (int)snapRoadEnd.End.Y;
-                    Canvas.Children.Add(new Line()
-                    {
-                        X1 = snapRoadEnd.End.X,
-                        Y1 = snapRoadEnd.End.Y,
-                        X2 = fakeRoad.X2,
-                        Y2 = fakeRoad.Y2,
-                        Stroke = Brushes.Black,
-                        StrokeThickness = 4
-                    });
+
+                    assistLine.X1 = snapRoadEnd.End.X;
+                    assistLine.Y1 = snapRoadEnd.End.Y;
+                    assistLine.X2 = fakeRoad.X2;
+                    assistLine.Y2 = fakeRoad.Y2;
+
+                    Canvas.Children.Add(assistLine);
                 }
             }
             else if (fakeRoad.Y1 == fakeRoad.Y2 && fakeRoad.X1 != fakeRoad.X2 && Math.Abs(fakeRoad.X2 - fakeRoad.X1) >= minLengthRoad) // X road and GhostRoad is minimumlength
@@ -212,32 +217,24 @@ namespace KBS2.CityDesigner
                 {
                     fakeRoad.X2 = (int)snapRoadStart.Start.X;
 
-                    Canvas.Children.Add(new Line()
-                    {
-                        X1 = snapRoadStart.Start.X,
-                        Y1 = snapRoadStart.Start.Y,
-                        X2 = fakeRoad.X2,
-                        Y2 = fakeRoad.Y2,
-                        Stroke = Brushes.Black,
-                        StrokeThickness = 4
-                    });
+                    assistLine.X1 = snapRoadStart.Start.X;
+                    assistLine.Y1 = snapRoadStart.Start.Y;
+                    assistLine.X2 = fakeRoad.X2;
+                    assistLine.Y2 = fakeRoad.Y2;
 
+                    Canvas.Children.Add(assistLine);
                 }
                 else if (snapRoadEnd != null)
                 {
                     fakeRoad.X2 = (int)snapRoadEnd.End.X;
 
-                    Canvas.Children.Add(new Line()
-                    {
-                        X1 = snapRoadEnd.End.X,
-                        Y1 = snapRoadEnd.End.Y,
-                        X2 = fakeRoad.X2,
-                        Y2 = fakeRoad.Y2,
-                        Stroke = Brushes.Black,
-                        StrokeThickness = 4
-                    });
+                    assistLine.X1 = snapRoadEnd.End.X;
+                    assistLine.Y1 = snapRoadEnd.End.Y;
+                    assistLine.X2 = fakeRoad.X2;
+                    assistLine.Y2 = fakeRoad.Y2;
+
+                    Canvas.Children.Add(assistLine);
                 }
-                
             }
 
             Canvas.Children.Add(fakeRoad);
@@ -333,8 +330,6 @@ namespace KBS2.CityDesigner
             Canvas.SetLeft(copyBuilding, (int)Mouse.GetPosition(Canvas).X - realBuilding.Width / 2);
 
             RedrawAllObjects();
-
-            //Canvas.Children.Add(copyBuilding);
 
             Canvas.Children.Remove(fakeBuilding);
         }
@@ -490,8 +485,8 @@ namespace KBS2.CityDesigner
             foreach (var building in Buildings)
             {
                 var copyBuilding = (Rectangle)Clone(realBuilding);
-                //copybuilding.height = building.size;
-                //copybuilding.width = building.size;
+                copyBuilding.Height = building.Size;
+                copyBuilding.Width = building.Size;
                 Canvas.SetTop(copyBuilding, (int)building.Location.Y - building.Size / 2);
                 Canvas.SetLeft(copyBuilding, (int)building.Location.X - building.Size / 2);
 

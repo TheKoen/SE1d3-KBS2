@@ -213,8 +213,7 @@ namespace KBS2.CityDesigner
             {
                 if (Creator.SelectBuilding != null)
                 {
-                    
-                    Creator.SelectBuilding.Size = NumericWidthRoad.Value;
+                    Creator.SelectBuilding.Size = NumericSizeBuilding.Value;
                     Creator.RedrawAllObjects();
                 }
             }
