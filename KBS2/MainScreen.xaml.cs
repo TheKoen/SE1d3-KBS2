@@ -10,6 +10,8 @@ using System.ComponentModel;
 using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
+using CommandSystem;
+using CommandSystem.PropertyManagement;
 using KBS2.Visual.Controls;
 
 namespace KBS2
@@ -122,7 +124,7 @@ namespace KBS2
         public void createPropertyList()
         { 
             StackPanelSettings.Children.Clear();
-            var properties = CommandHandler.GetProperties();
+            var properties = PropertyHandler.GetProperties();
             foreach (var property in properties)
             {
                 var propname = property.Key.ToString();
@@ -172,7 +174,7 @@ namespace KBS2
             {
                 var propertyControl = (PropertySettings)child;
                 var name = propertyControl.LabelPropertyName.Content.ToString();
-                var property = CommandHandler.GetProperties().First(p => p.Key == name);
+                var property = PropertyHandler.GetProperties().First(p => p.Key == name);
 
                 if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
                 {
@@ -196,15 +198,15 @@ namespace KBS2
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
-            CommandHandler.ModifyProperty("main.tickRate", 30);
-            CommandHandler.ModifyProperty("command.tickRate", 30);
-            CommandHandler.ModifyProperty("startingPrice", 1.50);
-            CommandHandler.ModifyProperty("pricePerKilometer", 1.00);
-            CommandHandler.ModifyProperty("customerSpawnRate", 0.2f);
-            CommandHandler.ModifyProperty("availableCars", 10);
-            CommandHandler.ModifyProperty("customerCount", 10);
-            CommandHandler.ModifyProperty("globalSpeedLimit", -1);
-            CommandHandler.ModifyProperty("avgGroupSize", 10);
+            PropertyHandler.ModifyProperty("main.tickRate", 30);
+            PropertyHandler.ModifyProperty("command.tickRate", 30);
+            PropertyHandler.ModifyProperty("startingPrice", 1.50);
+            PropertyHandler.ModifyProperty("pricePerKilometer", 1.00);
+            PropertyHandler.ModifyProperty("customerSpawnRate", 0.2f);
+            PropertyHandler.ModifyProperty("availableCars", 10);
+            PropertyHandler.ModifyProperty("customerCount", 10);
+            PropertyHandler.ModifyProperty("globalSpeedLimit", -1);
+            PropertyHandler.ModifyProperty("avgGroupSize", 10);
             createPropertyList();
         }
 

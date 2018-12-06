@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Threading;
-using KBS2.Console;
+using CommandSystem.PropertyManagement;
 using Math = System.Math;
 
 namespace KBS2.Util.Loop
@@ -50,7 +50,7 @@ namespace KBS2.Util.Loop
         /// </summary>
         /// <param name="source"></param>
         /// <param name="args"></param>
-        protected override void OnTickrateChange(object source, CustomPropertyChangedArgs args)
+        protected override void OnTickrateChange(object source, UserPropertyChangedArgs args)
         {
             timer.Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(args.ValueAfter));
         }

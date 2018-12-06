@@ -76,7 +76,6 @@
     <Compile Include="ConsoleWindow.xaml.cs">
       <DependentUpon>ConsoleWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Console\CommandRegistrar.cs" />
     <Compile Include="Console\Commands\CommandLoad.cs" />
     <Compile Include="Console\Commands\CommandTime.cs" />
     <Compile Include="Console\Commands\CommandExport.cs" />
@@ -110,11 +109,9 @@
     <Compile Include="GPS\TSP\CustomerOrder\NearestNeighbour.cs" />
     <Compile Include="GPS\TSP\Path.cs" />
     <Compile Include="GPS\TSP\CustomerOrder\CustomerOrderAlgoritme.cs" />
-    <Compile Include="Util\CustomPropertyChangedArgs.cs" />
+    <Compile Include="Util\Loop\MainLoop.cs" />
     <Compile Include="Util\Loop\ThreadLoop.cs" />
     <Compile Include="Util\Loop\TickLoop.cs" />
-    <Compile Include="Util\Property.cs" />
-    <Compile Include="MainLoop.cs" />
     <Compile Include="ModelDesigner\CarDesign.cs" />
     <Compile Include="ModelDesigner\ModelDesigner.xaml.cs">
       <DependentUpon>ModelDesigner.xaml</DependentUpon>
@@ -126,6 +123,7 @@
     <Compile Include="Console\Commands\CommandTest.cs" />
     <Compile Include="Util\SpriteRenderer.cs" />
     <Compile Include="Util\StringConverters.cs" />
+    <Compile Include="Util\TextBoxProperties.cs" />
     <Compile Include="Visual\Controls\RoadControl.xaml.cs">
       <DependentUpon>RoadControl.xaml</DependentUpon>
     </Compile>

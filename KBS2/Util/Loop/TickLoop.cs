@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
+using CommandSystem;
+using CommandSystem.PropertyManagement;
 using KBS2.Console;
 
 namespace KBS2.Util.Loop
@@ -19,7 +21,7 @@ namespace KBS2.Util.Loop
         {
             Name = name;
             tickRate.PropertyChanged += OnTickrateChange;
-            CommandHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
+            PropertyHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace KBS2.Util.Loop
         /// </summary>
         /// <param name="source"></param>
         /// <param name="args"></param>
-        protected abstract void OnTickrateChange(object source, CustomPropertyChangedArgs args);
+        protected abstract void OnTickrateChange(object source, UserPropertyChangedArgs args);
 
         /// <summary>
         /// Called every Tick

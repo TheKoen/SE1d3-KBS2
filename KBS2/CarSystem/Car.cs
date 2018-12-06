@@ -93,7 +93,7 @@ namespace KBS2.CarSystem
             PropertyHandler.RegisterProperty($"car{id}.direction", ref this.direction);
 
             rotation = new Property(direction.GetVector());
-            CommandHandler.RegisterProperty($"car{id}.rotation", ref rotation);
+            PropertyHandler.RegisterProperty($"car{id}.rotation", ref rotation);
 
             maxSpeed = new Property(DefaultMaxSpeed);
             PropertyHandler.RegisterProperty($"car{id}.maxSpeed", ref maxSpeed);

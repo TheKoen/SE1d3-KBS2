@@ -36,18 +36,18 @@ namespace KBS2.Console.Commands
                 // Testing for float
                 output = TestFloat(ref _floatRegex, prop, val);
                 if (output != string.Empty) return output;
-                throw new InvalidParametersException();
+                throw new CommandInputException();
             }
-            catch (InvalidParametersException)
+            catch (CommandInputException)
             {
                 try
                 {
                     // Testing for double
                     output = TestDouble(ref _doubleRegex, prop, val);
                     if (output != string.Empty) return output;
-                    throw new InvalidParametersException();
+                    throw new CommandInputException();
                 }
-                catch (InvalidParametersException)
+                catch (CommandInputException)
                 {
                     // Testing for int
                     output = TestInt(ref _intRegex, prop, val);
