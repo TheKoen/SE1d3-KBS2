@@ -118,6 +118,7 @@
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
     <Compile Include="Util\StringConverters.cs" />
+    <Compile Include="Visual\CityRenderHandler.cs" />
     <Compile Include="Visual\Controls\CarControl.xaml.cs">
       <DependentUpon>CarControl.xaml</DependentUpon>
     </Compile>
@@ -133,6 +134,8 @@
     <Compile Include="Visual\Controls\RoadControl.xaml.cs">
       <DependentUpon>RoadControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Visual\CustomerRenderHandler.cs" />
+    <Compile Include="Visual\IRenderHandler.cs" />
     <Compile Include="Windows\CarInfoUserControl.xaml.cs">
       <DependentUpon>CarInfoUserControl.xaml</DependentUpon>
     </Compile>

@@ -13,6 +13,7 @@ using System.Linq;
 using KBS2.Visual.Controls;
 using System;
 using KBS2.CarSystem;
+using KBS2.Visual;
 
 namespace KBS2
 {
@@ -45,6 +46,8 @@ namespace KBS2
 
         private readonly ConsoleWindow consoleWindow;
 
+        private readonly CityRenderHandler cityRenderHandler;
+
         private string filePath;
 
         public int Ticks { get; set; }
@@ -53,14 +56,16 @@ namespace KBS2
         public MainScreen()
         {
             consoleWindow = new ConsoleWindow();
-            
+
+            cityRenderHandler = new CityRenderHandler(CanvasMain);
+
             InitializeComponent();
             WPFLoop.Subscribe(Update);
             CommandLoop.Start();
             GPSSystem.Setup();
 
             // Showing list of properties in settings tab
-            Loaded += (sender, args) => createPropertyList();
+            Loaded += (sender, args) => UpdatePropertyList();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -71,7 +76,7 @@ namespace KBS2
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            var dlg = new Microsoft.Win32.OpenFileDialog
             {
                 DefaultExt = ".xml",
                 Filter = "XML documents (.xml)|*.xml"
@@ -101,9 +106,9 @@ namespace KBS2
             CityParser.MakeCity(file);
             var city = City.Instance;
 
-            drawCity(city);
+            //TODO: Draw city.
 
-            createPropertyList();
+            UpdatePropertyList();
             //Enables buttons and tabs so the user can acces them.
             BtnStart.IsEnabled = true;
             BtnPause.IsEnabled = true;
@@ -133,7 +138,7 @@ namespace KBS2
 
             foreach (var car in city.Cars)
             {
-                CarControl carcontrol = new CarControl(car);
+                var carcontrol = new CarControl(car);
                 CanvasMain.Children.Add(carcontrol);
             }
         }
@@ -154,7 +159,7 @@ namespace KBS2
         }
 
         // Creates a label for every property.
-        public void createPropertyList()
+        public void UpdatePropertyList()
         { 
             StackPanelSettings.Children.Clear();
             var properties = CommandHandler.GetProperties();
@@ -201,8 +206,8 @@ namespace KBS2
         // Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            string s = "1,5";
-            string y = "1";
+            var s = "1,5";
+            var y = "1";
             foreach (var child in StackPanelSettings.Children)
             {
                 var propertyControl = (PropertySettings)child;
@@ -216,14 +221,13 @@ namespace KBS2
                     propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
                 }
          
-                if (propertyControl.LabelPropertyName.Content.ToString() == "startingPrice")
-                {              
-                    s = propertyControl.TBCurrentValue.Text.ToString();
-                }
-
-                if (propertyControl.LabelPropertyName.Content.ToString() == "pricePerKilometer")
-                {
-                   y = propertyControl.TBCurrentValue.Text.ToString();   
+                switch (propertyControl.LabelPropertyName.Content.ToString()) {
+                    case "startingPrice":
+                        s = propertyControl.TBCurrentValue.Text;
+                        break;
+                    case "pricePerKilometer":
+                        y = propertyControl.TBCurrentValue.Text;
+                        break;
                 }
             }
             LabelSimulationPriceFormula.Content = $" {s} + {y} * km";
@@ -231,6 +235,7 @@ namespace KBS2
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
+            //TODO: Does this need to be hardcoded? Can't we use a more dynamic solution?
             CommandHandler.ModifyProperty("main.tickRate", 30);
             CommandHandler.ModifyProperty("command.tickRate", 30);
             CommandHandler.ModifyProperty("startingPrice", 1.50);
@@ -240,7 +245,7 @@ namespace KBS2
             CommandHandler.ModifyProperty("customerCount", 10);
             CommandHandler.ModifyProperty("globalSpeedLimit", -1);
             CommandHandler.ModifyProperty("avgGroupSize", 10);
-            createPropertyList();
+            UpdatePropertyList();
         }
 
         public void UpdateTimer()
@@ -263,7 +268,7 @@ namespace KBS2
             UpdateTimer();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
             if (consoleWindow.IsVisible)
             {
@@ -272,34 +277,6 @@ namespace KBS2
             else
             {
                 consoleWindow.Show();
-            }
-        }
-
-        private void BtnConsole_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        public void drawCity(City city)
-        {
-            CanvasMain.Children.Clear();
-            foreach (var building in city.Buildings)
-            {
-                BuildingControl b = new BuildingControl(building.Location, building.Size);
-                
-                CanvasMain.Children.Add(b);
-            }
-
-            foreach (var road in city.Roads)
-            {
-                RoadControl rc = new RoadControl(road);
-                CanvasMain.Children.Add(rc);
-            }
-
-            foreach (var intersection in city.Intersections)
-            {
-                IntersectionControl ic = new IntersectionControl(intersection);
-                CanvasMain.Children.Add(ic);
             }
         }
     }
