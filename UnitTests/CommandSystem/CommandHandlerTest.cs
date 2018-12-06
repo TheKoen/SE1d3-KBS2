@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace UnitTests.CommandSystem
 {
     [TestFixture]
-    public class CommandListTest
+    public class CommandHandlerTest
     {
         private bool _registerCommandTestRan;
         
