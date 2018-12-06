@@ -22,18 +22,19 @@ namespace KBS2.Visual.Controls
     public partial class CustomerControl : UserControl
     {
 
-        public Customer c;
+        public Customer customer;
 
-        public CustomerControl(Customer c)
+        public CustomerControl(Customer customer)
         {
-            this.c = c;
-            InitializeComponent();
+            this.customer = customer;
             Update();
+            InitializeComponent();
+            MainScreen.WPFLoop.Subscribe(Update);
         }
 
         public void Update()
         {
-            EllipseCustomer.Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
+            Margin = new Thickness(customer.Location.X, customer.Location.Y, 0, 0);
         }
     }
 }

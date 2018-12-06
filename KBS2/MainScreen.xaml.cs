@@ -88,28 +88,7 @@ namespace KBS2
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
-            // Loads the city file and parses the information into a City.
-            var file = new XmlDocument();
-            file.Load(filePath);
-            CityParser.MakeCity(file);
-            var city = City.Instance;
-
-            //TODO: Draw city.
-
-            UpdatePropertyList();
-            //Enables buttons and tabs so the user can acces them.
-            BtnStart.IsEnabled = true;
-            BtnPause.IsEnabled = true;
-            BtnStop.IsEnabled = true;
-            TabItemSettings.IsEnabled = true;
-            TabItemResults.IsEnabled = true;
-
-            // Fills in the current City information that is needed.
-            LabelSimulationRoad.Content = city.Roads.Count;
-            LabelSimulationIntersection.Content = city.Intersections.Count;
-            LabelSimulationBuilding.Content = city.Buildings.Count;
-            LabelSimulationGarage.Content = city.Buildings.FindAll(building => building is Garage).Count;
-            LabelSimulationAmountCostumer.Content = city.Customers.Count;
+            SimulationControlHandler.LoadButtonClick();
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)

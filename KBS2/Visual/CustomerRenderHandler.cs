@@ -23,22 +23,38 @@ namespace KBS2.Visual
 
         public void Update()
         {
-            foreach(var child in Canvas.Children)
+            if(City.Instance != null)
             {
-                if(child is CustomerControl)
+                AddCostumerControls(City.Instance);
+            }
+        }
+
+ 
+        private void AddCostumerControls(City city)
+        {
+            foreach(var customer in city.Customers)
+            {
+                if (!HasControlFor(customer))
                 {
-                    ((CustomerControl)child).Update();
+                    Canvas.Children.Add(new CustomerControl(customer));
                 }
             }
         }
 
-        //nieuwe func die pakt alle customers in city en maakt controls
-        private void AddControlForCustomersInCity(City city)
+        public bool HasControlFor(Customer customer)
         {
-            foreach(var customer in city.Customers)
+            foreach (var child in Canvas.Children)
             {
-                Canvas.Children.Add(new CustomerControl(customer));
+                if (child is CustomerControl)
+                {
+                    var control = (CustomerControl)child;
+                    if (control.customer.Equals(customer))
+                    {
+                        return true;
+                    }
+                }
             }
+            return false;
         }
     }
 }
