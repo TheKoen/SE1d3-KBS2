@@ -27,27 +27,14 @@ namespace KBS2.Visual.Controls
         public CarControl(Car c)
         {
             this.car = c;
-            var x = carSpawnDirectionDeterminesRotation(car.Direction);
-            RenderTransform = new RotateTransform(x);
+            RenderTransform = new RotateTransform();
             Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
             InitializeComponent();
         }
 
-        private int carSpawnDirectionDeterminesRotation(DirectionCar direction)
+        public void ()
         {
-            switch (direction)
-            {
-                case DirectionCar.North:
-                    return 0;
-                case DirectionCar.East:
-                    return +90;
-                case DirectionCar.South:
-                    return +180;
-                case DirectionCar.West:
-                    return -90;
-                default:
-                    return 0;
-            }   
+            return ;
         }
     }
 }
