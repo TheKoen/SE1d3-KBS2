@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Xml;
 using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
@@ -76,7 +77,12 @@ namespace KBS2.CitySystem
                 case "Building":
                     return new Building(loc, size);
                 case "Garage":
-                    return new Garage(loc, size, DirectionCar.North);
+                    if (Enum.TryParse(node.Attributes["Direction"].InnerText, out DirectionCar direction))
+                    {
+                        return new Garage(loc, size, direction);
+                    }
+
+                    throw new XmlException("Garage doesn't have a valid direction");
                 default:
                     return null;
             }
