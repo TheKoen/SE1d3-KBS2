@@ -6,10 +6,12 @@ namespace KBS2.Visual
 {
     public class CityRenderHandler : IRenderHandler
     {
+        private MainScreen Screen { get; }
         public Canvas Canvas { get; }
 
-        public CityRenderHandler(Canvas canvas)
+        public CityRenderHandler(MainScreen screen, Canvas canvas)
         {
+            Screen = screen;
             Canvas = canvas;
 
             MainScreen.WPFLoop.Subscribe(Update);
@@ -17,10 +19,13 @@ namespace KBS2.Visual
 
         public void Update()
         {
-
+            if (City.Instance != null)
+            {
+                Screen.LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
+            }
         }
 
-        private void DrawCity(City city)
+        public void DrawCity(City city)
         {
             Canvas.Children.Clear();
 

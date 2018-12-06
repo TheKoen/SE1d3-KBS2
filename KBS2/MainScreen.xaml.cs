@@ -46,9 +46,10 @@ namespace KBS2
 
         private readonly ConsoleWindow consoleWindow;
 
-        private readonly CityRenderHandler cityRenderHandler;
-
-        private string filePath;
+        public CityRenderHandler CityRenderHandler { get; private set; }
+        public CustomerRenderHandler CustomerRenderHandler { get; private set; }
+        public SimulationControlHandler SimulationControlHandler { get; private set; }
+        public PropertyDisplayHandler PropertyDisplayHandler { get; private set; }
 
         public int Ticks { get; set; }
         public double SecondsRunning { get; private set; }
@@ -56,16 +57,22 @@ namespace KBS2
         public MainScreen()
         {
             consoleWindow = new ConsoleWindow();
-
-            cityRenderHandler = new CityRenderHandler(CanvasMain);
-
-            InitializeComponent();
-            WPFLoop.Subscribe(Update);
             CommandLoop.Start();
+            
+            Initialized += (sender, args) => Initialize();
+            InitializeComponent();
+        }
+
+        private void Initialize()
+        {
             GPSSystem.Setup();
 
-            // Showing list of properties in settings tab
-            Loaded += (sender, args) => UpdatePropertyList();
+            CityRenderHandler = new CityRenderHandler(this, CanvasMain);
+            CustomerRenderHandler = new CustomerRenderHandler(CanvasMain);
+            SimulationControlHandler = new SimulationControlHandler(this);
+            PropertyDisplayHandler = new PropertyDisplayHandler(this);
+
+            WPFLoop.Subscribe(Update);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -76,26 +83,7 @@ namespace KBS2
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new Microsoft.Win32.OpenFileDialog
-            {
-                DefaultExt = ".xml",
-                Filter = "XML documents (.xml)|*.xml"
-            };
-
-            // Display OpenFileDialog by calling ShowDialog method
-            var result = dlg.ShowDialog();
-
-            // Get the selected file name and display in a TextBox
-            if (result == true)
-            {
-                
-                // Open document
-                var fileName = dlg.FileName;
-                filePath = fileName;
-                var cityname = Path.GetFileNameWithoutExtension(fileName);
-                TBCity.Text = cityname;
-                CityName.Content = "City : " + cityname.First().ToString().ToUpper() + cityname.Substring(1);
-            }
+            SimulationControlHandler.SelectButtonClick();
         }
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
@@ -109,12 +97,12 @@ namespace KBS2
             //TODO: Draw city.
 
             UpdatePropertyList();
-            //Enables or disables buttons and tabs so the user can acces them or not.                
+            //Enables buttons and tabs so the user can acces them.
+            BtnStart.IsEnabled = true;
+            BtnPause.IsEnabled = true;
+            BtnStop.IsEnabled = true;
             TabItemSettings.IsEnabled = true;
             TabItemResults.IsEnabled = true;
-            BtnStart.IsEnabled = true;
-            BtnPause.IsEnabled = false;
-            BtnStop.IsEnabled = false;
 
             // Fills in the current City information that is needed.
             LabelSimulationRoad.Content = city.Roads.Count;
@@ -126,44 +114,17 @@ namespace KBS2
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            WPFLoop.Start();
-            AILoop.Start();
-            BtnStart.IsEnabled = false;
-            BtnPause.IsEnabled = true;
-            BtnStop.IsEnabled = true;
-            App.Console.Print("Start pressed");
+            SimulationControlHandler.StartButtonClick();
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
-            WPFLoop.Stop();
-            AILoop.Stop();
-            BtnStart.IsEnabled = true;
-            App.Console.Print("Pause pressed");
+            SimulationControlHandler.PauseButtonClick();
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-            WPFLoop.Stop();
-            AILoop.Stop();
-            City.Instance.Controller.Reset();
-            BtnStart.IsEnabled = true;
-            App.Console.Print("Reset pressed");
-        }
-
-        // Creates a label for every property.
-        public void UpdatePropertyList()
-        { 
-            StackPanelSettings.Children.Clear();
-            var properties = CommandHandler.GetProperties();
-            foreach (var property in properties)
-            {
-                var propname = property.Key.ToString();
-                var propvalue = property.Value.Value.ToString();
-
-                var prop = new PropertySettings(propname, propvalue);
-                StackPanelSettings.Children.Add(prop);
-            }
+            SimulationControlHandler.ResetButtonClick();
         }
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
@@ -199,46 +160,13 @@ namespace KBS2
         // Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            var s = "1,5";
-            var y = "1";
-            foreach (var child in StackPanelSettings.Children)
-            {
-                var propertyControl = (PropertySettings)child;
-                var name = propertyControl.LabelPropertyName.Content.ToString();
-                var property = CommandHandler.GetProperties().First(p => p.Key == name);
-
-                if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
-                {
-                    var value = propertyControl.TBCurrentValue.Text;
-                    CommandHandler.HandleInput($"set { name } { value }");
-                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
-                }
-         
-                switch (propertyControl.LabelPropertyName.Content.ToString()) {
-                    case "startingPrice":
-                        s = propertyControl.TBCurrentValue.Text;
-                        break;
-                    case "pricePerKilometer":
-                        y = propertyControl.TBCurrentValue.Text;
-                        break;
-                }
-            }
-            LabelSimulationPriceFormula.Content = $" {s} + {y} * km";
+            PropertyDisplayHandler.SaveProperties();
+            PropertyDisplayHandler.UpdatePriceLabel(LabelSimulationPriceFormula);
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Does this need to be hardcoded? Can't we use a more dynamic solution?
-            CommandHandler.ModifyProperty("main.tickRate", 30);
-            CommandHandler.ModifyProperty("command.tickRate", 30);
-            CommandHandler.ModifyProperty("startingPrice", 1.50);
-            CommandHandler.ModifyProperty("pricePerKilometer", 1.00);
-            CommandHandler.ModifyProperty("customerSpawnRate", 0.2f);
-            CommandHandler.ModifyProperty("availableCars", 10);
-            CommandHandler.ModifyProperty("customerCount", 10);
-            CommandHandler.ModifyProperty("globalSpeedLimit", -1);
-            CommandHandler.ModifyProperty("avgGroupSize", 10);
-            UpdatePropertyList();
+            PropertyDisplayHandler.ResetDefaults();
         }
 
         public void UpdateTimer()
@@ -253,9 +181,6 @@ namespace KBS2
 
         public void Update()
         {
-            LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
-            LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
-
             Ticks++;
             SecondsRunning = GetSeconds();
             UpdateTimer();
