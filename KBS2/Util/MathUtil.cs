@@ -80,5 +80,14 @@ namespace KBS2.Util
             rotation.Normalize();
             return rotation;
         }
+
+        public static Vector Normalize(Vector vector)
+        {
+            var result = new Vector(vector.X, vector.Y);
+            result.Normalize();
+            if (Math.Abs(result.X) < 0.0001) result.X = 0;
+            if (Math.Abs(result.Y) < 0.0001) result.Y = 0;
+            return result;
+        }
     }
 }
