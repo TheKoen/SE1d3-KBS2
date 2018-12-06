@@ -60,8 +60,6 @@ namespace KBS2.Visual
         private void EnableButtonsAndTabs()
         {
             Screen.BtnStart.IsEnabled = true;
-            Screen.BtnPause.IsEnabled = true;
-            Screen.BtnStop.IsEnabled = true;
             Screen.TabItemSettings.IsEnabled = true;
             Screen.TabItemResults.IsEnabled = true;
         }
@@ -86,18 +84,24 @@ namespace KBS2.Visual
             {
                 Screen.CanvasMain.Children.Add(new CarControl(car));
             }
+
+            Screen.BtnPause.IsEnabled = true;
+            Screen.BtnStop.IsEnabled = true;
+            Screen.BtnStart.IsEnabled = false;
         }
 
         public void PauseButtonClick()
         {
+            Screen.BtnStart.IsEnabled = true;
             App.Console.Print("Pause pressed");
-
+            
             MainScreen.WPFLoop.Stop();
             MainScreen.AILoop.Stop();
         }
 
         public void ResetButtonClick()
         {
+            Screen.BtnStart.IsEnabled = true;
             App.Console.Print("Reset pressed");
 
             MainScreen.WPFLoop.Stop();
