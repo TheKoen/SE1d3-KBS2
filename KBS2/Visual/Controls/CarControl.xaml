@@ -8,12 +8,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="15" d:DesignWidth="15">
     <Grid Margin="0,0,2.2,0.2" >
-        <Rectangle Fill="#FFFF2727" HorizontalAlignment="Left" Height="8" Margin="-4,3,0,0" Stroke="#FFAE1717" VerticalAlignment="Top" Width="15" RenderTransformOrigin="0.5,0.5">
+        <Rectangle Name="Rectangle" Fill="#FFFF2727" HorizontalAlignment="Left" Height="8" Margin="-4,3,0,0" Stroke="#FFAE1717" VerticalAlignment="Top" Width="15" RenderTransformOrigin="0.5,0.5">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
                     <SkewTransform/>
-                    <RotateTransform Angle="90.171"/>
+                    <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
                     <TranslateTransform X="0.2" Y="0.201"/>
                 </TransformGroup>
             </Rectangle.RenderTransform>
