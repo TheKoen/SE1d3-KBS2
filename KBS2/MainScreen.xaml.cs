@@ -139,37 +139,13 @@ namespace KBS2
         // Method for saving the new values the user has filled in in the Settings tab.
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            var s = "1,5";
-            var y = "1";
-            foreach (var child in StackPanelSettings.Children)
-            {
-                var propertyControl = (PropertySettings)child;
-                var name = propertyControl.LabelPropertyName.Content.ToString();
-                var property = CommandHandler.GetProperties().First(p => p.Key == name);
-
-                if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
-                {
-                    var value = propertyControl.TBCurrentValue.Text;
-                    CommandHandler.HandleInput($"set { name } { value }");
-                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
-                }
-         
-                switch (propertyControl.LabelPropertyName.Content.ToString()) {
-                    case "startingPrice":
-                        s = propertyControl.TBCurrentValue.Text;
-                        break;
-                    case "pricePerKilometer":
-                        y = propertyControl.TBCurrentValue.Text;
-                        break;
-                }
-            }
-            LabelSimulationPriceFormula.Content = $" {s} + {y} * km";
+            PropertyDisplayHandler.SaveProperties();
+            PropertyDisplayHandler.UpdatePriceLabel(LabelSimulationPriceFormula);
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Does this need to be hardcoded? Can't we use a more dynamic solution?
-            
+            PropertyDisplayHandler.ResetDefaults();
         }
 
         public void UpdateTimer()
@@ -184,9 +160,6 @@ namespace KBS2
 
         public void Update()
         {
-            LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
-            LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
-
             Ticks++;
             SecondsRunning = GetSeconds();
             UpdateTimer();

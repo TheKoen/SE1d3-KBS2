@@ -82,11 +82,6 @@ namespace KBS2.Visual
             MainScreen.AILoop.Start();
             
             var city = City.Instance;
-            foreach (var Customer in city.Customers)
-            {
-                Screen.CanvasMain.Children.Add(Customer.CustomerControl);
-            }
-
             foreach (var car in city.Cars)
             {
                 Screen.CanvasMain.Children.Add(new CarControl(car));

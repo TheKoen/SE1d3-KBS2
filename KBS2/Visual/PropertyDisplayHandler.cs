@@ -1,5 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
 using KBS2.Console;
+using KBS2.GPS;
 
 namespace KBS2.Visual
 {
@@ -44,6 +46,31 @@ namespace KBS2.Visual
             CommandHandler.ModifyProperty("avgGroupSize", 10);
 
             UpdateProperties();
+        }
+
+        public void SaveProperties()
+        {
+            foreach (var child in PropertyPanel.Children)
+            {
+                var propertyControl = (PropertySettings)child;
+                var name = propertyControl.LabelPropertyName.Content.ToString();
+                var property = CommandHandler.GetProperties().First(p => p.Key == name);
+
+                if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
+                {
+                    var value = propertyControl.TBCurrentValue.Text;
+                    CommandHandler.HandleInput($"set { name } { value }");
+                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
+                }
+            }
+        }
+
+        public void UpdatePriceLabel(Label priceLabel)
+        {
+            var startingPrice = GPSSystem.StartingPrice.Value;
+            var pricePerKilometer = GPSSystem.PricePerKilometer.Value;
+
+            priceLabel.Content = $"€{startingPrice:0.00} + ({pricePerKilometer:0.00} * km)";
         }
 
         private void Update()
