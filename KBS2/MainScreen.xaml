@@ -74,22 +74,10 @@
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
                     <Button x:Name="BtnDefault" Content="Set default" HorizontalAlignment="Left" Margin="87,554,0,0" VerticalAlignment="Top" Width="75" Click="BtnDefault_Click"/>
                     <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Left" Margin="193,554,0,0" VerticalAlignment="Top" Width="75" Click="BtnSave_Click"/>
-                    <ScrollViewer HorizontalAlignment="Left" Height="529" VerticalAlignment="Top" Width="341" Margin="0,0,-0.1,0"/>
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="City:" Width="150" FontWeight="Bold" FontSize="14"/>
+                    <ScrollViewer x:Name="ScrollViewerSettings" HorizontalAlignment="Left" Height="529" VerticalAlignment="Top" Width="341" Margin="0,0,-0.1,0">
+                        <StackPanel x:Name="StackPanelSettings" Orientation="Vertical">
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="test" Width="150" FontSize="14"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            
-                        </StackPanel>
-                    </StackPanel>
-
-
-
-
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemResults" Header="Results" Margin="90,-2,-125,-2" IsEnabled="False">
