@@ -37,7 +37,7 @@ namespace KBS2.Visual.Controls
         {
             var rotation = MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
             App.Console.Print($"Car rotation {rotation} ");
-            RenderTransform = new RotateTransform();
+            RenderTransform = new RotateTransform(rotation);
             Margin = new Thickness(car.Location.X, car.Location.Y, 0, 0);           
         }
     }
