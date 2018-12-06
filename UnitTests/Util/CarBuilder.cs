@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CarSystem;
 using KBS2.CarSystem.Sensors;
+using KBS2.CitySystem;
+using KBS2.GPS;
 
 namespace UnitTests.Util
 {
@@ -18,9 +20,10 @@ namespace UnitTests.Util
         private Vector location;
         private readonly List<CreateSensor> sensors = new List<CreateSensor>();
         private DirectionCar direction;
-        private CarModel model = CarModel.TestModel;
+        private CarModel model = CarModel.Get("TestModel");
         private int width;
         private int length;
+        private Road currentRoad;
 
         public CarBuilder Location(Vector location)
         {
@@ -58,6 +61,12 @@ namespace UnitTests.Util
             return this;
         }
 
+        public CarBuilder CurrentRoad(Road currentRoad)
+        {
+            this.currentRoad = currentRoad;
+            return this;
+        }
+
         public Car Build()
         {
             if (location == null)
@@ -65,8 +74,16 @@ namespace UnitTests.Util
                 throw new ArgumentException("Location cannot be null");
             }
 
-            var car = new Car(ID++, model, location, new List<Sensor>(), direction, width, length);
+            var car = new Car(ID++, model, location, new List<Sensor>(), direction, width, length)
+            {
+                CurrentRoad = currentRoad
+            };
             sensors.ForEach(creator => car.Sensors.Add(creator(car)));
+
+            if (car.CurrentRoad == null)
+            {
+                car.CurrentRoad = GPSSystem.GetRoad(location);
+            }
 
             return car;
         }

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
+using CommandSystem.PropertyManagement;
 using KBS2.CitySystem;
-using KBS2.Console;
 
 namespace UnitTests.Util
 {
@@ -10,7 +10,7 @@ namespace UnitTests.Util
 
         public CityBuilder()
         {
-            CommandHandler.ResetProperties();
+            PropertyHandler.ResetProperties();
             City = new City();
         }
 

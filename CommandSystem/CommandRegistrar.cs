@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using KBS2.Console.Commands;
 
-namespace KBS2.Console
+namespace CommandSystem
 {
     public static class CommandRegistrar
     {

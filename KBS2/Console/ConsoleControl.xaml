@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KBS2.Console"
+             xmlns:util="clr-namespace:KBS2.Util"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              FocusManager.FocusedElement="{Binding ElementName=TextBoxInput}">
@@ -23,30 +24,8 @@
                 <ColumnDefinition Width="48" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="TextBoxInput" x:FieldModifier="public" Grid.Column="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" PreviewKeyDown="HandleInputKeyDown">
-                <TextBox.Style>
-                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                        <Style.Resources>
-                            <VisualBrush x:Key="VisualBrushCueBanner" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                                <VisualBrush.Visual>
-                                    <Label Content="Command" Foreground="LightGray" />
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                                <Setter Property="Background" Value="{StaticResource VisualBrushCueBanner}" />
-                            </Trigger>
-                            <Trigger Property="Text" Value="{x:Null}">
-                                <Setter Property="Background" Value="{StaticResource VisualBrushCueBanner}" />
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter Property="Background" Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            <TextBox x:Name="TextBoxInput" x:FieldModifier="public" Style="{StaticResource GhostTextBox}" util:TextBoxProperties.GhostText="Command"
+                     Grid.Column="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" PreviewKeyDown="HandleInputKeyDown" />
 
             <Button x:Name="ButtonSend" x:FieldModifier="public" Grid.Column="1" Content="Send" />
         </Grid>

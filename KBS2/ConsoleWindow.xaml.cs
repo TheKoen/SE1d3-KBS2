@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2.Console;
 using KBS2.Exceptions;
 
