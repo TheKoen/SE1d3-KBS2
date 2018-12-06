@@ -1,11 +1,11 @@
-namespace KBS2.Util
+namespace CommandSystem.PropertyManagement
 {
-    public class CustomPropertyChangedArgs
+    public sealed class UserPropertyChangedArgs
     {
         public dynamic ValueBefore { get; }
         public dynamic ValueAfter { get; }
 
-        public CustomPropertyChangedArgs(dynamic valueBefore, dynamic valueAfter)
+        public UserPropertyChangedArgs(dynamic valueBefore, dynamic valueAfter)
         {
             ValueBefore = valueBefore;
             ValueAfter = valueAfter;

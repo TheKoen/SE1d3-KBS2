@@ -10,6 +10,8 @@ using System.ComponentModel;
 using System.Linq;
 using KBS2.Util.Loop;
 using System.Linq;
+using CommandSystem;
+using CommandSystem.PropertyManagement;
 using KBS2.Visual.Controls;
 using System;
 using KBS2.CarSystem;

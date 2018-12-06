@@ -1,64 +1,74 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using KBS2.CarSystem.Sensors;
+using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
-using KBS2.CustomerSystem;
+using KBS2.GPS;
+using KBS2.Util;
 
 namespace KBS2.CarSystem
 {
     public class CarController
     {
+        // Acceleration is calculated by 1 / accelerationDivider
+        private const double accelerationDivider = 9.0;
+
+        // Decceleration is calculated by acceleration * brakingMultiplier
+        private const double brakingMultiplier = 1.2;
+
+        // Maximum angle the car can rotate in a lane (in degrees).
+        private const double maxInLaneRotation = 5.0;
+
+        // Maximum amount the car can deviate from the lane center.
+        private const double maxLaneDeviation = 0.2;
+
+        // Speed at which the car will rotate (in degrees per tick).
+        private const double rotationSpeed = 1.0;
+
+        // Distance the car needs to brake.
+        private const double brakingDistance = 10.0;
+
+        // Maximum speed while driving normally.
+        private const double maxNormalSpeed = 1.0;
+
+        // Maximum speed while turning.
+        private const double maxTurningSpeed = 0.6;
+
         public Car Car { get; set; }
 
-        public CarController(Car car) 
+        private bool initialized;
+        private bool braking;
+
+        public CarController(Car car)
         {
             Car = car;
         }
 
-        /// <summary>
-        /// Remove all customers out of the car
-        /// </summary>
-        /// <returns>List with all removed customers</returns>
-        public List<Customer> RemoveCustomers()
+        public void Init()
         {
-            var items = Car.Passengers;
-            Car.Passengers.Clear();
-            return items;
-        }
+            initialized = true;
 
-        /// <summary>
-        /// Remove specific customer out of the car
-        /// </summary>
-        /// <returns>Customer that is removed</returns>
-        /// <param name="customer">customer that needs to be removed out of the car</param>
-        public Customer RemoveCustomer(Customer customer)
-        {
-            Car.Passengers.Remove(customer);
-            return customer;
-        }
-
-        /// <summary>
-        /// Add customers to the car
-        /// </summary>
-        /// <param name="customers">List with customers that needs to be added</param>
-        public void AddCustomers(IEnumerable<Customer> customers)
-        {
-            foreach (var item in customers)
+            // If we have a CollisionSensor on the front, subscribe to it.
+            if (HasSensors<CollisionSensor>(Direction.Front))
             {
-                Car.Passengers.Add(item);
+                GetSensors<CollisionSensor>(Direction.Front).First().SubScribeSensorEvent(OnCollisionSensorDetect);
             }
         }
 
-        /// <summary>
-        /// Add a customer to the car
-        /// </summary>
-        /// <param name="customer"></param>
-        public void AddCustomer(Customer customer)
+        private void OnCollisionSensorDetect(object source, SensorEventArgs args)
         {
-            Car.Passengers.Add(customer);
+            braking = true;
         }
 
-        public List<T> GetSensors<T>(Direction side) where T : Sensor
+        /// <summary>
+        /// Get all the sensors of type T on a specific side.
+        /// </summary>
+        /// <typeparam name="T">Type of the Sensor. Must extend Sensor</typeparam>
+        /// <param name="side">Side on which the sensors must be installed</param>
+        /// <returns>A list with Sensors of type T</returns>
+        public List<T> GetSensors<T>(Direction side = Direction.Global) where T : Sensor
         {
             return Car.Sensors
                 .FindAll(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side))
@@ -67,42 +77,222 @@ namespace KBS2.CarSystem
         }
 
         /// <summary>
-        /// Change direction of the car and throw an event
+        /// Check if there are any sensors of type T on a specific side.
         /// </summary>
-        /// <return>returns bool true if car is able to rotate</return>
-        /// <param name="direction">change the direction of the car with DirectionCar</param>
-        protected bool ChangeDirectionCar(DirectionCar direction) 
+        /// <typeparam name="T">Type of the Sensor. Must extend Sensor</typeparam>
+        /// <param name="side">Side on which the sensors must be installed</param>
+        /// <returns>true if there are any Sensors of type T on the specified side</returns>
+        public bool HasSensors<T>(Direction side = Direction.Global) where T : Sensor
         {
-            if(Car.Direction == direction)
+            return Car.Sensors
+                .Any(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side));
+        }
+
+        /// <summary>
+        /// Runs the main car logic. Needs to be subscribed to the MainLoop.
+        /// </summary>
+        public void Update()
+        {
+            // If we're not initialized, initialize!
+            if (!initialized)
             {
-                return false;
+                Init();
             }
-            switch (Car.Direction) {
-                case DirectionCar.North when direction == DirectionCar.South:
-                case DirectionCar.South when direction == DirectionCar.North:
-                case DirectionCar.West when direction == DirectionCar.East:
-                case DirectionCar.East when direction == DirectionCar.West:
-                    return false;
-                default:
-                    Car.Direction = direction;
-                    return true;
+
+            // Update the current road with the road at our location.
+            Car.CurrentRoad = GPSSystem.GetRoad(Car.Location);
+            if (Car.CurrentRoad == null)
+            {
+                return;
+            }
+
+            // Calculate the distance to the local target (usually the next intersection).
+            var distanceToTarget = MathUtil.Distance(Car.Location, Car.CurrentTarget);
+            // Calculate the distance to the destination.
+            var distanceToDestination = MathUtil.Distance(Car.Location, Car.Destination.Location);
+            // Calculate the relative yaw (in degrees).
+            var yaw = MathUtil.VectorToAngle(Car.Rotation, Car.Direction);
+            // Get the current velocity of the car.
+            var velocity = Car.Velocity;
+            // Create a variable to store the added rotation in this update call.
+            var addedRotation = 0.0;
+
+            // Check how far we are from our destination.
+            if (distanceToDestination > 10)
+            {
+                // Call the handle functions to stay in the lane and accelerate/deccelerate.
+                HandleStayInLane(ref velocity, ref yaw, ref addedRotation);
+                HandleAccelerate(ref velocity, ref distanceToTarget);
+            }
+            else
+            {
+                // Call the handle function to approach the target.
+                HandleApproachTarget(ref velocity, ref yaw, ref addedRotation);
+            }
+
+            // Update the car's velocity with the result of the handle functions.
+            velocity = MathUtil.RotateVector(velocity, -addedRotation);
+            Car.Velocity = velocity;
+            Car.Rotation = new Vector(velocity.X, velocity.Y);
+            Car.Rotation.Normalize();
+
+            // Update the car's location with the velocity.
+            Car.Location = Vector.Add(Car.Location, Car.Velocity);
+        }
+
+        public void HandleApproachTarget(ref Vector velocity, ref double yaw, ref double addedRotation)
+        {
+            var speed = velocity.Length;
+            var rotation = MathUtil.VelocityToRotation(velocity);
+
+            if (speed > 0.2)
+            {
+                velocity = Vector.Add(velocity, CalculateDeccelerationVector(velocity));
+            }
+
+            var destination = Car.Destination.Location;
+            var location = Car.Location;
+
+            var sub = new Vector(
+                destination.X - location.X,
+                destination.Y - location.Y
+            );
+            sub.Normalize();
+
+            var angle = Vector.AngleBetween(rotation, sub);
+            if (angle > 0)
+            {
+                if (yaw < maxInLaneRotation)
+                {
+                    addedRotation += rotationSpeed;
+                }
+            }
+            else
+            {
+                if (yaw > -maxInLaneRotation)
+                {
+                    addedRotation -= rotationSpeed;
+                }
             }
         }
 
-        public void Update()
+        /// <summary>
+        /// Rotates the car in the right direction to stay in the lane.
+        /// </summary>
+        /// <param name="velocity">Current velocity of the car</param>
+        /// <param name="yaw">Current relative yaw of the car</param>
+        /// <param name="addedRotation">Amount of rotation (in degrees) to add</param>
+        public void HandleStayInLane(ref Vector velocity, ref double yaw, ref double addedRotation)
         {
-            var distanceToLeft = GetSensors<LineSensor>(Direction.Left).First().Distance;
-            var distanceToRight = GetSensors<LineSensor>(Direction.Right).First().Distance;
-            var velocity = Car.Velocity;
+            // Check if the car has LineSensors on the left and right side.
+            if (HasSensors<LineSensor>(Direction.Left) && HasSensors<LineSensor>(Direction.Right))
+            {
+                // Request the distance to the left and right side from the sensors.
+                var distanceToLeft = GetSensors<LineSensor>(Direction.Left).First().Distance;
+                var distanceToRight = GetSensors<LineSensor>(Direction.Right).First().Distance;
 
-            if (distanceToLeft > distanceToRight && velocity.X < 0.5)
-            {
-                velocity.X -= 0.1;
+                // Check if we're too far to the right side of the lane.
+                if (distanceToLeft - distanceToRight >= maxLaneDeviation)
+                {
+                    //Rotate to the left if possible.
+                    if (yaw < maxInLaneRotation)
+                    {
+                        addedRotation += rotationSpeed;
+                    }
+                }
+                // Check if we're too far to the left side of the lane.
+                else if (distanceToRight - distanceToLeft >= maxLaneDeviation)
+                {
+                    //Rotate to the right if possible.
+                    if (yaw > -maxInLaneRotation)
+                    {
+                        addedRotation -= rotationSpeed;
+                    }
+                }
+                // If we're centered on the lane again, rotate the car straight.
+                else if (Math.Abs(yaw) > 0.01)
+                {
+                    yaw += yaw < 0 ? rotationSpeed : -rotationSpeed;
+                }
             }
-            else if (distanceToRight > distanceToLeft && velocity.X > -0.5)
+        }
+
+        /// <summary>
+        /// Accelerates (or deccelerates) the car depending on the surroundings.
+        /// </summary>
+        /// <param name="velocity">Current velocity of the car</param>
+        /// <param name="distanceToTarget">Distance to the current local target</param>
+        public void HandleAccelerate(ref Vector velocity, ref double distanceToTarget)
+        {
+            // Get the current speed of the car.
+            var speed = velocity.Length;
+
+            // Check if we're far away enough from the target
+            if (distanceToTarget > brakingDistance)
             {
-                velocity.X += 0.1;
+                if (!braking)
+                {
+                    // If we're not braking, accelerate the car.
+                    if (Math.Abs(speed) < 0.001)
+                    {
+                        velocity = Vector.Divide(Car.Direction.GetVector(), accelerationDivider);
+                    }
+                    else if (speed < maxNormalSpeed)
+                    {
+                        velocity = Vector.Add(velocity, CalculateAccelerationVector(velocity));
+                    }
+                }
+                else
+                {
+                    // If we are braking, deccelerate the car.
+                    velocity = speed > 0.01
+                        ? Vector.Add(velocity, CalculateDeccelerationVector(velocity))
+                        : new Vector();
+                }
             }
+            else
+            {
+                // If we're close to the target, check if we're on the target road.
+                if (Car.CurrentRoad.Equals(Car.Destination.Road))
+                {
+                    // If so, start braking.
+                    braking = true;
+                }
+                else
+                {
+                    // Otherwise we're in a turn, so slow down a little.
+                    if (speed > maxTurningSpeed)
+                    {
+                        velocity = Vector.Add(velocity, CalculateDeccelerationVector(velocity));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the vector used for acceleration using the current velocity.
+        /// The current velocity is only used to detarmaine the direction.
+        /// </summary>
+        /// <param name="velocity">Current velocity of the car</param>
+        /// <returns>Acceleration vector</returns>
+        private static Vector CalculateAccelerationVector(Vector velocity)
+        {
+            var clone = new Vector(velocity.X, velocity.Y);
+            clone.Normalize();
+            return Vector.Divide(clone, accelerationDivider);
+        }
+
+        /// <summary>
+        /// Calculates the vector used for decceleration using the current velocity.
+        /// The current velocity is only used to detarmaine the direction.
+        /// </summary>
+        /// <param name="velocity">Current velocity of the car</param>
+        /// <returns>Decceleration vector</returns>
+        private static Vector CalculateDeccelerationVector(Vector velocity)
+        {
+            var acceleration = CalculateAccelerationVector(velocity);
+            acceleration.Negate();
+            return Vector.Multiply(acceleration, brakingMultiplier);
         }
     }
 }

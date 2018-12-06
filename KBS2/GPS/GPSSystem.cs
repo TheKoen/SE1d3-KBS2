@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
-using KBS2.Console;
 using KBS2.CustomerSystem;
+using KBS2.GPS.TSP;
 using KBS2.Util;
 
 namespace KBS2.GPS
@@ -15,13 +16,17 @@ namespace KBS2.GPS
     {
         public static Property StartingPrice = new Property(1.50);
         public static Property PricePerKilometer = new Property(1.00);
+        public static Property availableModel = new Property("TestModel");
+        public static CarModel AvailableModel => CarModel.Get(availableModel.Value);
 
         public static void Setup()
         {
-            CommandHandler.RegisterProperty("startingPrice", ref StartingPrice);
-            CommandHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+            PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
+            PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+            PropertyHandler.RegisterProperty("availableModel", ref availableModel);
         }
-
+         
+        
         /// <summary>
         /// returns a road located at this location
         /// </summary>
@@ -29,31 +34,8 @@ namespace KBS2.GPS
         /// <returns>the road that the location is at, if none it returns null</returns>
         public static Road GetRoad(Vector location)
         {
-            var roads = City.Instance.Roads;
-
-            foreach (var road in roads)
-            {
-                var laneWidth = road.Width / 2.0;
-                var minX = road.IsXRoad()
-                    ? Math.Min(road.Start.X, road.End.X)
-                    : road.Start.X - laneWidth;
-                var maxX = road.IsXRoad()
-                    ? Math.Max(road.Start.X, road.End.X)
-                    : road.Start.X + laneWidth;
-                var minY = road.IsXRoad()
-                    ? road.Start.Y - laneWidth
-                    : Math.Min(road.Start.Y, road.End.Y);
-                var maxY = road.IsXRoad()
-                    ? road.Start.Y + laneWidth
-                    : Math.Max(road.Start.Y, road.End.Y);
-
-                if (location.X >= minX && location.X <= maxX && location.Y >= minY && location.Y <= maxY)
-                {
-                    return road;
-                }
-            }
-
-            return null;
+            var roads = GetRoadsInRange(location, 12);
+            return roads.Count == 0 ? null : roads.First();
         }
 
         /// <summary>
@@ -132,12 +114,12 @@ namespace KBS2.GPS
 
             if (nearestGarage == null) return;
 
-            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, CarModel.TestModel);
+            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, AvailableModel);
             car.Destination = destination;
         }
 
         /// <summary>
-        /// returns the direction of a car
+        /// returns 
         /// </summary>
         /// <param name="car"></param>
         /// <param name="intersection"></param>
@@ -163,7 +145,7 @@ namespace KBS2.GPS
                     var destination = car.Destination;
                     var distance = MathUtil.DistanceToRoad(destination.Location, road) - road.Width / 4d;
                     var direction = GetDirectionToRoad(destination.Location, road);
-                    var delta = Vector.Multiply(direction.GetDirection(), distance);
+                    var delta = Vector.Multiply(direction.GetVector(), distance);
                     var target = Vector.Add(destination.Location, delta);
 
                     return new Destination {Road = road, Location = target};
@@ -267,6 +249,11 @@ namespace KBS2.GPS
             return ExploreIntersection(intersectionNext, end, target, distance, cycles, past);
         }
 
+        /// <summary>
+        /// Find the next intersection of an intersection
+        /// </summary>
+        /// <param name="intersection">intersection to use</param>
+        /// <returns>List with the found intersections</returns>
         public static List<Intersection> FindNextIntersections(Intersection intersection)
         {
             var list = new List<Intersection>();
@@ -294,6 +281,20 @@ namespace KBS2.GPS
                        point.Y >= location.Y - size && point.Y <= location.Y + size;
             });
             return interserction;
+        }
+
+        /// <summary>
+        /// Find the intersections of a road
+        /// </summary>
+        /// <param name="road">road you want to explore</param>
+        /// <returns>List with found Intersections</returns>
+        public static List<Intersection> FindIntersectionsRoad(Road road)
+        {
+            return new List<Intersection>
+            {
+                FindIntersection(road.Start),
+                FindIntersection(road.End)
+            }; ;
         }
 
         public static double CalculatePrice(double distance)

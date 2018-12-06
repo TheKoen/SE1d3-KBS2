@@ -26,18 +26,23 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
     /// </summary>
     internal class EntityRadarController : SensorController
     {
-        public EntityRadarController(EntityRadar radar)
+        public EntityRadar Radar { get; set; }
+        public EntityRadarController(EntityRadar radar) : base(radar)
         {
             Radar = radar;
         }
-
-        public EntityRadar Radar { get; set; }
+        
 
         /// <summary>
         ///     Checks for entities in range of the radar
         /// </summary>
         public override void Update()
         {
+            if (Sensor.Car.CurrentRoad == null)
+            {
+                return;
+            }
+
             Radar.EntitiesInRange = City.Instance.Controller.GetEntities()
                 .FindAll(entity => entity.GetPoints().Any(point =>
                     MathUtil.Distance(point, Radar.Car.Location) < Radar.Range && !entity.Equals(Radar.Car))

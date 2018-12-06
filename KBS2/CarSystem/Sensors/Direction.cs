@@ -1,4 +1,6 @@
-﻿namespace KBS2.CarSystem.Sensors
+﻿using System;
+
+namespace KBS2.CarSystem.Sensors
 {
     /// <summary>
     ///     Direction of a sensor

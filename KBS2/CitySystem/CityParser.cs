@@ -1,6 +1,6 @@
-﻿using KBS2.Console;
-using System.Windows;
+﻿using System.Windows;
 using System.Xml;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 
 namespace KBS2.CitySystem
@@ -9,10 +9,10 @@ namespace KBS2.CitySystem
     {
         public static City MakeCity(XmlDocument city)
         {
-            var properties = CommandHandler.GetProperties();
+            var properties = PropertyHandler.GetProperties();
             if (properties.ContainsKey("availableCars"))
             {
-                CommandHandler.ResetProperties();
+                PropertyHandler.ResetProperties();
             }
 
             var cityObject = new City();

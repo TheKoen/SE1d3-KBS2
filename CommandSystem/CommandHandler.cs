@@ -1,100 +1,69 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using KBS2.Console.Commands;
-using KBS2.Exceptions;
-using KBS2.Util;
+using CommandSystem.Exceptions;
 
-namespace KBS2.Console
+namespace CommandSystem
 {
     public static class CommandHandler
     {
-        public static event EventHandler<object> CommandRan;
-
         // List of commands that the console can call
         private static readonly List<Type> CommandList = new List<Type>();
-        // List of properties that can be modified using console commands
-        private static readonly Dictionary<string, Property> PropertyList = new Dictionary<string, Property>();
-
-        /// <summary>
-        /// Resets the list of properties
-        /// </summary>
-        public static void ResetProperties()
-        {
-            PropertyList.Clear();
-        }
-
+        
         /// <summary>
         /// Registers an <see cref="ICommand"/> to the <see cref="CommandHandler"/> for future use
         /// </summary>
         /// <param name="command"><see cref="ICommand"/> to be ran</param>
         public static void RegisterCommand(Type command)
         {
+            // Making sure our Type can be assigned to ICommand
             if (!typeof(ICommand).IsAssignableFrom(command))
-                throw new TypeMismatchException("Parameter \"command\" must implement ICommand");
+                throw new CommandHandlerException("Parameter \"command\" must implement ICommand");
             
+            // Getting a list of existing attributes
             var attributes = CommandList.Select(c =>
                 (CommandMetadataAttribute) Attribute.GetCustomAttribute(c,
                     typeof(CommandMetadataAttribute))).ToList();
+            // Getting the attribute of the given Type
             var thisAttribute =
                 (CommandMetadataAttribute) Attribute.GetCustomAttribute(command,
                     typeof(CommandMetadataAttribute));
             
+            // Checking for conflicts with attribute keys and aliases
             attributes.ForEach(attribute =>
             {
                 if (thisAttribute.Key == attribute.Key || thisAttribute.Aliases.Contains(attribute.Key))
-                    throw new KeyExistsException($"Command \"{command.Name}\" conflicts with Key \"{attribute.Key}\"");
+                    throw new CommandHandlerException($"Command \"{command.Name}\" conflicts with Key \"{attribute.Key}\"");
                 attribute.Aliases.ToList().ForEach(alias =>
                 {
                     if (thisAttribute.Key == alias || thisAttribute.Aliases.Contains(alias))
-                        throw new KeyExistsException($"Command \"{command.Name}\" conflicts with Alias \"{alias}\"");
+                        throw new CommandHandlerException($"Command \"{command.Name}\" conflicts with Alias \"{alias}\"");
                 });
             });
 
             CommandList.Add(command);
         }
-
-        /// <summary>
-        /// Registers a <see cref="Property"/> to the <see cref="CommandHandler"/> for future use
-        /// </summary>
-        /// <param name="name">Name of the <see cref="Property"/></param>
-        /// <param name="property"><see cref="Property"/> to be stored</param>
-        public static void RegisterProperty(string name, ref Property property)
-        {
-            if (PropertyList.ContainsKey(name)) throw new KeyExistsException($"Property \"{name}\" already exists");
-
-            PropertyList.Add(name, property);
-        }
-
-        /// <summary>
-        /// Gets the name of every registered <see cref="ICommand"/>
-        /// </summary>
-        /// <returns><see cref="List{String}"/> of names</returns>
-        public static List<string> GetCommandNames()
-        {
-            return CommandList.Select(c =>
-                ((CommandMetadataAttribute) Attribute.GetCustomAttribute(c, typeof(CommandMetadataAttribute))).Key
-                ).ToList();
-        }
-
+        
         /// <summary>
         /// Gets every registered <see cref="ICommand"/>
         /// </summary>
-        /// <returns><see cref="List{Type}"/> of commands</returns>
-        public static IEnumerable<Type> GetCommands()
-        {
-            return CommandList;
-        }
-
+        /// <returns><see cref="IEnumerable{Type}"/> of commands</returns>
+        public static IEnumerable<Type> GetCommands() =>
+            new List<Type>(CommandList);
+        
         /// <summary>
-        /// Gets the name of every registered <see cref="Property"/>
+        /// Gets the name of every registered <see cref="ICommand"/>
         /// </summary>
-        /// <returns><see cref="Dictionary{String,Property}"/> of properties</returns>
-        public static Dictionary<string, Property> GetProperties()
+        /// <returns><see cref="IEnumerable{String}"/> of names</returns>
+        public static IEnumerable<string> GetCommandNames()
         {
-            return PropertyList;
+            return CommandList.Select(c =>
+                ((CommandMetadataAttribute) Attribute.GetCustomAttribute(c, typeof(CommandMetadataAttribute))).Key
+            );
         }
-
+        
+        
+        
         /// <summary>
         /// Runs a <see cref="ICommand"/>
         /// </summary>
@@ -103,6 +72,7 @@ namespace KBS2.Console
         /// <returns>Output generated by the <see cref="ICommand"/></returns>
         public static IEnumerable<char> RunCommand(string name, params string[] args)
         {
+            // Finding command(s) that match the given string
             var commands = CommandList.Where(c =>
             {
                 var attribute =
@@ -110,28 +80,16 @@ namespace KBS2.Console
                         typeof(CommandMetadataAttribute));
                 return attribute.Aliases.Contains(name) || attribute.Key == name;
             }).ToList();
-            if (commands.Count < 1) throw new UnknownCommandException($"Unknown command \"{name}\"");
+            // Making sure there's only one matching command, otherwise something's gone wrong
+            if (commands.Count < 1) throw new CommandInputException($"Unknown command \"{name}\"");
             if (commands.Count > 1) throw new Exception("There should never be multiple commands with the same key or aliases");
             var command = commands[0];
             
+            // Constructing and running a command
             var result = ((ICommand) Activator.CreateInstance(command)).Run(args);
-            CommandRan?.Invoke(command, result);
             return result;
         }
-
-        /// <summary>
-        /// Modifies a <see cref="Property"/>
-        /// </summary>
-        /// <param name="name">Name of the <see cref="Property"/> to modify</param>
-        /// <param name="value">New value for the <see cref="Property"/></param>
-        public static void ModifyProperty(string name, object value)
-        {
-            if (!PropertyList.ContainsKey(name)) throw new KeyNotFoundException($"Property \"{name}\" is not registered");
-            
-            PropertyList[name].Value = value;
-        }
-
-
+        
         /// <summary>
         /// Attempts to run an <see cref="ICommand"/> using the given input
         /// </summary>
@@ -140,7 +98,7 @@ namespace KBS2.Console
         public static IEnumerable<char> HandleInput(string input)
         {
             if (input.Trim().Length == 0)
-                throw new EmptyCommandException();
+                throw new CommandInputException("Received empty string or string with only whitespace");
             
             // Separating words in the input
             var segments = input.Trim().Split(' ');

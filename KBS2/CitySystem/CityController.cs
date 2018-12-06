@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using KBS2.Console;
+using CommandSystem.PropertyManagement;
 using KBS2.CustomerSystem;
 using KBS2.Util;
 
@@ -20,7 +20,7 @@ namespace KBS2.CitySystem
         public CityController(City city)
         {
             City = city;
-            CommandHandler.RegisterProperty("customerSpawnRate", ref customerSpawnRate);
+            PropertyHandler.RegisterProperty("customerSpawnRate", ref customerSpawnRate);
         }
 
         public void Update()

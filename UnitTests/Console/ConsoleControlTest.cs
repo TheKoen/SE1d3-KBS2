@@ -54,7 +54,7 @@ namespace UnitTests.Console
             _sendCommandEventTestPassed = true;
         }
 
-        [TestCase("", ""), Order(1)]
+        [TestCase("", ""), Order(2)]
         [TestCase("Test1", "Test1")]
         [TestCase("Test2", "Test2")]
         [TestCase("Test3", "Test3")]

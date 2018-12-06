@@ -1,6 +1,6 @@
 using System;
 
-namespace KBS2.Exceptions
+namespace CommandSystem.Exceptions
 {
     public class CommandException : Exception
     {

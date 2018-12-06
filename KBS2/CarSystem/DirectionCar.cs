@@ -65,7 +65,7 @@ namespace KBS2.CarSystem
             }
         }
 
-        public static Vector GetDirection(this DirectionCar current)
+        public static Vector GetVector(this DirectionCar current)
         {
             switch (current)
             {
@@ -84,7 +84,7 @@ namespace KBS2.CarSystem
 
         public static Vector RotateTo(this DirectionCar current, Direction rotation)
         {
-            var direction = current.GetDirection();
+            var direction = current.GetVector();
             switch (rotation)
             {
                 case Direction.Front:
