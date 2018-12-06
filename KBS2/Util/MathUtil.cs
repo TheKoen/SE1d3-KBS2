@@ -59,11 +59,11 @@ namespace KBS2.Util
             // Convert the angle from degrees to radians.
             var radians = (Math.PI / 180) * angle;
 
+            var x = vector.X * Math.Cos(radians) - vector.Y * Math.Sin(radians);
+            var y = vector.X * Math.Sin(radians) + vector.Y * Math.Cos(radians);
+
             // Rotate the vector.
-            return new Vector(
-                vector.X * Math.Cos(radians) - vector.Y * Math.Sin(radians),
-                vector.X * Math.Sin(radians) + vector.Y * Math.Cos(radians)
-            );
+            return new Vector(x, y);
         }
 
         /// <summary>

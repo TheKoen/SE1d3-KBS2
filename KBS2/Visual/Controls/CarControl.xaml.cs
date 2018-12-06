@@ -35,10 +35,22 @@ namespace KBS2.Visual.Controls
 
         public void Update()
         {
-            var rotation = MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
-            App.Console.Print($"Car rotation {rotation} ");
-            RenderTransform = new RotateTransform(rotation);
-            Margin = new Thickness(car.Location.X, car.Location.Y, 0, 0);           
+            var angle = MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
+            App.Console.Print($"Car rotation {angle} ");
+            RenderTransform = new RotateTransform(angle);
+            var rotation = car.Rotation;
+            var xoffset = MathUtil.RotateVector(rotation, 90);
+            xoffset.Normalize();
+            Vector.Multiply(xoffset, car.Width / 2d);
+            var yoffset = MathUtil.RotateVector(xoffset, 90);
+            yoffset.Normalize();
+            Vector.Multiply(yoffset, car.Length / 2d);
+
+            var location = new Vector(car.Location.X, car.Location.Y);
+            Vector.Add(location, xoffset);
+            Vector.Add(location, yoffset);
+
+            Margin = new Thickness(location.X, location.Y, 0, 0);           
         }
     }
 }
