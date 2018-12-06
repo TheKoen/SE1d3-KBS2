@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2.CitySystem;
-using KBS2.Exceptions;
 
 namespace KBS2.Console.Commands
 {
@@ -14,7 +15,7 @@ namespace KBS2.Console.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidParametersException("Command usage: \"time <pause/start/reset>\"");
+                throw new CommandInputException("Command usage: \"time <pause/start/reset>\"");
             }
 
             var loop = MainScreen.Loop;
@@ -40,7 +41,7 @@ namespace KBS2.Console.Commands
                     City.Instance.Controller.Reset();
                     return "Simulation reset. Type \"time start\" to start it again.";
                 default:
-                    throw new InvalidParametersException($"Unkown subcommand \'{subcommand}\'");
+                    throw new CommandInputException($"Unkown subcommand \'{subcommand}\'");
             }
         }
     }

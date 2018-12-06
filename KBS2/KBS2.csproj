@@ -83,16 +83,10 @@
     <Compile Include="Console\Commands\CommandGet.cs" />
     <Compile Include="Console\Commands\CommandHelp.cs" />
     <Compile Include="Console\Commands\CommandMap.cs" />
-    <Compile Include="Console\Commands\CommandMetadataAttribute.cs" />
     <Compile Include="Console\Commands\CommandProperties.cs" />
     <Compile Include="Console\Commands\CommandSet.cs" />
     <Compile Include="Console\Commands\CommandsSensors.cs" />
-    <Compile Include="Exceptions\CommandException.cs" />
-    <Compile Include="Exceptions\EmptyCommandException.cs" />
-    <Compile Include="Exceptions\InvalidParametersException.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
-    <Compile Include="Exceptions\TypeMismatchException.cs" />
-    <Compile Include="Exceptions\UnknownCommandException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="CustomerSystem\Customer.cs" />
@@ -102,7 +96,6 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
-    <Compile Include="Util\Loop\MainLoop.cs" />
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
@@ -121,6 +114,14 @@
     <Compile Include="Util\Loop\ThreadLoop.cs" />
     <Compile Include="Util\Loop\TickLoop.cs" />
     <Compile Include="Util\Property.cs" />
+    <Compile Include="MainLoop.cs" />
+    <Compile Include="ModelDesigner\CarDesign.cs" />
+    <Compile Include="ModelDesigner\ModelDesigner.xaml.cs">
+      <DependentUpon>ModelDesigner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModelDesigner\SensorCreationWindow.xaml.cs">
+      <DependentUpon>SensorCreationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
     <Compile Include="Util\SpriteRenderer.cs" />
@@ -154,17 +155,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Console\CommandHandler.cs" />
     <Compile Include="Console\ConsoleControl.xaml.cs">
       <DependentUpon>ConsoleControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Console\ICommand.cs" />
     <Compile Include="Console\SendCommandArgs.cs" />
     <Compile Include="CitySystem\City.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ModelDesigner\ModelDesigner.xaml" />
+    <Page Include="ModelDesigner\SensorCreationWindow.xaml" />
     <Page Include="Visual\Controls\RoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -218,5 +219,11 @@
     <Folder Include="CityDesigner\" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
+      <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
+      <Name>CommandSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

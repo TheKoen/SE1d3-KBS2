@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace KBS2.Console
+namespace CommandSystem
 {
     public interface ICommand
     {

@@ -3,7 +3,8 @@ using KBS2.Console;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
-using KBS2.Exceptions;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2.GPS;
 using KBS2.Util.Loop;
 

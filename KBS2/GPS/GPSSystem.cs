@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
-using KBS2.Console;
 using KBS2.CustomerSystem;
 using KBS2.GPS.TSP;
 using KBS2.Util;
@@ -21,9 +21,9 @@ namespace KBS2.GPS
 
         public static void Setup()
         {
-            CommandHandler.RegisterProperty("startingPrice", ref StartingPrice);
-            CommandHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-            CommandHandler.RegisterProperty("availableModel", ref availableModel);
+            PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
+            PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+            PropertyHandler.RegisterProperty("availableModel", ref availableModel);
         }
          
         

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2.CitySystem;
-using KBS2.Exceptions;
 
 namespace KBS2.Console.Commands
 {
@@ -17,12 +18,12 @@ namespace KBS2.Console.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidParametersException("Command usage: \"load <file>\"");
+                throw new CommandInputException("Command usage: \"load <file>\"");
             }
 
             if (!File.Exists(args[0]))
             {
-                throw new InvalidParametersException($"Cannot find file \"{args[0]}\"");
+                throw new CommandInputException($"Cannot find file \"{args[0]}\"");
             }
             
             try

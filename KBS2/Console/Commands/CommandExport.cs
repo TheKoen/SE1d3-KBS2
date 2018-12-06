@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security;
-using KBS2.Exceptions;
+using CommandSystem;
+using CommandSystem.Exceptions;
 
 namespace KBS2.Console.Commands
 {
@@ -14,12 +15,12 @@ namespace KBS2.Console.Commands
     {
         public IEnumerable<char> Run(params string[] args)
         {
-            if (args.Length < 1) throw new InvalidParametersException();
+            if (args.Length < 1) throw new CommandInputException("Invalid parameters");
 
             var filename = string.Join(" ", args);
             if (File.Exists(filename))
             {
-                throw new InvalidParametersException($"File \"{filename}\" already exists");
+                throw new CommandInputException($"File \"{filename}\" already exists");
             }
 
             // Trying to write to a file
@@ -37,17 +38,17 @@ namespace KBS2.Console.Commands
                 when(se.GetType() == typeof(UnauthorizedAccessException) ||
                      se.GetType() == typeof(SecurityException))
             {
-                throw new InvalidParametersException($"Accessn't file \"{filename}\"");
+                throw new CommandInputException($"Accessn't file \"{filename}\"");
             }
             catch (ArgumentException)
             {
-                throw new InvalidParametersException("Can't write to a system device");
+                throw new CommandInputException("Can't write to a system device");
             }
             catch (IOException ioe)
                 when (ioe.GetType() == typeof(PathTooLongException) ||
                       ioe.GetType() == typeof(DirectoryNotFoundException))
             {
-                throw new InvalidParametersException($"Invalid path \"{filename}\"");
+                throw new CommandInputException($"Invalid path \"{filename}\"");
             }
 
             return $"Exported to \"{filename}\"";
