@@ -25,7 +25,7 @@ namespace KBS2.CustomerSystem
             Mood = CustomerSystem.Moral.Happy;
             
             Controller = new CustomerController(this);
-            MainWindow.Loop.Subscribe(Controller.Update);
+            MainScreen.Loop.Subscribe(Controller.Update);
         }
 
         public Vector GetLocation()

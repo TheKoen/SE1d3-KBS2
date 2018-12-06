@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
-using KBS2.Console;
 using KBS2.CustomerSystem;
-using KBS2.Util;
 
 namespace KBS2.CitySystem
 {
@@ -53,12 +52,12 @@ namespace KBS2.CitySystem
             Customers = new List<Customer>();
 
             Controller = new CityController(this);
-            MainWindow.Loop.Subscribe(Controller.Update);
+            MainScreen.Loop.Subscribe(Controller.Update);
 
-            CommandHandler.RegisterProperty("availableCars", ref availableCars);
-            CommandHandler.RegisterProperty("customerCount", ref customerCount);
-            CommandHandler.RegisterProperty("globalSpeedLimit", ref speedLimit);
-            CommandHandler.RegisterProperty("avgGroupSize", ref avgGroupSize);
+            PropertyHandler.RegisterProperty("availableCars", ref availableCars);
+            PropertyHandler.RegisterProperty("customerCount", ref customerCount);
+            PropertyHandler.RegisterProperty("globalSpeedLimit", ref speedLimit);
+            PropertyHandler.RegisterProperty("avgGroupSize", ref avgGroupSize);
         }
 
         public void AddGroup(CustomerGroup group)

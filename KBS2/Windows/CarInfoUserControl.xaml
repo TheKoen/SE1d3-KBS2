@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="KBS2.Windows.CarInfoUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KBS2.Windows"
+             mc:Ignorable="d" Height="292.29" Width="253.271">
+    <Grid>
+        <Label x:Name="LabelInfoCar" Content="Car" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" FontSize="20" FontWeight="Bold"/>
+        <Label Content="Car ID" HorizontalAlignment="Left" Margin="22,73,0,0" VerticalAlignment="Top"/>
+        <Label Content="Car Model" HorizontalAlignment="Left" Margin="22,104,0,0" VerticalAlignment="Top"/>
+        <Label Content="Distance Traveled" HorizontalAlignment="Left" Margin="22,135,0,0" VerticalAlignment="Top"/>
+        <Label Content="Location" HorizontalAlignment="Left" Margin="22,166,0,0" VerticalAlignment="Top"/>
+        <Label Content="Target Location" HorizontalAlignment="Left" Margin="22,197,0,0" VerticalAlignment="Top"/>
+        <Label Content="Customers" HorizontalAlignment="Left" Margin="22,228,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoCarID" Content="Label" HorizontalAlignment="Left" Margin="169,73,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoCarModel" Content="Label" HorizontalAlignment="Left" Margin="169,104,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoDistanceTraveled" Content="Label" HorizontalAlignment="Left" Margin="169,135,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoLocationCar" Content="Label" HorizontalAlignment="Left" Margin="169,166,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoDestinationCar" Content="Label" HorizontalAlignment="Left" Margin="169,197,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoCustomerCount" Content="Label" HorizontalAlignment="Left" Margin="169,228,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</UserControl>

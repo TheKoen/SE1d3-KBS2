@@ -1,10 +1,11 @@
 using System;
 using System.IO;
 using System.Threading;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2;
 using KBS2.Console;
 using KBS2.Console.Commands;
-using KBS2.Exceptions;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
@@ -26,7 +27,10 @@ namespace UnitTests.Commands
         [SetUp]
         public void Init()
         {
-            typeof(MainWindow).GetProperty("Console")?.SetValue(null, new ConsoleControl());
+            var console = new ConsoleControl();
+            typeof(MainWindow).GetProperty("Console")?.SetValue(null, console);
+
+            App.Console = console;
             
             File.Create(Filename1).Close();
 
@@ -49,14 +53,14 @@ namespace UnitTests.Commands
         public void ExportFileExists()
         {
             // On file exists
-            Assert.Throws(typeof(InvalidParametersException), () => _command.Run(Filename1));
+            Assert.Throws(typeof(CommandInputException), () => _command.Run(Filename1));
         }
 
         [Test]
         public void ExportNoPermission()
         {
             // On no permission to write file
-            Assert.Throws(typeof(InvalidParametersException), () => _command.Run(_filename2));
+            Assert.Throws(typeof(CommandInputException), () => _command.Run(_filename2));
         }
 
         [Test]
@@ -70,14 +74,14 @@ namespace UnitTests.Commands
                 return;
             }
             // On export to system device
-            Assert.Throws(typeof(InvalidParametersException), () => _command.Run(Filename3Unix));
+            Assert.Throws(typeof(CommandInputException), () => _command.Run(Filename3Unix));
         }
 
         [Test]
         public void ExportPathTooLong()
         {
             // On path too long
-            Assert.Throws(typeof(InvalidParametersException), () => _command.Run(_filename4));
+            Assert.Throws(typeof(CommandInputException), () => _command.Run(_filename4));
         }
 
         [Test]

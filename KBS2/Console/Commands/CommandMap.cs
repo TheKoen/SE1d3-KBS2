@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using CommandSystem;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
 using KBS2.GPS;
@@ -89,7 +89,7 @@ namespace KBS2.Console.Commands
                 builder.Append('\n');
             }
 
-            MainWindow.Console.Print(builder.ToString());
+            App.Console.Print(builder.ToString());
         }
 
         private static bool IsCustomer(Vector point)
