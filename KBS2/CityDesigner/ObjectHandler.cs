@@ -63,9 +63,10 @@ namespace KBS2.CityDesigner
         };
 
         // items in the city
-        public List<Road> Roads = new List<Road>();
-        public List<Intersection> Intersections = new List<Intersection>();
-        public List<Building> Buildings = new List<Building>();
+        public static List<Road> Roads = new List<Road>();
+        public static List<Intersection> Intersections = new List<Intersection>();
+        public static List<Building> Buildings = new List<Building>();
+        public static List<Garage> Garages = new List<Garage>();
 
         // snaprange 
         private int snapRange = 20;
@@ -523,6 +524,38 @@ namespace KBS2.CityDesigner
             {
                 Intersections.Remove(intersection);
             }
+        }
+
+        public static bool LocationContainsObject(Vector location)
+        {
+            foreach(var road in Roads)
+            {
+                if(road.IsOnRoad(location))
+                {
+                    return true;
+                }
+            }
+            foreach(var building in Buildings)
+            {
+                if(location.X >= building.Location.X - building.Size/2 && location.X <= building.Location.X + building.Size/2)
+                {
+                    if (location.Y >= building.Location.Y - building.Size / 2 && location.Y <= building.Location.Y + building.Size / 2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            foreach(var garage in Garages)
+            {
+                if(location.X >= garage.Location.X - garage.Size/2 && location.X <= garage.Location.X + garage.Size/2)
+                {
+                    if (location.Y >= garage.Location.Y - garage.Size / 2 && location.Y <= garage.Location.Y + garage.Size / 2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
     }

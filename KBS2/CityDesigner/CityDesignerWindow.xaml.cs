@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using KBS2.CityDesigner.ObjectCreators;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +50,7 @@ namespace KBS2.CityDesigner
             popupWindow.ShowDialog();
 
             // save the city
-            CitySaver.SaveCity(popupWindow.FileName, Creator.Roads, Creator.Buildings, Creator.Intersections);
+            CitySaver.SaveCity(popupWindow.FileName, ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Intersections);
         }
 
         /// <summary>
@@ -133,30 +134,38 @@ namespace KBS2.CityDesigner
             //location mouse on canvas
             X.Text = ((int)e.GetPosition(Canvas).X).ToString();
             Y.Text = ((int)e.GetPosition(Canvas).Y).ToString();
-            
+
 
             // drawing Ghost Building
-            if (Tool == Tools.Building) { Creator.DrawGhostBuilding(sender, e); }
+            if (Tool == Tools.Building) { BuildingCreator.DrawGhost(e.GetPosition(Canvas), Canvas); }//Creator.DrawGhostBuilding(sender, e); }
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 leftButtonWasPressed = true;
                 // drawing Ghost Road
-                if(Tool == Tools.Road) { Creator.DrawGhostRoad(sender, e); }
-                
+                if(Tool == Tools.Road) { RoadCreator.DrawGhost(e.GetPosition(Canvas), Canvas, ObjectHandler.Roads); }
+
             }
             if (e.LeftButton == MouseButtonState.Released && leftButtonWasPressed == true)
             {
                 leftButtonWasPressed = false;
                 // drawing Real Road
-                if (Tool == Tools.Road) { Creator.CreateRoad(); }
+                if (Tool == Tools.Road) {
+                    var newRoad = RoadCreator.CreateRoad(Canvas, ObjectHandler.Roads);
+                    //try to create intersection for new road
+                    if(newRoad != null)
+                    {
+                        IntersectionCreator.CreateIntersection(Canvas, ObjectHandler.Roads, ObjectHandler.Intersections, newRoad.Start);
+                        IntersectionCreator.CreateIntersection(Canvas, ObjectHandler.Roads, ObjectHandler.Intersections, newRoad.End);
+                    }
+                }
             }
            
         }
 
         private void MouseClicksOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
-            if (Tool == Tools.Building) { Creator.CreateBuilding(); }
+            if (Tool == Tools.Building) { BuildingCreator.CreateBuilding((Vector)e.GetPosition(Canvas), Canvas, ObjectHandler.Buildings); }
         }
 
         private void MouseLeaveCanvasEventHandler(object sender, MouseEventArgs e)
@@ -184,8 +193,8 @@ namespace KBS2.CityDesigner
         private void RemoveObjectButtonEventHandler(object sender, RoutedEventArgs e)
         {
             //Remove object hide information
-            Creator.Roads.Remove(Creator.SelectRoad);
-            Creator.Buildings.Remove(Creator.SelectBuilding);
+            ObjectHandler.Roads.Remove(Creator.SelectRoad);
+            ObjectHandler.Buildings.Remove(Creator.SelectBuilding);
             InformationBlockRoad.Visibility = Visibility.Hidden;
             InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
