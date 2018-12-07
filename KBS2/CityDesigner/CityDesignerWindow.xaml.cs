@@ -126,8 +126,6 @@ namespace KBS2.CityDesigner
         }
         
 
-        
-
         private bool leftButtonWasPressed;
         private void MouseMovesOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
@@ -178,6 +176,7 @@ namespace KBS2.CityDesigner
         {
             //Get data of Object
             Creator.SelectRoad = null;
+            Creator.SelectBuilding = null;
             if (Tool == Tools.Cursor) { Creator.GetObject(); }
         }
 

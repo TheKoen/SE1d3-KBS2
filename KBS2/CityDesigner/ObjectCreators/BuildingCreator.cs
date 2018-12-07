@@ -45,6 +45,8 @@ namespace KBS2.CityDesigner.ObjectCreators
             canvas.Children.Remove(buildingGhost);
             Canvas.SetTop(buildingGhost, (int)mouse.Y - buildingGhost.Height / 2);
             Canvas.SetLeft(buildingGhost, (int)mouse.X - buildingGhost.Width / 2);
+            buildingGhost.Width = standardSize;
+            buildingGhost.Height = standardSize;
             canvas.Children.Add(buildingGhost);
         }
 

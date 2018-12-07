@@ -209,7 +209,8 @@ namespace KBS2.CityDesigner.ObjectCreators
                 RemoveGhost(canvas);
                 return null;
             }
-            // check if road crosses other road
+            //TODO check if road crosses other road
+            
            
             Road road;
             //check if road is vertical or horizontal

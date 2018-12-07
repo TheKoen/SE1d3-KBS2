@@ -32,13 +32,38 @@ namespace KBS2.CityDesigner.ObjectCreators
                 // add To list if not excist at start of new road
                 var newIntersection = new Intersection(location, roadMaxSize);
                 intersections.Add(newIntersection);
-                DrawIntersection(canvas, newIntersection);
+                DrawIntersection(canvas, newIntersection, roads, intersections);
                 return newIntersection;
             }
             return null;
         }
 
-        public static void DrawIntersection(Canvas canvas, Intersection intersection)
+        public static void UpdateIntersections(List<Road> roads, List<Intersection> intersections)
+        {
+            var stupidIntersectionWihoutRoads = new List<Intersection>();
+
+            foreach (var intersection in intersections)
+            {
+                // set the size of the intersection to the max  with of the roads connected
+                intersection.Size = roads.FindAll(r => r.Start == intersection.Location || r.End == intersection.Location)
+                    .OrderByDescending(r => r.Width)
+                    .First()
+                    .Width;
+
+                if (roads.FindAll(r => r.End == intersection.Location || r.Start == intersection.Location).Count == 1)
+                {
+                  
+                    stupidIntersectionWihoutRoads.Add(intersection);
+                }
+            }
+            //delete the intersection without road connected
+            foreach (var intersectionItem in stupidIntersectionWihoutRoads)
+            {
+                intersections.Remove(intersectionItem);
+            }
+        }
+
+        public static void DrawIntersection(Canvas canvas, Intersection intersection, List<Road> roads, List<Intersection> intersections)
         {
             Canvas.SetTop(IntersectionRectangle, (int)intersection.Location.Y - intersection.Size / 2);
             Canvas.SetLeft(IntersectionRectangle, (int)intersection.Location.X - intersection.Size / 2);
