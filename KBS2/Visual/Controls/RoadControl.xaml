@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KBS2.Visual.Controls"
-             mc:Ignorable="d" RenderTransformOrigin="0.5,0.5">
+             mc:Ignorable="d">
     <UserControl.LayoutTransform>
         <RotateTransform Angle = "0"></RotateTransform>
     </UserControl.LayoutTransform>

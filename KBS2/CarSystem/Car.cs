@@ -55,6 +55,7 @@ namespace KBS2.CarSystem
         public List<Customer> Passengers { get; }
 
         public Road CurrentRoad { get; set; }
+        public Intersection CurrentIntersection { get; set; }
         public Vector CurrentTarget { get; set; }
         public Destination Destination { get; set; }
 

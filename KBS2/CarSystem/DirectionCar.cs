@@ -74,9 +74,9 @@ namespace KBS2.CarSystem
                 case DirectionCar.East:
                     return new Vector(1, 0);
                 case DirectionCar.South:
-                    return new Vector(1, 0);
+                    return new Vector(0, 1);
                 case DirectionCar.West:
-                    return new Vector(0, -1);
+                    return new Vector(-1, 0);
                 default:
                     throw new ArgumentException($"Unknown direction {current}");
             }

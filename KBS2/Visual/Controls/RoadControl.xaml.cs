@@ -17,15 +17,15 @@ namespace KBS2.Visual.Controls
             Width = length;
             Height = road.Width;
 
-            var c = Width / 2d;
+            var offset = road.Width / 2d;
 
             if (road.Start.X + road.Start.Y < road.End.X + road.End.Y)
             {
-                Margin = road.IsXRoad() ? new Thickness(road.Start.X, road.End.Y, 0, 0) : new Thickness(road.Start.X - c, road.End.Y -c, 0, 0);
+                Margin = road.IsXRoad() ? new Thickness(road.Start.X, road.End.Y - offset, 0, 0) : new Thickness(road.Start.X - offset, road.End.Y, 0, 0);
             }
             else
             {
-                Margin = road.IsXRoad() ? new Thickness(road.End.X, road.Start.Y, 0, 0) : new Thickness(road.End.X - c, road.Start.Y-c, 0, 0);
+                Margin = road.IsXRoad() ? new Thickness(road.End.X, road.Start.Y - offset, 0, 0) : new Thickness(road.End.X - offset, road.Start.Y, 0, 0);
                 
             }
 

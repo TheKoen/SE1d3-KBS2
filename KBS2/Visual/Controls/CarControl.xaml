@@ -5,19 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KBS2.Visual.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="15" d:DesignWidth="15">
-    <Grid Margin="0,0,2.2,0.2" >
-        <Rectangle Name="Rectangle" Fill="#FFFF2727" HorizontalAlignment="Left" Height="8" Margin="-4,3,0,0" Stroke="#FFAE1717" VerticalAlignment="Top" Width="15" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
-                    <TranslateTransform X="0.2" Y="0.201"/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-
+             mc:Ignorable="d"
+             d:DesignHeight="10" d:DesignWidth="5">
+    <Grid>
+        <Rectangle Width="5" Height="10" Fill="Red"></Rectangle>
     </Grid>
 </UserControl>
