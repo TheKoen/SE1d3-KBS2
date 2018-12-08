@@ -209,8 +209,30 @@ namespace KBS2.CityDesigner.ObjectCreators
                 RemoveGhost(canvas);
                 return null;
             }
-            //TODO check if road crosses other road
-            
+            //TODO: check if road crosses other road
+            foreach(var roadI in roadsList)
+            {
+                if(roadI.IsXRoad() && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2)
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
+                if(roadI.IsXRoad() && roadGhost.X1 + roadGhost.StrokeThickness/2 >= roadI.Start.X - roadI.Width/2 && roadGhost.X1 - roadGhost.StrokeThickness/2 <= roadI.Start.X + roadI.Width/2)
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
+                if(roadGhost.X1 == roadGhost.X2 && !roadI.IsXRoad() && Math.Max(roadGhost.Y1, roadGhost.Y2) >= roadI.Start.Y && Math.Min(roadGhost.Y1, roadGhost.Y2) <= roadI.Start.Y)
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
+                if(roadGhost.Y1 == roadGhost.Y2 && !roadI.IsXRoad() && Math.Max(roadGhost.X1, roadGhost.X2) >= roadI.Start.X && Math.Min(roadGhost.X1, roadGhost.X2) <= roadI.Start.X)
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
+            }
            
             Road road;
             //check if road is vertical or horizontal
