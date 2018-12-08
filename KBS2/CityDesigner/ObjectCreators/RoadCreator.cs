@@ -199,7 +199,7 @@ namespace KBS2.CityDesigner.ObjectCreators
         /// <param name="canvas"></param>
         /// <param name="roadsList"></param>
         /// <returns></returns>
-        public static Road CreateRoad(Canvas canvas, List<Road> roadsList)
+        public static Road CreateRoad(Canvas canvas, List<Road> roadsList, List<Building> buildingsList)
         {
             startRoad = new Point(0, 0);
 
@@ -209,7 +209,29 @@ namespace KBS2.CityDesigner.ObjectCreators
                 RemoveGhost(canvas);
                 return null;
             }
-            //TODO: check if road crosses other road
+
+            //Check if road crosses building
+            foreach(var building in buildingsList)
+            {
+                if(roadGhost.Y1 + roadGhost.StrokeThickness / 2 >= building.Location.Y - building.Size / 2 && roadGhost.Y1 - roadGhost.StrokeThickness / 2 <= building.Location.Y + building.Size / 2)
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
+                if(roadGhost.X1 + roadGhost.StrokeThickness / 2 >= building.Location.X - building.Size / 2 && roadGhost.X1 - roadGhost.StrokeThickness / 2 <= building.Location.X + building.Size / 2)
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
+            }
+            
+            //TODO: Check if road crosses Garage
+
+
+
+
+
+            //check if road crosses other road
             foreach(var roadI in roadsList)
             {
                 if(roadI.IsXRoad() && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2)

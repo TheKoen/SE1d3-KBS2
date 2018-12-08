@@ -86,7 +86,7 @@ namespace KBS2.CityDesigner
 
                 // set the buttons active and not active
                 BuildingButton.IsEnabled = true;
-                IntersectionButton.IsEnabled = true;
+                GarageButton.IsEnabled = true;
                 CursorButton.IsEnabled = true;
                 RoadButton.IsEnabled = false;
             }
@@ -97,7 +97,7 @@ namespace KBS2.CityDesigner
 
                 // set the buttons active and not active
                 BuildingButton.IsEnabled = true;
-                IntersectionButton.IsEnabled = true;
+                GarageButton.IsEnabled = true;
                 CursorButton.IsEnabled = false;
                 RoadButton.IsEnabled = true;
             }
@@ -108,18 +108,18 @@ namespace KBS2.CityDesigner
 
                 // set the buttons active and not active
                 BuildingButton.IsEnabled = false;
-                IntersectionButton.IsEnabled = true;
+                GarageButton.IsEnabled = true;
                 CursorButton.IsEnabled = true;
                 RoadButton.IsEnabled = true;
             }
-            if(e.Source == IntersectionButton)
+            if(e.Source == GarageButton)
             {
                 //set tool
-                Tool = Tools.Intersection;
+                Tool = Tools.Garage;
 
                 // set the buttons active and not active
                 BuildingButton.IsEnabled = true;
-                IntersectionButton.IsEnabled = false;
+                GarageButton.IsEnabled = false;
                 CursorButton.IsEnabled = true;
                 RoadButton.IsEnabled = true;
             }
@@ -135,7 +135,10 @@ namespace KBS2.CityDesigner
 
 
             // drawing Ghost Building
-            if (Tool == Tools.Building) { BuildingCreator.DrawGhost(e.GetPosition(Canvas), Canvas); }//Creator.DrawGhostBuilding(sender, e); }
+            if (Tool == Tools.Building) { BuildingCreator.DrawGhost(e.GetPosition(Canvas), Canvas); }
+
+            // drawin Ghost Garage
+            if (Tool == Tools.Garage) { GarageCreator.DrawGhost(e.GetPosition(Canvas), Canvas); }
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -149,7 +152,7 @@ namespace KBS2.CityDesigner
                 leftButtonWasPressed = false;
                 // drawing Real Road
                 if (Tool == Tools.Road) {
-                    var newRoad = RoadCreator.CreateRoad(Canvas, ObjectHandler.Roads);
+                    var newRoad = RoadCreator.CreateRoad(Canvas, ObjectHandler.Roads, ObjectHandler.Buildings);
                     //try to create intersection for new road
                     if(newRoad != null)
                     {
@@ -163,7 +166,8 @@ namespace KBS2.CityDesigner
 
         private void MouseClicksOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
-            if (Tool == Tools.Building) { BuildingCreator.CreateBuilding((Vector)e.GetPosition(Canvas), Canvas, ObjectHandler.Buildings); }
+            if (Tool == Tools.Building) { BuildingCreator.CreateBuilding(e.GetPosition(Canvas), Canvas, ObjectHandler.Buildings); }
+            if (Tool == Tools.Garage) { GarageCreator.CreateGarage(e.GetPosition(Canvas), Canvas, ObjectHandler.Garages); }
         }
 
         private void MouseLeaveCanvasEventHandler(object sender, MouseEventArgs e)

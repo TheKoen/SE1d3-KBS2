@@ -5,9 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace KBS2.CityDesigner.ObjectCreators
 {
@@ -33,27 +36,27 @@ namespace KBS2.CityDesigner.ObjectCreators
 
         private static readonly int standardSize = 50;
 
-        public static void DrawGhost(int mouseX, int mouseY, Canvas canvas)
+        public static void DrawGhost(Point mouse, Canvas canvas)
         {
             canvas.Children.Remove(garageGhost);
-            Canvas.SetTop(garageGhost, (int)mouseY - garageGhost.Height / 2);
-            Canvas.SetLeft(garageGhost, (int)mouseX - garageGhost.Width / 2);
+            Canvas.SetTop(garageGhost, (int)mouse.Y - garageGhost.Height / 2);
+            Canvas.SetLeft(garageGhost, (int)mouse.X - garageGhost.Width / 2);
+            garageGhost.Width = standardSize;
+            garageGhost.Height = standardSize;
             canvas.Children.Add(garageGhost);
         }
 
-        public static Garage CreateGarage(int locationX, int locationY)
+        public static Garage CreateGarage(Point location, Canvas canvas, List<Garage> garageList)
         {
-            var returnGarage = new Garage(new System.Windows.Vector(locationX, locationY), standardSize , DirectionCar.North);
+            var returnGarage = new Garage(new System.Windows.Vector(location.X, location.Y), standardSize , DirectionCar.North);
 
-            if(ObjectHandler.LocationContainsObject(new System.Windows.Vector(locationX, locationY)))
+            if(!ObjectHandler.LocationContainsObject(new System.Windows.Vector(location.X, location.Y)))
             {
+                garageList.Add(returnGarage);
+                drawGarage(canvas, returnGarage);
                 return returnGarage;
             }
-            else
-            {
-                throw new Exception("Could not create garage because is on road, intersection, building or garage");
-            }
-            
+            return null;
         }
 
         public static void drawGarage(Canvas canvas, Garage garage)
@@ -61,7 +64,21 @@ namespace KBS2.CityDesigner.ObjectCreators
             canvas.Children.Remove(garageRectangle);
             Canvas.SetTop(garageRectangle, (int)garage.Location.Y - garage.Size / 2);
             Canvas.SetLeft(garageRectangle, (int)garage.Location.X - garage.Size / 2);
-            canvas.Children.Add(garageRectangle);
+            garageRectangle.Width = garage.Size;
+            garageRectangle.Height = garage.Size;
+            canvas.Children.Add(clone(garageRectangle));
+        }
+
+        /// <summary>
+        /// Dirty fix to copy Garage
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private static FrameworkElement clone(FrameworkElement e)
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(XamlWriter.Save(e));
+            return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
     }
 }

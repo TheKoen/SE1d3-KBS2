@@ -57,11 +57,11 @@ namespace KBS2.CityDesigner.ObjectCreators
         /// <param name="canvas"></param>
         /// <param name="buildingList"></param>
         /// <returns></returns>
-        public static Building CreateBuilding(Vector location, Canvas canvas, List<Building> buildingList)
+        public static Building CreateBuilding(Point location, Canvas canvas, List<Building> buildingList)
         {
-            var returnBuilding = new Building(location, standardSize);
+            var returnBuilding = new Building((Vector)location, standardSize);
 
-            if (!ObjectHandler.LocationContainsObject(location))
+            if (!ObjectHandler.LocationContainsObject((Vector)location))
             {
                 buildingList.Add(returnBuilding);
                 DrawBuilding(canvas, returnBuilding);

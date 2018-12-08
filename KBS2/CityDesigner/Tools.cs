@@ -11,6 +11,6 @@ namespace KBS2.CityDesigner
         Cursor,
         Road,
         Building,
-        Intersection
+        Garage
     }
 }
