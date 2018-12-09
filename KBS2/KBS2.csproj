@@ -87,6 +87,8 @@
     <Compile Include="Console\Commands\CommandsSensors.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
+    <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
+    <Compile Include="GPS\AlgorithmTools.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="CustomerSystem\Customer.cs" />
     <Compile Include="CustomerSystem\CustomerController.cs" />
@@ -95,6 +97,10 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
+    <Compile Include="GPS\IAlgorithm.cs" />
+    <Compile Include="GPS\NodeNetwork\Link.cs" />
+    <Compile Include="GPS\NodeNetwork\Node.cs" />
+    <Compile Include="GPS\NodeNetwork\RoadNetwork.cs" />
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
@@ -221,7 +227,6 @@
   <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
