@@ -152,13 +152,8 @@ namespace KBS2.CityDesigner
                 leftButtonWasPressed = false;
                 // drawing Real Road
                 if (Tool == Tools.Road) {
-                    var newRoad = RoadCreator.CreateRoad(Canvas, ObjectHandler.Roads, ObjectHandler.Buildings);
-                    //try to create intersection for new road
-                    if(newRoad != null)
-                    {
-                        IntersectionCreator.CreateIntersection(Canvas, ObjectHandler.Roads, ObjectHandler.Intersections, newRoad.Start);
-                        IntersectionCreator.CreateIntersection(Canvas, ObjectHandler.Roads, ObjectHandler.Intersections, newRoad.End);
-                    }
+                    RoadCreator.CreateRoad(Canvas, ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Garages);
+                    
                 }
             }
            
@@ -197,12 +192,15 @@ namespace KBS2.CityDesigner
         {
             //Remove object hide information
             ObjectHandler.Roads.Remove(Creator.SelectRoad);
+            ObjectHandler.Intersections.Remove(ObjectHandler.Intersections.Find(i => i.Location == Creator.SelectRoad.Start));
+            ObjectHandler.Intersections.Remove(ObjectHandler.Intersections.Find(i => i.Location == Creator.SelectRoad.End));
             ObjectHandler.Buildings.Remove(Creator.SelectBuilding);
             InformationBlockRoad.Visibility = Visibility.Hidden;
             InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
+            Creator.SelectRoad = null;
             Creator.SelectBuilding = null;
-            Creator.RedrawAllObjects();
+            ObjectHandler.RedrawAllObjects(Canvas);;
         }
 
         private void ChangeWidthRoadEventHandler(object sender, PropertyChangedEventArgs e)
@@ -212,7 +210,7 @@ namespace KBS2.CityDesigner
                 if (Creator.SelectRoad != null)
                 {
                     Creator.SelectRoad.Width = NumericWidthRoad.Value;
-                    Creator.RedrawAllObjects();
+                    ObjectHandler.RedrawAllObjects(Canvas);
                 }
             }
             catch(NullReferenceException) { } // because creator does not exist before the first event is fired in XML
@@ -226,7 +224,7 @@ namespace KBS2.CityDesigner
                 if (Creator.SelectBuilding != null)
                 {
                     Creator.SelectBuilding.Size = NumericSizeBuilding.Value;
-                    Creator.RedrawAllObjects();
+                    ObjectHandler.RedrawAllObjects(Canvas);
                 }
             }
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
@@ -239,7 +237,7 @@ namespace KBS2.CityDesigner
                 if (Creator.SelectBuilding != null)
                 {
                     Creator.SelectRoad.MaxSpeed = NumericMaxSpeedRoad.Value;
-                    Creator.RedrawAllObjects();
+                    ObjectHandler.RedrawAllObjects(Canvas);
                 }
             }
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML

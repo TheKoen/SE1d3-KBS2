@@ -47,7 +47,7 @@ namespace KBS2.CityDesigner
             Roads = e.Roads;
             Intersections = e.Intersections;
             Buildings = e.Buildings;
-            RedrawAllObjects();
+            RedrawAllObjects(Canvas);
         }
 
               
@@ -176,26 +176,27 @@ namespace KBS2.CityDesigner
         {
             BuildingCreator.RemoveGhost(Canvas);
             RoadCreator.RemoveGhost(Canvas);
+            GarageCreator.RemoveGhost(Canvas);
         }
 
         /// <summary>
         /// Redraw all objects on Canvas
         /// </summary>
-        public void RedrawAllObjects()
+        public static void RedrawAllObjects(Canvas canvas)
         {
             //clear canvas
-            Canvas.Children.Clear();
+            canvas.Children.Clear();
 
             //draw roads
             foreach (var road in Roads)
             {
-                RoadCreator.DrawRoad(Canvas, road);
+                RoadCreator.DrawRoad(canvas, road);
             }
 
             //draw Buildings
             foreach (var building in Buildings)
             {
-                BuildingCreator.DrawBuilding(Canvas, building);
+                BuildingCreator.DrawBuilding(canvas, building);
             }
 
             // check for unnessesary intersection if so remove
@@ -204,7 +205,7 @@ namespace KBS2.CityDesigner
             //draw Intersection 
             foreach (var intersection in Intersections)
             {
-                IntersectionCreator.DrawIntersection(Canvas, intersection, Roads, Intersections);                            
+                IntersectionCreator.DrawIntersection(canvas, intersection, Roads, Intersections);                            
             }
         }
 

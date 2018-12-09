@@ -80,5 +80,10 @@ namespace KBS2.CityDesigner.ObjectCreators
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
+
+        public static void RemoveGhost(Canvas canvas)
+        {
+            canvas.Children.Remove(garageGhost);
+        }
     }
 }

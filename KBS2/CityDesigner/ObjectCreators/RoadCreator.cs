@@ -199,9 +199,11 @@ namespace KBS2.CityDesigner.ObjectCreators
         /// <param name="canvas"></param>
         /// <param name="roadsList"></param>
         /// <returns></returns>
-        public static Road CreateRoad(Canvas canvas, List<Road> roadsList, List<Building> buildingsList)
+        public static Road CreateRoad(Canvas canvas, List<Road> roadsList, List<Building> buildingsList, List<Garage> garagesList)
         {
             startRoad = new Point(0, 0);
+
+            Road road = new Road(new Vector((int)roadGhost.X1, (int)roadGhost.Y1), new Vector((int)roadGhost.X2, (int)roadGhost.Y2), standardRoadWidth, standardMaxSpeed);
 
             //check if road is long enough
             if (Util.MathUtil.Distance(new Vector(roadGhost.X1, roadGhost.Y1), new Vector(roadGhost.X2, roadGhost.Y2)) < minLengthRoad)
@@ -225,48 +227,64 @@ namespace KBS2.CityDesigner.ObjectCreators
                 }
             }
             
-            //TODO: Check if road crosses Garage
-
-
-
-
-
-            //check if road crosses other road
-            foreach(var roadI in roadsList)
+            //Check if road crosses Garage
+            foreach(var garage in garagesList)
             {
-                if(roadI.IsXRoad() && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2)
+                if (roadGhost.Y1 + roadGhost.StrokeThickness / 2 >= garage.Location.Y - garage.Size / 2 && roadGhost.Y1 - roadGhost.StrokeThickness / 2 <= garage.Location.Y + garage.Size / 2)
                 {
                     RemoveGhost(canvas);
                     return null;
                 }
-                if(roadI.IsXRoad() && roadGhost.X1 + roadGhost.StrokeThickness/2 >= roadI.Start.X - roadI.Width/2 && roadGhost.X1 - roadGhost.StrokeThickness/2 <= roadI.Start.X + roadI.Width/2)
-                {
-                    RemoveGhost(canvas);
-                    return null;
-                }
-                if(roadGhost.X1 == roadGhost.X2 && !roadI.IsXRoad() && Math.Max(roadGhost.Y1, roadGhost.Y2) >= roadI.Start.Y && Math.Min(roadGhost.Y1, roadGhost.Y2) <= roadI.Start.Y)
-                {
-                    RemoveGhost(canvas);
-                    return null;
-                }
-                if(roadGhost.Y1 == roadGhost.Y2 && !roadI.IsXRoad() && Math.Max(roadGhost.X1, roadGhost.X2) >= roadI.Start.X && Math.Min(roadGhost.X1, roadGhost.X2) <= roadI.Start.X)
+                if (roadGhost.X1 + roadGhost.StrokeThickness / 2 >= garage.Location.X - garage.Size / 2 && roadGhost.X1 - roadGhost.StrokeThickness / 2 <= garage.Location.X + garage.Size / 2)
                 {
                     RemoveGhost(canvas);
                     return null;
                 }
             }
-           
-            Road road;
+
+
+            var roadGhostStart = new Vector(roadGhost.X1, roadGhost.Y2);
+            var roadGhostEnd = new Vector(roadGhost.X2, roadGhost.Y2);
+
+            //check if road collides with other roads
+            foreach (var roadI in roadsList)
+            {
+                
+                if (!roadI.IsXRoad() && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2) // check if road overlaps
+                {
+
+                    if (roadGhostEnd != roadI.End && roadGhostEnd != roadI.Start && roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
+                    {
+                        RemoveGhost(canvas);
+                        return null;
+                    }
+                }
+                if(roadI.IsXRoad() && roadGhost.X1 + roadGhost.StrokeThickness/2 >= roadI.Start.X - roadI.Width/2 && roadGhost.X1 - roadGhost.StrokeThickness/2 <= roadI.Start.X + roadI.Width/2) // chekf if road overlaps
+                {
+                    if (roadGhostEnd != roadI.End && roadGhostEnd != roadI.Start && roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
+                    {
+                        RemoveGhost(canvas);
+                        return null;
+                    }
+                }
+                            
+            }
+            if (CreateMultipleRoadsWhenCrossingEachother(road, roadsList, canvas) == true) // check if road is crossed by ghost road
+            {
+                RemoveGhost(canvas);
+                return null;
+            }
+
+
             //check if road is vertical or horizontal
             if (roadGhost.X1 == roadGhost.X2 || roadGhost.Y1 == roadGhost.Y2)
             {
-
-                // return road
-                road = new Road(new Vector((int)roadGhost.X1, (int)roadGhost.Y1), new Vector((int)roadGhost.X2, (int)roadGhost.Y2), standardRoadWidth, standardMaxSpeed);
                 DrawRoad(canvas, road);
 
                 RemoveGhost(canvas);
                 roadsList.Add(road);
+                IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.Start);
+                IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.End);
                 return road;
             }
             else
@@ -274,6 +292,79 @@ namespace KBS2.CityDesigner.ObjectCreators
                 RemoveGhost(canvas);
                 return null;
             }
+        }
+
+        
+        private static bool CreateMultipleRoadsWhenCrossingEachother(Road road1, List<Road> roadsList, Canvas canvas)
+        {
+            bool returnBool = false;
+            List<Road> removeRoads = new List<Road>();
+            List<Road> addRoads = new List<Road>();
+            
+            foreach (var crossingRoad in roadsList) {
+                if (road1.IsXRoad() && !crossingRoad.IsXRoad() && (road1.End != crossingRoad.End && road1.End != crossingRoad.Start && road1.Start != crossingRoad.Start && road1.Start != crossingRoad.End))
+                {
+                    if (Math.Max(road1.Start.X, road1.End.X) >= crossingRoad.Start.X && Math.Min(road1.Start.X, road1.End.X) <= crossingRoad.Start.X && Math.Max(crossingRoad.Start.Y, crossingRoad.End.Y) >= road1.Start.Y && Math.Min(crossingRoad.Start.Y, crossingRoad.End.Y) <= road1.Start.Y)
+                    {
+                        var roadNew1 = new Road(new Vector(crossingRoad.Start.X, crossingRoad.Start.Y), new Vector(crossingRoad.Start.X, road1.Start.Y), standardRoadWidth, standardMaxSpeed);  // crossingRoad replacement
+                        var roadNew2 = new Road(new Vector(crossingRoad.Start.X, road1.Start.Y), new Vector(crossingRoad.End.X, crossingRoad.End.Y), standardRoadWidth, standardMaxSpeed);      // crossingRoad replacement
+                        var roadNew3 = new Road(new Vector(road1.Start.X, road1.Start.Y), new Vector(crossingRoad.Start.X, road1.Start.Y), standardRoadWidth, standardMaxSpeed);                 // road1 replacement
+                        var roadNew4 = new Road(new Vector(crossingRoad.Start.X, road1.Start.Y), new Vector(road1.End.X, road1.End.Y), standardRoadWidth, standardMaxSpeed);                    // road1 replacement
+                        removeRoads.Add(road1);
+                        removeRoads.Add(crossingRoad);
+                        addRoads.Add(roadNew1);
+                        addRoads.Add(roadNew2);
+                        addRoads.Add(roadNew3);
+                        addRoads.Add(roadNew4);
+
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew3.Start);
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew3.End);
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew4.Start);
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew4.End);
+                                               
+                        returnBool = true;
+                    }
+                    
+                }
+                else if (crossingRoad.IsXRoad() && !road1.IsXRoad() && (road1.End != crossingRoad.End && road1.End != crossingRoad.Start && road1.Start != crossingRoad.Start && road1.Start != crossingRoad.End))
+                {
+                    if (Math.Max(road1.Start.Y, road1.End.Y) >= crossingRoad.Start.Y && Math.Min(road1.Start.Y, road1.End.Y) <= crossingRoad.Start.Y && Math.Max(crossingRoad.Start.X, crossingRoad.End.X) >= road1.Start.X && Math.Min(crossingRoad.Start.X, crossingRoad.End.X) <= road1.Start.X)
+                    {
+                        var roadNew1 = new Road(new Vector(crossingRoad.Start.X, crossingRoad.Start.Y), new Vector(road1.Start.X, crossingRoad.Start.Y), standardRoadWidth, standardMaxSpeed);  // crossing Road replacement
+                        var roadNew2 = new Road(new Vector(road1.Start.X, crossingRoad.Start.Y), new Vector(crossingRoad.End.X, crossingRoad.End.Y), standardRoadWidth, standardMaxSpeed);      // crossing Road replacement
+                        var roadNew3 = new Road(new Vector(road1.Start.X, road1.Start.Y), new Vector(road1.Start.X, crossingRoad.Start.Y), standardRoadWidth, standardMaxSpeed);                // road1 replacement
+                        var roadNew4 = new Road(new Vector(road1.Start.X, crossingRoad.Start.Y), new Vector(road1.End.X, road1.End.Y), standardRoadWidth, standardMaxSpeed);                    // road1 replacement
+                        removeRoads.Add(road1);
+                        removeRoads.Add(crossingRoad);
+                        addRoads.Add(roadNew1);
+                        addRoads.Add(roadNew2);
+                        addRoads.Add(roadNew3);
+                        addRoads.Add(roadNew4);
+
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew3.Start);
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew3.End);
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew4.Start);
+                        IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, roadNew4.End);
+
+                        
+
+                        returnBool = true;
+                        
+                    }
+                }
+            }
+            foreach(var i in addRoads)
+            {
+                roadsList.Add(i);
+            }
+            foreach(var i in removeRoads)
+            {
+                roadsList.Remove(i);
+            }
+            ObjectHandler.RedrawAllObjects(canvas);
+
+            roadsList.Remove(road1);
+            return returnBool;
         }
 
         /// <summary>
@@ -284,6 +375,8 @@ namespace KBS2.CityDesigner.ObjectCreators
         {
             canvas.Children.Remove(roadGhost);
         }
+
+        
 
         public static void DrawRoad(Canvas canvas, Road road)
         {
