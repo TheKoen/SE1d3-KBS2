@@ -139,7 +139,11 @@ namespace KBS2
 
         }
 
-        // Method for saving the new values the user has filled in in the Settings tab.
+        /// <summary>
+        /// Method for the save button with saving the new values the user has filled in in the Settings tab.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             PropertyDisplayHandler.SaveProperties();
@@ -151,12 +155,19 @@ namespace KBS2
             PropertyDisplayHandler.ResetDefaults();
         }
 
+        /// <summary>
+        /// This method updates the timer of the simulation
+        /// </summary>
         public void UpdateTimer()
         {
             LabelSimulationTime.Content = SecondsRunning;
         }
 
-        public double GetSeconds()
+        /// <summary>
+        /// This method is calculating seconds from ticks
+        /// </summary>
+        /// <returns>seconds the simulation is running</returns>
+        public double CalculateSeconds()
         {
             return Math.Round(Ticks / 10d, 2);
         }
@@ -164,7 +175,7 @@ namespace KBS2
         public void Update()
         {
             Ticks++;
-            SecondsRunning = GetSeconds();
+            SecondsRunning = CalculateSeconds();
             UpdateTimer();
         }
 
