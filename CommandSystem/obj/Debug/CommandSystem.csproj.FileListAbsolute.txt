@@ -1,0 +1,6 @@
+D:\Documents\GitHub\SE1d3-KBS2\CommandSystem\bin\Debug\CommandSystem.dll
+D:\Documents\GitHub\SE1d3-KBS2\CommandSystem\bin\Debug\CommandSystem.pdb
+D:\Documents\GitHub\SE1d3-KBS2\CommandSystem\obj\Debug\CommandSystem.csprojAssemblyReference.cache
+D:\Documents\GitHub\SE1d3-KBS2\CommandSystem\obj\Debug\CommandSystem.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\SE1d3-KBS2\CommandSystem\obj\Debug\CommandSystem.dll
+D:\Documents\GitHub\SE1d3-KBS2\CommandSystem\obj\Debug\CommandSystem.pdb
