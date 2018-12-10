@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:KBS2.Visual.Controls"
              mc:Ignorable="d" Width="0" Height="0">
     <Grid Margin="0,0,4,4">
-        <Ellipse x:Name="EllipseCustomer" Fill="#FF04FF07" HorizontalAlignment="Left" Height="8" Stroke="#FFD0FF00" VerticalAlignment="Top" Width="8" Margin="-4"/>
+        <Ellipse x:Name="EllipseCustomer" Fill="#4286f4" HorizontalAlignment="Left" Height="8" VerticalAlignment="Top" Width="8" Margin="-4" MouseLeftButtonDown="Customer_Select"/>
 
     </Grid>
 </UserControl>

@@ -46,6 +46,7 @@ namespace KBS2
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private readonly ConsoleWindow consoleWindow;
+        private long starTime;
 
         public CityRenderHandler CityRenderHandler { get; private set; }
         public CustomerRenderHandler CustomerRenderHandler { get; private set; }
@@ -97,6 +98,7 @@ namespace KBS2
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.StartButtonClick();
+            starTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
@@ -160,7 +162,9 @@ namespace KBS2
         /// </summary>
         public void UpdateTimer()
         {
-            LabelSimulationTime.Content = SecondsRunning;
+            var time = (DateTimeOffset.Now.ToUnixTimeMilliseconds() - starTime);
+            var temp = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(time);
+            LabelSimulationTime.Content = $"{temp:mm:ss:FF}";
         }
 
         /// <summary>
@@ -169,7 +173,7 @@ namespace KBS2
         /// <returns>seconds the simulation is running</returns>
         public double CalculateSeconds()
         {
-            return Math.Round(Ticks / 10d, 2);
+            return Ticks / 30.0d;
         }
 
         public void Update()

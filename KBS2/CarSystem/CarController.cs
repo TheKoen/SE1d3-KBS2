@@ -208,6 +208,10 @@ namespace KBS2.CarSystem
             {
                 addedRotation += rotationSpeed * 0.8;
             }
+            else if (angle > 135)
+            {
+                addedRotation += rotationSpeed * 45.0;
+            }
             // If the angle is more than 45 degrees (90 - 45), rotate to the right.
             else if (angle > 45)
             {
@@ -226,9 +230,9 @@ namespace KBS2.CarSystem
             var speed = velocity.Length;
             var rotation = MathUtil.VelocityToRotation(velocity);
             
-            if (speed > maxTurningSpeed / 2d || distanceToDestination < 10)
+            if (speed > maxTurningSpeed / 2d || distanceToDestination < 20)
             {
-                velocity = speed > 0.01
+                velocity = speed > 0.1
                     ? Vector.Add(velocity, CalculateDeccelerationVector(velocity))
                     : new Vector();
             }
@@ -245,16 +249,16 @@ namespace KBS2.CarSystem
 
             if (angle > 0)
             {
-                if (yaw < maxInLaneRotation)
+                if (yaw > -maxInLaneRotation)
                 {
-                    addedRotation += rotationSpeed;
+                    addedRotation -= rotationSpeed;
                 }
             }
             else
             {
-                if (yaw > -maxInLaneRotation)
+                if (yaw < maxInLaneRotation)
                 {
-                    addedRotation -= rotationSpeed;
+                    addedRotation += rotationSpeed;
                 }
             }
         }
@@ -329,7 +333,7 @@ namespace KBS2.CarSystem
             else if (braking)
             {
                 // If we are braking, deccelerate the car.
-                velocity = speed > 0.01
+                velocity = speed > 0.1
                     ? Vector.Add(velocity, CalculateDeccelerationVector(velocity))
                     : new Vector();
             }
