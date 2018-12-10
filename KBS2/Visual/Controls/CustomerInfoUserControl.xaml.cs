@@ -28,8 +28,8 @@ namespace KBS2.Windows
             LabelInfoName.Content = customer.Name;
             LabelInfoAge.Content = customer.Age;
             LabelInfoGender.Content = customer.Gender;
-            LabelInfoLocation.Content = "0, 0";
-            LabelInfoDestination.Content = "0, 0";
+            LabelInfoLocation.DataContext = customer;
+            LabelInfoDestination.DataContext = customer;
 
             //Switch case for moral and change picture depending on moral (:
             MoralImage.Source = new BitmapImage(new Uri(@"/KBS2;component/Images/happy.png", UriKind.Relative));
