@@ -109,6 +109,8 @@ namespace KBS2
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.ResetButtonClick();
+            starTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            LabelSimulationTime.Content = "00:00:00";
         }
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
