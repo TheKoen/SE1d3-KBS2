@@ -70,7 +70,7 @@ namespace KBS2
             GPSSystem.Setup();
 
             CityRenderHandler = new CityRenderHandler(this, CanvasMain);
-            CustomerRenderHandler = new CustomerRenderHandler(CanvasMain);
+            CustomerRenderHandler = new CustomerRenderHandler(CanvasMain, this);
             CarRenderHandler = new CarRenderHandler(CanvasMain, this);
             SimulationControlHandler = new SimulationControlHandler(this);
             PropertyDisplayHandler = new PropertyDisplayHandler(this);

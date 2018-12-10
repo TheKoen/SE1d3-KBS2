@@ -17,7 +17,16 @@ namespace KBS2.CustomerSystem
     {
         private static readonly Random Random = new Random();
         public List<Customer> Customers { get; set; } = new List<Customer>();
-        public Building Destination { get; set; }
+        private Building destination;
+        public Building Destination
+        {
+            get => destination;
+            set
+            {
+                destination = value;
+                Customers.ForEach(customer => customer.UpdateDestination());
+            }
+        }
         public CustomerGroupController Controller { get; set; }
         public Vector Location { get; set; }
         public List<Road> RoadsNear;

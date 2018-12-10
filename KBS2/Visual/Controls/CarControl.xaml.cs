@@ -56,15 +56,15 @@ namespace KBS2.Visual.Controls
 
         public void Car_Select(object sender, MouseButtonEventArgs e)
         {
-            //Empty previous info
-
-            //Open info of the selected car
-            Screen.TabItemInfo.IsSelected = true;
-
-            //ADd info about this car :^)
+            //Empty info tab
+            Screen.TabItemInfo.Content = null;
+            
+            //Add info about this car
             CarInfoUserControl ci = new CarInfoUserControl(car);
             Screen.TabItemInfo.Content = ci;
-            
+
+            //Open the info tab of selected car
+            Screen.TabItemInfo.IsSelected = true;
         }
     }
 }
