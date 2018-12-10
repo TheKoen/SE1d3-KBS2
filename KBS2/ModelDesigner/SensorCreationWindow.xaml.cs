@@ -20,9 +20,11 @@ namespace KBS2.ModelDesigner
         {
             InitializeComponent();
 
+            // Setting the list of sensor types that can be used for the new sensor
             ComboBoxType.ItemsSource = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(t => t.GetTypes())
                 .Where(t => t.IsClass && !t.IsAbstract && typeof(Sensor).IsAssignableFrom(t));
+            // Setting the list of directions that can be used
             ComboBoxSide.ItemsSource = Enum.GetNames(typeof(Direction));
 
             Success = false;
@@ -36,6 +38,7 @@ namespace KBS2.ModelDesigner
 
         private void TextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            // Preventing users from entering spaces in TextBoxes
             e.Handled = e.Key == Key.Space;
         }
 

@@ -7,6 +7,6 @@
              xmlns:local="clr-namespace:KBS2.Visual.Controls"
              mc:Ignorable="d" RenderTransformOrigin="0,0">
     <Grid>
-        <Rectangle HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=BuildingControlName}" Stroke="#FF665D5D" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=BuildingControlName}" StrokeThickness="4" Fill="#FFB5B5BB" RenderTransformOrigin="1,1"/>
+        <Rectangle Name="Rectangle" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=BuildingControlName}" Stroke="#FF665D5D" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=BuildingControlName}" StrokeThickness="4" Fill="#FFB5B5BB" RenderTransformOrigin="1,1"/>
     </Grid>
 </UserControl>

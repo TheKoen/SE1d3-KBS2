@@ -46,7 +46,8 @@
         </ComboBox>
         
         <Label Content="Range" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" />
-        <TextBox x:Name="TextBoxRange" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"
+        <TextBox x:Name="TextBoxRange" Style="{StaticResource GhostTextBox}" util:TextBoxProperties.GhostText="Range"
+                 Width="40" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"
                  PreviewTextInput="TextBoxRange_OnPreviewTextInput" PreviewKeyDown="TextBox_OnPreviewKeyDown" />
         
         <WrapPanel Grid.Row="3" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2">

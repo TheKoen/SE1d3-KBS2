@@ -9,13 +9,22 @@ using KBS2.CarSystem.Sensors;
 
 namespace KBS2.ModelDesigner
 {
+    public interface ICarDesign
+    {
+        int CarWidth { get; set; }
+        int CarHeight { get; set; }
+        List<SensorPrototype> SensorList { get; }
+        
+        DrawingImage Brush { get; }
+    }
+
     [Serializable]
-    public class CarDesign : ISerializable
+    public class CarDesign : ICarDesign, ISerializable
     {
         public int CarWidth { get; set; } = 10;
         public int CarHeight { get; set; } = 5;
-        
-        private List<SensorPrototype> SensorList = new List<SensorPrototype>();
+
+        public List<SensorPrototype> SensorList { get; } = new List<SensorPrototype>();
 
         public DrawingImage Brush
         {
@@ -142,19 +151,7 @@ namespace KBS2.ModelDesigner
             CarHeight = (int) info.GetValue("height", typeof(int));
             SensorList = (List<SensorPrototype>) info.GetValue("sensors", typeof(List<SensorPrototype>));
         }
-
-
-        public void AddSensor(SensorPrototype sensorPrototype) =>
-            SensorList.Add(sensorPrototype);
-
-        public void RemoveSensor(SensorPrototype sensorPrototype) =>
-            SensorList.Remove(sensorPrototype);
         
-        public List<SensorPrototype> GetSensors() =>
-            new List<SensorPrototype>(SensorList);
-        
-        public CarModel GetAsModel(string name, double maxSpeed) =>
-            new CarModel(maxSpeed, SensorList, name);
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

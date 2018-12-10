@@ -3,6 +3,8 @@ using System.Windows;
 using System.Xml;
 using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
+using KBS2.GPS;
+using KBS2.GPS.NodeNetwork;
 
 namespace KBS2.CitySystem
 {
@@ -47,6 +49,9 @@ namespace KBS2.CitySystem
             {
                 cityObject.Intersections.Add(ParseIntersection((XmlNode)intersection));
             }
+            
+            RoadNetwork.GenerateNetwork(cityObject.Roads, cityObject.Intersections);
+            
             return cityObject;
         }
 

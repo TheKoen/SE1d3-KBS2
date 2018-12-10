@@ -55,12 +55,10 @@ namespace CommandSystem
         /// Gets the name of every registered <see cref="ICommand"/>
         /// </summary>
         /// <returns><see cref="IEnumerable{String}"/> of names</returns>
-        public static IEnumerable<string> GetCommandNames()
-        {
-            return CommandList.Select(c =>
+        public static IEnumerable<string> GetCommandNames() =>
+            CommandList.Select(c =>
                 ((CommandMetadataAttribute) Attribute.GetCustomAttribute(c, typeof(CommandMetadataAttribute))).Key
             );
-        }
         
         
         
