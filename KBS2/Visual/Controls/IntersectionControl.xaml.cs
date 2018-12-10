@@ -28,9 +28,9 @@ namespace KBS2.Visual.Controls
 
             Height = size;
             Width = size;
-            var c = size / 2d;
+            var offset = size / 2d;
             setStripes();
-            Margin = new Thickness(intersection.Location.X-c, intersection.Location.Y, 0 , 0);
+            Margin = new Thickness(intersection.Location.X - offset, intersection.Location.Y - offset, 0, 0);
             var Roads = intersection.GetRoads();
 
             foreach (var road in Roads)
@@ -49,7 +49,8 @@ namespace KBS2.Visual.Controls
                     }
                 }
                 else
-                {   //boven onder
+                {
+                    //boven onder
                     var RoadAvgY = (road.Start.Y + road.End.Y) / 2d;
                     if (intersection.Location.Y > RoadAvgY)
                     {
@@ -65,26 +66,28 @@ namespace KBS2.Visual.Controls
 
         public void setStripes()
         {
-            var mult = 0.125;
+            var mult = 0.1;
             // IntersectionStripeTop
-            IntersectionStripeTop.Height = Height/2d;
-            IntersectionStripeTop.Width = Width* mult;
-            IntersectionStripeTop.Margin = new Thickness(Width/2d - IntersectionStripeTop.Width/2d, 0, 0, 0);
+            IntersectionStripeTop.Height = Height / 2d;
+            IntersectionStripeTop.Width = Width * mult;
+            IntersectionStripeTop.Margin = new Thickness(Width / 2d - IntersectionStripeTop.Width / 2d, 0, 0, 0);
 
             // IntersectionStripeBottom
             IntersectionStripeBottom.Height = Height / 2d;
             IntersectionStripeBottom.Width = Width * mult;
-            IntersectionStripeBottom.Margin = new Thickness(Width / 2d - IntersectionStripeTop.Width / 2d, Height / 2d, 0, 0);
+            IntersectionStripeBottom.Margin =
+                new Thickness(Width / 2d - IntersectionStripeTop.Width / 2d, Height / 2d, 0, 0);
 
             // IntersectionStripeLeft
             IntersectionStripeLeft.Height = Width * mult;
             IntersectionStripeLeft.Width = Height / 2d;
-            IntersectionStripeLeft.Margin = new Thickness(0, Height / 2d - IntersectionStripeLeft.Height/2d, 0, 0);
+            IntersectionStripeLeft.Margin = new Thickness(0, Height / 2d - IntersectionStripeLeft.Height / 2d, 0, 0);
 
             // IntersectionStripeRight
             IntersectionStripeRight.Height = Width * mult;
             IntersectionStripeRight.Width = Height / 2d;
-            IntersectionStripeRight.Margin = new Thickness(Width / 2d, Height / 2d - IntersectionStripeLeft.Height/2d, 0, 0);
+            IntersectionStripeRight.Margin =
+                new Thickness(Width / 2d, Height / 2d - IntersectionStripeLeft.Height / 2d, 0, 0);
         }
     }
 }

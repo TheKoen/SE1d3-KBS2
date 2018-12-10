@@ -9,7 +9,7 @@
     <Grid >
 
         <Canvas x:Name="CanvasMain" HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951"/>
-        <TabControl x:Name="TabControlMain" HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" Background="#FF0015FF">
+        <TabControl x:Name="TabControlMain" HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" >
 
             <TabItem x:Name="TabItemSimulation" Header="Simulation" Margin="-2,-2,-20,-2" >
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">

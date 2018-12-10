@@ -146,10 +146,10 @@
     <Compile Include="Visual\IRenderHandler.cs" />
     <Compile Include="Visual\PropertyDisplayHandler.cs" />
     <Compile Include="Visual\SimulationControlHandler.cs" />
-    <Compile Include="Windows\CarInfoUserControl.xaml.cs">
+    <Compile Include="Visual\Controls\CarInfoUserControl.xaml.cs">
       <DependentUpon>CarInfoUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\CustomerInfoUserControl.xaml.cs">
+    <Compile Include="Visual\Controls\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="ConsoleWindow.xaml">
@@ -203,11 +203,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\CarInfoUserControl.xaml">
+    <Page Include="Visual\Controls\CarInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\CustomerInfoUserControl.xaml">
+    <Page Include="Visual\Controls\CustomerInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

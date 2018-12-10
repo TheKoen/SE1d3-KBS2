@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Xml;
 using KBS2.CitySystem;
 using KBS2.Visual.Controls;
@@ -45,8 +47,27 @@ namespace KBS2.Visual
         {
             // Loads the city file and parses the information into a City.
             var file = new XmlDocument();
-            file.Load(SelectedFilePath);
-            CityParser.MakeCity(file);
+
+            try
+            {
+                file.Load(SelectedFilePath);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Please select a City", "No city selected!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                CityParser.MakeCity(file);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error in the city file.", "Invalid City File", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            
             var city = City.Instance;
 
             Screen.CityRenderHandler.DrawCity(city);
@@ -77,17 +98,7 @@ namespace KBS2.Visual
             App.Console.Print("Start pressed");
 
             MainScreen.WPFLoop.Start();
-            MainScreen.AILoop.Start();
-            
-            var city = City.Instance;
-            foreach (var car in city.Cars)
-            {
-                Screen.CanvasMain.Children.Add(new CarControl(car));
-            }
-
-            Screen.BtnPause.IsEnabled = true;
-            Screen.BtnStop.IsEnabled = true;
-            Screen.BtnStart.IsEnabled = false;
+            MainScreen.AILoop.Start();            
         }
 
         public void PauseButtonClick()
@@ -104,10 +115,27 @@ namespace KBS2.Visual
             Screen.BtnStart.IsEnabled = true;
             App.Console.Print("Reset pressed");
 
+            LoadButtonClick();
+            ResetLabels();
+            Screen.Ticks = 0;
+            Screen.SecondsRunning = 0;
+            Screen.UpdateTimer();
             MainScreen.WPFLoop.Stop();
             MainScreen.AILoop.Stop();
 
             City.Instance.Controller.Reset();
+        }
+
+        public void ResetLabels()
+        {
+            Screen.LabelSimulationAmountCostumer.Content = 0;
+            Screen.LabelSimulationSuccesfulRides.Content = 0;
+            Screen.LabelSimulationRidesCancelled.Content = 0;
+            Screen.LabelSimulationDeaths.Content = 0;
+
+            Screen.LabelSimulationAmountCars.Content = 0;
+            Screen.LabelSimulationDriving.Content = 0;
+            Screen.LabelSimulationNotInUse.Content = 0;
         }
     }
 }

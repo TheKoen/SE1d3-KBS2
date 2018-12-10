@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using KBS2.Util.Loop;
-using System.Linq;
 using CommandSystem;
 using CommandSystem.PropertyManagement;
 using KBS2.Visual.Controls;
@@ -55,7 +54,7 @@ namespace KBS2
         public PropertyDisplayHandler PropertyDisplayHandler { get; private set; }
 
         public int Ticks { get; set; }
-        public double SecondsRunning { get; private set; }
+        public double SecondsRunning { get; set; }
 
         public MainScreen()
         {
@@ -72,7 +71,7 @@ namespace KBS2
 
             CityRenderHandler = new CityRenderHandler(this, CanvasMain);
             CustomerRenderHandler = new CustomerRenderHandler(CanvasMain);
-            CarRenderHandler = new CarRenderHandler(CanvasMain);
+            CarRenderHandler = new CarRenderHandler(CanvasMain, this);
             SimulationControlHandler = new SimulationControlHandler(this);
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
 
@@ -159,7 +158,7 @@ namespace KBS2
 
         public double GetSeconds()
         {
-            return Math.Round(Ticks / 100.0, 2);
+            return Math.Round(Ticks / 10d, 2);
         }
 
         public void Update()

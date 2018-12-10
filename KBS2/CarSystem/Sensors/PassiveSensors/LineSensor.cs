@@ -45,7 +45,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
             var currentValue = road.IsXRoad() ? currentLoc.Y : currentLoc.X;
             var roadValue = road.IsXRoad() ? road.Start.Y : road.Start.X;
             var positiveDir = Sensor.Car.Direction.Equals(DirectionCar.South) ||
-                              Sensor.Car.Direction.Equals(DirectionCar.East);
+                              Sensor.Car.Direction.Equals(DirectionCar.West);
 
             switch (Sensor.Direction)
             {
@@ -55,8 +55,8 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
                 case Direction.Right:
                     var laneWidth = road.Width / 2.0;
                     Sensor.Distance = positiveDir
-                        ? Math.Abs(roadValue + laneWidth - currentValue)
-                        : Math.Abs(roadValue - laneWidth - currentValue);
+                        ? Math.Abs(roadValue - laneWidth - currentValue)
+                        : Math.Abs(roadValue + laneWidth - currentValue);
                     break;
                 default:
                     throw new ArgumentException($"Unable to find line in direction {Sensor.Direction}");

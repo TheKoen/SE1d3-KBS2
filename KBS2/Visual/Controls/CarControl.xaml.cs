@@ -1,5 +1,6 @@
 ﻿using KBS2.CarSystem;
 using KBS2.Util;
+using KBS2.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,11 @@ namespace KBS2.Visual.Controls
     {
 
         public Car car { get; set; }
+        public MainScreen Screen { get; set; }
 
-        public CarControl(Car car)
+        public CarControl(Car car, MainScreen screen)
         {
+            Screen = screen;
             this.car = car;            
             Update();
             MainScreen.WPFLoop.Subscribe(Update);
@@ -35,9 +38,10 @@ namespace KBS2.Visual.Controls
 
         public void Update()
         {
-            var angle = MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
-            App.Console.Print($"Car rotation {angle} ");
-            RenderTransform = new RotateTransform(Math.Abs(angle), 0.5, 0.5);
+            var angle = -MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
+            while (angle < 0) angle += 360;
+            if (angle >= 360) angle -= 360;
+            RenderTransform = new RotateTransform(angle, 0.5, 0.5);
 
             var rotation = car.Rotation;
             var xoffset = Vector.Multiply(MathUtil.Normalize(MathUtil.RotateVector(rotation, 90)), car.Width / 2d);
@@ -47,7 +51,20 @@ namespace KBS2.Visual.Controls
             location = Vector.Subtract(location, xoffset);
             location = Vector.Subtract(location, yoffset);
 
-            Margin = new Thickness(location.X, location.Y, 0, 0);           
+            Margin = new Thickness(location.X, location.Y, 0, 0);
+        }
+
+        public void Car_Select(object sender, MouseButtonEventArgs e)
+        {
+            //Empty previous info
+
+            //Open info of the selected car
+            Screen.TabItemInfo.IsSelected = true;
+
+            //ADd info about this car :^)
+            CarInfoUserControl ci = new CarInfoUserControl(car);
+            Screen.TabItemInfo.Content = ci;
+            
         }
     }
 }

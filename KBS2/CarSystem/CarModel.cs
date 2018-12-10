@@ -77,7 +77,7 @@ namespace KBS2.CarSystem
 
         public Car CreateCar(int id, Vector location, DirectionCar direction)
         {
-            var car = new Car(id, this, location, new List<Sensor>(), direction, 10, 5);
+            var car = new Car(id, this, location, new List<Sensor>(), direction, 5, 10);
             var sensors = Sensors
                 .Select(prototype => prototype.Create(car, prototype.Direction, prototype.Range))
                 .ToList();
