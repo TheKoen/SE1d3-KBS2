@@ -95,9 +95,11 @@ namespace KBS2.Visual
 
         public void StartButtonClick()
         {
-            Screen.BtnStart.IsEnabled = false;
             Screen.BtnPause.IsEnabled = true;
             Screen.BtnStop.IsEnabled = true;
+            Screen.BtnLoad.IsEnabled = false;
+            Screen.BtnSelect.IsEnabled = false;
+            Screen.BtnStart.IsEnabled = false;
 
             App.Console.Print("Start pressed");
 
@@ -118,6 +120,9 @@ namespace KBS2.Visual
         public void ResetButtonClick()
         {
             Screen.BtnStart.IsEnabled = true;
+            Screen.BtnLoad.IsEnabled = true;
+            Screen.BtnSelect.IsEnabled = true;
+
             Screen.BtnPause.IsEnabled = false;
             Screen.BtnStop.IsEnabled = false;
             App.Console.Print("Reset pressed");
