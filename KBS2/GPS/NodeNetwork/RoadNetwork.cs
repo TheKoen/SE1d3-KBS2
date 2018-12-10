@@ -30,7 +30,7 @@ namespace KBS2.GPS.NodeNetwork
                 var nodeA = Nodes.Single(node => node.Equals(endpointA));
                 var nodeB = Nodes.Single(node => node.Equals(endpointB));
                 
-                Links[i] = new Link(nodeA, nodeB);
+                Links[i] = new Link(ref nodeA, ref nodeB);
             }
         }
         
@@ -39,8 +39,8 @@ namespace KBS2.GPS.NodeNetwork
 
     public struct RoadNetworkCopy
     {
-        public Node[] Nodes { get; }
-        public Link[] Links { get; }
+        public Node[] Nodes { get; set; }
+        public Link[] Links { get; set; }
 
         public RoadNetworkCopy(Node[] nodes, Link[] links)
         {

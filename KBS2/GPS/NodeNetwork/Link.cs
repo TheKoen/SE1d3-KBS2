@@ -2,13 +2,13 @@ using System;
 
 namespace KBS2.GPS.NodeNetwork
 {
-    public struct Link
+    public class Link
     {
-        public Node NodeA;
-        public Node NodeB;
+        public Node NodeA { get; }
+        public Node NodeB { get; }
         public double Distance { get; }
 
-        public Link(Node nodeA, Node nodeB)
+        public Link(ref Node nodeA, ref Node nodeB)
         {
             NodeA = nodeA;
             NodeB = nodeB;

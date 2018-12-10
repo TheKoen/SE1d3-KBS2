@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace KBS2.GPS.NodeNetwork
 {
-    public struct Node : IEquatable<Node>
+    public class Node : IEquatable<Node>
     {
         public double PositionX { get; }
         public double PositionY { get; }

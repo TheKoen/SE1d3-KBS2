@@ -131,8 +131,8 @@ namespace KBS2.GPS
         public static Destination GetDirection(Car car, Intersection intersection)
         {
             var road = car.CurrentRoad;
-            var location = CalculateDistance(road.Start, car.Location) <
-                           CalculateDistance(road.End, car.Location)
+            var location = MathUtil.Distance(road.Start, car.Location) <
+                           MathUtil.Distance(road.End, car.Location)
                 ? road.Start
                 : road.End;
             return Algorithm.Calculate(new Destination
