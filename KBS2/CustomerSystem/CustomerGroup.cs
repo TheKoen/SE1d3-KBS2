@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Media;
 using KBS2.CitySystem;
 using Newtonsoft.Json;
 
@@ -33,12 +34,13 @@ namespace KBS2.CustomerSystem
 
             var thread = new Thread(() =>
             {
-                var request = (HttpWebRequest) WebRequest.Create($"https://uinames.com/api/?amount={customers}&region=united%20states");
+                var request = (HttpWebRequest) WebRequest.Create($"https://kbs.koenn.me/names.json");
                 request.Method = "GET";
                 request.ContentType = "application/json";
 
                 if (!(request.GetResponse() is HttpWebResponse response))
                 {
+                    App.Console?.Print("Unable to request names for customers!", Colors.Red);
                     return;
                 }
 
@@ -47,15 +49,19 @@ namespace KBS2.CustomerSystem
                     if (responseStream != null)
                     {
                         var reader = new StreamReader(responseStream, Encoding.UTF8);
-                        var data = customers == 1 ? $"[{reader.ReadToEnd()}]" : reader.ReadToEnd();
-                        var info = JsonConvert.DeserializeObject <CustomerInfo[]>(data);
+                        var info = JsonConvert.DeserializeObject <CustomerInfo[]>(reader.ReadToEnd());
                         var index = 0;
+                        var rand = Random.Next(info.Length);
                         foreach (var customer in Customers)
                         {
-                            customer.Name = $"{info[index].name} {info[index].surname}";
-                            customer.Gender = info[index].gender;
+                            customer.Name = $"{info[rand + index].name} {info[index].surname}";
+                            customer.Gender = info[rand + index].gender;
                             index++;
                         }
+                    }
+                    else
+                    {
+                        App.Console?.Print("Unable to parse names for customers!", Colors.Red);
                     }
                 }
             });
