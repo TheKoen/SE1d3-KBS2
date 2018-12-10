@@ -12,7 +12,7 @@ namespace KBS2.CityDesigner
         public static EventHandler CitySaved;
 
 
-        public static void SaveCity(string path, List<Road> roads, List<Building> buildings, List<Intersection> intersections)
+        public static void SaveCity(string path, List<Road> roads, List<Building> buildings, List<Garage> garages, List<Intersection> intersections)
         {
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
@@ -66,6 +66,21 @@ namespace KBS2.CityDesigner
                 buildingElement.Attributes.Append(size);
             }
 
+            foreach (var garage in garages)
+            {
+                XmlElement garageElement = doc.CreateElement("Garage");
+                garageElement.AppendChild(buildingsElement);
+
+                XmlAttribute location = doc.CreateAttribute("Location");
+                location.Value = garage.Location.X.ToString() + ", " + garage.Location.Y.ToString();
+
+                XmlAttribute size = doc.CreateAttribute("Size");
+                size.Value = garage.Size.ToString();
+
+                garageElement.Attributes.Append(location);
+                garageElement.Attributes.Append(size);
+            }
+
 
             XmlElement intersectionsElement = doc.CreateElement("Intersections");
             cityElement.AppendChild(intersectionsElement);
@@ -84,7 +99,7 @@ namespace KBS2.CityDesigner
                 intersectionElement.Attributes.Append(location);
                 intersectionElement.Attributes.Append(size);
             }
-
+            
             doc.Save(path);
 
             CitySaved?.Invoke(null, EventArgs.Empty);

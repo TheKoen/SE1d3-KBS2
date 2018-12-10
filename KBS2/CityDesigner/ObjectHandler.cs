@@ -199,6 +199,12 @@ namespace KBS2.CityDesigner
                 BuildingCreator.DrawBuilding(canvas, building);
             }
 
+            //draw Garages
+            foreach (var garage in Garages)
+            {
+                GarageCreator.drawGarage(canvas, garage);
+            }
+
             // check for unnessesary intersection if so remove or nessesary
             IntersectionCreator.UpdateIntersections(Roads, Intersections);
 
@@ -231,7 +237,7 @@ namespace KBS2.CityDesigner
             }
             foreach(var building in Buildings)
             {
-                if (minX <= building.Location.X + building.Size / 2 && maxX >= building.Location.X - building.Size / 2 && minY / 2 <= building.Location.Y + building.Size / 2 && maxY >= building.Location.Y - building.Size / 2)
+                if (minX <= building.Location.X + building.Size / 2 && maxX >= building.Location.X - building.Size / 2 && minY <= building.Location.Y + building.Size / 2 && maxY >= building.Location.Y - building.Size / 2)
                 {
                     return true;
                 }

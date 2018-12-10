@@ -50,7 +50,7 @@ namespace KBS2.CityDesigner
             popupWindow.ShowDialog();
 
             // save the city
-            CitySaver.SaveCity(popupWindow.FileName, ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Intersections);
+            CitySaver.SaveCity(popupWindow.FileName, ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Garages, ObjectHandler.Intersections);
         }
 
         /// <summary>

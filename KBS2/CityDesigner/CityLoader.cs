@@ -28,6 +28,7 @@ namespace KBS2.CityDesigner
             var _roads = new List<Road>();
             var _intersections = new List<Intersection>();
             var _buildings = new List<Building>();
+            var _garages = new List<Garage>();
 
             var doc = new XmlDocument();
             doc.Load(path);
@@ -50,7 +51,19 @@ namespace KBS2.CityDesigner
                 throw new XmlException("Missing buildings in city.");
             foreach (var building in buildings.ChildNodes)
             {
-                _buildings.Add(ParseBuilding((XmlNode)building));
+                var b = ParseBuilding((XmlNode)building);
+                if(b.GetType() == typeof(Garage))
+                {
+                    _garages.Add((Garage)b);
+                }
+                else if(b.GetType() == typeof(Building))
+                {
+                    _buildings.Add(b);
+                }
+                else
+                {
+                    throw new XmlException("Error casting garages and buildings");
+                }
             }
 
             //selecting and adding intersections to list
