@@ -9,7 +9,7 @@
     <Grid >
 
         <Canvas x:Name="CanvasMain" HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951"/>
-        <TabControl x:Name="TabControlMain" HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" Background="#FF0015FF">
+        <TabControl x:Name="TabControlMain" HorizontalAlignment="Left" Height="670" Margin="950,0,0,0" VerticalAlignment="Top" Width="344" >
 
             <TabItem x:Name="TabItemSimulation" Header="Simulation" Margin="-2,-2,-20,-2" >
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
@@ -25,10 +25,10 @@
                     <Label Content="Intersections:" HorizontalAlignment="Left" Margin="48,109,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.036,0.406"/>
                     <Label Content="Buildings:" HorizontalAlignment="Left" Margin="48,135,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.036,0.406"/>
                     <Label Content="Garages:" HorizontalAlignment="Left" Margin="48,160,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.036,0.406"/>
-                    <Label x:Name="LabelSimulationRoad" Content="Label" HorizontalAlignment="Left" Margin="139,83,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationIntersection" Content="Label" HorizontalAlignment="Left" Margin="139,109,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationBuilding" Content="Label" HorizontalAlignment="Left" Margin="139,134,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationGarage" Content="Label" HorizontalAlignment="Left" Margin="139,160,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationRoad" Content="0" HorizontalAlignment="Left" Margin="139,83,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationIntersection" Content="0" HorizontalAlignment="Left" Margin="139,109,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationBuilding" Content="0" HorizontalAlignment="Left" Margin="139,134,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationGarage" Content="0" HorizontalAlignment="Left" Margin="139,160,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
 
 
                     <Label Content="Customers" HorizontalAlignment="Left" Margin="121,182,0,0" VerticalAlignment="Top" FontSize="18" Grid.ColumnSpan="2"/>
@@ -36,19 +36,19 @@
                     <Label Content="Succesful rides:" HorizontalAlignment="Left" Margin="48,242,0,0" VerticalAlignment="Top"/>
                     <Label Content="Rides cancelled:" HorizontalAlignment="Left" Margin="48,268,0,0" VerticalAlignment="Top" Width="98"/>
                     <Label Content="Deaths:" HorizontalAlignment="Left" Margin="48,293,0,0" VerticalAlignment="Top" Width="91"/>
-                    <Label x:Name="LabelSimulationAmountCostumer" Content="Label" HorizontalAlignment="Left" Margin="139,216,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationSuccesfulRides" Content="Label" HorizontalAlignment="Left" Margin="139,242,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationRidesCancelled" Content="Label" HorizontalAlignment="Left" Margin="139,266,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.016,0.609" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationDeaths" Content="Label" HorizontalAlignment="Left" Margin="139,289,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationAmountCostumer" Content="0" HorizontalAlignment="Left" Margin="139,216,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationSuccesfulRides" Content="0" HorizontalAlignment="Left" Margin="139,242,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationRidesCancelled" Content="0" HorizontalAlignment="Left" Margin="139,266,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.016,0.609" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationDeaths" Content="0" HorizontalAlignment="Left" Margin="139,289,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
 
 
                     <Label Content="Cars" HorizontalAlignment="Left" Margin="121,315,0,0" VerticalAlignment="Top" FontSize="18"/>
                     <Label Content="Amount:" HorizontalAlignment="Left" Margin="48,348,0,0" VerticalAlignment="Top"/>
                     <Label Content="Not in use:" HorizontalAlignment="Left" Margin="48,374,0,0" VerticalAlignment="Top" Width="94"/>
                     <Label Content="Driving:" HorizontalAlignment="Left" Margin="49,399,0,0" VerticalAlignment="Top" Width="90"/>
-                    <Label x:Name="LabelSimulationAmountCars" Content="Label" HorizontalAlignment="Left" Margin="139,349,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationNotInUse" Content="Label" HorizontalAlignment="Left" Margin="139,374,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
-                    <Label x:Name="LabelSimulationDriving" Content="Label" HorizontalAlignment="Left" Margin="139,400,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationAmountCars" Content="0" HorizontalAlignment="Left" Margin="139,349,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationNotInUse" Content="0" HorizontalAlignment="Left" Margin="139,374,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
+                    <Label x:Name="LabelSimulationDriving" Content="0" HorizontalAlignment="Left" Margin="139,400,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
 
 
                     <Label Content="Price" HorizontalAlignment="Left" Margin="121,431,0,0" VerticalAlignment="Top" FontSize="18"/>

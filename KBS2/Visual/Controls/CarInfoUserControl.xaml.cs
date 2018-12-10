@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS2.CarSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,17 @@ namespace KBS2.Windows
     /// </summary>
     public partial class CarInfoUserControl : UserControl
     {
-        public CarInfoUserControl()
+        public CarInfoUserControl(Car car)
         {
             InitializeComponent();
+
+            LabelInfoCarID.Content = car.Id;
+            LabelInfoCarModel.Content = car.Model.Name;
+            LabelInfoCustomerCount.Content = car.Passengers.Count;
+            LabelInfoDestinationCar.Content = car.Destination;
+            LabelInfoLocationCar.DataContext = car;
+            LabelInfoDistanceTraveled.Content = car.DistanceTraveled;
+
         }
     }
 }

@@ -66,7 +66,7 @@ namespace KBS2.Visual.Controls
 
         public void setStripes()
         {
-            var mult = 0.125;
+            var mult = 0.1;
             // IntersectionStripeTop
             IntersectionStripeTop.Height = Height / 2d;
             IntersectionStripeTop.Width = Width * mult;

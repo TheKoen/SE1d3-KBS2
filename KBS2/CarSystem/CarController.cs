@@ -150,6 +150,7 @@ namespace KBS2.CarSystem
 
             // Update the car's location with the velocity.
             Car.Location = Vector.Add(Car.Location, Car.Velocity);
+            Car.DistanceTraveled += Car.Velocity.Length;
         }
 
         public void HandleTurn(ref Vector velocity, ref double yaw, ref double addedRotation)
