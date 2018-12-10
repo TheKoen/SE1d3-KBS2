@@ -7,5 +7,5 @@ KBS2/obj/*
 KBS2/bin/*
 UnitTests/obj/*
 UnitTests/bin/*
-/CommandSystem/obj/Debug/DesignTimeResolveAssemblyReferences.cache
-/CommandSystem/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+CommandSystem/bin/*
+CommandSystem/obj/*
