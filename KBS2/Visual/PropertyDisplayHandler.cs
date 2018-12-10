@@ -36,16 +36,11 @@ namespace KBS2.Visual
 
         public void ResetDefaults()
         {
-            PropertyHandler.ModifyProperty("main.tickRate", 30);
-            PropertyHandler.ModifyProperty("command.tickRate", 30);
-            PropertyHandler.ModifyProperty("startingPrice", 1.50);
-            PropertyHandler.ModifyProperty("pricePerKilometer", 1.00);
-            PropertyHandler.ModifyProperty("customerSpawnRate", 0.2f);
-            PropertyHandler.ModifyProperty("availableCars", 10);
-            PropertyHandler.ModifyProperty("customerCount", 10);
-            PropertyHandler.ModifyProperty("globalSpeedLimit", -1);
-            PropertyHandler.ModifyProperty("avgGroupSize", 10);
-
+            var properties = PropertyHandler.GetProperties();
+            foreach(var prop in properties)
+            {
+                prop.Value.ResetToFirstValue();
+            }
             UpdateProperties();
         }
 
