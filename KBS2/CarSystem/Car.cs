@@ -46,7 +46,10 @@ namespace KBS2.CarSystem
         public CarModel Model
         {
             get => model.Value;
-            set => model.Value = value;
+            set
+            {
+                model.Value = value;
+            }
         }
 
         public Vector Velocity { get; set; } = new Vector(0, 0);
