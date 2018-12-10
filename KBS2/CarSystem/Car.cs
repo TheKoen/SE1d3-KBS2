@@ -12,7 +12,7 @@ namespace KBS2.CarSystem
 {
     public class Car : IEntity, INotifyPropertyChanged
     {
-        public const double DefaultMaxSpeed = 60;
+        public const double DefaultMaxSpeed = 1.0;
 
         public int Id { get; set; }
 
@@ -118,7 +118,10 @@ namespace KBS2.CarSystem
         public CarModel Model
         {
             get => model.Value;
-            set => model.Value = value;
+            set
+            {
+                model.Value = value;
+            }
         }
 
         public Vector Velocity { get; set; } = new Vector(0, 0);
@@ -161,19 +164,19 @@ namespace KBS2.CarSystem
             MainScreen.AILoop.Subscribe(Controller.Update);
 
             this.location = new Property(location);
-            PropertyHandler.RegisterProperty($"car{id}.location", ref this.location);
+            //PropertyHandler.RegisterProperty($"car{id}.location", ref this.location);
 
             this.direction = new Property(direction);
-            PropertyHandler.RegisterProperty($"car{id}.direction", ref this.direction);
+            //PropertyHandler.RegisterProperty($"car{id}.direction", ref this.direction);
 
             rotation = new Property(direction.GetVector());
-            PropertyHandler.RegisterProperty($"car{id}.rotation", ref rotation);
+            //PropertyHandler.RegisterProperty($"car{id}.rotation", ref rotation);
 
             maxSpeed = new Property(DefaultMaxSpeed);
             PropertyHandler.RegisterProperty($"car{id}.maxSpeed", ref maxSpeed);
 
             this.model = new Property(model);
-            PropertyHandler.RegisterProperty($"car{id}.model", ref this.model);
+            //PropertyHandler.RegisterProperty($"car{id}.model", ref this.model);
         }
 
         public Vector GetLocation()

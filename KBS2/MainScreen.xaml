@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KBS2"
         mc:Ignorable="d"
-        Title="Selfdriving Car Simulation" Height="700" Width="1300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Selfdriving Car Simulation" 
+        Height="700" Width="1300" 
+        WindowStartupLocation="CenterScreen" 
+        WindowState="Maximized">
     <Grid >
 
         <Canvas x:Name="CanvasMain" HorizontalAlignment="Left" Height="670"  VerticalAlignment="Top" Width="951"/>
@@ -52,14 +55,14 @@
 
 
                     <Label Content="Price" HorizontalAlignment="Left" Margin="121,431,0,0" VerticalAlignment="Top" FontSize="18"/>
-                    <Label x:Name="LabelSimulationPriceFormula" Content="1.5 + 1 * km" HorizontalAlignment="Left" Margin="78,460,0,0" VerticalAlignment="Top" Width="191" FontSize="20"/>
+                    <Label x:Name="LabelSimulationPriceFormula" Content="1.50 + (1.00 * km)" HorizontalAlignment="Left" Margin="73,465,0,0" VerticalAlignment="Top" Width="193" FontSize="20"/>
 
 
-                    <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="40,514,0,0" VerticalAlignment="Top" Width="70" Height="40" Background="#FF1BE72C" Click="BtnStart_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="139,514,0,0" VerticalAlignment="Top" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnStop" Content="Reset" HorizontalAlignment="Left" Margin="236,514,0,0" VerticalAlignment="Top" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
-                    <Label x:Name="LabelSimulationTime" Content="00:00" HorizontalAlignment="Left" Margin="127,569,0,0" VerticalAlignment="Top" Height="57" Width="153" FontSize="36" />
-                    <Button x:Name="button" Content="Console" HorizontalAlignment="Left" Margin="280,613,0,0" VerticalAlignment="Top" Width="50" Click="BtnConsole_Click"/>
+                    <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="39,0,0,72.4" VerticalAlignment="Bottom" Width="70" Height="40" Background="#FF1BE72C" Click="BtnStart_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="138,0,0,72.4" VerticalAlignment="Bottom" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnStop" Content="Reset" HorizontalAlignment="Left" Margin="235,0,0,72.4" VerticalAlignment="Bottom" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
+                    <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="96,0,0,10.4" VerticalAlignment="Bottom" Height="57" Width="153" FontSize="36" />
+                    <Button x:Name="button" Content="Console" HorizontalAlignment="Left" Margin="280,0,0,10.4" VerticalAlignment="Bottom" Width="50" Click="BtnConsole_Click"/>
 
 
                 </Grid>

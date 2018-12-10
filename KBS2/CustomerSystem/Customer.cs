@@ -8,6 +8,7 @@ namespace KBS2.CustomerSystem
     public class Customer : IEntity
     {
         public string Name { get; set; }
+        public string Gender { get; set; }
         public Vector Location { get; set; }
         public double Moral { get; set; }
         public CustomerController Controller { get; set; }

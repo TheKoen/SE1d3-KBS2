@@ -15,7 +15,7 @@ namespace KBS2.CitySystem
             set => availableCars.Value = value;
         }
 
-        private readonly Property customerCount = new Property(20);
+        private readonly Property customerCount = new Property(1);
         public int CustomerCount {
             get => customerCount.Value;
             set => customerCount.Value = value;
@@ -27,7 +27,7 @@ namespace KBS2.CitySystem
             set => speedLimit.Value = value;
         }
 
-        private readonly Property avgGroupSize = new Property(3);
+        private readonly Property avgGroupSize = new Property(1);
         public int AvgGroupSize {
             get => avgGroupSize.Value;
             set => avgGroupSize.Value = value;

@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading;
 using System.Windows;
 using KBS2.CitySystem;
+using Newtonsoft.Json;
 
 namespace KBS2.CustomerSystem
 {
@@ -24,6 +30,44 @@ namespace KBS2.CustomerSystem
             Destination = destination;
             Controller = new CustomerGroupController(this);
             MainScreen.AILoop.Subscribe(Controller.Update);
+
+            var thread = new Thread(() =>
+            {
+                var request = (HttpWebRequest) WebRequest.Create($"https://uinames.com/api/?amount={customers}&region=united%20states");
+                request.Method = "GET";
+                request.ContentType = "application/json";
+
+                if (!(request.GetResponse() is HttpWebResponse response))
+                {
+                    return;
+                }
+
+                using (var responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        var reader = new StreamReader(responseStream, Encoding.UTF8);
+                        var data = customers == 1 ? $"[{reader.ReadToEnd()}]" : reader.ReadToEnd();
+                        var info = JsonConvert.DeserializeObject <CustomerInfo[]>(data);
+                        var index = 0;
+                        foreach (var customer in Customers)
+                        {
+                            customer.Name = $"{info[index].name} {info[index].surname}";
+                            customer.Gender = info[index].gender;
+                            index++;
+                        }
+                    }
+                }
+            });
+            thread.Start();
+        }
+
+        private class CustomerInfo
+        {
+            public string name { get; set; }
+            public string surname { get; set; }
+            public string gender { get; set; }
+            public string region { get; set; }
         }
     }
 }
