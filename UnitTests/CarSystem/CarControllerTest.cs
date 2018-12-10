@@ -101,8 +101,9 @@ namespace UnitTests.CarSystem
             var velocity = new Vector(initialVelocity, 0.0);
             var yaw = 0.0;
             var addedRotation = 0.0;
+            var distanceToDestination = 10000.0;
 
-            controller.HandleApproachTarget(ref velocity, ref yaw, ref addedRotation);
+            controller.HandleApproachTarget(ref velocity, ref yaw, ref addedRotation, ref distanceToDestination);
 
             Assert.AreEqual(expectedSpeed, velocity.Length, 0.01);
             Assert.AreEqual(expectedRotation, addedRotation, 0.01);

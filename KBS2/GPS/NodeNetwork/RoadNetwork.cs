@@ -16,14 +16,14 @@ namespace KBS2.GPS.NodeNetwork
             Links = new Link[roads.Count];
 
             // Adding Nodes using Intersections
-            for (var i = 0; i < Nodes.Length - 1; ++i)
+            for (var i = 0; i < Nodes.Length; ++i)
             {
                 var intersectionLocation = intersections[i].Location;
                 Nodes[i] = new Node(intersectionLocation.X, intersectionLocation.Y);
             }
 
             // Adding Links using Roads
-            for (var i = 0; i < Links.Length - 1; ++i)
+            for (var i = 0; i < Links.Length; ++i)
             {
                 var endpointA = new Node(GPSSystem.FindIntersection(roads[i].Start).Location);
                 var endpointB = new Node(GPSSystem.FindIntersection(roads[i].End).Location);

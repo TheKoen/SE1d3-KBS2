@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using KBS2.CarSystem;
@@ -33,9 +34,15 @@ namespace KBS2.GPS.Algorithms
         {
             if (startNode.Value == null)
                 startNode.Value = 0.0;
-            var connectedLinks = network.Links
-                .Where(l => l.NodeA.Equals(startNode) || l.NodeB.Equals(startNode))
-                .ToList();
+//            var connectedLinks = network.Links
+//                .Where(l => l.NodeA.Equals(startNode) || l.NodeB.Equals(startNode))
+//                .ToList();
+            var connectedLinks = new List<Link>();
+            foreach (var link in network.Links)
+            {
+                if (link.NodeA.Equals(startNode) || link.NodeB.Equals(startNode))
+                    connectedLinks.Add(link);
+            }
             foreach (var l in connectedLinks)
             {
                 var toNode = l.NodeA.Equals(startNode) ? l.NodeB : l.NodeA;

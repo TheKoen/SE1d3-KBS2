@@ -4,8 +4,8 @@ namespace KBS2.GPS.NodeNetwork
 {
     public struct Link
     {
-        public Node NodeA { get; }
-        public Node NodeB { get; }
+        public Node NodeA;
+        public Node NodeB;
         public double Distance { get; }
 
         public Link(Node nodeA, Node nodeB)
