@@ -116,7 +116,7 @@ namespace KBS2.CarSystem
             // Create a variable to store the added rotation in this update call.
             var addedRotation = 0.0;
 
-            if (distanceToTarget < 20)
+            if (distanceToTarget < 20 && !Car.Destination.Road.Equals(Car.CurrentRoad))
             {
                 if (!obtainedNewTarget)
                 {
