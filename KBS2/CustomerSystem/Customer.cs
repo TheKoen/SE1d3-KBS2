@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.Visual.Controls;
 
 namespace KBS2.CustomerSystem
 {
     public class Customer : IEntity
     {
         public string Name { get; set; }
+        public string Gender { get; set; }
         public Vector Location { get; set; }
         public double Moral { get; set; }
         public CustomerController Controller { get; set; }
@@ -25,7 +27,8 @@ namespace KBS2.CustomerSystem
             Mood = CustomerSystem.Moral.Happy;
             
             Controller = new CustomerController(this);
-            MainScreen.Loop.Subscribe(Controller.Update);
+
+            MainScreen.AILoop.Subscribe(Controller.Update);
         }
 
         public Vector GetLocation()

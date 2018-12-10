@@ -35,8 +35,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -87,6 +92,8 @@
     <Compile Include="Console\Commands\CommandsSensors.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
+    <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
+    <Compile Include="GPS\AlgorithmTools.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="CustomerSystem\Customer.cs" />
     <Compile Include="CustomerSystem\CustomerController.cs" />
@@ -95,6 +102,10 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
+    <Compile Include="GPS\IAlgorithm.cs" />
+    <Compile Include="GPS\NodeNetwork\Link.cs" />
+    <Compile Include="GPS\NodeNetwork\Node.cs" />
+    <Compile Include="GPS\NodeNetwork\RoadNetwork.cs" />
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
@@ -127,16 +138,33 @@
     </Compile>
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
-    <Compile Include="Util\SpriteRenderer.cs" />
     <Compile Include="Util\StringConverters.cs" />
+    <Compile Include="Visual\CityRenderHandler.cs" />
+    <Compile Include="Visual\Controls\CarControl.xaml.cs">
+      <DependentUpon>CarControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Visual\Controls\CustomerControl.xaml.cs">
+      <DependentUpon>CustomerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Visual\Controls\BuildingControl.xaml.cs">
+      <DependentUpon>BuildingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Visual\Controls\IntersectionControl.xaml.cs">
+      <DependentUpon>IntersectionControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Util\TextBoxProperties.cs" />
     <Compile Include="Visual\Controls\RoadControl.xaml.cs">
       <DependentUpon>RoadControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\CarInfoUserControl.xaml.cs">
+    <Compile Include="Visual\CarRenderHandler.cs" />
+    <Compile Include="Visual\CustomerRenderHandler.cs" />
+    <Compile Include="Visual\IRenderHandler.cs" />
+    <Compile Include="Visual\PropertyDisplayHandler.cs" />
+    <Compile Include="Visual\SimulationControlHandler.cs" />
+    <Compile Include="Visual\Controls\CarInfoUserControl.xaml.cs">
       <DependentUpon>CarInfoUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\CustomerInfoUserControl.xaml.cs">
+    <Compile Include="Visual\Controls\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="ConsoleWindow.xaml">
@@ -171,16 +199,32 @@
     <Page Include="ModelDesigner\ModelDesigner.xaml" />
     <Page Include="ModelDesigner\ModelPickerWindow.xaml" />
     <Page Include="ModelDesigner\SensorCreationWindow.xaml" />
+    <Page Include="Visual\Controls\CarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\CustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\BuildingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\IntersectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ModelDesigner\SensorPickerWindow.xaml" />
     <Page Include="Visual\Controls\RoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\CarInfoUserControl.xaml">
+    <Page Include="Visual\Controls\CarInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\CustomerInfoUserControl.xaml">
+    <Page Include="Visual\Controls\CustomerInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -207,6 +251,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -221,7 +266,9 @@
   <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CityDesigner\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>

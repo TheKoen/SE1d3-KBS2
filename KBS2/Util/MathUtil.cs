@@ -59,11 +59,11 @@ namespace KBS2.Util
             // Convert the angle from degrees to radians.
             var radians = (Math.PI / 180) * angle;
 
+            var x = vector.X * Math.Cos(radians) - vector.Y * Math.Sin(radians);
+            var y = vector.X * Math.Sin(radians) + vector.Y * Math.Cos(radians);
+
             // Rotate the vector.
-            return new Vector(
-                vector.X * Math.Cos(radians) - vector.Y * Math.Sin(radians),
-                vector.X * Math.Sin(radians) + vector.Y * Math.Cos(radians)
-            );
+            return new Vector(x, y);
         }
 
         /// <summary>
@@ -79,6 +79,15 @@ namespace KBS2.Util
             var rotation = new Vector(velocity.X, velocity.Y);
             rotation.Normalize();
             return rotation;
+        }
+
+        public static Vector Normalize(Vector vector)
+        {
+            var result = new Vector(vector.X, vector.Y);
+            result.Normalize();
+            if (Math.Abs(result.X) < 0.0001) result.X = 0;
+            if (Math.Abs(result.Y) < 0.0001) result.Y = 0;
+            return result;
         }
     }
 }
