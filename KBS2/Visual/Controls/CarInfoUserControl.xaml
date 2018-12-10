@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="KBS2.Windows.CarInfoUserControl"
+﻿<UserControl x:Class="KBS2.Visual.Controls.CarInfoUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:KBS2.Windows"
+             xmlns:local="clr-namespace:KBS2.Visual.Controls"
              mc:Ignorable="d" Height="292.29" Width="253.271">
     <Grid>
         <Label Content="Car" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" FontSize="20" FontWeight="Bold" RenderTransformOrigin="1.632,0.591"/>

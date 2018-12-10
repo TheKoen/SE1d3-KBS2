@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using CommandSystem.PropertyManagement;
@@ -64,10 +65,14 @@ namespace KBS2.CarSystem
         }
 
         private double distanceTraveled;
-        public double DistanceTraveled { get => distanceTraveled;
-            set { distanceTraveled = value;
-                      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DistanceTraveled"));
-                }
+        public double DistanceTraveled 
+        {
+            get => distanceTraveled;
+            set 
+            {
+                distanceTraveled = Math.Round(value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DistanceTraveled"));
+            }
         }
 
         private Property model;

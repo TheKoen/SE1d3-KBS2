@@ -1,20 +1,7 @@
-﻿using KBS2.CarSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
+using KBS2.CarSystem;
 
-namespace KBS2.Windows
+namespace KBS2.Visual.Controls
 {
     /// <summary>
     /// Interaction logic for CarInfoUserControl.xaml
@@ -30,7 +17,7 @@ namespace KBS2.Windows
             LabelInfoCustomerCount.Content = car.Passengers.Count;
             LabelInfoDestinationCar.Content = car.Destination;
             LabelInfoLocationCar.DataContext = car;
-            LabelInfoDistanceTraveled.Content = car.DistanceTraveled;
+            LabelInfoDistanceTraveled.DataContext = car;
 
         }
     }
