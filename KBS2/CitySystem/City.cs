@@ -15,7 +15,7 @@ namespace KBS2.CitySystem
             set => availableCars.Value = value;
         }
 
-        private readonly Property customerCount = new Property(1);
+        private readonly Property customerCount = new Property(10);
         public int CustomerCount {
             get => customerCount.Value;
             set => customerCount.Value = value;
