@@ -29,7 +29,7 @@ namespace KBS2.CarSystem.Sensors
                 if (_controller != null) throw new InvalidOperationException("Controller is already set!");
 
                 _controller = value;
-                MainScreen.Loop.Subscribe(_controller.Update);
+                MainScreen.AILoop.Subscribe(_controller.Update);
             }
         }
 

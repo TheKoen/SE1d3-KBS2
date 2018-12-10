@@ -7,6 +7,7 @@ using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
+using KBS2.GPS.Algorithms;
 using KBS2.GPS.TSP;
 using KBS2.Util;
 
@@ -14,19 +15,21 @@ namespace KBS2.GPS
 {
     public class GPSSystem
     {
-        private static Property StartingPrice = new Property(1.50);
-        private static Property PricePerKilometer = new Property(1.00);
-        private static Property availableModel = new Property("TestModel");
-        private static CarModel AvailableModel => CarModel.Get(availableModel.Value);
+        public static Property StartingPrice = new Property(1.50);
+        public static Property PricePerKilometer = new Property(1.00);
+        public static Property availableModel = new Property("TestModel");
+        public static CarModel AvailableModel => CarModel.Get(availableModel.Value);
+
+        private static IAlgorithm Algorithm = new AlgorithmDijkstra();
 
         public static void Setup()
         {
             PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
             PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-            PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
         }
-         
-        
+
+
         /// <summary>
         /// returns a road located at this location
         /// </summary>
@@ -112,10 +115,15 @@ namespace KBS2.GPS
                 nearestDistance = tempDistance;
             }
 
-            if (nearestGarage == null) return;
-
-            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, AvailableModel);
-            car.Destination = destination;
+            var car = nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel);
+            if (car != null)
+            {
+                car.Destination = new Destination
+                {
+                    Location = group.Location,
+                    Road = NearestRoad(group.Location)
+                };
+            }
         }
 
         /// <summary>
@@ -126,7 +134,18 @@ namespace KBS2.GPS
         /// <returns></returns>
         public static Destination GetDirection(Car car, Intersection intersection)
         {
-            var roadsAtInteresection = intersection.GetRoads();
+            var road = car.CurrentRoad;
+            var location = CalculateDistance(road.Start, car.Location) <
+                           CalculateDistance(road.End, car.Location)
+                ? road.Start
+                : road.End;
+            return Algorithm.Calculate(new Destination
+            {
+                Location = location,
+                Road = car.CurrentRoad
+            }, car.Destination);
+
+            /*var roadsAtInteresection = intersection.GetRoads();
             var roads = new List<Road>();
 
             foreach (var road in roadsAtInteresection)
@@ -164,7 +183,7 @@ namespace KBS2.GPS
                 selectDestination = closestPointToDestination;
             }
 
-            return new Destination {Road = selectedRoad, Location = selectDestination};
+            return new Destination {Road = selectedRoad, Location = selectDestination};*/
         }
 
         public static DirectionCar GetDirectionToRoad(Vector point, Road road)
@@ -294,7 +313,8 @@ namespace KBS2.GPS
             {
                 FindIntersection(road.Start),
                 FindIntersection(road.End)
-            }; ;
+            };
+            ;
         }
 
         public static double CalculatePrice(double distance)

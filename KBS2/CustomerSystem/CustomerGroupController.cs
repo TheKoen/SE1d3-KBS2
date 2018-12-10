@@ -8,7 +8,7 @@ namespace KBS2.CustomerSystem
 {
     public class CustomerGroupController
     {
-        public const int GroupDistanceFromRoad = 10;
+        public const int GroupDistanceFromRoad = 5;
         public const int GroupRadius = 30;
         public CustomerGroup Group { get; set; }
 
