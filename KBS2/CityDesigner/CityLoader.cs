@@ -76,7 +76,7 @@ namespace KBS2.CityDesigner
             }
 
             //Invoke the event
-            LoadedCity?.Invoke(null, new LoadedCityEventArgs(_roads, _buildings, _intersections));
+            LoadedCity?.Invoke(null, new LoadedCityEventArgs(_roads, _buildings, _garages ,_intersections));
 
         }
         private static Vector ParseLocation(string locationString)

@@ -39,8 +39,6 @@ namespace KBS2.CityDesigner
                 else _value = value;
 
                 TextBoxValue.Text = _value.ToString();
-
-                ValueChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
             }
         }
 
@@ -85,12 +83,14 @@ namespace KBS2.CityDesigner
         {
             if (Value + StepSize > MaxValue) return;
             Value += StepSize;
+            ValueChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
         }
 
         private void ButtonDown_OnClick(object sender, RoutedEventArgs e)
         {
             if (Value - StepSize < MinValue) return;
             Value -= StepSize;
+            ValueChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
         }
     }
 }

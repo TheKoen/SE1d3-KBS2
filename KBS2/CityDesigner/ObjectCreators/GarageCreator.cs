@@ -48,7 +48,7 @@ namespace KBS2.CityDesigner.ObjectCreators
 
         public static Garage CreateGarage(Point location, Canvas canvas, List<Garage> garageList)
         {
-            var returnGarage = new Garage(new System.Windows.Vector(location.X, location.Y), standardSize , DirectionCar.North);
+            var returnGarage = new Garage(new System.Windows.Vector((int)location.X, (int)location.Y), standardSize , DirectionCar.North);
 
             if(!ObjectHandler.Overlaps(returnGarage))
             {

@@ -175,17 +175,26 @@ namespace KBS2.CityDesigner
         {
             //Get data of Object
             Creator.SelectRoad = null;
-            Creator.SelectBuilding = null;
+            Creator.SelectBuildingGarage = null;
             if (Tool == Tools.Cursor) { Creator.GetObject(); }
         }
 
-        private void MouseEntersCanvasEventHandler(object sneder, MouseEventArgs e)
+        private void MouseEntersCanvasEventHandler(object sender, MouseEventArgs e)
         {
             //Un-Display information 
             InformationBlockRoad.Visibility = Visibility.Hidden;
             InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
-            Creator.SelectBuilding = null;
+            Creator.SelectBuildingGarage = null;
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            ObjectHandler.Buildings.Clear();
+            ObjectHandler.Roads.Clear();
+            ObjectHandler.Intersections.Clear();
+            ObjectHandler.Garages.Clear();
+            ObjectHandler.RedrawAllObjects(Canvas);
         }
 
         private void RemoveObjectButtonEventHandler(object sender, RoutedEventArgs e)
@@ -193,12 +202,12 @@ namespace KBS2.CityDesigner
             //Remove object hide information
             ObjectHandler.Roads.Remove(Creator.SelectRoad);
             ObjectHandler.RedrawAllObjects(Canvas);
-            ObjectHandler.Buildings.Remove(Creator.SelectBuilding);
+            ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
             InformationBlockRoad.Visibility = Visibility.Hidden;
             InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
             Creator.SelectRoad = null;
-            Creator.SelectBuilding = null;
+            Creator.SelectBuildingGarage = null;
             ObjectHandler.RedrawAllObjects(Canvas);;
         }
 
@@ -220,9 +229,14 @@ namespace KBS2.CityDesigner
         {
             try
             {
-                if (Creator.SelectBuilding != null)
+                if (Creator.SelectBuildingGarage != null)
                 {
-                    Creator.SelectBuilding.Size = NumericSizeBuilding.Value;
+                    Creator.SelectBuildingGarage.Size = NumericSizeBuilding.Value;
+                    if (ObjectHandler.Overlaps(Creator.SelectBuildingGarage)) 
+                    {
+                        Creator.SelectBuildingGarage.Size--;
+                        NumericSizeBuilding.Value--;
+                    }
                     ObjectHandler.RedrawAllObjects(Canvas);
                 }
             }
@@ -233,7 +247,7 @@ namespace KBS2.CityDesigner
         {
             try
             {
-                if (Creator.SelectBuilding != null)
+                if (Creator.SelectBuildingGarage != null)
                 {
                     Creator.SelectRoad.MaxSpeed = NumericMaxSpeedRoad.Value;
                     ObjectHandler.RedrawAllObjects(Canvas);

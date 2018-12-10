@@ -130,7 +130,7 @@ namespace KBS2.CityDesigner.ObjectCreators
                 }
             }
 
-            //trying to snap the road to same level as nearby road (not done yet
+            //trying to snap the road to same level as nearby road
 
             if (roadGhost.X1 == roadGhost.X2 && roadGhost.Y1 != roadGhost.Y2 && Math.Abs(roadGhost.Y2 - roadGhost.Y1) >= minLengthRoad) // Y GhostRoad and GhostRoad is minimumlength
             {
@@ -205,14 +205,11 @@ namespace KBS2.CityDesigner.ObjectCreators
 
             Road road = new Road(new Vector((int)roadGhost.X1, (int)roadGhost.Y1), new Vector((int)roadGhost.X2, (int)roadGhost.Y2), standardRoadWidth, standardMaxSpeed);
 
-            //check if road is long enough and road is not snapped
+            //check if road is long enough and road 
             if (Util.MathUtil.Distance(new Vector(roadGhost.X1, roadGhost.Y1), new Vector(roadGhost.X2, roadGhost.Y2)) < minLengthRoad)
             {
-                if (!roadsList.Any(r => r.Start == road.End || r.End == road.End))
-                {
-                    RemoveGhost(canvas);
-                    return null;
-                }
+                RemoveGhost(canvas);
+                return null;
             }
 
             //check if road is not vertical or horizontal

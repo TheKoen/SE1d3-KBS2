@@ -29,8 +29,7 @@ namespace KBS2.CityDesigner
        
         //selected items
         public Road SelectRoad { get; set; }
-        public Building SelectBuilding { get; set; }
-
+        public Building SelectBuildingGarage { get; set; }
 
         public ObjectHandler(Canvas canvas, CityDesignerWindow window)
         {
@@ -47,6 +46,7 @@ namespace KBS2.CityDesigner
             Roads = e.Roads;
             Intersections = e.Intersections;
             Buildings = e.Buildings;
+            Garages = e.Garages;
             RedrawAllObjects(Canvas);
         }
 
@@ -128,6 +128,16 @@ namespace KBS2.CityDesigner
                 }
             }
 
+            //check if Cursor is on a Building
+            foreach (var garage in Garages)
+            {
+                if (mouseX <= garage.Location.X + garage.Size / 2 && mouseX >= garage.Location.X - garage.Size / 2 && mouseY <= garage.Location.Y + garage.Size / 2 && mouseY >= garage.Location.Y - garage.Size / 2)
+                {
+                    displayInfoScreenObject(garage);
+                    return;
+                }
+            }
+
         }
         
         /// <summary>
@@ -149,10 +159,10 @@ namespace KBS2.CityDesigner
         /// <param name="building"></param>
         private void displayInfoScreenObject(Building building)
         {
-            SelectBuilding = building;
+            SelectBuildingGarage = building;
             window.InformationBlockBuilding.Visibility = Visibility.Visible;
             window.InformationBlockRoad.Visibility = Visibility.Hidden;
-            window.NumericSizeBuilding.Value = SelectBuilding.Size; 
+            window.NumericSizeBuilding.Value = SelectBuildingGarage.Size; 
             
         }
 
@@ -230,14 +240,14 @@ namespace KBS2.CityDesigner
 
             foreach(var garage in Garages)
             {
-                if(minX <= garage.Location.X + garage.Size/2 && maxX >= garage.Location.X - garage.Size/2 && minY <= garage.Location.Y + garage.Size / 2 && maxY >= garage.Location.Y - garage.Size / 2)
+                if(buildingI != garage && minX <= garage.Location.X + garage.Size/2 && maxX >= garage.Location.X - garage.Size/2 && minY <= garage.Location.Y + garage.Size / 2 && maxY >= garage.Location.Y - garage.Size / 2)
                 {
                     return true;
                 } 
             }
             foreach(var building in Buildings)
             {
-                if (minX <= building.Location.X + building.Size / 2 && maxX >= building.Location.X - building.Size / 2 && minY <= building.Location.Y + building.Size / 2 && maxY >= building.Location.Y - building.Size / 2)
+                if (buildingI != building && minX <= building.Location.X + building.Size / 2 && maxX >= building.Location.X - building.Size / 2 && minY <= building.Location.Y + building.Size / 2 && maxY >= building.Location.Y - building.Size / 2)
                 {
                     return true;
                 }
@@ -253,7 +263,7 @@ namespace KBS2.CityDesigner
                 } 
                 else
                 {
-                    if (minY <= Math.Max(road.Start.Y, road.End.Y) && maxX >= Math.Min(road.Start.Y, road.End.Y) && minX <= road.Start.X + road.Width/2 && maxX >= road.Start.X - road.Width/2)
+                    if (minY <= Math.Max(road.Start.Y, road.End.Y) && maxY >= Math.Min(road.Start.Y, road.End.Y) && minX <= road.Start.X + road.Width/2 && maxX >= road.Start.X - road.Width/2)
                     {
                         return true;
                     }

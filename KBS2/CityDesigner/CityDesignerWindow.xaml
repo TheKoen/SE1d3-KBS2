@@ -26,6 +26,7 @@
                 <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" Margin="77,106,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="SaveButton_Click"/>
                 <TextBox x:Name="FileName" HorizontalAlignment="Left" Height="23" Margin="10,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" IsEnabled="False"/>
                 <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" Margin="77,135,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="LoadButton_Click"/>
+                <Button x:Name="ClearButton" Content="Clear" HorizontalAlignment="Left" Margin="77,164,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="ClearButton_Click"/>
                 <TextBox x:Name="X" HorizontalAlignment="Left" Height="23" Margin="10,199,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" IsEnabled="False"/>
                 <TextBox x:Name="Y" HorizontalAlignment="Left" Height="23" Margin="10,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" IsEnabled="False"/>
                 <Button x:Name="RoadButton" Content="Road" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top" Width="74" Height="24" Click="ChangeTool"/>
@@ -44,6 +45,7 @@
                     <Label Content="Size: " HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top"/>
                     <local:NumericUpDownControl x:Name="NumericSizeBuilding" Margin="138,52,10,101" RenderTransformOrigin="0.289,-0.12" MinValue="0" MaxValue="100" ValueChanged="ChangeWidthBuildingEventHandler"/>
                 </Grid>
+                
             </Grid>
         </DockPanel>
 

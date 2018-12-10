@@ -57,7 +57,7 @@ namespace KBS2.CityDesigner
                 buildingsElement.AppendChild(buildingElement);
 
                 XmlAttribute location = doc.CreateAttribute("Location");
-                location.Value = building.Location.X.ToString() + ", " + building.Location.Y.ToString();
+                location.Value = ((int)building.Location.X).ToString() + ", " + ((int)building.Location.Y).ToString();
 
                 XmlAttribute size = doc.CreateAttribute("Size");
                 size.Value = building.Size.ToString();
@@ -69,10 +69,10 @@ namespace KBS2.CityDesigner
             foreach (var garage in garages)
             {
                 XmlElement garageElement = doc.CreateElement("Garage");
-                garageElement.AppendChild(buildingsElement);
+                buildingsElement.AppendChild(garageElement);
 
                 XmlAttribute location = doc.CreateAttribute("Location");
-                location.Value = garage.Location.X.ToString() + ", " + garage.Location.Y.ToString();
+                location.Value = ((int)garage.Location.X).ToString() + ", " + ((int)garage.Location.Y).ToString();
 
                 XmlAttribute size = doc.CreateAttribute("Size");
                 size.Value = garage.Size.ToString();
