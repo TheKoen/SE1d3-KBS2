@@ -45,9 +45,8 @@ namespace KBS2.Visual
         {
             foreach (var child in Canvas.Children)
             {
-                if (child is CustomerControl)
+                if (child is CustomerControl control)
                 {
-                    var control = (CustomerControl)child;
                     if (control.customer.Equals(customer))
                     {
                         return true;
