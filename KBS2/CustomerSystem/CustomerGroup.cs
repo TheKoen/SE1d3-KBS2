@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Media;
 using KBS2.CitySystem;
 using Newtonsoft.Json;
+using Exception = System.Exception;
 
 namespace KBS2.CustomerSystem
 {
@@ -38,9 +39,19 @@ namespace KBS2.CustomerSystem
                 request.Method = "GET";
                 request.ContentType = "application/json";
 
-                if (!(request.GetResponse() is HttpWebResponse response))
+                HttpWebResponse response;
+                try
                 {
-                    App.Console?.Print("Unable to request names for customers!", Colors.Red);
+                    response = request.GetResponse() as HttpWebResponse;
+                    if (response == null)
+                    {
+                        App.Console?.Print("Unable to request names for customers!", Colors.Red);
+                        return;
+                    }
+                }
+                catch (Exception)
+                {
+                    App.Console?.Print("Unable to connect to the server.", Colors.Red);
                     return;
                 }
 
@@ -54,7 +65,7 @@ namespace KBS2.CustomerSystem
                         var rand = Random.Next(info.Length);
                         foreach (var customer in Customers)
                         {
-                            customer.Name = $"{info[rand + index].name} {info[index].surname}";
+                            customer.Name = $"{info[rand + index].name} {info[rand + index].surname}";
                             customer.Gender = info[rand + index].gender;
                             index++;
                         }
