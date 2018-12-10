@@ -192,8 +192,7 @@ namespace KBS2.CityDesigner
         {
             //Remove object hide information
             ObjectHandler.Roads.Remove(Creator.SelectRoad);
-            ObjectHandler.Intersections.Remove(ObjectHandler.Intersections.Find(i => i.Location == Creator.SelectRoad.Start));
-            ObjectHandler.Intersections.Remove(ObjectHandler.Intersections.Find(i => i.Location == Creator.SelectRoad.End));
+            ObjectHandler.RedrawAllObjects(Canvas);
             ObjectHandler.Buildings.Remove(Creator.SelectBuilding);
             InformationBlockRoad.Visibility = Visibility.Hidden;
             InformationBlockBuilding.Visibility = Visibility.Hidden;

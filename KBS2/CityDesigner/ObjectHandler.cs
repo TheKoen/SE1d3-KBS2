@@ -210,6 +210,54 @@ namespace KBS2.CityDesigner
         }
 
         /// <summary>
+        /// Checks if building or garages overlaps building, garage or road
+        /// </summary>
+        /// <param name="buildingI">building or garage you want to check</param>
+        /// <returns>returns true when </returns>
+        public static bool Overlaps(Building buildingI)
+        {
+            //check for garages 
+            var maxX = buildingI.Location.X + buildingI.Size / 2;
+            var minX = buildingI.Location.X - buildingI.Size / 2;
+            var maxY = buildingI.Location.Y + buildingI.Size / 2;
+            var minY = buildingI.Location.Y - buildingI.Size / 2;
+
+            foreach(var garage in Garages)
+            {
+                if(minX <= garage.Location.X + garage.Size/2 && maxX >= garage.Location.X - garage.Size/2 && minY <= garage.Location.Y + garage.Size / 2 && maxY >= garage.Location.Y - garage.Size / 2)
+                {
+                    return true;
+                } 
+            }
+            foreach(var building in Buildings)
+            {
+                if (minX <= building.Location.X + building.Size / 2 && maxX >= building.Location.X - building.Size / 2 && minY / 2 <= building.Location.Y + building.Size / 2 && maxY >= building.Location.Y - building.Size / 2)
+                {
+                    return true;
+                }
+            }
+            foreach(var road in Roads)
+            {
+                if(road.IsXRoad())
+                {
+                    if (minX <= Math.Max(road.Start.X, road.End.X) && maxX >= Math.Min(road.Start.X, road.End.X) && minY <= road.Start.Y + road.Width/2 && maxY >= road.Start.Y - road.Width/2)
+                    {
+                        return true;
+                    } 
+                } 
+                else
+                {
+                    if (minY <= Math.Max(road.Start.Y, road.End.Y) && maxX >= Math.Min(road.Start.Y, road.End.Y) && minX <= road.Start.X + road.Width/2 && maxX >= road.Start.X - road.Width/2)
+                    {
+                        return true;
+                    }
+                }
+                
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Location contains object returns true if so
         /// </summary>
         /// <param name="location"></param>

@@ -61,16 +61,13 @@ namespace KBS2.CityDesigner.ObjectCreators
         {
             var returnBuilding = new Building((Vector)location, standardSize);
 
-            if (!ObjectHandler.LocationContainsObject((Vector)location))
+            if (!ObjectHandler.Overlaps(returnBuilding))
             {
                 buildingList.Add(returnBuilding);
                 DrawBuilding(canvas, returnBuilding);
                 return returnBuilding;
             }
-            else
-            {
-                throw new Exception("Could not create building because is on road, intersection, building or garage");
-            }
+            return null;
         }
 
         /// <summary>

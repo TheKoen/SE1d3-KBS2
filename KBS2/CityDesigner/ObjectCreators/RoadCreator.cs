@@ -205,11 +205,14 @@ namespace KBS2.CityDesigner.ObjectCreators
 
             Road road = new Road(new Vector((int)roadGhost.X1, (int)roadGhost.Y1), new Vector((int)roadGhost.X2, (int)roadGhost.Y2), standardRoadWidth, standardMaxSpeed);
 
-            //check if road is long enough
+            //check if road is long enough and road is not snapped
             if (Util.MathUtil.Distance(new Vector(roadGhost.X1, roadGhost.Y1), new Vector(roadGhost.X2, roadGhost.Y2)) < minLengthRoad)
             {
-                RemoveGhost(canvas);
-                return null;
+                if (!roadsList.Any(r => r.Start == road.End || r.End == road.End))
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
             }
 
             //check if road is not vertical or horizontal
@@ -218,37 +221,12 @@ namespace KBS2.CityDesigner.ObjectCreators
                 RemoveGhost(canvas);
                 return null;
             }
-
-            //Check if road crosses building
-            foreach (var building in buildingsList)
+            // check for coliding with buildings or garages
+            if (crossesBuildingOrGarage(buildingsList, garagesList, canvas))
             {
-                if(roadGhost.Y1 + roadGhost.StrokeThickness / 2 >= building.Location.Y - building.Size / 2 && roadGhost.Y1 - roadGhost.StrokeThickness / 2 <= building.Location.Y + building.Size / 2)
-                {
-                    RemoveGhost(canvas);
-                    return null;
-                }
-                if(roadGhost.X1 + roadGhost.StrokeThickness / 2 >= building.Location.X - building.Size / 2 && roadGhost.X1 - roadGhost.StrokeThickness / 2 <= building.Location.X + building.Size / 2)
-                {
-                    RemoveGhost(canvas);
-                    return null;
-                }
-            }
-            
-            //Check if road crosses Garage
-            foreach(var garage in garagesList)
-            {
-                if (roadGhost.Y1 + roadGhost.StrokeThickness / 2 >= garage.Location.Y - garage.Size / 2 && roadGhost.Y1 - roadGhost.StrokeThickness / 2 <= garage.Location.Y + garage.Size / 2)
-                {
-                    RemoveGhost(canvas);
-                    return null;
-                }
-                if (roadGhost.X1 + roadGhost.StrokeThickness / 2 >= garage.Location.X - garage.Size / 2 && roadGhost.X1 - roadGhost.StrokeThickness / 2 <= garage.Location.X + garage.Size / 2)
-                {
-                    RemoveGhost(canvas);
-                    return null;
-                }
-            }
-
+                RemoveGhost(canvas);
+                return null;
+            };
 
             var roadGhostStart = new Vector(roadGhost.X1, roadGhost.Y2);
             var roadGhostEnd = new Vector(roadGhost.X2, roadGhost.Y2);
@@ -256,21 +234,26 @@ namespace KBS2.CityDesigner.ObjectCreators
             //check if road collides with other roads
             foreach (var roadI in roadsList)
             {
-                
                 if (!roadI.IsXRoad() && roadGhost.Y1 == roadGhost.Y2 && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2) // check if road overlaps
-                {
-                    if (roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
+                { 
+                    if(Math.Min(roadGhost.X1, roadGhost.X2) > Math.Min(roadI.Start.X, roadI.End.X) && Math.Max(roadGhost.X1, roadGhost.X2) < Math.Max(roadI.Start.X, roadI.End.X))
                     {
-                        RemoveGhost(canvas);
-                        return null;
+                        if (roadGhostStart != roadI.Start && roadGhostStart != roadI.End && roadGhostEnd != roadI.Start && roadGhostEnd != roadI.End)
+                        {
+                            RemoveGhost(canvas);
+                            return null;
+                        }
                     }
                 }
                 if(roadI.IsXRoad() && roadGhost.X1 == roadGhost.X2 && roadGhost.X1 + roadGhost.StrokeThickness/2 >= roadI.Start.X - roadI.Width/2 && roadGhost.X1 - roadGhost.StrokeThickness/2 <= roadI.Start.X + roadI.Width/2) // chekf if road overlaps
                 {
-                    if (roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
+                    if(Math.Min(roadGhost.Y1, roadGhost.Y2) > Math.Min(roadI.Start.Y, roadI.End.Y) && Math.Max(roadGhost.Y1, roadGhost.Y2) < Math.Max(roadI.Start.Y, roadI.End.Y))
                     {
-                        RemoveGhost(canvas);
-                        return null;
+                        if (roadGhostStart != roadI.Start && roadGhostStart != roadI.End && roadGhostEnd != roadI.Start && roadGhostEnd != roadI.End)
+                        {
+                            RemoveGhost(canvas);
+                            return null;
+                        }
                     }
                 }
                             
@@ -290,6 +273,40 @@ namespace KBS2.CityDesigner.ObjectCreators
             IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.Start);
             IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.End);
             return road;
+        }
+
+        private static bool crossesBuildingOrGarage(List<Building> buildingsList, List<Garage> garagesList, Canvas canvas)
+        {
+            //Check if road crosses building
+            foreach (var building in buildingsList)
+            {
+                if (roadGhost.Y1 + roadGhost.StrokeThickness / 2 >= building.Location.Y - building.Size / 2 && roadGhost.Y1 - roadGhost.StrokeThickness / 2 <= building.Location.Y + building.Size / 2)
+                {
+                    RemoveGhost(canvas);
+                    return true;
+                }
+                if (roadGhost.X1 + roadGhost.StrokeThickness / 2 >= building.Location.X - building.Size / 2 && roadGhost.X1 - roadGhost.StrokeThickness / 2 <= building.Location.X + building.Size / 2)
+                {
+                    RemoveGhost(canvas);
+                    return true;
+                }
+            }
+
+            //Check if road crosses Garage
+            foreach (var garage in garagesList)
+            {
+                if (roadGhost.Y1 + roadGhost.StrokeThickness / 2 >= garage.Location.Y - garage.Size / 2 && roadGhost.Y1 - roadGhost.StrokeThickness / 2 <= garage.Location.Y + garage.Size / 2)
+                {
+                    RemoveGhost(canvas);
+                    return true;
+                }
+                if (roadGhost.X1 + roadGhost.StrokeThickness / 2 >= garage.Location.X - garage.Size / 2 && roadGhost.X1 - roadGhost.StrokeThickness / 2 <= garage.Location.X + garage.Size / 2)
+                {
+                    RemoveGhost(canvas);
+                    return true;
+                }
+            }
+            return false;
         }
 
         
