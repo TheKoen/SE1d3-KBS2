@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS2.CustomerSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,18 @@ namespace KBS2.Windows
     /// </summary>
     public partial class CustomerInfoUserControl : UserControl
     {
-        public CustomerInfoUserControl()
+        public CustomerInfoUserControl(Customer customer)
         {
             InitializeComponent();
+
+            LabelInfoName.Content = customer.Name;
+            LabelInfoAge.Content = customer.Age;
+            LabelInfoLocation.Content = "0, 0";
+            LabelInfoDestination.Content = "0, 0";
+
+            //Switch case for moral and change picture depending on moral (:
+            MoralImage.Source = new BitmapImage(new Uri(@"/KBS2;component/Images/happy.png", UriKind.Relative));
+            ProfilePicture.Source = new BitmapImage(new Uri(@"/KBS2;component/Images/Customer_Profile_Picture.png", UriKind.Relative));
         }
     }
 }
