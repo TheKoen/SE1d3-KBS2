@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using KBS2.CarSystem.Sensors;
+using KBS2.Util;
 
 namespace KBS2.CarSystem
 {
@@ -98,6 +99,16 @@ namespace KBS2.CarSystem
                 default:
                     throw new ArgumentException($"Unknown rotation {rotation}");
             }
+        }
+
+        public static DirectionCar Parse(Vector vector)
+        {
+            if (Math.Abs(MathUtil.VectorToAngle(vector, DirectionCar.North)) <= 45) return DirectionCar.North;
+            if (Math.Abs(MathUtil.VectorToAngle(vector, DirectionCar.South)) <= 45) return DirectionCar.South;
+            if (Math.Abs(MathUtil.VectorToAngle(vector, DirectionCar.East)) <= 45) return DirectionCar.East;
+            if (Math.Abs(MathUtil.VectorToAngle(vector, DirectionCar.West)) <= 45) return DirectionCar.West;
+
+            return DirectionCar.North;
         }
     }
 }

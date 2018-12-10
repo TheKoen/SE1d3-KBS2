@@ -92,6 +92,9 @@ namespace KBS2.CarSystem
             return CarModelList.Last(m => m.Name.Equals(name));
         }
 
+        public static IEnumerable<CarModel> GetAll() =>
+            new List<CarModel>(CarModelList);
+
         public static void Set(CarModel model)
         {
             if (Contains(model.Name))

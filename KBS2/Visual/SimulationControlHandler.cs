@@ -95,10 +95,13 @@ namespace KBS2.Visual
 
         public void StartButtonClick()
         {
+            Screen.BtnPause.IsEnabled = true;
+            Screen.BtnStop.IsEnabled = true;
+
             App.Console.Print("Start pressed");
 
             MainScreen.WPFLoop.Start();
-            MainScreen.AILoop.Start();            
+            MainScreen.AILoop.Start();
         }
 
         public void PauseButtonClick()
@@ -113,6 +116,8 @@ namespace KBS2.Visual
         public void ResetButtonClick()
         {
             Screen.BtnStart.IsEnabled = true;
+            Screen.BtnPause.IsEnabled = false;
+            Screen.BtnStop.IsEnabled = false;
             App.Console.Print("Reset pressed");
 
             LoadButtonClick();
