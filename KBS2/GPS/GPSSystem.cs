@@ -118,7 +118,11 @@ namespace KBS2.GPS
             var car = nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel);
             if (car != null)
             {
-                car.Destination = destination;
+                car.Destination = new Destination
+                {
+                    Location = group.Location,
+                    Road = NearestRoad(group.Location)
+                };
             }
         }
 
