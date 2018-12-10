@@ -212,8 +212,15 @@ namespace KBS2.CityDesigner.ObjectCreators
                 return null;
             }
 
+            //check if road is not vertical or horizontal
+            if (!(roadGhost.X1 == roadGhost.X2 || roadGhost.Y1 == roadGhost.Y2))
+            {
+                RemoveGhost(canvas);
+                return null;
+            }
+
             //Check if road crosses building
-            foreach(var building in buildingsList)
+            foreach (var building in buildingsList)
             {
                 if(roadGhost.Y1 + roadGhost.StrokeThickness / 2 >= building.Location.Y - building.Size / 2 && roadGhost.Y1 - roadGhost.StrokeThickness / 2 <= building.Location.Y + building.Size / 2)
                 {
@@ -250,18 +257,17 @@ namespace KBS2.CityDesigner.ObjectCreators
             foreach (var roadI in roadsList)
             {
                 
-                if (!roadI.IsXRoad() && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2) // check if road overlaps
+                if (!roadI.IsXRoad() && roadGhost.Y1 == roadGhost.Y2 && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2) // check if road overlaps
                 {
-
-                    if (roadGhostEnd != roadI.End && roadGhostEnd != roadI.Start && roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
+                    if (roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
                     {
                         RemoveGhost(canvas);
                         return null;
                     }
                 }
-                if(roadI.IsXRoad() && roadGhost.X1 + roadGhost.StrokeThickness/2 >= roadI.Start.X - roadI.Width/2 && roadGhost.X1 - roadGhost.StrokeThickness/2 <= roadI.Start.X + roadI.Width/2) // chekf if road overlaps
+                if(roadI.IsXRoad() && roadGhost.X1 == roadGhost.X2 && roadGhost.X1 + roadGhost.StrokeThickness/2 >= roadI.Start.X - roadI.Width/2 && roadGhost.X1 - roadGhost.StrokeThickness/2 <= roadI.Start.X + roadI.Width/2) // chekf if road overlaps
                 {
-                    if (roadGhostEnd != roadI.End && roadGhostEnd != roadI.Start && roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
+                    if (roadGhostStart != roadI.Start && roadGhostStart != roadI.End)
                     {
                         RemoveGhost(canvas);
                         return null;
@@ -276,22 +282,14 @@ namespace KBS2.CityDesigner.ObjectCreators
             }
 
 
-            //check if road is vertical or horizontal
-            if (roadGhost.X1 == roadGhost.X2 || roadGhost.Y1 == roadGhost.Y2)
-            {
-                DrawRoad(canvas, road);
+            
+            DrawRoad(canvas, road);
 
-                RemoveGhost(canvas);
-                roadsList.Add(road);
-                IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.Start);
-                IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.End);
-                return road;
-            }
-            else
-            {
-                RemoveGhost(canvas);
-                return null;
-            }
+            RemoveGhost(canvas);
+            roadsList.Add(road);
+            IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.Start);
+            IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.End);
+            return road;
         }
 
         
@@ -300,6 +298,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             bool returnBool = false;
             List<Road> removeRoads = new List<Road>();
             List<Road> addRoads = new List<Road>();
+            
             
             foreach (var crossingRoad in roadsList) {
                 if (road1.IsXRoad() && !crossingRoad.IsXRoad() && (road1.End != crossingRoad.End && road1.End != crossingRoad.Start && road1.Start != crossingRoad.Start && road1.Start != crossingRoad.End))
@@ -361,7 +360,10 @@ namespace KBS2.CityDesigner.ObjectCreators
             {
                 roadsList.Remove(i);
             }
-            ObjectHandler.RedrawAllObjects(canvas);
+            if(returnBool == true)
+            {
+                ObjectHandler.RedrawAllObjects(canvas);
+            }            
 
             roadsList.Remove(road1);
             return returnBool;

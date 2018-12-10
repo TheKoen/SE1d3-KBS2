@@ -41,6 +41,7 @@ namespace KBS2.CityDesigner.ObjectCreators
         public static void UpdateIntersections(List<Road> roads, List<Intersection> intersections)
         {
             var stupidIntersectionWihoutRoads = new List<Intersection>();
+            var neededIntersections = new List<Intersection>();
 
             foreach (var intersection in intersections)
             {
@@ -52,10 +53,28 @@ namespace KBS2.CityDesigner.ObjectCreators
 
                 if (roads.FindAll(r => r.End == intersection.Location || r.Start == intersection.Location).Count == 1)
                 {
-                  
+
                     stupidIntersectionWihoutRoads.Add(intersection);
                 }
             }
+            roads.ForEach(r =>
+            {
+                if(!intersections.Any(i => i.Location == r.Start || i.Location == r.End) && roads.Any(x => (x.Start == r.Start || x.End == r.Start) && r != x))
+                {
+                    intersections.Add(new Intersection(r.Start, roads.FindAll(x => x.Start == r.Start || x.End == r.Start)
+                        .OrderByDescending(x => x.Width)
+                        .First()
+                        .Width));
+                }
+                if(!intersections.Any(i => i.Location == r.Start || i.Location == r.End) && roads.Any(x => (x.Start == r.End || x.End == r.End) && r != x))
+                {
+                    intersections.Add(new Intersection(r.End, roads.FindAll(x => x.Start == r.End || x.End == r.End)
+                        .OrderByDescending(x => x.Width)
+                        .First()
+                        .Width));
+                }
+            } );
+
             //delete the intersection without road connected
             foreach (var intersectionItem in stupidIntersectionWihoutRoads)
             {

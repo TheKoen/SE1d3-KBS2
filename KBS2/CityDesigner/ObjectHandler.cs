@@ -199,7 +199,7 @@ namespace KBS2.CityDesigner
                 BuildingCreator.DrawBuilding(canvas, building);
             }
 
-            // check for unnessesary intersection if so remove
+            // check for unnessesary intersection if so remove or nessesary
             IntersectionCreator.UpdateIntersections(Roads, Intersections);
 
             //draw Intersection 
