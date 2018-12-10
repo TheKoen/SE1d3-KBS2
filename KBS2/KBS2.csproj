@@ -261,9 +261,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Customer_Profile_Picture.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +271,16 @@
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
       <Name>CommandSystem</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Annoyed.png" />
+    <Resource Include="Images\Mad.png" />
+    <Resource Include="Images\Neutral.png" />
+    <Resource Include="Images\Sad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Female_Profile_Picture.jpg" />
+    <Resource Include="Images\Male_Profile_Picture.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
