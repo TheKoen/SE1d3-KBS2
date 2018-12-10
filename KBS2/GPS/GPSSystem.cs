@@ -23,7 +23,7 @@ namespace KBS2.GPS
         {
             PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
             PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-            PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
         }
          
         

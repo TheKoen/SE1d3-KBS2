@@ -31,7 +31,7 @@ namespace KBS2.Visual
 
             foreach (var building in city.Buildings)
             {
-                Canvas.Children.Add(new BuildingControl(building.Location, building.Size));
+                Canvas.Children.Add(new BuildingControl(building));
             }
 
             foreach (var road in city.Roads)
