@@ -46,6 +46,7 @@ namespace KBS2
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private readonly ConsoleWindow consoleWindow;
+        private readonly ModelDesigner.ModelDesigner modelDesigner;
         private long starTime;
 
         public CityRenderHandler CityRenderHandler { get; private set; }
@@ -60,6 +61,7 @@ namespace KBS2
         public MainScreen()
         {
             consoleWindow = new ConsoleWindow();
+            modelDesigner = new ModelDesigner.ModelDesigner();
             CommandLoop.Start();
             
             Initialized += (sender, args) => Initialize();
@@ -83,6 +85,7 @@ namespace KBS2
         {
             consoleWindow.AllowClose = true;
             consoleWindow.Close();
+            modelDesigner.Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
@@ -195,6 +198,23 @@ namespace KBS2
             {
                 consoleWindow.Show();
             }
+        }
+
+        private void BtnCarModelMaker_Click(object sender, RoutedEventArgs e)
+        {
+            if (consoleWindow.IsVisible)
+            {
+                modelDesigner.Hide();
+            }
+            else
+            {
+                modelDesigner.Show();
+            }
+        }
+
+        private void BtnCityMaker_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
