@@ -41,6 +41,31 @@ namespace KBS2.CarSystem
             }
         }
 
+        private Destination destination = new Destination();
+        public Destination Destination
+        {
+            get => destination;
+            set
+            {
+                destination = value;
+                if (destination.Road == null) return;
+                TargetLocationString = $"{Destination.Location.X:F0}, {Destination.Location.Y:F0}";
+            }
+        }
+
+        private string targetLocationString;
+
+        public string TargetLocationString
+        {
+            get => targetLocationString;
+            private set
+            {
+                if (targetLocationString == value) return;
+
+                targetLocationString = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetLocationString"));
+            }
+        }
 
 
         private Property direction;
@@ -75,6 +100,17 @@ namespace KBS2.CarSystem
             }
         }
 
+        private int passengerCount;
+        public int PassengerCount
+        {
+            get => passengerCount;
+            set
+            {
+                passengerCount = Passengers.Count;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PassengerCount"));
+            }
+        }
+
         private Property model;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -88,12 +124,13 @@ namespace KBS2.CarSystem
         public Vector Velocity { get; set; } = new Vector(0, 0);
 
         public List<Sensor> Sensors { get; }
+
         public List<Customer> Passengers { get; }
 
         public Road CurrentRoad { get; set; }
         public Intersection CurrentIntersection { get; set; }
         public Vector CurrentTarget { get; set; }
-        public Destination Destination { get; set; }
+
 
         public CarController Controller { get; }
 

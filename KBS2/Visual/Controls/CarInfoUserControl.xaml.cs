@@ -14,8 +14,8 @@ namespace KBS2.Visual.Controls
 
             LabelInfoCarID.Content = car.Id;
             LabelInfoCarModel.Content = car.Model.Name;
-            LabelInfoCustomerCount.Content = car.Passengers.Count;
-            LabelInfoDestinationCar.Content = car.Destination;
+            LabelInfoCustomerCount.DataContext = car;
+            LabelInfoDestinationCar.DataContext = car;
             LabelInfoLocationCar.DataContext = car;
             LabelInfoDistanceTraveled.DataContext = car;
 
