@@ -50,7 +50,7 @@ namespace KBS2.CitySystem
                 cityObject.Intersections.Add(ParseIntersection((XmlNode)intersection));
             }
             
-            RoadNetwork.GenerateNetwork(cityObject.Roads, cityObject.Intersections);
+            //RoadNetwork.GenerateNetwork(cityObject.Roads, cityObject.Intersections);
             
             return cityObject;
         }

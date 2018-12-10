@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using KBS2.CitySystem;
 using KBS2.Visual.Controls;
 
 namespace KBS2.CustomerSystem
 {
-    public class Customer : IEntity
+    public class Customer : IEntity, INotifyPropertyChanged
     {
         public string Name { get; set; }
         public string Gender { get; set; }
@@ -30,6 +31,8 @@ namespace KBS2.CustomerSystem
 
             MainScreen.AILoop.Subscribe(Controller.Update);
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Vector GetLocation()
         {

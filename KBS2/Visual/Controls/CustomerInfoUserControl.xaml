@@ -9,20 +9,22 @@
         <Label Content="Customer" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" FontSize="20" FontWeight="Bold"/>
         <Label Content="Name:" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top"/>
         <Label Content="Age:" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top"/>
-        <Label Content="Location:" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
-        <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,145,0,0" VerticalAlignment="Top"/>
-        <Label Content="Moral:" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top"/>
-        <Image x:Name="MoralImage" HorizontalAlignment="Left" Height="75" Margin="94,189,0,0" VerticalAlignment="Top" Width="75" />
+        <Label Content="Location:" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top"/>
+        <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,180,0,0" VerticalAlignment="Top"/>
+        <Label Content="Moral:" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top"/>
+        <Image x:Name="MoralImage" HorizontalAlignment="Left" Height="75" Margin="94,209,0,0" VerticalAlignment="Top" Width="75" />
 
-        <Label x:Name="LabelInfoName" Content="Label" HorizontalAlignment="Left" Margin="131,52,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoAge" Content="Label" HorizontalAlignment="Left" Margin="131,83,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoLocation" Content="Label" HorizontalAlignment="Left" Margin="131,114,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoDestination" Content="Label" HorizontalAlignment="Left" Margin="131,145,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoName" Content="Label" HorizontalAlignment="Left" Margin="94,52,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoAge" Content="Label" HorizontalAlignment="Left" Margin="94,83,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoLocation" Content="Label" HorizontalAlignment="Left" Margin="94,147,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoDestination" Content="Label" HorizontalAlignment="Left" Margin="94,180,0,0" VerticalAlignment="Top"/>
         <Border BorderThickness="2"
         BorderBrush="#FF000000"
         VerticalAlignment="Top" Margin="202,52,34,0" CornerRadius="8,8,8,8">
             <Image x:Name="ProfilePicture" Height="111"  VerticalAlignment="Top" Margin="-2,0,0,0"/>
         </Border>
+        <Label Content="Gender:" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoGender" Content="Label" HorizontalAlignment="Left" Margin="94,114,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </UserControl>

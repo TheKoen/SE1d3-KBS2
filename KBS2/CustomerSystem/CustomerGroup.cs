@@ -33,7 +33,7 @@ namespace KBS2.CustomerSystem
 
             var thread = new Thread(() =>
             {
-                var request = (HttpWebRequest) WebRequest.Create($"https://uinames.com/api/?amount={customers}&region=united%20states");
+                var request = (HttpWebRequest) WebRequest.Create($"https://kbs.koenn.me/names.json");
                 request.Method = "GET";
                 request.ContentType = "application/json";
 
@@ -47,7 +47,7 @@ namespace KBS2.CustomerSystem
                     if (responseStream != null)
                     {
                         var reader = new StreamReader(responseStream, Encoding.UTF8);
-                        var data = customers == 1 ? $"[{reader.ReadToEnd()}]" : reader.ReadToEnd();
+                        var data = reader.ReadToEnd();
                         var info = JsonConvert.DeserializeObject <CustomerInfo[]>(data);
                         var index = 0;
                         foreach (var customer in Customers)

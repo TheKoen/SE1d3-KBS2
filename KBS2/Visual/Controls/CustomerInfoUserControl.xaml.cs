@@ -27,6 +27,7 @@ namespace KBS2.Windows
 
             LabelInfoName.Content = customer.Name;
             LabelInfoAge.Content = customer.Age;
+            LabelInfoGender.Content = customer.Gender;
             LabelInfoLocation.Content = "0, 0";
             LabelInfoDestination.Content = "0, 0";
 
