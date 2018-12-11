@@ -40,11 +40,11 @@ namespace KBS2.Visual.Controls
             //Empty info tab
             Screen.TabItemInfo.Content = null;
 
-            //Add info about this car
+            //Add info about this customer
             CustomerInfoUserControl ci = new CustomerInfoUserControl(customer);
             Screen.TabItemInfo.Content = ci;
 
-            //Open the info tab of selected car
+            //Open the info tab of selected customer
             Screen.TabItemInfo.IsSelected = true;
         }
 
