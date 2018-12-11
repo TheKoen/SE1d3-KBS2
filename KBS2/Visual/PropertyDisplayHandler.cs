@@ -72,7 +72,7 @@ namespace KBS2.Visual
         private void Update()
         {
             ticks++;
-            if (ticks == 100)
+            if (ticks == 20)
             {
                 ticks = 0;
                 UpdateProperties();
