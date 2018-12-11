@@ -77,6 +77,7 @@ namespace KBS2.CityDesigner
         private void TextBoxValue_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             Value = VerifyValue(((TextBox)sender).Text);
+            ValueChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
         }
 
         private void ButtonUp_OnClick(object sender, RoutedEventArgs e)
