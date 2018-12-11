@@ -78,6 +78,8 @@ namespace KBS2
             SimulationControlHandler = new SimulationControlHandler(this);
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
 
+            starTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
             WPFLoop.Subscribe(Update);
         }
 
@@ -85,6 +87,7 @@ namespace KBS2
         {
             consoleWindow.AllowClose = true;
             consoleWindow.Close();
+            modelDesigner.AllowClose = true;
             modelDesigner.Close();
         }
 
@@ -101,7 +104,6 @@ namespace KBS2
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.StartButtonClick();
-            starTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)

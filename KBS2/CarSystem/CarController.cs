@@ -210,7 +210,7 @@ namespace KBS2.CarSystem
             }
             else if (angle > 135)
             {
-                addedRotation += rotationSpeed * 45.0;
+                addedRotation += rotationSpeed * 90.0;
             }
             // If the angle is more than 45 degrees (90 - 45), rotate to the right.
             else if (angle > 45)
