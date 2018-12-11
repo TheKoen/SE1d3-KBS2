@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="CityDesignerWindow" Height="700" Width="1300">
+        Title="CityDesignerWindow" Height="700" Width="1300" KeyDown="KeydownEventHandler">
 
     <Grid Background="#FFBFBFBF">
         <Canvas x:Name="Canvas" HorizontalAlignment="Left" Height="670" Margin="247,0,0,0" VerticalAlignment="Top" Width="1035" Background="#FFE0E0E0" 

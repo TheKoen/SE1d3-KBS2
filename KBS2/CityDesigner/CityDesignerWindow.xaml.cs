@@ -197,6 +197,33 @@ namespace KBS2.CityDesigner
             ObjectHandler.RedrawAllObjects(Canvas);
         }
 
+        /// <summary>
+        /// Remove object when selected with delete button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void KeydownEventHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                //Remove object hide information
+                ObjectHandler.Roads.Remove(Creator.SelectRoad);
+                ObjectHandler.RedrawAllObjects(Canvas);
+                ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
+                InformationBlockRoad.Visibility = Visibility.Hidden;
+                InformationBlockBuilding.Visibility = Visibility.Hidden;
+                Creator.SelectRoad = null;
+                Creator.SelectRoad = null;
+                Creator.SelectBuildingGarage = null;
+                ObjectHandler.RedrawAllObjects(Canvas);
+            }
+        }
+
+        /// <summary>
+        /// Remove object when selected with remove button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveObjectButtonEventHandler(object sender, RoutedEventArgs e)
         {
             //Remove object hide information
@@ -208,7 +235,7 @@ namespace KBS2.CityDesigner
             Creator.SelectRoad = null;
             Creator.SelectRoad = null;
             Creator.SelectBuildingGarage = null;
-            ObjectHandler.RedrawAllObjects(Canvas);;
+            ObjectHandler.RedrawAllObjects(Canvas);
         }
 
         private void ChangeWidthRoadEventHandler(object sender, PropertyChangedEventArgs e)
