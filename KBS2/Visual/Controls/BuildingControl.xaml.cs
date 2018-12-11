@@ -36,7 +36,7 @@ namespace KBS2.Visual.Controls
             {
                 if (building is Garage)
                 {
-                    Rectangle.Fill = new SolidColorBrush(Colors.LightSlateGray);
+                    Rectangle.Fill = new SolidColorBrush(Colors.DeepPink);
                 }
             };
 
