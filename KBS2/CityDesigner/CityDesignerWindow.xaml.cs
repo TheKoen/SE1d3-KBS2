@@ -1,4 +1,5 @@
 ﻿using KBS2.CityDesigner.ObjectCreators;
+using KBS2.CitySystem;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -26,12 +27,18 @@ namespace KBS2.CityDesigner
 
         public Tools Tool { get; set; } = Tools.Cursor;
 
-
+        private Cursor cursorOnCanvas;
+        private readonly string pathCanvasCursor = "C:\\Windows\\Cursors\\cross_r.cur";
+        private bool successFoundCursor = true;
+        private Cursor defaultCursor = Mouse.OverrideCursor;
 
         public CityDesignerWindow()
         {
             InitializeComponent();
             Creator = new ObjectHandler(Canvas, this);
+
+            //look for cursor
+            try { cursorOnCanvas = new Cursor(pathCanvasCursor, true); } catch(ArgumentException) { successFoundCursor = false;  }
         }
 
 
@@ -127,6 +134,12 @@ namespace KBS2.CityDesigner
         
 
         private bool leftButtonWasPressed;
+
+        /// <summary>
+        /// Fired when the mouse moves over canvas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseMovesOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
             //location mouse on canvas
@@ -159,18 +172,34 @@ namespace KBS2.CityDesigner
            
         }
 
+        /// <summary>
+        /// Fired when the mouse clicks on canvas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseClicksOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
             if (Tool == Tools.Building) { BuildingCreator.CreateBuilding(e.GetPosition(Canvas), Canvas, ObjectHandler.Buildings); }
-            if (Tool == Tools.Garage) { GarageCreator.CreateGarage(e.GetPosition(Canvas), Canvas, ObjectHandler.Garages); }
+            if (Tool == Tools.Garage) { GarageCreator.CreateGarage(e.GetPosition(Canvas), Canvas, ObjectHandler.Garages, ObjectHandler.Roads); }
         }
 
+        /// <summary>
+        /// Fired when the mouse leaves the canvas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseLeaveCanvasEventHandler(object sender, MouseEventArgs e)
         {
             //remove ghost items when leaving canvas
             Creator.RemoveGhosts();
+            changeCursorCanvas(false);
         }
 
+        /// <summary>
+        /// Fired when the mouse rightclicks on the canvas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseRightCanvasEventHandler(object sender, MouseEventArgs e)
         {
             //Get data of Object
@@ -179,6 +208,11 @@ namespace KBS2.CityDesigner
             if (Tool == Tools.Cursor) { Creator.GetObject(); }
         }
 
+        /// <summary>
+        /// Fired when the mouse enters the canvas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseEntersCanvasEventHandler(object sender, MouseEventArgs e)
         {
             //Un-Display information 
@@ -186,8 +220,14 @@ namespace KBS2.CityDesigner
             InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
             Creator.SelectBuildingGarage = null;
+            changeCursorCanvas(true);
         }
 
+        /// <summary>
+        /// Cleans the canvas form all objects
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             ObjectHandler.Buildings.Clear();
@@ -209,7 +249,14 @@ namespace KBS2.CityDesigner
                 //Remove object hide information
                 ObjectHandler.Roads.Remove(Creator.SelectRoad);
                 ObjectHandler.RedrawAllObjects(Canvas);
-                ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
+                if (Creator.SelectBuildingGarage != null && Creator.SelectBuildingGarage.GetType() == typeof(Garage))
+                {
+                    ObjectHandler.Garages.Remove((Garage)Creator.SelectBuildingGarage);
+                }
+                else  if(Creator.SelectBuildingGarage != null)
+                {
+                    ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
+                }
                 InformationBlockRoad.Visibility = Visibility.Hidden;
                 InformationBlockBuilding.Visibility = Visibility.Hidden;
                 Creator.SelectRoad = null;
@@ -229,7 +276,14 @@ namespace KBS2.CityDesigner
             //Remove object hide information
             ObjectHandler.Roads.Remove(Creator.SelectRoad);
             ObjectHandler.RedrawAllObjects(Canvas);
-            ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
+            if(Creator.SelectBuildingGarage != null && Creator.SelectBuildingGarage.GetType() == typeof(Garage))
+            {
+                ObjectHandler.Garages.Remove((Garage)Creator.SelectBuildingGarage);
+            }
+            else if(Creator.SelectBuildingGarage != null)
+            {
+                ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
+            }            
             InformationBlockRoad.Visibility = Visibility.Hidden;
             InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
@@ -238,6 +292,11 @@ namespace KBS2.CityDesigner
             ObjectHandler.RedrawAllObjects(Canvas);
         }
 
+        /// <summary>
+        /// EventHandler that changes the width of a road
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChangeWidthRoadEventHandler(object sender, PropertyChangedEventArgs e)
         {
             try
@@ -252,6 +311,11 @@ namespace KBS2.CityDesigner
             
         }
 
+        /// <summary>
+        /// EventHandler that changes the width of a building
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChangeWidthBuildingEventHandler(object sender, PropertyChangedEventArgs e)
         {
             try
@@ -270,6 +334,11 @@ namespace KBS2.CityDesigner
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
         }
         
+        /// <summary>
+        /// EventHandler that changes the max speed of a road 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChangeMaxSpeedRoadEventHandler(object sender, PropertyChangedEventArgs e)
         {
             try
@@ -281,6 +350,18 @@ namespace KBS2.CityDesigner
                 }
             }
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
+        }
+
+        private void changeCursorCanvas(bool onCanvas)
+        {
+            if(onCanvas && successFoundCursor)
+            {
+                Mouse.OverrideCursor = cursorOnCanvas;                 
+            }
+            else
+            {
+                Mouse.OverrideCursor = defaultCursor;
+            }
         }
     }
 }

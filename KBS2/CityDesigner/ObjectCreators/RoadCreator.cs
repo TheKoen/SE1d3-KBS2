@@ -75,10 +75,7 @@ namespace KBS2.CityDesigner.ObjectCreators
                 {
                     roadGhost.X1 = road.End.X;
                     roadGhost.Y1 = road.End.Y;
-
-                    
                     break;
-
                 }
                 //snapping straight
                 else if (Util.MathUtil.Distance(new Vector(startRoad.X, startRoad.Y), road.Start) <= snapRange)
