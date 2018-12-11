@@ -106,6 +106,11 @@ namespace KBS2
             SimulationControlHandler.ResetButtonClick();
             LabelSimulationTime.Content = "00:00:00";
             Stopwatch.Reset();
+            
+            CommandLoop.Register();
+            WPFLoop.Register();
+            AILoop.Register();
+            GPSSystem.Setup();
         }
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)

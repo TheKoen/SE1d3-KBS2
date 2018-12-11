@@ -24,9 +24,16 @@ namespace KBS2.GPS
 
         public static void Setup()
         {
-            PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
-            PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-            //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            try
+            {
+                PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
+                PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+                //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to register tickRate property for GPSSystem", Colors.Yellow);
+            }
         }
 
 
