@@ -23,6 +23,7 @@ namespace KBS2.Windows
     {
         public Customer Customer { get; set; }
         private Moral LastMood = Moral.Happy;
+        public Uri profilePicturePath = null;
         public CustomerInfoUserControl(Customer customer)
         {
             InitializeComponent();
@@ -36,14 +37,24 @@ namespace KBS2.Windows
             LabelInfoDestination.DataContext = customer;
 
             //Depending on the gender of our customer, a profile picture will be selected to represent it.
-            Uri profilePicturePath = customer.Gender == "Female"
+            
+
+            if(customer.Gender == "Female" || customer.Gender == "Male")
+            {
+                profilePicturePath = customer.Gender == "Female"
                 ? new Uri(@" /KBS2;component/Images/Female_Profile_Picture.jpg", UriKind.Relative)
                 : new Uri(@" / KBS2;component/Images/Male_Profile_Picture.jpg", UriKind.Relative);
-
+            }
+            else
+            {
+                LabelInfoGender.Content = "Other";
+                profilePicturePath = new Uri(@" /KBS2;component/Images/Other_Profile_Picture.png", UriKind.Relative);
+            }
 
             
             //Switch case for moral and change picture depending on moral (:
             MoralImage.Source = new BitmapImage(new Uri(@"/KBS2;component/Images/happy.png", UriKind.Relative));
+            
             ProfilePicture.Source = new BitmapImage(profilePicturePath);
 
             MainScreen.WPFLoop.Subscribe(Update);

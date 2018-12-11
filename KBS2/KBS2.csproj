@@ -284,5 +284,8 @@
     <Resource Include="Images\Female_Profile_Picture.jpg" />
     <Resource Include="Images\Male_Profile_Picture.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Other_Profile_Picture.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
