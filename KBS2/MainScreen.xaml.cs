@@ -1,19 +1,9 @@
-﻿using KBS2.CitySystem;
-using KBS2.Console;
-using KBS2.GPS;
+﻿using KBS2.GPS;
 using System.Windows;
-using System.Xml;
-using System.IO;
-using KBS2.Util;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using KBS2.Util.Loop;
-using CommandSystem;
-using CommandSystem.PropertyManagement;
-using KBS2.Visual.Controls;
 using System;
-using KBS2.CarSystem;
+using System.Diagnostics;
 using KBS2.Visual;
 
 namespace KBS2
@@ -41,13 +31,13 @@ namespace KBS2
          * needs to run fast, but can more easily deal with irregular
          * refresh rates.
          */
-        public static readonly TickLoop CommandLoop = new MainLoop("Command");
-        public static readonly TickLoop WPFLoop = new MainLoop("Main");
+        public static readonly TickLoop CommandLoop = new MainLoop("CMD");
+        public static readonly TickLoop WPFLoop = new MainLoop("WPF");
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private readonly ConsoleWindow consoleWindow;
         private readonly ModelDesigner.ModelDesigner modelDesigner;
-        private long starTime;
+        private readonly Stopwatch Stopwatch = new Stopwatch();
 
         public CityRenderHandler CityRenderHandler { get; private set; }
         public CustomerRenderHandler CustomerRenderHandler { get; private set; }
@@ -78,8 +68,6 @@ namespace KBS2
             SimulationControlHandler = new SimulationControlHandler(this);
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
 
-            starTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
             WPFLoop.Subscribe(Update);
         }
 
@@ -104,18 +92,20 @@ namespace KBS2
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.StartButtonClick();
+            Stopwatch.Start();
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.PauseButtonClick();
+            Stopwatch.Stop();
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.ResetButtonClick();
-            starTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             LabelSimulationTime.Content = "00:00:00";
+            Stopwatch.Reset();
         }
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
@@ -169,7 +159,7 @@ namespace KBS2
         /// </summary>
         public void UpdateTimer()
         {
-            var time = (DateTimeOffset.Now.ToUnixTimeMilliseconds() - starTime);
+            var time = Stopwatch.ElapsedMilliseconds;
             var temp = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(time);
             LabelSimulationTime.Content = $"{temp:mm:ss:FF}";
         }
