@@ -21,8 +21,12 @@ namespace KBS2.Visual.Controls
     /// </summary>
     public partial class BuildingControl : UserControl
     {
-        public BuildingControl(Building building)
+        public Building Building { get; set; }
+        public MainScreen Screen;
+        public BuildingControl(Building building, MainScreen screen)
         {
+            Building = building;
+            Screen = screen;
             var size = building.Size;
             var location = building.Location;
 
@@ -41,6 +45,28 @@ namespace KBS2.Visual.Controls
             };
 
             InitializeComponent();
+        }
+
+        public void Building_Selected(object sender, MouseButtonEventArgs e)
+        {
+            //Check if building is garage else do nothing
+            if(Building is Garage)
+            {
+                //Show garage info + Properties to change
+                //Empty info tab
+                Screen.TabItemInfo.Content = null;
+
+                //Add info about this garage
+                GarageInfoUserControl ci = new GarageInfoUserControl(Building);
+                Screen.TabItemInfo.Content = ci;
+
+                //Open the info tab of selected garage
+                Screen.TabItemInfo.IsSelected = true;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }

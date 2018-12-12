@@ -151,6 +151,9 @@
     <Compile Include="Visual\Controls\BuildingControl.xaml.cs">
       <DependentUpon>BuildingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Visual\Controls\GarageInfoUserControl.xaml.cs">
+      <DependentUpon>GarageInfoUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Visual\Controls\IntersectionControl.xaml.cs">
       <DependentUpon>IntersectionControl.xaml</DependentUpon>
     </Compile>
@@ -210,6 +213,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Visual\Controls\BuildingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\GarageInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
