@@ -10,10 +10,16 @@ namespace KBS2.Visual.Controls
     /// </summary>
     public partial class CarInfoUserControl : UserControl
     {
+
+        private StackPanel PropertyPanel { get; }
+        private Car Car;
+        private PropertySettings MaxSpeedProperties;
+
         public CarInfoUserControl(Car car)
         {
             InitializeComponent();
 
+            Car = car;
             LabelInfoCarID.Content = car.Id;
             LabelInfoCarModel.Content = car.Model.Name;
             LabelInfoCustomerCount.DataContext = car;
@@ -21,12 +27,41 @@ namespace KBS2.Visual.Controls
             LabelInfoLocationCar.DataContext = car;
             LabelInfoDistanceTraveled.DataContext = car;
 
-            //Takes the last character of car Id and that char determines the picture for that specific car.
+            PropertyPanel = this.StackPanelCar;
+
+            determineCarPicture(car);
+            displayProperties();
+        }
+
+        private void displayProperties()
+        {
+            var propertyName = "Max Speed";
+            var propertyValue = Car.MaxSpeed.ToString();
+
+            MaxSpeedProperties = new PropertySettings(propertyName, propertyValue);
+            PropertyPanel.Children.Add(MaxSpeedProperties);
+        }
+
+        /// <summary>
+        /// Takes the last character of car Id and that char determines the picture for that specific car.
+        /// </summary>
+        /// <param name="car"></param>
+        private void determineCarPicture(Car car)
+        {
             var last = int.Parse(car.Id.ToString()[car.Id.ToString().Length - 1].ToString());
             var car1 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture1.jpg", UriKind.Relative));
             var car2 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture2.jpg", UriKind.Relative));
-            var car3 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture3.jpg", UriKind.Relative));         
+            var car3 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture3.jpg", UriKind.Relative));
             CarPicture.Source = (last >= 0 && last < 4) ? car1 : (last >= 4 && last < 7) ? car2 : car3;
+        }
+
+        private void BtnCarSave_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (Car.MaxSpeed.ToString() != MaxSpeedProperties.TBCurrentValue.ToString())
+            {
+                var newValue = double.Parse(MaxSpeedProperties.TBCurrentValue.ToString());
+                Car.MaxSpeed = newValue;
+            }
         }
     }
 }

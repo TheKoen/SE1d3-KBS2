@@ -32,12 +32,12 @@ namespace KBS2.Visual.Controls
             PropertyPanel = this.StackPanelGarage;
             Building = (Garage)building;
             LabelGarageLocation.Content = Building.Location;
-            DisplayProperties();
+            displayProperties();
         }
 
-        public void DisplayProperties()
+        private void displayProperties()
         {
-            var propertyName = "AvailableCars";
+            var propertyName = "Available Cars";
             var propertyValue = Building.AvailableCars.ToString();
 
             AvailableCarsProperty = new PropertySettings(propertyName, propertyValue);
