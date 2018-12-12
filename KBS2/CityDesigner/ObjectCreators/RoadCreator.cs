@@ -265,6 +265,11 @@ namespace KBS2.CityDesigner.ObjectCreators
                         }
                     }
                 }
+                if((roadGhostStart == roadI.Start || roadGhostStart == roadI.End) && (roadGhostEnd == roadI.Start || roadGhostEnd == roadI.End))
+                {
+                    RemoveGhost(canvas);
+                    return null;
+                }
                             
             }
             if (CreateMultipleRoadsWhenCrossingEachother(road, roadsList, canvas) == true) // check if road is crossed by ghost road
