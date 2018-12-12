@@ -83,7 +83,6 @@
                         <StackPanel x:Name="StackPanelSettings" Orientation="Vertical">
                         </StackPanel>
                     </ScrollViewer>
-                    <Label x:Name="LabelSettingsErrorMessage" Content="" HorizontalAlignment="Left" Margin="86,551,0,0" VerticalAlignment="Top" Width="180"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemResults" Header="Results" Margin="90,-2,-125,-2" IsEnabled="False">
