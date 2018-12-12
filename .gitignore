@@ -7,3 +7,6 @@ KBS2/obj/*
 KBS2/bin/*
 UnitTests/obj/*
 UnitTests/bin/*
+/CommandSystem/obj/*
+/CommandSyste/bin/*
+
