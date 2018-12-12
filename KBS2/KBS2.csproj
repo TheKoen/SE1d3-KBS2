@@ -184,6 +184,14 @@
     <Compile Include="Visual\Controls\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="CityDesigner\CityDesignerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CityDesigner\NumericUpDownControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ConsoleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -280,9 +288,7 @@
   <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CityDesigner\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
