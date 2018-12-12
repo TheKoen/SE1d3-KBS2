@@ -21,6 +21,11 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
 
         public override void Update()
         {
+            if (Sensor.Car.CurrentRoad == null)
+            {
+                return;
+            }
+
             var carDir = Sensor.Car.Direction;
             var sensorDir = GetAbsoluteDirection(carDir);
             var entities = GetEntitiesInRange(sensorDir);

@@ -1,11 +1,12 @@
-using KBS2.CitySystem;
-using KBS2.Console;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
-using KBS2.Exceptions;
+using CommandSystem;
+using CommandSystem.Exceptions;
+using KBS2.CitySystem;
 using KBS2.GPS;
 using KBS2.CityDesigner;
+using KBS2.Util.Loop;
 
 namespace KBS2
 {
@@ -14,9 +15,8 @@ namespace KBS2
     /// </summary>
     public partial class MainWindow
     {
-        public static readonly MainLoop Loop = new MainLoop("main");
-        public static readonly MainLoop CommandLoop = new MainLoop("command");
-        public static ConsoleControl Console { get; private set; }
+        //public static readonly MainLoop Loop = new MainLoop("main");
+        public static readonly TickLoop CommandLoop = new MainLoop("command");
 
         public MainWindow()
         {
@@ -27,10 +27,10 @@ namespace KBS2
             InitializeComponent();
             CommandLoop.Start();
 
-            Console = MainConsole;
+            App.Console = MainConsole;
 
             GPSSystem.Setup();
-            
+
             // Create a City
             var file = new XmlDocument();
             file.LoadXml("<City>\n\n" +
@@ -78,8 +78,9 @@ namespace KBS2
 
             // Registering commands
             CommandRegistrar.AutoRegisterCommands("KBS2.Console.Commands");
-            
+
             // Console logic
+            
             MainConsole.SendCommand += (sender, args) =>
             {
                 var input = args.Command;
@@ -104,5 +105,6 @@ namespace KBS2
             // Focuses the TextBox inside the console on load
             MainConsole.TextBoxInput.Focus();
         }
+        
+        }
     }
-}

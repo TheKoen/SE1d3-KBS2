@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
-using KBS2.Console;
 using KBS2.CustomerSystem;
+using KBS2.GPS.Algorithms;
 using KBS2.GPS.TSP;
 using KBS2.Util;
 
@@ -14,19 +15,28 @@ namespace KBS2.GPS
 {
     public class GPSSystem
     {
-        private static Property StartingPrice = new Property(1.50);
-        private static Property PricePerKilometer = new Property(1.00);
-        private static Property availableModel = new Property("TestModel");
-        private static CarModel AvailableModel => CarModel.Get(availableModel.Value);
+        public static Property StartingPrice = new Property(1.50);
+        public static Property PricePerKilometer = new Property(1.00);
+        public static Property availableModel = new Property("TestModel");
+        public static CarModel AvailableModel => CarModel.Get(availableModel.Value);
+
+        private static IAlgorithm Algorithm = new AlgorithmDijkstra();
 
         public static void Setup()
         {
-            CommandHandler.RegisterProperty("startingPrice", ref StartingPrice);
-            CommandHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-            CommandHandler.RegisterProperty("availableModel", ref availableModel);
+            try
+            {
+                PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
+                PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+                //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to register tickRate property for GPSSystem", Colors.Yellow);
+            }
         }
-         
-        
+
+
         /// <summary>
         /// returns a road located at this location
         /// </summary>
@@ -34,31 +44,8 @@ namespace KBS2.GPS
         /// <returns>the road that the location is at, if none it returns null</returns>
         public static Road GetRoad(Vector location)
         {
-            var roads = City.Instance.Roads;
-
-            foreach (var road in roads)
-            {
-                var laneWidth = road.Width / 2.0;
-                var minX = road.IsXRoad()
-                    ? Math.Min(road.Start.X, road.End.X)
-                    : road.Start.X - laneWidth;
-                var maxX = road.IsXRoad()
-                    ? Math.Max(road.Start.X, road.End.X)
-                    : road.Start.X + laneWidth;
-                var minY = road.IsXRoad()
-                    ? road.Start.Y - laneWidth
-                    : Math.Min(road.Start.Y, road.End.Y);
-                var maxY = road.IsXRoad()
-                    ? road.Start.Y + laneWidth
-                    : Math.Max(road.Start.Y, road.End.Y);
-
-                if (location.X >= minX && location.X <= maxX && location.Y >= minY && location.Y <= maxY)
-                {
-                    return road;
-                }
-            }
-
-            return null;
+            var roads = GetRoadsInRange(location, 12);
+            return roads.Count == 0 ? null : roads.First();
         }
 
         /// <summary>
@@ -111,7 +98,7 @@ namespace KBS2.GPS
             {
                 var distance = CalculateDistance(group.Location, destination.Location);
                 var price = CalculatePrice(distance);
-                MainWindow.Console.Print(
+                App.Console.Print(
                     $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}");
             }
             catch (Exception) { }
@@ -135,10 +122,15 @@ namespace KBS2.GPS
                 nearestDistance = tempDistance;
             }
 
-            if (nearestGarage == null) return;
-
-            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, AvailableModel);
-            car.Destination = destination;
+            var car = nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel);
+            if (car != null)
+            {
+                car.Destination = new Destination
+                {
+                    Location = group.Location,
+                    Road = NearestRoad(group.Location)
+                };
+            }
         }
 
         /// <summary>
@@ -149,7 +141,18 @@ namespace KBS2.GPS
         /// <returns></returns>
         public static Destination GetDirection(Car car, Intersection intersection)
         {
-            var roadsAtInteresection = intersection.GetRoads();
+            var road = car.CurrentRoad;
+            var location = MathUtil.Distance(road.Start, car.Location) <
+                           MathUtil.Distance(road.End, car.Location)
+                ? road.Start
+                : road.End;
+            return Algorithm.Calculate(new Destination
+            {
+                Location = location,
+                Road = car.CurrentRoad
+            }, car.Destination);
+
+            /*var roadsAtInteresection = intersection.GetRoads();
             var roads = new List<Road>();
 
             foreach (var road in roadsAtInteresection)
@@ -187,7 +190,7 @@ namespace KBS2.GPS
                 selectDestination = closestPointToDestination;
             }
 
-            return new Destination {Road = selectedRoad, Location = selectDestination};
+            return new Destination {Road = selectedRoad, Location = selectDestination};*/
         }
 
         public static DirectionCar GetDirectionToRoad(Vector point, Road road)
@@ -217,7 +220,7 @@ namespace KBS2.GPS
             }
             catch (Exception)
             {
-                MainWindow.Console.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
+                App.Console.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
                 return 0;
             }
         }
@@ -227,7 +230,7 @@ namespace KBS2.GPS
         {
             if (intersection == null)
             {
-                MainWindow.Console.Print("Warning: Found a problem while exporing route: null terminating road",
+                App.Console.Print("Warning: Found a problem while exporing route: null terminating road",
                     Colors.Yellow);
                 return distance;
             }
@@ -293,30 +296,6 @@ namespace KBS2.GPS
 
             return list;
         }
-        
-        /// <summary>
-        /// Find the next intersection of an intersection in a specific city
-        /// </summary>
-        /// <param name="intersection"></param>
-        /// <param name="city"></param>
-        /// <returns></returns>
-        public static List<Intersection> FindNextIntersections(Intersection intersection, City city)
-        {
-            var list = new List<Intersection>();
-            var roads = city.Roads.FindAll(r => r.Start == intersection.Location || r.End == intersection.Location);
-            foreach (var road in roads)
-            {
-                if(road.Start == intersection.Location)
-                {
-                    list.Add(city.Intersections.Find(i => i.Location == road.End));
-                }
-                else
-                {
-                    list.Add(city.Intersections.Find(i => i.Location == road.Start));
-                }
-            }
-            return list;
-        }
 
         public static Intersection FindIntersection(Vector location)
         {
@@ -337,12 +316,12 @@ namespace KBS2.GPS
         /// <returns>List with found Intersections</returns>
         public static List<Intersection> FindIntersectionsRoad(Road road)
         {
-            var listIntersections = new List<Intersection>();
-
-            listIntersections.Add(FindIntersection(road.Start));
-            listIntersections.Add(FindIntersection(road.End));
-
-            return listIntersections;
+            return new List<Intersection>
+            {
+                FindIntersection(road.Start),
+                FindIntersection(road.End)
+            };
+            ;
         }
 
         public static double CalculatePrice(double distance)

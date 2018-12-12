@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="KBS2.Visual.Controls.RoadControl"
+             x:Name="RoadControlName"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KBS2.Visual.Controls"
+             mc:Ignorable="d">
+    <UserControl.LayoutTransform>
+        <RotateTransform Angle = "0"></RotateTransform>
+    </UserControl.LayoutTransform>
+    <Grid Background="White">
+        <Rectangle x:Name="RectRoad" Fill="Black" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=RoadControlName}" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=RoadControlName}"/>
+        <Rectangle Fill="White" HorizontalAlignment="Left" Height="2" Margin="0,9,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=RoadControlName}"/>
+
+
+    </Grid>
+</UserControl>

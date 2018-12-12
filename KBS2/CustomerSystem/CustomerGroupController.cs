@@ -8,7 +8,7 @@ namespace KBS2.CustomerSystem
 {
     public class CustomerGroupController
     {
-        public const int GroupDistanceFromRoad = 10;
+        public const int GroupDistanceFromRoad = 5;
         public const int GroupRadius = 30;
         public CustomerGroup Group { get; set; }
 
@@ -30,7 +30,6 @@ namespace KBS2.CustomerSystem
         /// <returns>returns true with an horizontal road and false with an vertical road</returns>
         public bool CheckRoadOrientation(Road road)
         {
-            #warning Possible loss of precision
             return road.Start.Y == road.End.Y;
         }
 

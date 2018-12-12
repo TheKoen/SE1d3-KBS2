@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using CommandSystem.PropertyManagement;
 
 namespace UnitTests.Util
 {
@@ -17,7 +18,7 @@ namespace UnitTests.Util
 
         public CustomerGroupBuilder(Vector startLocation, Vector destination)
         {
-            CommandHandler.ResetProperties();
+            PropertyHandler.ResetProperties();
             CustomerGroup = new CustomerGroup(random.Next(1, (int)Math.Round(3 / 2.0 * 3.0)), new Building(startLocation, 10), new Building(destination, 10));
         }
 

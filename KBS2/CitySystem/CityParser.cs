@@ -1,7 +1,10 @@
-﻿using KBS2.Console;
+﻿using System;
 using System.Windows;
 using System.Xml;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
+using KBS2.GPS;
+using KBS2.GPS.NodeNetwork;
 
 namespace KBS2.CitySystem
 {
@@ -9,10 +12,10 @@ namespace KBS2.CitySystem
     {
         public static City MakeCity(XmlDocument city)
         {
-            var properties = CommandHandler.GetProperties();
+            var properties = PropertyHandler.GetProperties();
             if (properties.ContainsKey("availableCars"))
             {
-                CommandHandler.ResetProperties();
+                PropertyHandler.ResetProperties();
             }
 
             var cityObject = new City();
@@ -46,6 +49,9 @@ namespace KBS2.CitySystem
             {
                 cityObject.Intersections.Add(ParseIntersection((XmlNode)intersection));
             }
+            
+            RoadNetwork.GenerateNetwork(cityObject.Roads, cityObject.Intersections);
+            
             return cityObject;
         }
 
@@ -76,7 +82,12 @@ namespace KBS2.CitySystem
                 case "Building":
                     return new Building(loc, size);
                 case "Garage":
-                    return new Garage(loc, size, DirectionCar.North);
+                    if (Enum.TryParse(node.Attributes["Direction"].InnerText, out DirectionCar direction))
+                    {
+                        return new Garage(loc, size, direction);
+                    }
+
+                    throw new XmlException("Garage doesn't have a valid direction");
                 default:
                     return null;
             }
