@@ -55,8 +55,12 @@ namespace KBS2.Visual
                 if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
                 {
                     var value = propertyControl.TBCurrentValue.Text;
+                    if (propertyControl.TBCurrentValue.Text.Contains(","))
+                    {     
+                        value = value.Replace(",", ".");
+                    }
                     CommandHandler.HandleInput($"set { name } { value }");
-                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
+                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;              
                 }
             }
         }
