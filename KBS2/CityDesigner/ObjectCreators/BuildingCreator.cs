@@ -1,4 +1,5 @@
 ﻿using KBS2.CitySystem;
+using KBS2.Visual.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,16 +24,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             Width = standardSize,
             Height = standardSize,
         };
-
-        private static Rectangle buildingRectangle = new Rectangle()
-        {
-            Fill = Brushes.Blue,
-            StrokeThickness = 4,
-            Stroke = Brushes.Black,
-            Width = standardSize,
-            Height = standardSize,
-        };
-
+        
         private static readonly int standardSize = 50;
 
         /// <summary>
@@ -77,12 +69,7 @@ namespace KBS2.CityDesigner.ObjectCreators
         /// <param name="building"></param>
         public static void DrawBuilding(Canvas canvas, Building building)
         {
-            RemoveGhost(canvas);
-            Canvas.SetTop(buildingRectangle, (int)building.Location.Y - building.Size / 2);
-            Canvas.SetLeft(buildingRectangle, (int)building.Location.X - building.Size / 2);
-            buildingRectangle.Width = building.Size;
-            buildingRectangle.Height = building.Size;
-            canvas.Children.Add(clone(buildingRectangle));
+            canvas.Children.Add(new BuildingControl(building));
         }
 
         /// <summary>
@@ -92,19 +79,6 @@ namespace KBS2.CityDesigner.ObjectCreators
         public static void RemoveGhost(Canvas canvas)
         {
             canvas.Children.Remove(buildingGhost);
-        }
-
-
-        /// <summary>
-        /// Dirty fix to copy Buildings
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private static FrameworkElement clone(FrameworkElement e)
-        {
-            XmlDocument document = new XmlDocument();
-            document.LoadXml(XamlWriter.Save(e));
-            return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
     }
 }

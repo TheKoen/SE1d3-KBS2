@@ -1,4 +1,5 @@
 ﻿using KBS2.CitySystem;
+using KBS2.Visual.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             Stroke = Brushes.LightSteelBlue,
             StrokeThickness = standardRoadWidth
         };
-
-        private static Line roadLine = new Line()
-        {
-            Stroke = Brushes.LightBlue,
-            StrokeThickness = standardRoadWidth
-        };
+                
 
         private static Line assistLine = new Line()
         {
@@ -495,17 +491,18 @@ namespace KBS2.CityDesigner.ObjectCreators
 
         public static void DrawRoad(Canvas canvas, Road road)
         {
-            
-            roadLine.X1 = (int)road.Start.X;
-            roadLine.Y1 = (int)road.Start.Y;
-            roadLine.X2 = (int)road.End.X;
-            roadLine.Y2 = (int)road.End.Y;
+
+            //roadLine.X1 = (int)road.Start.X;
+            //roadLine.Y1 = (int)road.Start.Y;
+            //roadLine.X2 = (int)road.End.X;
+            //roadLine.Y2 = (int)road.End.Y;
+
+            var roadLine = new RoadControl(road);
 
             Canvas.SetZIndex(roadLine, 2);
-            roadLine.StrokeThickness = road.Width;
 
             
-            canvas.Children.Add(clone(roadLine));
+            canvas.Children.Add(roadLine);
         }
 
         /// <summary>
