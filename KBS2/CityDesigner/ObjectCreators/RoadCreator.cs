@@ -478,52 +478,6 @@ namespace KBS2.CityDesigner.ObjectCreators
                 throw new Exception("road you want to place is not horizontal or vertical.");
             }
             
-
-
-            /*
-            var location = road1.Start;
-            for(int i = 0; i <= crossingRoads.Count(); i++)
-            {
-                if (i == crossingRoads.Count()) // add last part of ghostroad
-                {
-                    var roadNew = new Road(location, road1.End, standardRoadWidth, standardMaxSpeed);
-                    if(roadNew.Start != roadNew.End)
-                    {
-                        roadsList.Add(roadNew);
-                    }
-                }
-                else if (crossingRoads[i].IsXRoad())
-                {
-                    var roadNew = new Road(location, new Vector(location.X, crossingRoads[i].Start.Y), standardRoadWidth, standardMaxSpeed);
-                    var roadCrossNew1 = new Road(crossingRoads[i].Start, new Vector(location.X, crossingRoads[i].Start.Y), crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
-                    var roadCrossNew2 = new Road(new Vector(location.X, crossingRoads[i].Start.Y), crossingRoads[i].End, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
-                    if(Util.MathUtil.Distance(roadNew.Start, roadNew.End) > snapRange) { roadsList.Add(roadNew); } 
-                    if(Util.MathUtil.Distance(roadCrossNew1.Start, roadCrossNew1.End) > snapRange) { roadsList.Add(roadCrossNew1); }
-                    if(Util.MathUtil.Distance(roadCrossNew2.Start, roadCrossNew2.End) > snapRange) { roadsList.Add(roadCrossNew2); }
-                    roadsList.Remove(crossingRoads[i]);
-                    
-                    location = new Vector(location.X, crossingRoads[i].Start.Y);
-                }
-                else if (!crossingRoads[i].IsXRoad())
-                {
-                    var roadNew = new Road(location, new Vector(crossingRoads[i].Start.X, location.Y), standardRoadWidth, standardMaxSpeed);
-                    var roadCrossNew1 = new Road(crossingRoads[i].Start, new Vector(crossingRoads[i].Start.X, location.Y), crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
-                    var roadCrossNew2 = new Road(new Vector(crossingRoads[i].Start.X, location.Y), crossingRoads[i].End, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
-
-                    if (Util.MathUtil.Distance(roadNew.Start, roadNew.End) > snapRange) { roadsList.Add(roadNew); }
-                    if (Util.MathUtil.Distance(roadCrossNew1.Start, roadCrossNew1.End) > snapRange) { roadsList.Add(roadCrossNew1); }
-                    if (Util.MathUtil.Distance(roadCrossNew2.Start, roadCrossNew2.End) > snapRange) { roadsList.Add(roadCrossNew2); }
-                    roadsList.Remove(crossingRoads[i]);
-
-                    location = new Vector(crossingRoads[i].Start.X, location.Y);
-                }
-                else
-                {
-                    throw new Exception("Could not create Intersections");
-                }
-                returnBool = true;
-            }
-            */
             ObjectHandler.RedrawAllObjects(canvas);
             return returnBool;
         }
