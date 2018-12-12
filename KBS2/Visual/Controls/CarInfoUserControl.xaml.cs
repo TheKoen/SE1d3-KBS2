@@ -26,7 +26,7 @@ namespace KBS2.Visual.Controls
             var car1 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture1.jpg", UriKind.Relative));
             var car2 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture2.jpg", UriKind.Relative));
             var car3 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture3.jpg", UriKind.Relative));         
-            CarPicture.Source = (last >= 0 && last < 4) ? car1 : (last >= 4 && last < 7) ? car2 : car3; ;
+            CarPicture.Source = (last >= 0 && last < 4) ? car1 : (last >= 4 && last < 7) ? car2 : car3;
         }
     }
 }
