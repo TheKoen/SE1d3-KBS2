@@ -294,5 +294,10 @@
   <ItemGroup>
     <Resource Include="Images\Other_Profile_Picture.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CarPicture1.jpg" />
+    <Resource Include="Images\CarPicture2.jpg" />
+    <Resource Include="Images\CarPicture3.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
