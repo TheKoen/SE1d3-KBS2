@@ -1,9 +1,10 @@
 using System;
 using System.Windows;
+using Algorithms.NodeNetwork;
 using KBS2.CitySystem;
-using KBS2.GPS.NodeNetwork;
+using KBS2.GPS;
 
-namespace KBS2.GPS
+namespace Algorithms
 {
     public static class AlgorithmTools
     {

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using Algorithms;
+using Algorithms.Algorithms;
 using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
-using KBS2.GPS.Algorithms;
-using KBS2.GPS.TSP;
 using KBS2.Util;
 
 namespace KBS2.GPS

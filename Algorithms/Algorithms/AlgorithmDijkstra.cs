@@ -1,18 +1,18 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Algorithms.NodeNetwork;
+using KBS2;
 using KBS2.CarSystem;
-using KBS2.Console;
-using KBS2.GPS.NodeNetwork;
+using KBS2.GPS;
 
-namespace KBS2.GPS.Algorithms
+namespace Algorithms.Algorithms
 {
     public class AlgorithmDijkstra : IAlgorithm
     {
         public Destination Calculate(Destination carDestination, Destination endDestination)
         {
             App.Console.Print($"carDestination: {carDestination.Location}, endDestination: {endDestination.Location}");
-            var network = RoadNetwork.GetInstance();
+            var network = NodeNetwork.NodeNetwork.GetInstance();
             var startNode = new Node(GPSSystem.FindIntersection(carDestination.Location).Location);
             var endNodes = AlgorithmTools.IntersectionTupleToNodeTuple(
                 AlgorithmTools.GetIntersectionOrderForRoadSide(endDestination.Road, endDestination.Location));
@@ -32,7 +32,7 @@ namespace KBS2.GPS.Algorithms
             };
         }
 
-        private static void AssignNodeValues(ref RoadNetworkCopy network, ref Node startNode)
+        private static void AssignNodeValues(ref NodeNetworkCopy network, ref Node startNode)
         {
             if (startNode.Value == null)
             {
@@ -53,7 +53,7 @@ namespace KBS2.GPS.Algorithms
             }
         }
 
-        private static Node FindNextNodeOnBestRoute(ref RoadNetworkCopy network, Node endNode)
+        private static Node FindNextNodeOnBestRoute(ref NodeNetworkCopy network, Node endNode)
         {
             var currentNode = network.Nodes.Single(n => n.Equals(endNode));
             var previousNode = currentNode;

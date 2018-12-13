@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using KBS2.CitySystem;
+using KBS2.GPS;
 
-namespace KBS2.GPS.NodeNetwork
+namespace Algorithms.NodeNetwork
 {
-    public static class RoadNetwork
+    public static class NodeNetwork
     {
         public static Node[] Nodes { get; private set; }
         public static Link[] Links { get; private set; }
@@ -34,15 +34,15 @@ namespace KBS2.GPS.NodeNetwork
             }
         }
         
-        public static RoadNetworkCopy GetInstance() => new RoadNetworkCopy(Nodes, Links);
+        public static NodeNetworkCopy GetInstance() => new NodeNetworkCopy(Nodes, Links);
     }
 
-    public struct RoadNetworkCopy
+    public struct NodeNetworkCopy
     {
         public Node[] Nodes { get; set; }
         public Link[] Links { get; set; }
 
-        public RoadNetworkCopy(Node[] nodes, Link[] links)
+        public NodeNetworkCopy(Node[] nodes, Link[] links)
         {
             Nodes = nodes;
             Links = links;

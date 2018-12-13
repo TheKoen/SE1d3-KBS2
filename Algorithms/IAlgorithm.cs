@@ -1,6 +1,6 @@
 using KBS2.CarSystem;
 
-namespace KBS2.GPS
+namespace Algorithms
 {
     public interface IAlgorithm
     {

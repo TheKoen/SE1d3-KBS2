@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 
-namespace KBS2.GPS.NodeNetwork
+namespace Algorithms.NodeNetwork
 {
     public class Node : IEquatable<Node>
     {

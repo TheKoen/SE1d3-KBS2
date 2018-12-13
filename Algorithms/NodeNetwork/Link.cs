@@ -1,6 +1,6 @@
 using System;
 
-namespace KBS2.GPS.NodeNetwork
+namespace Algorithms.NodeNetwork
 {
     public class Link
     {

@@ -1,0 +1,14 @@
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\Algorithms.dll
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\Algorithms.pdb
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\KBS2.exe
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\CommandSystem.dll
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\KBS2.pdb
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\KBS2.exe.config
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\CommandSystem.pdb
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\obj\Debug\Algorithms.csprojAssemblyReference.cache
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\obj\Debug\Algorithms.csproj.CoreCompileInputs.cache
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\obj\Debug\Algorithms.csproj.CopyComplete
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\obj\Debug\Algorithms.dll
+C:\Users\Snootiful\Documents\C#\SE1d3-KBS2\Algorithms\obj\Debug\Algorithms.pdb
