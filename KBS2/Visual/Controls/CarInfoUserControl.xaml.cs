@@ -30,14 +30,14 @@ namespace KBS2.Visual.Controls
 
             PropertyPanel = this.StackPanelCar;
 
-            determineCarPicture(car);
-            displayProperties();
+            DetermineCarPicture(car);
+            DisplayProperties();
         }
 
         /// <summary>
         /// creating and displaying the properties of car.
         /// </summary>
-        private void displayProperties()
+        private void DisplayProperties()
         {
             var propertyName = "Max Speed";
             var propertyValue = Car.MaxSpeed.ToString();
@@ -56,7 +56,7 @@ namespace KBS2.Visual.Controls
         /// Takes the last character of car Id and that char determines the picture for that specific car.
         /// </summary>
         /// <param name="car"></param>
-        private void determineCarPicture(Car car)
+        private void DetermineCarPicture(Car car)
         {
             var last = int.Parse(car.Id.ToString()[car.Id.ToString().Length - 1].ToString());
             var car1 = new BitmapImage(new Uri($@" /KBS2;component/Images/CarPicture1.jpg", UriKind.Relative));
@@ -65,6 +65,11 @@ namespace KBS2.Visual.Controls
             CarPicture.Source = (last >= 0 && last < 4) ? car1 : (last >= 4 && last < 7) ? car2 : car3;
         }
 
+        /// <summary>
+        /// If any car property changed this method will save the new values.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnCarSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (Car.MaxSpeed.ToString() != CarMaxSpeedProperties.TBCurrentValue.Text.ToString())
