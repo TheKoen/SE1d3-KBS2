@@ -13,7 +13,8 @@ namespace KBS2.Visual.Controls
 
         private StackPanel PropertyPanel { get; }
         private Car Car;
-        private PropertySettings MaxSpeedProperties;
+        private PropertySettings CarMaxSpeedProperties;
+        private PropertySettings CarModelProperties;
 
         public CarInfoUserControl(Car car)
         {
@@ -33,13 +34,22 @@ namespace KBS2.Visual.Controls
             displayProperties();
         }
 
+        /// <summary>
+        /// creating and displaying the properties of car.
+        /// </summary>
         private void displayProperties()
         {
             var propertyName = "Max Speed";
             var propertyValue = Car.MaxSpeed.ToString();
 
-            MaxSpeedProperties = new PropertySettings(propertyName, propertyValue);
-            PropertyPanel.Children.Add(MaxSpeedProperties);
+            CarMaxSpeedProperties = new PropertySettings(propertyName, propertyValue);
+            PropertyPanel.Children.Add(CarMaxSpeedProperties);
+
+            //var propertyName2 = "Model";
+            //var propertyValue2 = Car.Model;
+
+            //CarModelProperties = new PropertySettings(propertyName2, propertyValue);
+            //PropertyPanel.Children.Add(CarModelProperties);
         }
 
         /// <summary>
@@ -57,9 +67,9 @@ namespace KBS2.Visual.Controls
 
         private void BtnCarSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (Car.MaxSpeed.ToString() != MaxSpeedProperties.TBCurrentValue.ToString())
+            if (Car.MaxSpeed.ToString() != CarMaxSpeedProperties.TBCurrentValue.Text.ToString())
             {
-                var newValue = double.Parse(MaxSpeedProperties.TBCurrentValue.ToString());
+                var newValue = double.Parse(CarMaxSpeedProperties.TBCurrentValue.Text.ToString());
                 Car.MaxSpeed = newValue;
             }
         }
