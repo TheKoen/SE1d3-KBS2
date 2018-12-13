@@ -1,20 +1,9 @@
-﻿using KBS2.CitySystem;
-using KBS2.Console;
-using KBS2.GPS;
+﻿using KBS2.GPS;
 using System.Windows;
-using System.Xml;
-using System.IO;
-using KBS2.Util;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using KBS2.Util.Loop;
-using System.Linq;
-using CommandSystem;
-using CommandSystem.PropertyManagement;
-using KBS2.Visual.Controls;
 using System;
-using KBS2.CarSystem;
+using System.Diagnostics;
 using KBS2.Visual;
 
 namespace KBS2
@@ -42,11 +31,13 @@ namespace KBS2
          * needs to run fast, but can more easily deal with irregular
          * refresh rates.
          */
-        public static readonly TickLoop CommandLoop = new MainLoop("Command");
-        public static readonly TickLoop WPFLoop = new MainLoop("Main");
+        public static readonly TickLoop CommandLoop = new MainLoop("CMD");
+        public static readonly TickLoop WPFLoop = new MainLoop("WPF");
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private readonly ConsoleWindow consoleWindow;
+        private readonly ModelDesigner.ModelDesigner modelDesigner;
+        private readonly Stopwatch Stopwatch = new Stopwatch();
 
         public CityRenderHandler CityRenderHandler { get; private set; }
         public CustomerRenderHandler CustomerRenderHandler { get; private set; }
@@ -55,11 +46,12 @@ namespace KBS2
         public PropertyDisplayHandler PropertyDisplayHandler { get; private set; }
 
         public int Ticks { get; set; }
-        public double SecondsRunning { get; private set; }
+        public double SecondsRunning { get; set; }
 
         public MainScreen()
         {
             consoleWindow = new ConsoleWindow();
+            modelDesigner = new ModelDesigner.ModelDesigner();
             CommandLoop.Start();
             
             Initialized += (sender, args) => Initialize();
@@ -71,8 +63,8 @@ namespace KBS2
             GPSSystem.Setup();
 
             CityRenderHandler = new CityRenderHandler(this, CanvasMain);
-            CustomerRenderHandler = new CustomerRenderHandler(CanvasMain);
-            CarRenderHandler = new CarRenderHandler(CanvasMain);
+            CustomerRenderHandler = new CustomerRenderHandler(CanvasMain, this);
+            CarRenderHandler = new CarRenderHandler(CanvasMain, this);
             SimulationControlHandler = new SimulationControlHandler(this);
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
 
@@ -83,6 +75,8 @@ namespace KBS2
         {
             consoleWindow.AllowClose = true;
             consoleWindow.Close();
+            modelDesigner.AllowClose = true;
+            modelDesigner.Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
@@ -98,16 +92,25 @@ namespace KBS2
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.StartButtonClick();
+            Stopwatch.Start();
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.PauseButtonClick();
+            Stopwatch.Stop();
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
             SimulationControlHandler.ResetButtonClick();
+            LabelSimulationTime.Content = "00:00:00";
+            Stopwatch.Reset();
+            
+            CommandLoop.Register();
+            WPFLoop.Register();
+            AILoop.Register();
+            GPSSystem.Setup();
         }
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
@@ -140,7 +143,11 @@ namespace KBS2
 
         }
 
-        // Method for saving the new values the user has filled in in the Settings tab.
+        /// <summary>
+        /// Method for the save button with saving the new values the user has filled in in the Settings tab.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             PropertyDisplayHandler.SaveProperties();
@@ -152,20 +159,29 @@ namespace KBS2
             PropertyDisplayHandler.ResetDefaults();
         }
 
+        /// <summary>
+        /// This method updates the timer of the simulation
+        /// </summary>
         public void UpdateTimer()
         {
-            LabelSimulationTime.Content = SecondsRunning;
+            var time = Stopwatch.ElapsedMilliseconds;
+            var temp = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(time);
+            LabelSimulationTime.Content = $"{temp:mm:ss:FF}";
         }
 
-        public double GetSeconds()
+        /// <summary>
+        /// This method is calculating seconds from ticks
+        /// </summary>
+        /// <returns>seconds the simulation is running</returns>
+        public double CalculateSeconds()
         {
-            return Math.Round(Ticks / 100.0, 2);
+            return Ticks / 30.0d;
         }
 
         public void Update()
         {
             Ticks++;
-            SecondsRunning = GetSeconds();
+            SecondsRunning = CalculateSeconds();
             UpdateTimer();
         }
 
@@ -179,6 +195,23 @@ namespace KBS2
             {
                 consoleWindow.Show();
             }
+        }
+
+        private void BtnCarModelMaker_Click(object sender, RoutedEventArgs e)
+        {
+            if (consoleWindow.IsVisible)
+            {
+                modelDesigner.Hide();
+            }
+            else
+            {
+                modelDesigner.Show();
+            }
+        }
+
+        private void BtnCityMaker_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -13,11 +13,12 @@ namespace KBS2.Visual
     public class CustomerRenderHandler : IRenderHandler
     {
         public Canvas Canvas { get; }
+        public MainScreen Screen { get; set; }
 
-        public CustomerRenderHandler(Canvas canvas)
+        public CustomerRenderHandler(Canvas canvas, MainScreen screen)
         {
             Canvas = canvas;
-
+            Screen = screen;
             MainScreen.WPFLoop.Subscribe(Update);
         }
 
@@ -36,7 +37,7 @@ namespace KBS2.Visual
             {
                 if (!HasControlFor(customer))
                 {
-                    Canvas.Children.Add(new CustomerControl(customer));
+                    Canvas.Children.Add(new CustomerControl(customer, Screen));
                 }
             }
         }
@@ -45,9 +46,8 @@ namespace KBS2.Visual
         {
             foreach (var child in Canvas.Children)
             {
-                if (child is CustomerControl)
+                if (child is CustomerControl control)
                 {
-                    var control = (CustomerControl)child;
                     if (control.customer.Equals(customer))
                     {
                         return true;

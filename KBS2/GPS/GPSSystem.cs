@@ -24,9 +24,16 @@ namespace KBS2.GPS
 
         public static void Setup()
         {
-            PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
-            PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-            //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            try
+            {
+                PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
+                PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+                //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to register tickRate property for GPSSystem", Colors.Yellow);
+            }
         }
 
 
@@ -118,7 +125,11 @@ namespace KBS2.GPS
             var car = nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel);
             if (car != null)
             {
-                car.Destination = destination;
+                car.Destination = new Destination
+                {
+                    Location = group.Location,
+                    Road = NearestRoad(group.Location)
+                };
             }
         }
 

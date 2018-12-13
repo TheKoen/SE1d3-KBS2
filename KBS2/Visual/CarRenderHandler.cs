@@ -14,11 +14,12 @@ namespace KBS2.Visual
     public class CarRenderHandler : IRenderHandler
     {
         public Canvas Canvas { get; }
+        public MainScreen Screen { get; set; }
 
-        public CarRenderHandler(Canvas canvas)
+        public CarRenderHandler(Canvas canvas, MainScreen screen)
         {
             Canvas = canvas;
-
+            Screen = screen;
             MainScreen.WPFLoop.Subscribe(Update);
         }
 
@@ -37,7 +38,7 @@ namespace KBS2.Visual
             {
                 if (!HasControlFor(car))
                 {
-                    Canvas.Children.Add(new CarControl(car));
+                    Canvas.Children.Add(new CarControl(car, Screen));
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace KBS2.Util.Loop
 
         public ThreadLoop(string name) : base(name)
         {
-            thread = new Thread(Run);
+            thread = new Thread(Run) {Name = Name};
             interval = CalculateInterval(TickRate);
 
             Application.Current.Exit += (sender, args) => Stop();

@@ -1,4 +1,5 @@
 ﻿using KBS2.CustomerSystem;
+using KBS2.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,28 @@ namespace KBS2.Visual.Controls
     {
 
         public Customer customer;
+        public MainScreen Screen { get; set; }
 
-        public CustomerControl(Customer customer)
+        public CustomerControl(Customer customer, MainScreen screen)
         {
+            Screen = screen;
             this.customer = customer;
             Update();
             InitializeComponent();
             MainScreen.WPFLoop.Subscribe(Update);
+        }
+
+        public void Customer_Select(object sender, MouseButtonEventArgs e)
+        {
+            //Empty info tab
+            Screen.TabItemInfo.Content = null;
+
+            //Add info about this car
+            CustomerInfoUserControl ci = new CustomerInfoUserControl(customer);
+            Screen.TabItemInfo.Content = ci;
+
+            //Open the info tab of selected car
+            Screen.TabItemInfo.IsSelected = true;
         }
 
         public void Update()

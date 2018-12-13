@@ -115,8 +115,9 @@ namespace KBS2.CarSystem
             var velocity = Car.Velocity;
             // Create a variable to store the added rotation in this update call.
             var addedRotation = 0.0;
+            var closeToDestination = CloseToDestination();
 
-            if (distanceToTarget < 20 && !Car.Destination.Road.Equals(Car.CurrentRoad))
+            if (distanceToTarget < 20 && !closeToDestination)
             {
                 if (!obtainedNewTarget)
                 {
@@ -147,7 +148,7 @@ namespace KBS2.CarSystem
             else
             {
                 // Check how far we are from our destination.
-                if (distanceToDestination > 30)
+                if (!closeToDestination)
                 {
                     // Call the handle functions to stay in the lane and accelerate/deccelerate.
                     HandleStayInLane(ref velocity, ref yaw, ref addedRotation);
@@ -175,6 +176,7 @@ namespace KBS2.CarSystem
 
             // Update the car's location with the velocity.
             Car.Location = Vector.Add(Car.Location, Car.Velocity);
+            Car.DistanceTraveled += Car.Velocity.Length;
         }
 
         public void HandleTurn(ref Vector velocity, ref double yaw, ref double addedRotation)
@@ -206,6 +208,10 @@ namespace KBS2.CarSystem
             {
                 addedRotation += rotationSpeed * 0.8;
             }
+            else if (angle > 135)
+            {
+                addedRotation += rotationSpeed * 90.0;
+            }
             // If the angle is more than 45 degrees (90 - 45), rotate to the right.
             else if (angle > 45)
             {
@@ -224,9 +230,9 @@ namespace KBS2.CarSystem
             var speed = velocity.Length;
             var rotation = MathUtil.VelocityToRotation(velocity);
             
-            if (speed > maxTurningSpeed / 2d || distanceToDestination < 10)
+            if (speed > maxTurningSpeed / 2d || distanceToDestination < 20)
             {
-                velocity = speed > 0.01
+                velocity = speed > 0.1
                     ? Vector.Add(velocity, CalculateDeccelerationVector(velocity))
                     : new Vector();
             }
@@ -243,16 +249,16 @@ namespace KBS2.CarSystem
 
             if (angle > 0)
             {
-                if (yaw < maxInLaneRotation)
+                if (yaw > -maxInLaneRotation)
                 {
-                    addedRotation += rotationSpeed;
+                    addedRotation -= rotationSpeed;
                 }
             }
             else
             {
-                if (yaw > -maxInLaneRotation)
+                if (yaw < maxInLaneRotation)
                 {
-                    addedRotation -= rotationSpeed;
+                    addedRotation += rotationSpeed;
                 }
             }
         }
@@ -327,7 +333,7 @@ namespace KBS2.CarSystem
             else if (braking)
             {
                 // If we are braking, deccelerate the car.
-                velocity = speed > 0.01
+                velocity = speed > 0.1
                     ? Vector.Add(velocity, CalculateDeccelerationVector(velocity))
                     : new Vector();
             }
@@ -339,6 +345,15 @@ namespace KBS2.CarSystem
                     velocity = Vector.Add(velocity, CalculateDeccelerationVector(velocity));
                 }
             }
+        }
+
+        private bool CloseToDestination()
+        {
+            var distanceToDestination = MathUtil.Distance(Car.Location, Car.Destination.Location);
+            var target = Car.CurrentTarget;
+            var destination = Car.Destination;
+
+            return distanceToDestination < 20 && MathUtil.Distance(target, destination.Location) < 10;
         }
 
         private static Vector GetClosestRoadPoint(Vector location)

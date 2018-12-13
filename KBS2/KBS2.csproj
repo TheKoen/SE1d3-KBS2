@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -154,10 +157,10 @@
     <Compile Include="Visual\IRenderHandler.cs" />
     <Compile Include="Visual\PropertyDisplayHandler.cs" />
     <Compile Include="Visual\SimulationControlHandler.cs" />
-    <Compile Include="Windows\CarInfoUserControl.xaml.cs">
+    <Compile Include="Visual\Controls\CarInfoUserControl.xaml.cs">
       <DependentUpon>CarInfoUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\CustomerInfoUserControl.xaml.cs">
+    <Compile Include="Visual\Controls\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="ConsoleWindow.xaml">
@@ -213,11 +216,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\CarInfoUserControl.xaml">
+    <Page Include="Visual\Controls\CarInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\CustomerInfoUserControl.xaml">
+    <Page Include="Visual\Controls\CustomerInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -244,6 +247,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -251,9 +255,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Customer_Profile_Picture.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\happy.png" />
@@ -274,6 +275,19 @@
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
       <Name>CommandSystem</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Annoyed.png" />
+    <Resource Include="Images\Mad.png" />
+    <Resource Include="Images\Neutral.png" />
+    <Resource Include="Images\Sad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Female_Profile_Picture.jpg" />
+    <Resource Include="Images\Male_Profile_Picture.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Other_Profile_Picture.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,6 +8,6 @@
              mc:Ignorable="d"
              d:DesignHeight="10" d:DesignWidth="5">
     <Grid>
-        <Rectangle Width="5" Height="10" Fill="Red"></Rectangle>
+        <Rectangle Width="5" Height="10" Fill="Red" MouseLeftButtonDown="Car_Select"></Rectangle>
     </Grid>
 </UserControl>

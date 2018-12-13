@@ -22,6 +22,7 @@ namespace KBS2.Visual
             if (City.Instance != null)
             {
                 Screen.LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
+                Screen.LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
             }
         }
 

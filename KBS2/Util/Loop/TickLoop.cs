@@ -8,9 +8,9 @@ namespace KBS2.Util.Loop
 {
     public abstract class TickLoop
     {
-        private string Name { get; }
+        protected string Name { get; }
 
-        private readonly Property tickRate = new Property(30);
+        private Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
 
         private event Update UpdateEvent;
@@ -21,7 +21,19 @@ namespace KBS2.Util.Loop
         {
             Name = name;
             tickRate.PropertyChanged += OnTickrateChange;
-            PropertyHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
+            Register();
+        }
+
+        public void Register()
+        {
+            try
+            {
+                PropertyHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
+            }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to register tickRate property for {Name} loop", Colors.Yellow);
+            }
         }
 
         /// <summary>
@@ -79,20 +91,20 @@ namespace KBS2.Util.Loop
             }
             catch (Exception exception)
             {
-                App.Console.Print($"Exception in main loop: {exception}", Colors.Red);
+                App.Console.Print($"Exception in {Name} loop: {exception}", Colors.Red);
 
                 exceptionCount++;
                 if (exceptionCount > 2)
                 {
                     Stop();
-                    App.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
+                    App.Console.Print($"{Name} loop has been stopped due to too many exceptions!", Colors.Red);
                 }
             }
             var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
             var interval = CalculateInterval(tickRate.Value);
             if (taken > interval)
             {
-                App.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
+                App.Console.Print($"{Name} loop is running {taken - interval}ms behind!", Colors.Yellow);
             }
         }
 

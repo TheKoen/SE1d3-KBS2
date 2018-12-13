@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace KBS2.ModelDesigner
         
         private CarDesign _currentDesign = new CarDesign();
         private static readonly IFormatter Formatter = new BinaryFormatter();
-        
+        public bool AllowClose = false;
+
         public ModelDesigner()
         {
             InitializeComponent();
@@ -224,6 +226,15 @@ namespace KBS2.ModelDesigner
         private void TextBoxMaxSpeed_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = NotNumberRegex.IsMatch(e.Text);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (!AllowClose)
+            {
+                e.Cancel = true;
+                Hide();
+            }
         }
     }
 }

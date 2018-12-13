@@ -1,5 +1,6 @@
 ﻿using KBS2.CarSystem;
 using KBS2.Util;
+using KBS2.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,11 @@ namespace KBS2.Visual.Controls
     {
 
         public Car car { get; set; }
+        public MainScreen Screen { get; set; }
 
-        public CarControl(Car car)
+        public CarControl(Car car, MainScreen screen)
         {
+            Screen = screen;
             this.car = car;            
             Update();
             MainScreen.WPFLoop.Subscribe(Update);
@@ -49,6 +52,19 @@ namespace KBS2.Visual.Controls
             location = Vector.Subtract(location, yoffset);
 
             Margin = new Thickness(location.X, location.Y, 0, 0);
+        }
+
+        public void Car_Select(object sender, MouseButtonEventArgs e)
+        {
+            //Empty info tab
+            Screen.TabItemInfo.Content = null;
+            
+            //Add info about this car
+            CarInfoUserControl ci = new CarInfoUserControl(car);
+            Screen.TabItemInfo.Content = ci;
+
+            //Open the info tab of selected car
+            Screen.TabItemInfo.IsSelected = true;
         }
     }
 }
