@@ -76,15 +76,11 @@ namespace KBS2.Visual.Controls
                 Screen.TabItemInfo.Content = null;
 
                 //Add info about this garage
-                GarageInfoUserControl ci = new GarageInfoUserControl(Building);
+                var ci = new GarageInfoUserControl(Building);
                 Screen.TabItemInfo.Content = ci;
 
                 //Open the info tab of selected garage
                 Screen.TabItemInfo.IsSelected = true;
-            }
-            else
-            {
-                return;
             }
         }
     }
