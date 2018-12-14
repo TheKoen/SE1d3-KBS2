@@ -21,20 +21,15 @@ namespace KBS2.Visual.Controls
     /// </summary>
     public partial class BuildingControl : UserControl
     {
-        public Building Building { get; set; }
-        public MainScreen Screen;
-        public BuildingControl(Building building, MainScreen screen)
-        {
-            Building = building;
-            Screen = screen;
-            var size = building.Size;
-            var location = building.Location;
+        private Building Building { get; }
+        private MainScreen Screen { get; }
 
-            var c = size / 2d;
-            Margin = new Thickness(location.X - c, location.Y - c, 0, 0);
-            
-            Width = size;
-            Height = size;
+        private float lastZoom;
+
+        public BuildingControl(MainScreen screen, Building building)
+        {
+            Screen = screen;
+            Building = building;
 
             Initialized += (sender, args) =>
             {
@@ -45,6 +40,30 @@ namespace KBS2.Visual.Controls
             };
 
             InitializeComponent();
+            Update();
+
+            MainScreen.CommandLoop.Subscribe(Update);
+        }
+
+        private void Update()
+        {
+            if (Math.Abs(lastZoom - Screen.Zoom) < 0.01)
+            {
+                return;
+            }
+            lastZoom = Screen.Zoom;
+
+            var zoom = Screen.Zoom;
+            var size = Building.Size;
+            var location = Building.Location;
+
+            var offset = size / 2d;
+            Margin = new Thickness((location.X - offset) * zoom, (location.Y - offset) * zoom, 0, 0);
+
+            Width = size * zoom;
+            Height = size * zoom;
+
+            Rectangle.StrokeThickness = (size * zoom) / 8d;
         }
 
         public void Building_Selected(object sender, MouseButtonEventArgs e)

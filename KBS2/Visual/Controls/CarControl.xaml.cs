@@ -30,10 +30,10 @@ namespace KBS2.Visual.Controls
         public CarControl(Car car, MainScreen screen)
         {
             Screen = screen;
-            this.car = car;            
+            this.car = car;
+            InitializeComponent();
             Update();
             MainScreen.WPFLoop.Subscribe(Update);
-            InitializeComponent();
         }
 
         public void Update()
@@ -51,7 +51,10 @@ namespace KBS2.Visual.Controls
             location = Vector.Subtract(location, xoffset);
             location = Vector.Subtract(location, yoffset);
 
-            Margin = new Thickness(location.X, location.Y, 0, 0);
+            var zoom = Screen.Zoom;
+            Margin = new Thickness(location.X * zoom, location.Y * zoom, 0, 0);
+            CarRectangle.Width = 5 * zoom;
+            CarRectangle.Height = 10 * zoom;
         }
 
         public void Car_Select(object sender, MouseButtonEventArgs e)
