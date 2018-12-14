@@ -122,15 +122,11 @@ namespace KBS2.GPS
                 nearestDistance = tempDistance;
             }
 
-            var car = nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel);
-            if (car != null)
+            var car = nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel, new Destination
             {
-                car.Destination = new Destination
-                {
-                    Location = group.Location,
-                    Road = NearestRoad(group.Location)
-                };
-            }
+                Location = group.Location,
+                Road = NearestRoad(group.Location)
+            });
         }
 
         /// <summary>
