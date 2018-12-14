@@ -32,17 +32,17 @@ namespace KBS2.Visual
 
             foreach (var building in city.Buildings)
             {
-                Canvas.Children.Add(new BuildingControl(building));
+                Canvas.Children.Add(new BuildingControl(Screen, building));
             }
 
             foreach (var road in city.Roads)
             {
-                Canvas.Children.Add(new RoadControl(road));
+                Canvas.Children.Add(new RoadControl(Screen, road));
             }
 
             foreach (var intersection in city.Intersections)
             {
-                Canvas.Children.Add(new IntersectionControl(intersection));
+                Canvas.Children.Add(new IntersectionControl(Screen, intersection));
             }
         }
     }
