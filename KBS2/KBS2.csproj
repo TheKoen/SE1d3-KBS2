@@ -193,6 +193,7 @@
     <Compile Include="Visual\Controls\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Visual\ZoomHandler.cs" />
     <Page Include="ConsoleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

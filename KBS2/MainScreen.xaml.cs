@@ -4,6 +4,8 @@ using System.ComponentModel;
 using KBS2.Util.Loop;
 using System;
 using System.Diagnostics;
+using System.Windows.Controls;
+using KBS2.CitySystem;
 using KBS2.Visual;
 using KBS2.Database;
 
@@ -32,7 +34,7 @@ namespace KBS2
          * needs to run fast, but can more easily deal with irregular
          * refresh rates.
          */
-        public static readonly TickLoop CommandLoop = new MainLoop("CMD");
+        public static readonly TickLoop CommandLoop = new MainLoop("CMD", 60);
         public static readonly TickLoop WPFLoop = new MainLoop("WPF");
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
@@ -45,9 +47,12 @@ namespace KBS2
         public CarRenderHandler CarRenderHandler { get; private set; }
         public SimulationControlHandler SimulationControlHandler { get; private set; }
         public PropertyDisplayHandler PropertyDisplayHandler { get; private set; }
+        public ZoomHandler ZoomHandler { get; private set; }
 
         public int Ticks { get; set; }
         public double SecondsRunning { get; set; }
+
+        public float Zoom { get; set; } = 1.0F;
 
         public MainScreen()
         {
@@ -68,6 +73,7 @@ namespace KBS2
             CarRenderHandler = new CarRenderHandler(CanvasMain, this);
             SimulationControlHandler = new SimulationControlHandler(this);
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
+            ZoomHandler = new ZoomHandler(this);
 
             WPFLoop.Subscribe(Update);
 
@@ -76,6 +82,9 @@ namespace KBS2
                 context.Cities.Add(City);
                 context.SaveChanges();
             } 
+            CommandLoop.Subscribe(CmdUpdate);
+
+            PreviewMouseWheel += ZoomHandler.Scroll;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -192,6 +201,24 @@ namespace KBS2
             UpdateTimer();
         }
 
+        public void CmdUpdate()
+        {
+            if (City.Instance == null) return;
+
+            var maxWidth = 0.0;
+            var maxHeight = 0.0;
+            foreach (var road in City.Instance.Roads)
+            {
+                if (road.Start.X * Zoom > maxWidth) maxWidth = road.Start.X * Zoom;
+                if (road.End.X * Zoom > maxWidth) maxWidth = road.End.X * Zoom;
+                if (road.Start.Y * Zoom > maxHeight) maxHeight = road.Start.Y * Zoom;
+                if (road.End.Y * Zoom > maxHeight) maxHeight = road.End.Y * Zoom;
+            }
+
+            CanvasMain.Width = Math.Max(maxWidth + 400, Width - 50);
+            CanvasMain.Height = Math.Max(maxHeight + 50, Height - 50);
+        }
+
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
             if (consoleWindow.IsVisible)
@@ -219,6 +246,11 @@ namespace KBS2
         private void BtnCityMaker_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Zoom_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            ZoomHandler?.ZoomBoxChanged();
         }
     }
 }

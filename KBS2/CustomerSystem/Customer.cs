@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
 using KBS2.Visual.Controls;
@@ -56,7 +58,14 @@ namespace KBS2.CustomerSystem
 
         public void UpdateDestination()
         {
-            TargetLocationString = $"{Group.Destination.Location.X:F0}, {Group.Destination.Location.Y:F0}";
+            try
+            {
+                TargetLocationString = $"{Group.Destination.Location.X:F0}, {Group.Destination.Location.Y:F0}";
+            }
+            catch (Exception)
+            {
+                App.Console?.Print("Unable to update destination label!", Colors.Red);
+            }
         }
 
         private string targetLocationString;

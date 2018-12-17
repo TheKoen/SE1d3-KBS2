@@ -11,7 +11,7 @@ namespace KBS2.Util.Loop
     {
         private readonly DispatcherTimer timer;
 
-        public MainLoop(string name) : base(name)
+        public MainLoop(string name, int tickRate = 30) : base(name, tickRate)
         {
             timer = new DispatcherTimer
             {
