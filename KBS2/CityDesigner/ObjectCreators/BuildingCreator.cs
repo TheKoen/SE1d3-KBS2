@@ -24,7 +24,16 @@ namespace KBS2.CityDesigner.ObjectCreators
             Width = standardSize,
             Height = standardSize,
         };
-        
+
+        private static Rectangle buildingCreate = new Rectangle()
+        {
+            Fill = Brushes.Gray,
+            StrokeThickness = 4,
+            Stroke = Brushes.Black,
+            Width = standardSize,
+            Height = standardSize,
+        };
+
         private static readonly int standardSize = 50;
 
         /// <summary>
@@ -69,7 +78,14 @@ namespace KBS2.CityDesigner.ObjectCreators
         /// <param name="building"></param>
         public static void DrawBuilding(Canvas canvas, Building building)
         {
-            canvas.Children.Add(new BuildingControl(building));
+            Canvas.SetLeft(buildingCreate, (int)building.Location.X - building.Size / 2);
+            Canvas.SetTop(buildingCreate, (int)building.Location.Y - building.Size / 2);
+            Canvas.SetZIndex(buildingCreate, 2);
+
+            buildingCreate.Width = building.Size;
+            buildingCreate.Height = building.Size;
+
+            canvas.Children.Add(clone(buildingCreate));
         }
 
         /// <summary>
@@ -79,6 +95,18 @@ namespace KBS2.CityDesigner.ObjectCreators
         public static void RemoveGhost(Canvas canvas)
         {
             canvas.Children.Remove(buildingGhost);
+        }
+
+        /// <summary>
+        /// Dirty fix to copy Roads
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private static FrameworkElement clone(FrameworkElement e)
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(XamlWriter.Save(e));
+            return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
     }
 }

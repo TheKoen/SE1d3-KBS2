@@ -32,8 +32,10 @@ namespace KBS2.CityDesigner
         private bool successFoundCursor = true;
         private Cursor defaultCursor = Mouse.OverrideCursor;
 
+        
         public CityDesignerWindow()
         {
+            MainScreen.CommandLoop.Start();
             InitializeComponent();
             Creator = new ObjectHandler(Canvas, this);
             //look for cursor
