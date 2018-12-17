@@ -39,7 +39,7 @@ namespace KBS2.CityDesigner.ObjectCreators
 
         private static readonly int standardRoadWidth = 20;
         private static readonly int standardMaxSpeed = 100;
-        private static readonly int snapRange = 20;
+        private static readonly int snapRange = 50;
         private static readonly int minLengthRoad = 50;
 
 
@@ -271,6 +271,7 @@ namespace KBS2.CityDesigner.ObjectCreators
                         }
                     }
                 }
+                /**
                 if((roadGhostStart == roadI.Start || roadGhostStart == roadI.End) && (roadGhostEnd == roadI.Start || roadGhostEnd == roadI.End))
                 {
                     if((road.IsXRoad() && roadI.IsXRoad()) || (!road.IsXRoad() && !roadI.IsXRoad()))
@@ -279,6 +280,7 @@ namespace KBS2.CityDesigner.ObjectCreators
                         return null;
                     }
                 }
+                */
                             
             }
             if (CreateMultipleRoadsWhenCrossingEachother(road, roadsList, canvas) == true) // check if road is crossed by ghost road
