@@ -78,16 +78,61 @@ namespace KBS2
 
             WPFLoop.Subscribe(Update);
 
-            using (var context = new MyDatabase("killakid")) {
-                var City = new Database.City { CityName = "BedenkWatLeuks" };
-                context.Cities.Add(City);
+            /*using (var context = new MyDatabase("killakid")) {
+                var city = new Database.City { CityName = "BedenkWatLeuks" };
+                context.Cities.Add(city);
                 context.SaveChanges();
-            }
+            }*/
 
             using (var context = new MyDatabase("killakid"))
             {
-                var cities = (from city in context.Cities
-                              select city).ToList();
+                var city = (from c in context.Cities
+                              select c).ToList().First();
+                var garage = new Database.Garage
+                {
+                    City = city,
+                    Location = new Database.Vector
+                    {
+                        X = 10,
+                        Y = 20
+                    }
+                };
+                context.Garages.Add(garage);
+
+                var inst = new Database.CityInstance
+                {
+                    City = city
+                };
+
+                var car = new Database.Car
+                {
+                    CityInstance = inst,
+                    Garage = garage,
+                    Model = "TestModel"
+                };
+
+                context.Cars.Add(car);
+
+                var trip = new Database.Trip
+                {
+                    Car = car,
+                    Distance = 100.3,
+                    EndLocation = new Database.Vector
+                    {
+                        X = 984,
+                        Y = 4385
+                    },
+                    StartLocation = new Database.Vector
+                    {
+                        X = 645,
+                        Y = 235
+                    },
+                    Price = 100.5
+                };
+
+                context.Trips.Add(trip);
+
+                context.SaveChanges();
             }
 
             CommandLoop.Subscribe(CmdUpdate);
