@@ -52,6 +52,14 @@ namespace KBS2.CustomerSystem
         }
 
         /// <summary>
+        /// The customer makes a review depending on how long they had to wait, their moral state and the time of the ride.
+        /// </summary>
+        public void MakeReview()
+        {
+            Review r = new Review(Customer);
+        }
+
+        /// <summary>
         /// Change the moral of a customer
         /// </summary>
         /// <param name="Moral"></param>
@@ -85,6 +93,7 @@ namespace KBS2.CustomerSystem
                 return;
             }
             
+            //Customer randomly walks around while waiting on the car
             if(walking && !direction.Equals(Customer.Location))
             {
                 if (!MoveTowardsLocation(direction))
