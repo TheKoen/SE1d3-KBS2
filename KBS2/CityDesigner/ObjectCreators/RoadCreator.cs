@@ -25,7 +25,7 @@ namespace KBS2.CityDesigner.ObjectCreators
 
         private static Line roadLine = new Line()
         {
-            Stroke = Brushes.Red,
+            Stroke = Brushes.LightBlue,
             StrokeThickness = standardRoadWidth
         };
 
@@ -515,19 +515,11 @@ namespace KBS2.CityDesigner.ObjectCreators
             roadLine.X2 = (int)road.End.X;
             roadLine.Y2 = (int)road.End.Y;
 
-            Line r = new Line()
-            {
-                Stroke = Brushes.Red,
-                X1 = (int)road.Start.X,
-                Y1 = (int)road.Start.Y,
-                X2 = (int)road.End.X,
-                Y2 = (int)road.End.Y,
-                Width = road.Width
-            };
+            
+            Canvas.SetZIndex(roadLine, 2);
+            roadLine.StrokeThickness = road.Width;
 
-            roadLine.Width = road.Width;
-
-            canvas.Children.Add(clone(r));
+            canvas.Children.Add(clone(roadLine));
         }
 
         /// <summary>

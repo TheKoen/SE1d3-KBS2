@@ -25,7 +25,7 @@ namespace KBS2.CityDesigner
     {
         public ObjectHandler Creator { get; set; }
 
-        public Tools Tool { get; set; } = Tools.Cursor;
+        public Tools Tool { get; set; } = Tools.Road;
 
         private Cursor cursorOnCanvas;
         private readonly string pathCanvasCursor = "C:\\Windows\\Cursors\\cross_r.cur";
@@ -69,16 +69,25 @@ namespace KBS2.CityDesigner
         /// <param name="e"></param>
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            //load window
-            var popupWindow = new OpenFileDialog();
-            popupWindow.Title = "Load City";
-            popupWindow.Filter = "XML file | *.xml";
-            if(popupWindow.ShowDialog() == true)
+            try
             {
-                //set the File name in textBox
-                FileName.Text = System.IO.Path.GetFileNameWithoutExtension(popupWindow.FileName);
-                CityLoader.LoadCity(popupWindow.FileName);
+                CityLoader.LoadCity();
             }
+            catch(Exception b)
+            {
+                MessageBox.Show(windowDesigner, b.Message, "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeFileName(object sender, LoadedCityEventArgs e)
+        {
+            FileName.Text = e.Path;
         }
 
         /// <summary>
@@ -96,21 +105,9 @@ namespace KBS2.CityDesigner
                 // set the buttons active and not active
                 BuildingButton.IsEnabled = true;
                 GarageButton.IsEnabled = true;
-                CursorButton.IsEnabled = true;
                 RoadButton.IsEnabled = false;
             }
-            if(e.Source == CursorButton)
-            {
-                //set tool
-                Tool = Tools.Cursor;
-
-                // set the buttons active and not active
-                BuildingButton.IsEnabled = true;
-                GarageButton.IsEnabled = true;
-                CursorButton.IsEnabled = false;
-                RoadButton.IsEnabled = true;
-            }
-            if(e.Source == BuildingButton)
+            else if(e.Source == BuildingButton)
             {
                 //set tool
                 Tool = Tools.Building;
@@ -118,10 +115,9 @@ namespace KBS2.CityDesigner
                 // set the buttons active and not active
                 BuildingButton.IsEnabled = false;
                 GarageButton.IsEnabled = true;
-                CursorButton.IsEnabled = true;
                 RoadButton.IsEnabled = true;
             }
-            if(e.Source == GarageButton)
+            else if(e.Source == GarageButton)
             {
                 //set tool
                 Tool = Tools.Garage;
@@ -129,7 +125,6 @@ namespace KBS2.CityDesigner
                 // set the buttons active and not active
                 BuildingButton.IsEnabled = true;
                 GarageButton.IsEnabled = false;
-                CursorButton.IsEnabled = true;
                 RoadButton.IsEnabled = true;
             }
         }
@@ -211,7 +206,7 @@ namespace KBS2.CityDesigner
             //Get data of Object
             Creator.SelectRoad = null;
             Creator.SelectBuildingGarage = null;
-            if (Tool == Tools.Cursor) { Creator.GetObject(); }
+            Creator.GetObject();
         }
 
         /// <summary>

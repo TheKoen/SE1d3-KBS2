@@ -9,13 +9,15 @@ namespace KBS2.CityDesigner
         public List<Intersection> Intersections { get; set; }
         public List<Building> Buildings { get; set; }
         public List<Garage> Garages { get; set; }
+        public string Path { get; set; }
 
-        public LoadedCityEventArgs(List<Road> roads, List<Building> buildings, List<Garage> garages, List<Intersection> intersections)
+        public LoadedCityEventArgs(List<Road> roads, List<Building> buildings, List<Garage> garages, List<Intersection> intersections, string path)
         {
             Garages = garages;
             Roads = roads;
             Buildings = buildings;
             Intersections = intersections;
+            Path = path;
         }
     }
 }

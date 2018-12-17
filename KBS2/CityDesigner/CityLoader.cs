@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace KBS2.CityDesigner
@@ -23,7 +24,7 @@ namespace KBS2.CityDesigner
             Instance = this;
         }
 
-        public static void LoadCity(string path)
+        public static void LoadCity()
         {
             var _roads = new List<Road>();
             var _intersections = new List<Intersection>();
@@ -31,8 +32,20 @@ namespace KBS2.CityDesigner
             var _garages = new List<Garage>();
 
             var doc = new XmlDocument();
-            doc.Load(path);
-            
+
+            var popupWindow = new OpenFileDialog();
+            popupWindow.Title = "Load City";
+            popupWindow.Filter = "XML file | *.xml";
+            if(popupWindow.ShowDialog() == DialogResult.OK)
+            {
+                
+                doc.Load(popupWindow.FileName);
+            }
+            else
+            {
+                throw new Exception("Please select a document.");
+            }
+                        
             var root = doc.DocumentElement;
             if (root == null) throw new XmlException("Missing root node");
 
@@ -76,7 +89,7 @@ namespace KBS2.CityDesigner
             }
 
             //Invoke the event
-            LoadedCity?.Invoke(null, new LoadedCityEventArgs(_roads, _buildings, _garages ,_intersections));
+            LoadedCity?.Invoke(null, new LoadedCityEventArgs(_roads, _buildings, _garages ,_intersections, popupWindow.FileName));
 
         }
         private static Vector ParseLocation(string locationString)
@@ -87,12 +100,19 @@ namespace KBS2.CityDesigner
 
         private static Road ParseRoad(XmlNode node)
         {
-            var start = ParseLocation(node.Attributes["Start"].InnerText);
-            var end = ParseLocation(node.Attributes["End"].InnerText);
-            var width = int.Parse(node.Attributes["Width"].InnerText);
-            var maxspeed = int.Parse(node.Attributes["MaxSpeed"].InnerText);
+            try
+            {
+                var start = ParseLocation(node.Attributes["Start"].InnerText);
+                var end = ParseLocation(node.Attributes["End"].InnerText);
+                var width = int.Parse(node.Attributes["Width"].InnerText);
+                var maxspeed = int.Parse(node.Attributes["MaxSpeed"].InnerText);
 
-            return new Road(start, end, width, maxspeed);
+                return new Road(start, end, width, maxspeed);
+            }
+            catch(Exception)
+            {
+                throw new Exception("It looks like this file is not a city.");
+            }
         }
 
         private static Building ParseBuilding(XmlNode node)
@@ -108,16 +128,23 @@ namespace KBS2.CityDesigner
                 case "Garage":
                     return new Garage(loc, size);
                 default:
-                    return null;
+                    throw new Exception("It looks like this file is not a city.");
             }
         }
 
         private static Intersection ParseIntersection(XmlNode node)
         {
-            var loc = ParseLocation(node.Attributes["Location"].InnerText);
-            var size = int.Parse(node.Attributes["Size"].InnerText);
+            try
+            {
+                var loc = ParseLocation(node.Attributes["Location"].InnerText);
+                var size = int.Parse(node.Attributes["Size"].InnerText);
 
-            return new Intersection(loc, size);
+                return new Intersection(loc, size);
+            }
+            catch(Exception)
+            {
+                throw new Exception("It looks like this file is not a city.");
+            }
         }
 
         public static void SubscribeLoadedCity(LoadedCityEventHandler source)

@@ -41,7 +41,6 @@ namespace KBS2.CityDesigner.ObjectCreators
         };
 
         private static readonly int standardSize = 50;
-        private static readonly int maximumDistanceToRoad = 200;
 
         /// <summary>
         /// Draws the ghost of a Garge on mouseLocation

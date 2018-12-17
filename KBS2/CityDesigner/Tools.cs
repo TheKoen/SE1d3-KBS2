@@ -8,7 +8,6 @@ namespace KBS2.CityDesigner
 {
     public enum Tools
     {
-        Cursor,
         Road,
         Building,
         Garage
