@@ -79,8 +79,11 @@ namespace KBS2
             WPFLoop.Subscribe(Update);
 
             using (var context = new MyDatabase("killakid")) {
-                var City = new Database.City { CityName = "BedenkWatLeuks" };
-                context.Cities.Add(City);
+                var City = new Database.City { CityName = "KillAKidShittyCity" };
+                foreach(var city in context.Cities)
+                {
+                    context.Cities.Remove(city);
+                }
                 context.SaveChanges();
             }
 

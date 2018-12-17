@@ -6,8 +6,19 @@ namespace KBS2.Database
     public class MyDatabase : DbContext
     {
         public MyDatabase(string connectionstring) : base(connectionstring) { }
+
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Simulation> Simulations { get; set; }
+        public virtual DbSet<CityInstance> CityInstances { get; set; }
+        public virtual DbSet<Garage> Garages { get; set; }
+        public virtual DbSet<CustomerGroup> CustomerGroups { get; set; }
+        public virtual DbSet<Car> Cars { get; set; }
+        public virtual DbSet<Vector> Vectors { get; set; }
+        public virtual DbSet<Trip> Trips { get; set; }
+        public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+
     }
 
     public class Simulation
