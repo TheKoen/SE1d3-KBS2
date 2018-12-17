@@ -36,7 +36,6 @@ namespace KBS2.CityDesigner
         {
             InitializeComponent();
             Creator = new ObjectHandler(Canvas, this);
-
             //look for cursor
             try { cursorOnCanvas = new Cursor(pathCanvasCursor, true); } catch(ArgumentException) { successFoundCursor = false;  }
         }
@@ -159,17 +158,21 @@ namespace KBS2.CityDesigner
                 // drawing Ghost Road
                 if(Tool == Tools.Road) { RoadCreator.DrawGhost(e.GetPosition(Canvas), Canvas, ObjectHandler.Roads); }
 
-            }
-            if (e.LeftButton == MouseButtonState.Released && leftButtonWasPressed == true)
+            }         
+        }
+        
+        private void MouseReleaseOnCanvasEventHandler(object sender, MouseEventArgs e)
+        {
+            if(leftButtonWasPressed == true)
             {
                 leftButtonWasPressed = false;
                 // drawing Real Road
-                if (Tool == Tools.Road) {
+                if (Tool == Tools.Road)
+                {
                     RoadCreator.CreateRoad(Canvas, ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Garages);
-                    
+
                 }
             }
-           
         }
 
         /// <summary>

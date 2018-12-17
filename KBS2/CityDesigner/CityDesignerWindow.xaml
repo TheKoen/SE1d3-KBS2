@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KBS2.CityDesigner"
+        xmlns:base="clr-namespace:KBS2"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -13,6 +14,7 @@
         <Canvas x:Name="Canvas" HorizontalAlignment="Left" Height="670" Margin="247,0,0,0" VerticalAlignment="Top" Width="1035" Background="#FFE0E0E0" 
                 PreviewMouseMove="MouseMovesOnCanvasEventHandler"
                 PreviewMouseLeftButtonDown="MouseClicksOnCanvasEventHandler"
+                PreviewMouseLeftButtonUp="MouseReleaseOnCanvasEventHandler" 
                 MouseEnter="MouseEntersCanvasEventHandler"
                 MouseLeave="MouseLeaveCanvasEventHandler"
                 MouseRightButtonDown="MouseRightCanvasEventHandler">

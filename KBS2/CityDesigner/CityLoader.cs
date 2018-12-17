@@ -106,7 +106,7 @@ namespace KBS2.CityDesigner
                 case "Building":
                     return new Building(loc, size);
                 case "Garage":
-                    return new Garage(loc, size, DirectionCar.North);
+                    return new Garage(loc, size);
                 default:
                     return null;
             }

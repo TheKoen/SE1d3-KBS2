@@ -267,8 +267,11 @@ namespace KBS2.CityDesigner.ObjectCreators
                 }
                 if((roadGhostStart == roadI.Start || roadGhostStart == roadI.End) && (roadGhostEnd == roadI.Start || roadGhostEnd == roadI.End))
                 {
-                    RemoveGhost(canvas);
-                    return null;
+                    if((road.IsXRoad() && roadI.IsXRoad()) || (!road.IsXRoad() && !roadI.IsXRoad()))
+                    {
+                        RemoveGhost(canvas);
+                        return null;
+                    }
                 }
                             
             }
@@ -462,8 +465,12 @@ namespace KBS2.CityDesigner.ObjectCreators
                     {
                         var beginNewRoad = location;
                         var roadNew = (Math.Max(road1.Start.Y, road1.End.Y) == road1.End.Y) ? new Road(beginNewRoad, road1.End, standardRoadWidth, standardMaxSpeed) : new Road(beginNewRoad, road1.Start, standardRoadWidth, standardMaxSpeed);
-                        roadsList.Add(roadNew);
-                        returnBool = true;
+                        if (Util.MathUtil.Distance(roadNew.Start, roadNew.End) > minLengthRoad)
+                        {
+                            roadsList.Add(roadNew);
+                            returnBool = true;
+                        }
+                        
                     }
                     else if(location == road1.End || location == road1.Start) // no last part of road
                     {

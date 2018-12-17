@@ -77,12 +77,8 @@ namespace KBS2.CityDesigner
                 XmlAttribute size = doc.CreateAttribute("Size");
                 size.Value = garage.Size.ToString();
 
-                XmlAttribute direction = doc.CreateAttribute("Size");
-                direction.Value = garage.Direction.ToString();
-
                 garageElement.Attributes.Append(location);
                 garageElement.Attributes.Append(size);
-                garageElement.Attributes.Append(direction);
             }
 
 

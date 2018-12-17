@@ -67,8 +67,7 @@ namespace KBS2.CityDesigner.ObjectCreators
         /// <returns>The added garage</returns>
         public static Garage CreateGarage(Point location, Canvas canvas, List<Garage> garageList, List<Road> roadsList)
         {
-            var returnGarage = new Garage(new System.Windows.Vector((int)location.X, (int)location.Y), standardSize, DirectionCar.North);
-            determineDirection(roadsList, returnGarage);
+            var returnGarage = new Garage(new System.Windows.Vector((int)location.X, (int)location.Y), standardSize);
 
             if(!ObjectHandler.Overlaps(returnGarage))
             {
@@ -78,18 +77,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             }
             return null;
         }
-
-        /// <summary>
-        /// Determines what the direction is of the garage
-        /// </summary>
-        /// <param name="roads"></param>
-        /// <param name="garage"></param>
-        /// <returns></returns>
-        private static DirectionCar determineDirection(List<Road> roads, Garage garage)
-        {
-            var roadsY = roads.Find(r => !r.IsXRoad() && (Math.Abs((garage.Location.X + garage.Size / 2) - (r.Start.X - r.Width / 2)) <= maximumDistanceToRoad || Math.Abs((garage.Location.X - garage.Size / 2) - (r.Start.X + r.Width / 2)) <= maximumDistanceToRoad));
-            return DirectionCar.North;
-        }
+  
 
         /// <summary>
         /// Draws specific garage on canvas

@@ -9,9 +9,8 @@ namespace KBS2.CitySystem
         public DirectionCar Direction { get; }
         public int AvailableCars { get; set; } = 1;
 
-        public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
+        public Garage(Vector location, int size) : base(location, size)
         {
-            Direction = direction;
         }
 
         public Car SpawnCar(int id, CarModel model)

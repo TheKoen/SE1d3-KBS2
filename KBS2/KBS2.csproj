@@ -288,7 +288,6 @@
   <ItemGroup>
     <Resource Include="Images\happy.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
@@ -307,6 +306,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Other_Profile_Picture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\iconDesigner.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
