@@ -48,15 +48,16 @@ namespace KBS2.CityDesigner
         /// <param name="e"></param>
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            // save window
-            var popupWindow = new SaveFileDialog();
-            popupWindow.Title = "Save City";
-            popupWindow.Filter = "XML file | *.xml";
-            popupWindow.ShowDialog();
-
             // save the city
-            CitySaver.SaveCity(popupWindow.FileName, ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Garages, ObjectHandler.Intersections);
+            try
+            {
+                CitySaver.SaveCity(ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Garages, ObjectHandler.Intersections);
+            }
+            catch(Exception b)
+            {
+                MessageBox.Show(windowDesigner, b.Message, "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
         }
 
         /// <summary>

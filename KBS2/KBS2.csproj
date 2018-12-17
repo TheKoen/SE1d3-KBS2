@@ -307,8 +307,5 @@
   <ItemGroup>
     <Resource Include="Images\Other_Profile_Picture.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\iconDesigner.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

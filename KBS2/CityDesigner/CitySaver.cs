@@ -1,6 +1,7 @@
 ﻿using KBS2.CitySystem;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace KBS2.CityDesigner
@@ -12,8 +13,27 @@ namespace KBS2.CityDesigner
         public static EventHandler CitySaved;
 
 
-        public static void SaveCity(string path, List<Road> roads, List<Building> buildings, List<Garage> garages, List<Intersection> intersections)
+        public static void SaveCity(List<Road> roads, List<Building> buildings, List<Garage> garages, List<Intersection> intersections)
         {
+            if(roads.Count == 0)
+            {
+                throw new Exception("Please give the city at least one road.");
+            }
+            if(buildings.Count == 0)
+            {
+                throw new Exception("Please give the city at least one building.");
+            }
+            if(garages.Count == 0)
+            {
+                throw new Exception("Please give the city at least one garage.");
+            }
+
+            // save window
+            var popupWindow = new SaveFileDialog();
+            popupWindow.Title = "Save City";
+            popupWindow.Filter = "XML file | *.xml";
+            popupWindow.ShowDialog();
+
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
             XmlElement root = doc.DocumentElement;
@@ -100,7 +120,7 @@ namespace KBS2.CityDesigner
                 intersectionElement.Attributes.Append(size);
             }
             
-            doc.Save(path);
+            doc.Save(popupWindow.FileName);
 
             CitySaved?.Invoke(null, EventArgs.Empty);
         }
