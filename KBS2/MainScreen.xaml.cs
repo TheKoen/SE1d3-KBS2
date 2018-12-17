@@ -78,26 +78,41 @@ namespace KBS2
 
             WPFLoop.Subscribe(Update);
 
-            /*using (var context = new MyDatabase("killakid")) {
-                var city = new Database.City { CityName = "BedenkWatLeuks" };
-                context.Cities.Add(city);
-                context.SaveChanges();
-            }*/
-
             using (var context = new MyDatabase("killakid"))
             {
+                // Kijk of de cities tabel leeg is
+                if (!context.Cities.Any())
+                {
+                    // Voeg een nieuwe city toe en save changes
+                    context.Cities.Add(new Database.City { CityName = "BedenkWatLeuks" });
+                    context.SaveChanges();
+                }
+
+                // Pak de eerste city uit de cities tabel
                 var city = (from c in context.Cities
                               select c).ToList().First();
+
+                // Make een nieuwe Garage om in de DB te stoppen.
                 var garage = new Database.Garage
                 {
+                    // Zet de city naar de city die we uit de DB gehaald hadden
                     City = city,
+                    // Zet de location naar een niewe vector
                     Location = new Database.Vector
                     {
-                        X = 10,
-                        Y = 20
+                        X = 10
                     }
                 };
                 context.Garages.Add(garage);
+
+                /*
+                 * Je hoeft nergens ID's in te vullen, EntityFramework doet dit zelf.
+                 * Let er wel op dat je Database.Vector en Database.City gebruikt, want
+                 * City and Vector zijn ook al bestaande klassen in het project.
+                 * Let ook op dat je alle velden leeg kan laten behalve de "name" van
+                 * een city. Als je een int of double leeg laat wordt het default een 0
+                 * en als je een string leeg laat wordt het default NULL.
+                 */
 
                 var inst = new Database.CityInstance
                 {
