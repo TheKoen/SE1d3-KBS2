@@ -7,12 +7,12 @@ namespace KBS2.Visual
     public class CityRenderHandler : IRenderHandler
     {
         private MainScreen Screen { get; }
-        public Canvas Canvas { get; }
+        public Canvas _Canvas { get; }
 
         public CityRenderHandler(MainScreen screen, Canvas canvas)
         {
             Screen = screen;
-            Canvas = canvas;
+            _Canvas = canvas;
 
             MainScreen.WPFLoop.Subscribe(Update);
         }
@@ -28,21 +28,23 @@ namespace KBS2.Visual
 
         public void DrawCity(City city)
         {
-            Canvas.Children.Clear();
+            _Canvas.Children.Clear();
 
             foreach (var building in city.Buildings)
             {
-                Canvas.Children.Add(new BuildingControl(building));
+                var b1 = new BuildingControl(Screen, building);
+                Panel.SetZIndex(b1, 100);
+                _Canvas.Children.Add(b1);
             }
 
             foreach (var road in city.Roads)
             {
-                Canvas.Children.Add(new RoadControl(road));
+                _Canvas.Children.Add(new RoadControl(Screen, road));
             }
 
             foreach (var intersection in city.Intersections)
             {
-                Canvas.Children.Add(new IntersectionControl(intersection));
+                _Canvas.Children.Add(new IntersectionControl(Screen, intersection));
             }
         }
     }

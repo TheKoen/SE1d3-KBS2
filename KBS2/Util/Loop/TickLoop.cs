@@ -17,10 +17,11 @@ namespace KBS2.Util.Loop
 
         private int exceptionCount;
 
-        protected TickLoop(string name)
+        protected TickLoop(string name, int tickRate = 30)
         {
             Name = name;
-            tickRate.PropertyChanged += OnTickrateChange;
+            this.tickRate.Value = tickRate;
+            this.tickRate.PropertyChanged += OnTickrateChange;
             Register();
         }
 

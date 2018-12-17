@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using KBS2.CarSystem;
+using KBS2.Util;
 
 namespace KBS2.CitySystem
 {
@@ -13,11 +15,25 @@ namespace KBS2.CitySystem
         {
         }
 
-        public Car SpawnCar(int id, CarModel model)
+        public Car SpawnCar(int id, CarModel model, Destination finalDestination)
         {
             if (AvailableCars <= 0)
             {
                 return null;
+            }
+
+            foreach (var cityCar in City.Instance.Cars)
+            {
+                if (MathUtil.Distance(Location, cityCar.Location) < 50)
+                {
+                    var thread = new Thread(() =>
+                    {
+                        Thread.Sleep(1000);
+                        SpawnCar(id, model, finalDestination);
+                    });
+                    thread.Start();
+                    return null;
+                }
             }
 
             var road = GPS.GPSSystem.NearestRoad(Location);
@@ -64,6 +80,7 @@ namespace KBS2.CitySystem
             car.CurrentTarget = destination;
             City.Instance.Cars.Add(car);
             AvailableCars--;
+            car.Destination = finalDestination;
             return car;
         }
     }

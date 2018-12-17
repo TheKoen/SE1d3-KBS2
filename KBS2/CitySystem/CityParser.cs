@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Xml;
 using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
@@ -49,8 +50,15 @@ namespace KBS2.CitySystem
             {
                 cityObject.Intersections.Add(ParseIntersection((XmlNode)intersection));
             }
-            
-            RoadNetwork.GenerateNetwork(cityObject.Roads, cityObject.Intersections);
+
+            try
+            {
+                RoadNetwork.GenerateNetwork(cityObject.Roads, cityObject.Intersections);
+            }
+            catch (Exception)
+            {
+                App.Console?.Print("Unable to load road network!", Colors.Red);
+            }
             
             return cityObject;
         }

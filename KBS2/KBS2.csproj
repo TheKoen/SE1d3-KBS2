@@ -166,6 +166,9 @@
     <Compile Include="Visual\Controls\BuildingControl.xaml.cs">
       <DependentUpon>BuildingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Visual\Controls\GarageInfoUserControl.xaml.cs">
+      <DependentUpon>GarageInfoUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Visual\Controls\IntersectionControl.xaml.cs">
       <DependentUpon>IntersectionControl.xaml</DependentUpon>
     </Compile>
@@ -192,6 +195,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Visual\ZoomHandler.cs" />
     <Page Include="ConsoleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Visual\Controls\BuildingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\GarageInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -306,6 +314,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Other_Profile_Picture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CarPicture1.jpg" />
+    <Resource Include="Images\CarPicture2.jpg" />
+    <Resource Include="Images\CarPicture3.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

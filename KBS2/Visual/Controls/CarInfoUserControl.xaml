@@ -4,21 +4,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KBS2.Visual.Controls"
-             mc:Ignorable="d" Height="292.29" Width="253.271">
-    <Grid>
+             mc:Ignorable="d" >
+    <Grid Height="502" Width="405" Margin="0,0,-33.4,-9" VerticalAlignment="Top">
         <Label Content="Car" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" FontSize="20" FontWeight="Bold" RenderTransformOrigin="1.632,0.591"/>
-        <Label Content="Car ID" HorizontalAlignment="Left" Margin="22,73,0,0" VerticalAlignment="Top"/>
-        <Label Content="Car Model" HorizontalAlignment="Left" Margin="22,104,0,0" VerticalAlignment="Top"/>
-        <Label Content="Distance Traveled" HorizontalAlignment="Left" Margin="22,135,0,0" VerticalAlignment="Top"/>
-        <Label Content="Location" HorizontalAlignment="Left" Margin="22,166,0,0" VerticalAlignment="Top"/>
-        <Label Content="Target Location" HorizontalAlignment="Left" Margin="22,197,0,0" VerticalAlignment="Top"/>
-        <Label Content="Customers" HorizontalAlignment="Left" Margin="22,228,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoCarID" Content="0" HorizontalAlignment="Left" Margin="169,73,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoCarModel" Content="TestModel" HorizontalAlignment="Left" Margin="169,104,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoDistanceTraveled" Content="{Binding DistanceTraveled}" HorizontalAlignment="Left" Margin="169,135,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoLocationCar" Content="{Binding LocationString}" HorizontalAlignment="Left" Margin="169,166,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoDestinationCar" Content="{Binding TargetLocationString}" HorizontalAlignment="Left" Margin="169,197,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelInfoCustomerCount" Content="{Binding PassengerCount}" HorizontalAlignment="Left" Margin="169,228,0,0" VerticalAlignment="Top"/>
+        <Label Content="Car ID" HorizontalAlignment="Left" Margin="11,73,0,0" VerticalAlignment="Top"/>
+        <Label Content="Car Model" HorizontalAlignment="Left" Margin="11,104,0,0" VerticalAlignment="Top"/>
+        <Label Content="Distance Traveled" HorizontalAlignment="Left" Margin="12,161,0,0" VerticalAlignment="Top"/>
+        <Label Content="Location" HorizontalAlignment="Left" Margin="12,192,0,0" VerticalAlignment="Top"/>
+        <Label Content="Target Location" HorizontalAlignment="Left" Margin="12,223,0,0" VerticalAlignment="Top"/>
+        <Label Content="Customers" HorizontalAlignment="Left" Margin="12,254,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoCarID" Content="0" HorizontalAlignment="Left" Margin="98,73,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.467,0.432"/>
+        <Label x:Name="LabelInfoCarModel" Content="TestModel" HorizontalAlignment="Left" Margin="98,104,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoDistanceTraveled" Content="{Binding DistanceTraveled}" HorizontalAlignment="Left" Margin="170,167,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoLocationCar" Content="{Binding LocationString}" HorizontalAlignment="Left" Margin="170,192,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoDestinationCar" Content="{Binding TargetLocationString}" HorizontalAlignment="Left" Margin="170,223,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelInfoCustomerCount" Content="{Binding PassengerCount}" HorizontalAlignment="Left" Margin="170,254,0,0" VerticalAlignment="Top"/>
+
+        <Image x:Name="CarPicture" Height="109" VerticalAlignment="Top" Margin="200,52,82,0"/>
+
+        <Border BorderThickness="2"
+        BorderBrush="#FF000000"
+        VerticalAlignment="Top" Margin="193,28,74,0" CornerRadius="8,8,8,8" Height="117"/>
+        <Label Content="Properties:" HorizontalAlignment="Left" Margin="12,298,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.385" FontWeight="Bold"/>
+        <Button x:Name="BtnCarSave" Content="Save Changes" HorizontalAlignment="Left" Margin="150,451,0,0" VerticalAlignment="Top" Width="82" Click="BtnCarSave_Click"/>
+        <StackPanel x:Name="StackPanelCar" Orientation="Vertical" Margin="0,328,35,70"/>
 
     </Grid>
 </UserControl>
