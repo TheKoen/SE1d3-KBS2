@@ -5,6 +5,7 @@ using KBS2.Util.Loop;
 using System;
 using System.Diagnostics;
 using KBS2.Visual;
+using KBS2.Database;
 
 namespace KBS2
 {
@@ -69,6 +70,12 @@ namespace KBS2
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
 
             WPFLoop.Subscribe(Update);
+
+            using (var context = new myDatabase("killakid")) {
+                var City = new KBS2.Database.City { CityName = "BedenkWatLeuks" };
+                context.Cities.Add(City);
+                context.SaveChanges();
+            } 
         }
 
         protected override void OnClosing(CancelEventArgs e)
