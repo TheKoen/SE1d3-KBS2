@@ -4,6 +4,7 @@ using System.ComponentModel;
 using KBS2.Util.Loop;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Controls;
 using KBS2.CitySystem;
 using KBS2.Visual;
@@ -77,11 +78,18 @@ namespace KBS2
 
             WPFLoop.Subscribe(Update);
 
-            using (var context = new myDatabase("killakid")) {
-                var City = new KBS2.Database.City { CityName = "BedenkWatLeuks" };
+            using (var context = new MyDatabase("killakid")) {
+                var City = new Database.City { CityName = "BedenkWatLeuks" };
                 context.Cities.Add(City);
                 context.SaveChanges();
-            } 
+            }
+
+            using (var context = new MyDatabase("killakid"))
+            {
+                var cities = (from city in context.Cities
+                              select city).ToList();
+            }
+
             CommandLoop.Subscribe(CmdUpdate);
 
             PreviewMouseWheel += ZoomHandler.Scroll;
@@ -203,11 +211,11 @@ namespace KBS2
 
         public void CmdUpdate()
         {
-            if (City.Instance == null) return;
+            if (CitySystem.City.Instance == null) return;
 
             var maxWidth = 0.0;
             var maxHeight = 0.0;
-            foreach (var road in City.Instance.Roads)
+            foreach (var road in CitySystem.City.Instance.Roads)
             {
                 if (road.Start.X * Zoom > maxWidth) maxWidth = road.Start.X * Zoom;
                 if (road.End.X * Zoom > maxWidth) maxWidth = road.End.X * Zoom;

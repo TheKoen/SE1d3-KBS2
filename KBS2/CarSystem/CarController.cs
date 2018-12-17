@@ -41,6 +41,7 @@ namespace KBS2.CarSystem
         private bool initialized;
         private bool braking;
         private bool obtainedNewTarget;
+        private int turning;
         private Vector newTarget;
 
         public CarController(Car car)
@@ -136,14 +137,20 @@ namespace KBS2.CarSystem
                 obtainedNewTarget = false;
             }
 
-            if (Car.CurrentRoad == null || Car.CurrentIntersection != null)
+            if (turning > 0)
             {
+                turning--;
                 if (newTarget.X > -1)
                 {
                     Car.CurrentTarget = newTarget;
                     newTarget = new Vector(-1, -1);
                 }
                 HandleTurn(ref velocity, ref yaw, ref addedRotation);
+            }
+
+            if (Car.CurrentRoad == null || Car.CurrentIntersection != null)
+            {
+                turning = 40;
             }
             else
             {
@@ -210,7 +217,7 @@ namespace KBS2.CarSystem
             }
             else if (angle > 135)
             {
-                addedRotation += rotationSpeed * 90.0;
+                addedRotation += rotationSpeed * 12;
             }
             // If the angle is more than 45 degrees (90 - 45), rotate to the right.
             else if (angle > 45)
