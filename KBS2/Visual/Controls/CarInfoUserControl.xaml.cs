@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using KBS2.CarSystem;
@@ -78,7 +79,15 @@ namespace KBS2.Visual.Controls
                 var newValue = double.Parse(CarMaxSpeedProperties.TBCurrentValue.Text);
                 Car.MaxSpeed = newValue;
                 var newValue2 = CarModelProperties.TBCurrentValue.Text;
-                Car.Model = CarModel.Get(newValue2); 
+                try
+                {
+                    Car.Model = CarModel.Get(newValue2);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The changes have not been saved, the given model does not exist.", "Changes not saved.", MessageBoxButton.OK);
+                    return;
+                }  
             }
         }
     }
