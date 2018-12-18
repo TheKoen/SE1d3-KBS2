@@ -14,7 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace KBS2.Windows
+namespace KBS2.Visual.Controls
+
 {
     /// <summary>
     /// Interaction logic for CustomerInfoUserControl.xaml
