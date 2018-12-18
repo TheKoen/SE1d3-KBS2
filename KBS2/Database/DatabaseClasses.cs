@@ -12,6 +12,10 @@ namespace KBS2.Database
         public virtual DbSet<Garage> Garages { get; set; }
         public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<Trip> Trips { get; set; }
+        public virtual DbSet<CustomerGroup> CustomerGroups { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+
     }
 
     public class Simulation
