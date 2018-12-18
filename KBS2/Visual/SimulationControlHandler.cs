@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Xml;
 using KBS2.CitySystem;
+using KBS2.Database;
 using KBS2.Visual.Controls;
 
 namespace KBS2.Visual
@@ -65,10 +66,10 @@ namespace KBS2.Visual
             catch (Exception ex)
             {
                 MessageBox.Show("There is an error in the city file.", "Invalid City File", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                return;5
             }
             
-            var city = City.Instance;
+            var city = CitySystem.City.Instance;
 
             Screen.CityRenderHandler.DrawCity(city);
 
@@ -85,12 +86,12 @@ namespace KBS2.Visual
             Screen.TabItemResults.IsEnabled = true;
         }
 
-        private void UpdateCountLabels(City city)
+        private void UpdateCountLabels(CitySystem.City city)
         {
             Screen.LabelSimulationRoad.Content = city.Roads.Count;
             Screen.LabelSimulationIntersection.Content = city.Intersections.Count;
             Screen.LabelSimulationBuilding.Content = city.Buildings.Count;
-            Screen.LabelSimulationGarage.Content = city.Buildings.FindAll(building => building is Garage).Count;
+            Screen.LabelSimulationGarage.Content = city.Buildings.FindAll(building => building is CitySystem.Garage).Count;
         }
 
         public void StartButtonClick()
@@ -127,6 +128,9 @@ namespace KBS2.Visual
             Screen.BtnStop.IsEnabled = false;
             App.Console.Print("Reset pressed");
 
+            var db = new DatabaseHandler();
+            db.dbFunction();
+
             LoadButtonClick();
             ResetLabels();
             Screen.Ticks = 0;
@@ -135,7 +139,7 @@ namespace KBS2.Visual
             MainScreen.WPFLoop.Stop();
             MainScreen.AILoop.Stop();
 
-            City.Instance.Controller.Reset();
+            CitySystem.City.Instance.Controller.Reset();
         }
 
         public void ResetLabels()
