@@ -28,7 +28,7 @@ namespace KBS2.Visual.Controls
             //Empty info tab
             Screen.TabItemInfo.Content = null;
 
-            //Add info about this car
+            //Add info about this customer
             var ci = new CustomerInfoUserControl(customer);
             Screen.TabItemInfo.Content = ci;
 

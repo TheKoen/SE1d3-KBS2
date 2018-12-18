@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace KBS2.Database
 {
     class DatabaseHandler
     {
+        public MyDatabase Database { get; private set; }
+        public int SimulationID { get; set; }
+
+        /// <summary>
+        /// Test Function with comments. WILL BE REMOVED! Don't touch!
+        /// </summary>
         public void dbFunction()
         {
             using (var context = new MyDatabase("killakid"))
@@ -77,10 +84,72 @@ namespace KBS2.Database
                     Price = 100.5
                 };
 
+                
                 context.Trips.Add(trip);
+
+                var simulation = new Database.Simulation
+                {
+                    CityInstance = inst,
+                    Duration = 50
+                };
+
+                context.Simulations.Add(simulation);
 
                 context.SaveChanges();
             }
+        }
+
+        public void Setup()
+        {
+            //Makes our connection with the database and updates when needed.
+            Database = new MyDatabase("killakid");
+            //When the application is closed the connection with the database is closed.
+            Application.Current.Exit += (source, args) => Database.Dispose();
+
+            // Kijk of de cities tabel leeg is
+            if (!Database.Cities.Any())
+            {
+                // Voeg een nieuwe city toe en save changes
+                Database.Cities.Add(new Database.City { CityName = "BedenkWatLeuks" });
+                Database.SaveChanges();
+            }
+
+            // Pak de eerste city uit de cities tabel
+            var city = (from c in Database.Cities
+                        select c).ToList().First();
+
+            var inst = new Database.CityInstance
+            {
+                City = city
+            };
+
+            var simulation = new Database.Simulation
+            {
+                CityInstance = inst,
+                Duration = 99
+            };
+
+            Database.Simulations.Add(simulation);
+
+            Database.SaveChanges();
+
+            SimulationID = simulation.ID;
+        }
+
+        public void Update(Results Data)
+        {
+            // Pak de laatste city uit de cities tabel
+            var sim = (from s in Database.Simulations
+                         where s.ID == SimulationID
+                         select s).ToList().First();
+
+            var cityinst = sim.CityInstance;
+
+            var city = cityinst.City;
+
+            sim.Duration++;
+
+            Database.SaveChanges();
         }
     }
 }

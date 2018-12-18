@@ -66,7 +66,7 @@ namespace KBS2.Visual
             catch (Exception ex)
             {
                 MessageBox.Show("There is an error in the city file.", "Invalid City File", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;5
+                return;
             }
             
             var city = CitySystem.City.Instance;
@@ -128,8 +128,9 @@ namespace KBS2.Visual
             Screen.BtnStop.IsEnabled = false;
             App.Console.Print("Reset pressed");
 
-            var db = new DatabaseHandler();
-            db.dbFunction();
+            var results = new Results();
+            results.Setup();
+            results.Update();
 
             LoadButtonClick();
             ResetLabels();
