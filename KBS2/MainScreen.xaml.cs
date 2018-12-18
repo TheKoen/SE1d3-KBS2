@@ -76,6 +76,7 @@ namespace KBS2
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
             ZoomHandler = new ZoomHandler(this);
 
+
             WPFLoop.Subscribe(Update);
             
             CommandLoop.Subscribe(CmdUpdate);
