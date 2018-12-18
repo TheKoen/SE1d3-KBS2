@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
+    <Compile Include="Util\ResultExport.cs" />
     <Compile Include="Util\StringConverters.cs" />
     <Compile Include="Visual\CityRenderHandler.cs" />
     <Compile Include="Visual\Controls\CarControl.xaml.cs">

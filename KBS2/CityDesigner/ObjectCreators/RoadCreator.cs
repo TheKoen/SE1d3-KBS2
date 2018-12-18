@@ -39,7 +39,7 @@ namespace KBS2.CityDesigner.ObjectCreators
 
         private static readonly int standardRoadWidth = 20;
         private static readonly int standardMaxSpeed = 100;
-        private static readonly int snapRange = 20;
+        private static readonly int snapRange = 40;
         private static readonly int minLengthRoad = 50;
 
 
@@ -533,6 +533,5 @@ namespace KBS2.CityDesigner.ObjectCreators
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
-
     }
 }

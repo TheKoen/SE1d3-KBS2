@@ -135,6 +135,8 @@ namespace KBS2.CarSystem
         public Vector CurrentTarget { get; set; }
 
 
+        public int GarageId { get; set; }
+
         public CarController Controller { get; }
 
         public int Width { get; set; }
@@ -150,10 +152,11 @@ namespace KBS2.CarSystem
         /// <param name="direction">Direction the car is facing</param>
         /// <param name="width"></param>
         /// <param name="length"></param>
-        public Car(int id, CarModel model, Vector location, List<Sensor> sensors, DirectionCar direction, int width, int length)
+        public Car(int id, CarModel model, Vector location, List<Sensor> sensors, int garageId, DirectionCar direction, int width, int length)
         {
             Id = id;
             Sensors = sensors;
+            GarageId = garageId;
             Width = width;
             Length = length;
 
