@@ -1,5 +1,5 @@
 ﻿using KBS2.CustomerSystem;
-using KBS2.Windows;
+using KBS2.Visual;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

@@ -1,6 +1,6 @@
 ﻿using KBS2.CarSystem;
 using KBS2.Util;
-using KBS2.Windows;
+using KBS2.Visual;
 using System;
 using System.Collections.Generic;
 using System.Linq;
