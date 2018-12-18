@@ -132,7 +132,7 @@
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropertySettings.xaml.cs">
+    <Compile Include="Visual\Controls\PropertySettings.xaml.cs">
       <DependentUpon>PropertySettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="GPS\TSP\CustomerOrder\NearestNeighbour2.cs" />
@@ -259,7 +259,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropertySettings.xaml">
+    <Page Include="Visual\Controls\PropertySettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

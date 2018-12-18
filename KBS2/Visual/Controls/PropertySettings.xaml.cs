@@ -22,11 +22,14 @@ namespace KBS2
     /// </summary>
     public partial class PropertySettings : UserControl
     {
-        public PropertySettings(string pn, string cv)
+        public PropertySettings(string pn, string cv, bool isInt)
         {
             InitializeComponent();
             this.PropertyName = pn;
-            this.CurrentValue = cv; 
+            this.CurrentValue = cv;
+
+            if (isInt) TBCurrentValue.PreviewTextInput += NumberValidationTextBox;
+            else TBCurrentValue.PreviewTextInput += TextValidationTextBox;
         }
 
         public string PropertyName
@@ -41,9 +44,15 @@ namespace KBS2
             set => TBCurrentValue.Text = value;
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        public void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9,.]+");
+            Regex regex = new Regex("^[^0-9,.]+$");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        public void TextValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("^[^a-zA-Z0-9]+$");
             e.Handled = regex.IsMatch(e.Text);
         }
     }
