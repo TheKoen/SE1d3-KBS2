@@ -42,13 +42,13 @@ namespace KBS2.Visual.Controls
             var propertyName = "Max Speed";
             var propertyValue = Car.MaxSpeed.ToString();
 
-            CarMaxSpeedProperties = new PropertySettings(propertyName, propertyValue);
+            CarMaxSpeedProperties = new PropertySettings(propertyName, propertyValue, true);
             PropertyPanel.Children.Add(CarMaxSpeedProperties);
 
             var propertyName2 = "Model";
             var propertyValue2 = Car.Model.Name;
             
-            CarModelProperties = new PropertySettings(propertyName2, propertyValue2);
+            CarModelProperties = new PropertySettings(propertyName2, propertyValue2, false);
             CarModelProperties.PreviewTextInput -= CarModelProperties.NumberValidationTextBox;
             PropertyPanel.Children.Add(CarModelProperties);
         }

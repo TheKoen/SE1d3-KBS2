@@ -40,7 +40,7 @@ namespace KBS2.Visual.Controls
             var propertyName = "Available Cars";
             var propertyValue = Building.AvailableCars.ToString();
 
-            AvailableCarsProperty = new PropertySettings(propertyName, propertyValue);
+            AvailableCarsProperty = new PropertySettings(propertyName, propertyValue, true);
             PropertyPanel.Children.Add(AvailableCarsProperty);
         }
 
