@@ -47,16 +47,7 @@ namespace KBS2.Util
                 simulationElement.Attributes.Append(simulationIdAttribute);
                 simulationElement.Attributes.Append(simulationDuration);
                 simulationElement.Attributes.Append(simulationCityName);
-
-                //TODO: find all cars by cityInstance
-                //TODO: find all customerGroups by cityInstance
-                //TODO: find all customers by customerGroups
-                //TODO: find all genders by customers
-                //TODO: find all reviews by customers
-                //TODO: find all garages by cityInstance
-                //TODO: find all trips by cars
-
-
+                
 
                 // Customers
 
