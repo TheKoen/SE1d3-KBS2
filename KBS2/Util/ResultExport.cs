@@ -26,6 +26,9 @@ namespace KBS2.Util
             XmlElement root = doc.DocumentElement;
             doc.InsertBefore(xmlDeclaration, root);
 
+            XmlElement results = doc.CreateElement("Results");
+            doc.AppendChild(results);
+
             using (var database = new MyDatabase("killakid"))
             {
                 var simulation = (from s in database.Simulations
@@ -35,7 +38,7 @@ namespace KBS2.Util
                 // Simulation
 
                 XmlElement simulationElement = doc.CreateElement("Simulation");
-                doc.AppendChild(simulationElement);
+                results.AppendChild(simulationElement);
 
                 XmlAttribute simulationIdAttribute = doc.CreateAttribute("SimulationId");
                 simulationIdAttribute.Value = simulationId.ToString();
@@ -56,7 +59,7 @@ namespace KBS2.Util
                                  select c).ToList();
 
                 XmlElement customersElement = doc.CreateElement("Customers");
-                doc.AppendChild(customersElement);
+                results.AppendChild(customersElement);
 
                 foreach (var customer in customers)
                 {
@@ -93,7 +96,7 @@ namespace KBS2.Util
 
 
                 XmlElement carsElement = doc.CreateElement("Cars");
-                doc.AppendChild(carsElement);
+                results.AppendChild(carsElement);
 
                 foreach (var car in cars)
                 {
@@ -117,7 +120,7 @@ namespace KBS2.Util
                                       select c).ToList();
 
                 XmlElement customerGroupsElement = doc.CreateElement("CustomerGroups");
-                doc.AppendChild(customerGroupsElement);
+                results.AppendChild(customerGroupsElement);
 
                 foreach (var customerGroup in customerGroups)
                 {
@@ -137,11 +140,11 @@ namespace KBS2.Util
                 // reviews
 
                 XmlElement reviewsElement = doc.CreateElement("Reviews");
-                doc.AppendChild(reviewsElement);
+                results.AppendChild(reviewsElement);
 
                 foreach (var review in reviews)
                 {
-                    XmlElement reviewElement = doc.CreateElement("CustomerGroup");
+                    XmlElement reviewElement = doc.CreateElement("Review");
                     reviewsElement.AppendChild(reviewElement);
 
                     XmlAttribute content = doc.CreateAttribute("Content");
@@ -170,7 +173,7 @@ namespace KBS2.Util
                                select g).ToList();
 
                 XmlElement garagesElement = doc.CreateElement("Garages");
-                doc.AppendChild(garagesElement);
+                results.AppendChild(garagesElement);
 
                 foreach (var garage in garages)
                 {
@@ -183,6 +186,34 @@ namespace KBS2.Util
                     garageElement.Attributes.Append(garageLocation);
                 }
 
+                // trips
+
+                var trips = (from t in database.Trips
+                             where t.Car.CityInstance == simulation.CityInstance
+                             select t).ToList();
+
+                XmlElement tripsElement = doc.CreateElement("Trips");
+                results.AppendChild(tripsElement);
+
+                foreach (var trip in trips)
+                {
+                    XmlElement tripElement = doc.CreateElement("Trip");
+                    tripsElement.AppendChild(tripElement);
+
+                    XmlAttribute startLocation = doc.CreateAttribute("StartLocation");
+                    startLocation.Value = $"{trip.StartLocation.X},{trip.StartLocation.Y}";
+
+                    XmlAttribute endLocation = doc.CreateAttribute("EndLocation");
+                    endLocation.Value = $"{trip.EndLocation.X},{trip.EndLocation.Y}";
+
+                    XmlAttribute car = doc.CreateAttribute("Car");
+                    car.Value = trip.Car;
+
+                    X
+
+                    tripElement.Attributes.Append(startLocation);
+                    tripElement.Attributes.Append(endLocation);
+                }
 
                 ResultExported?.Invoke(null, EventArgs.Empty);
             }
