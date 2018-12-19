@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace KBS2.CustomerSystem
 {
@@ -21,34 +17,38 @@ namespace KBS2.CustomerSystem
             Rating = GiveRating(customer.Mood);
             Content = CreateContent(customer.Mood);
         }
-
+        /// <summary>
+        /// Guide: https://www.codeproject.com/Articles/169598/%2FArticles%2F169598%2FParse-XML-Documents-by-XMLDocument-and-XDocument
+        /// can open and read but now need to get the right values.
+        /// </summary>
+        /// <param name="moral"></param>
+        /// <returns></returns>
         public string CreateContent(Moral moral)
         {
             var content = "";
-            //Open xml
-            var file = new XmlDocument();
+            moral = Moral.Mad;
+            XDocument file = XDocument.Load(@"CustomerSystem/Reviews.xml");
+
             try
             {
-                var path = new Uri(@" /KBS2;component/CustomerSystem/Reviews.xml", UriKind.Relative);
-                file.Load(path.ToString());
+                var mood = file
+                .Element("ReviewList")
+                .Element($"{moral}");
+
             }
-            catch
+            catch (System.NullReferenceException)
             {
-                content = "Loading of content failed.";
+                return content = "Failed to load review content.";
             }
 
-            var root = file.DocumentElement;
-            if (root == null) throw new XmlException("Missing root node");
 
-            var mood = file.SelectSingleNode($"//ReviewList/{moral}");
-            if (mood == null)
-                throw new XmlException("Missing mood in reviewlist.");
+
 
             Random random = new Random();
 
-            content = mood.ChildNodes[random.Next(1, mood.ChildNodes.Count)].ToString();
 
-            return content; 
+
+            return content;
             //Random description in section of depending moral
         }
 

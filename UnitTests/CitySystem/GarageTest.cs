@@ -1,7 +1,7 @@
 ﻿using KBS2.CarSystem;
+using KBS2.CitySystem;
 using NUnit.Framework;
 using System.Windows;
-using KBS2.CitySystem;
 using UnitTests.Util;
 
 namespace UnitTests.CitySystem
@@ -15,7 +15,7 @@ namespace UnitTests.CitySystem
         [TestCase(60, 60, DirectionCar.West, 60, 86.6)]
         public void TestSpawnCar(double gx, double gy, DirectionCar direction, double ex, double ey)
         {
-            
+
             var city = new CityBuilder()
                 .Road(new Vector(10, 0), new Vector(10, 100), 10)
                 .Road(new Vector(0, 90), new Vector(100, 90), 10)
@@ -24,7 +24,7 @@ namespace UnitTests.CitySystem
             var garage = new Garage(new Vector(gx, gy), 20, direction);
             city.Buildings.Add(garage);
 
-            var car = garage.SpawnCar(0, CarModel.Get("TestModel"));
+            var car = garage.SpawnCar(0, CarModel.Get("TestModel"), new Destination());
 
             Assert.AreEqual(ex, car.Location.X, 0.5);
             Assert.AreEqual(ey, car.Location.Y, 0.5);

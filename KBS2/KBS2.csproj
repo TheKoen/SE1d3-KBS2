@@ -323,5 +323,10 @@
     <Resource Include="Images\CarPicture2.jpg" />
     <Resource Include="Images\CarPicture3.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomerSystem\Reviews.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
