@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace KBS2.CustomerSystem
@@ -17,38 +19,35 @@ namespace KBS2.CustomerSystem
             Rating = GiveRating(customer.Mood);
             Content = CreateContent(customer.Mood);
         }
-        /// <summary>
-        /// Guide: https://www.codeproject.com/Articles/169598/%2FArticles%2F169598%2FParse-XML-Documents-by-XMLDocument-and-XDocument
-        /// can open and read but now need to get the right values.
-        /// </summary>
-        /// <param name="moral"></param>
-        /// <returns></returns>
+
         public string CreateContent(Moral moral)
         {
             var content = "";
-            moral = Moral.Mad;
+
+            //Open XML File
             XDocument file = XDocument.Load(@"CustomerSystem/Reviews.xml");
 
+
+            //Make a list of all reviews belonging to the current mood.
+            List<string> reviewlist = new List<string>();
+
+            //Query to fetch and fill the reviewlist above.
             try
             {
-                var mood = file
-                .Element("ReviewList")
-                .Element($"{moral}");
-
+                reviewlist = (from r in file.Descendants("ReviewList").Elements($"{moral.ToString()}").Elements("review")
+                              select r.Value).ToList();
             }
             catch (System.NullReferenceException)
             {
                 return content = "Failed to load review content.";
             }
 
-
-
-
+            //Random number for index will be generated and given as content
             Random random = new Random();
 
 
 
-            return content;
+            return content = reviewlist[random.Next(0, reviewlist.Count)];
             //Random description in section of depending moral
         }
 
