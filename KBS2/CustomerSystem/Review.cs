@@ -29,25 +29,25 @@ namespace KBS2.CustomerSystem
             var file = new XmlDocument();
             try
             {
-                var path = new Uri(@" /KBS2;component/CustomerSystem/Reviews.xml", UriKind.Relative);
-                file.Load(path.ToString());
+
+                file.Load("Reviews.xml");
             }
             catch
             {
                 content = "Loading of content failed.";
             }
-
+            /*
             var root = file.DocumentElement;
             if (root == null) throw new XmlException("Missing root node");
 
-            var mood = file.SelectSingleNode($"//ReviewList/{moral}");
+            var mood = file.SelectSingleNode($"//ReviewList/Mood/{moral}");
             if (mood == null)
                 throw new XmlException("Missing mood in reviewlist.");
 
             Random random = new Random();
 
             content = mood.ChildNodes[random.Next(1, mood.ChildNodes.Count)].ToString();
-
+            */
             return content; 
             //Random description in section of depending moral
         }
