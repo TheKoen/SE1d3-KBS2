@@ -36,7 +36,7 @@ namespace KBS2.CustomerSystem
             {
                 content = "Loading of content failed.";
             }
-            /*
+            
             var root = file.DocumentElement;
             if (root == null) throw new XmlException("Missing root node");
 
@@ -45,9 +45,8 @@ namespace KBS2.CustomerSystem
                 throw new XmlException("Missing mood in reviewlist.");
 
             Random random = new Random();
-
-            content = mood.ChildNodes[random.Next(1, mood.ChildNodes.Count)].ToString();
-            */
+            content = mood.ChildNodes[random.Next(0, mood.ChildNodes.Count)].InnerText;
+            
             return content; 
             //Random description in section of depending moral
         }
