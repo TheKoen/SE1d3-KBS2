@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using CommandSystem;
+using CommandSystem.Exceptions;
 using KBS2.CitySystem;
-using KBS2.Exceptions;
 
 namespace KBS2.Console.Commands
 {
@@ -14,33 +15,37 @@ namespace KBS2.Console.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidParametersException("Command usage: \"time <pause/start/reset>\"");
+                throw new CommandInputException("Command usage: \"time <pause/start/reset>\"");
             }
 
-            var loop = MainScreen.Loop;
+            var AILoop = MainScreen.AILoop;
+            var WPFLoop = MainScreen.WPFLoop;
             var subcommand = args[0].ToLower();
             switch (subcommand)
             {
                 case "start":
-                    if (loop.IsRunning())
+                    if (AILoop.IsRunning())
                     {
                         throw new CommandException("Simulation is already running!");
                     }
-                    loop.Start();
+                    AILoop.Start();
+                    WPFLoop.Start();
                     return "Simulation started.";
                 case "pause":
-                    if (!loop.IsRunning())
+                    if (!AILoop.IsRunning())
                     {
                         throw new CommandException("Simulation is not running!");
                     }
-                    loop.Stop();
+                    AILoop.Stop();
+                    WPFLoop.Stop();
                     return "Simulation paused.";
                 case "reset":
-                    loop.Stop();
+                    AILoop.Stop();
+                    WPFLoop.Stop();
                     City.Instance.Controller.Reset();
                     return "Simulation reset. Type \"time start\" to start it again.";
                 default:
-                    throw new InvalidParametersException($"Unkown subcommand \'{subcommand}\'");
+                    throw new CommandInputException($"Unkown subcommand \'{subcommand}\'");
             }
         }
     }

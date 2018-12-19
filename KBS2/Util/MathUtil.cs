@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using KBS2.CarSystem;
 using KBS2.CitySystem;
 
 namespace KBS2.Util
@@ -25,15 +26,10 @@ namespace KBS2.Util
         /// <returns>double distance</returns>
         public static double DistanceToRoad(Vector point, Road road)
         {
-            return ShortestDistance(road.Start, road.End, point);
-        }
-
-        private static double ShortestDistance(Vector lineStart, Vector lineEnd, Vector point)
-        {
-            var px = lineEnd.X - lineStart.X;
-            var py = lineEnd.Y - lineStart.Y;
+            var px = road.End.X - road.Start.X;
+            var py = road.End.Y - road.Start.Y;
             var temp = (px * px) + (py * py);
-            var u = ((point.X - lineStart.X) * px + (point.Y - lineStart.Y) * py) / (temp);
+            var u = ((point.X - road.Start.X) * px + (point.Y - road.Start.Y) * py) / (temp);
             if (u > 1)
             {
                 u = 1;
@@ -42,13 +38,56 @@ namespace KBS2.Util
             {
                 u = 0;
             }
-            var x = lineStart.X + u * px;
-            var y = lineStart.Y + u * py;
+
+            var x = road.Start.X + u * px;
+            var y = road.Start.Y + u * py;
 
             var dx = x - point.X;
             var dy = y - point.Y;
             var dist = Math.Sqrt(dx * dx + dy * dy);
             return dist;
+        }
+
+        /// <summary>
+        /// Rotates a vector by a specified angle (in degrees).
+        /// </summary>
+        /// <param name="vector">Vector to rotate</param>
+        /// <param name="angle">Angle in degrees</param>
+        /// <returns>The rotated vector</returns>
+        public static Vector RotateVector(Vector vector, double angle)
+        {
+            // Convert the angle from degrees to radians.
+            var radians = (Math.PI / 180) * angle;
+
+            var x = vector.X * Math.Cos(radians) - vector.Y * Math.Sin(radians);
+            var y = vector.X * Math.Sin(radians) + vector.Y * Math.Cos(radians);
+
+            // Rotate the vector.
+            return new Vector(x, y);
+        }
+
+        /// <summary>
+        /// Calculate the relative angle between an absolute direction and a vector.
+        /// </summary>
+        public static double VectorToAngle(Vector vector, DirectionCar direction)
+        {
+            return Vector.AngleBetween(vector, direction.GetVector());
+        }
+
+        public static Vector VelocityToRotation(Vector velocity)
+        {
+            var rotation = new Vector(velocity.X, velocity.Y);
+            rotation.Normalize();
+            return rotation;
+        }
+
+        public static Vector Normalize(Vector vector)
+        {
+            var result = new Vector(vector.X, vector.Y);
+            result.Normalize();
+            if (Math.Abs(result.X) < 0.0001) result.X = 0;
+            if (Math.Abs(result.Y) < 0.0001) result.Y = 0;
+            return result;
         }
     }
 }

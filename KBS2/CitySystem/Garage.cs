@@ -1,21 +1,42 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using KBS2.CarSystem;
+using KBS2.Util;
 
 namespace KBS2.CitySystem
 {
     public class Garage : Building
     {
         public DirectionCar Direction { get; }
-        public int AvailableCars { get; set; } = 5;
+        public int AvailableCars { get; set; } = 1;
 
         public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
         {
             Direction = direction;
         }
 
-        public Car SpawnCar(int id, CarModel model)
+        public Car SpawnCar(int id, CarModel model, Destination finalDestination)
         {
+            if (AvailableCars <= 0)
+            {
+                return null;
+            }
+
+            foreach (var cityCar in City.Instance.Cars)
+            {
+                if (MathUtil.Distance(Location, cityCar.Location) < 50)
+                {
+                    var thread = new Thread(() =>
+                    {
+                        Thread.Sleep(1000);
+                        SpawnCar(id, model, finalDestination);
+                    });
+                    thread.Start();
+                    return null;
+                }
+            }
+
             var road = GPS.GPSSystem.NearestRoad(Location);
 
             double x;
@@ -24,11 +45,11 @@ namespace KBS2.CitySystem
             if (road.IsXRoad())
             {
                 x = Location.X;
-                y = Location.Y > road.Start.Y ? road.Start.Y + road.Width / 4d : road.Start.Y - road.Width / 4d;
+                y = Direction == DirectionCar.East ? road.Start.Y + road.Width / 3d : road.Start.Y - road.Width / 3d;
             } else
             {
                 y = Location.Y;
-                x = Location.X > road.Start.X ? road.Start.X + road.Width / 4d : road.Start.X - road.Width / 4d;
+                x = Direction == DirectionCar.South ? road.Start.X - road.Width / 3d : road.Start.X + road.Width / 3d;
             }
 
             var location = new Vector(x, y);
@@ -57,8 +78,10 @@ namespace KBS2.CitySystem
                 Location = destination,
                 Road = road
             };
+            car.CurrentTarget = destination;
             City.Instance.Cars.Add(car);
             AvailableCars--;
+            car.Destination = finalDestination;
             return car;
         }
     }

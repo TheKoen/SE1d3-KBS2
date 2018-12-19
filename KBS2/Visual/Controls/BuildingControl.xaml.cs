@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KBS2.CitySystem;
 
 namespace KBS2.Visual.Controls
 {
@@ -20,15 +21,67 @@ namespace KBS2.Visual.Controls
     /// </summary>
     public partial class BuildingControl : UserControl
     {
-        public BuildingControl(Vector location, int size)
+        private Building Building { get; }
+        private MainScreen Screen { get; }
+
+        private float lastZoom;
+
+        public BuildingControl(MainScreen screen, Building building)
         {
-            var c = size / 2d;
-            Margin = new Thickness(location.X - c, location.Y - c, 0, 0);
-            
-            Width = size;
-            Height = size;
+            Screen = screen;
+            Building = building;
+
+            Initialized += (sender, args) =>
+            {
+                if (building is Garage)
+                {
+                    Rectangle.Fill = new SolidColorBrush(Colors.DeepPink);
+                }
+            };
 
             InitializeComponent();
+            Update();
+
+            MainScreen.CommandLoop.Subscribe(Update);
+        }
+
+        private void Update()
+        {
+            if (Math.Abs(lastZoom - Screen.Zoom) < 0.01)
+            {
+                return;
+            }
+            lastZoom = Screen.Zoom;
+
+            var zoom = Screen.Zoom;
+            var size = Building.Size;
+            var location = Building.Location;
+
+            var offset = size / 2d;
+            Margin = new Thickness((location.X - offset) * zoom, (location.Y - offset) * zoom, 0, 0);
+
+            Width = size * zoom;
+            Height = size * zoom;
+
+            Rectangle.StrokeThickness = (size * zoom) / 8d;
+        }
+
+        public void Building_Selected(object sender, MouseButtonEventArgs e)
+        {
+            //Check if building is garage else do nothing
+            if(Building is Garage)
+            {
+                //Show garage info + Properties to change
+                //Empty info tab
+                Screen.TabItemInfo.Content = null;
+
+                //Add info about this garage
+                var ci = new GarageInfoUserControl(Building);
+                Screen.TabItemInfo.Content = ci;
+
+                //Open the info tab of selected garage
+                Screen.TabItemInfo.IsSelected = true;
+            }
         }
     }
 }

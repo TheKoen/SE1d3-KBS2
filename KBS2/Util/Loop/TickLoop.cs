@@ -1,25 +1,40 @@
 ﻿using System;
 using System.Windows.Media;
+using CommandSystem;
+using CommandSystem.PropertyManagement;
 using KBS2.Console;
 
 namespace KBS2.Util.Loop
 {
     public abstract class TickLoop
     {
-        private string Name { get; }
+        protected string Name { get; }
 
-        private readonly Property tickRate = new Property(30);
+        private Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
 
         private event Update UpdateEvent;
 
         private int exceptionCount;
 
-        protected TickLoop(string name)
+        protected TickLoop(string name, int tickRate = 30)
         {
             Name = name;
-            tickRate.PropertyChanged += OnTickrateChange;
-            CommandHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
+            this.tickRate.Value = tickRate;
+            this.tickRate.PropertyChanged += OnTickrateChange;
+            Register();
+        }
+
+        public void Register()
+        {
+            try
+            {
+                PropertyHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
+            }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to register tickRate property for {Name} loop", Colors.Yellow);
+            }
         }
 
         /// <summary>
@@ -61,7 +76,7 @@ namespace KBS2.Util.Loop
         /// </summary>
         /// <param name="source"></param>
         /// <param name="args"></param>
-        protected abstract void OnTickrateChange(object source, CustomPropertyChangedArgs args);
+        protected abstract void OnTickrateChange(object source, UserPropertyChangedArgs args);
 
         /// <summary>
         /// Called every Tick
@@ -77,20 +92,20 @@ namespace KBS2.Util.Loop
             }
             catch (Exception exception)
             {
-                App.Console.Print($"Exception in main loop: {exception}", Colors.Red);
+                App.Console.Print($"Exception in {Name} loop: {exception}", Colors.Red);
 
                 exceptionCount++;
                 if (exceptionCount > 2)
                 {
                     Stop();
-                    App.Console.Print("Main loop has been stopped due to too many exceptions!", Colors.Red);
+                    App.Console.Print($"{Name} loop has been stopped due to too many exceptions!", Colors.Red);
                 }
             }
             var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
             var interval = CalculateInterval(tickRate.Value);
             if (taken > interval)
             {
-                App.Console.Print($"Main loop is running {taken - interval}ms behind!", Colors.Yellow);
+                App.Console.Print($"{Name} loop is running {taken - interval}ms behind!", Colors.Yellow);
             }
         }
 

@@ -1,18 +1,14 @@
-﻿using KBS2.CitySystem;
-using KBS2.Console;
-using KBS2.GPS;
+﻿using KBS2.GPS;
 using System.Windows;
-using System.Xml;
-using System.IO;
-using KBS2.Util;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using KBS2.Util.Loop;
-using System.Linq;
-using KBS2.Visual.Controls;
 using System;
-using KBS2.CarSystem;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Controls;
+using KBS2.CitySystem;
+using KBS2.Visual;
+using KBS2.Database;
 
 namespace KBS2
 {
@@ -21,129 +17,113 @@ namespace KBS2
     /// </summary>
     public partial class MainScreen : Window
     {
-        public static readonly TickLoop Loop = new MainLoop("main");
-        public static readonly TickLoop CommandLoop = new MainLoop("command");
+        /*
+         * A note on loops:
+         * There's 3 different loops, a CommandLoop, a WPFLoop and an AILoop.
+         * Make sure you understand what they are before subscribing to one!
+         *
+         * The CommandLoop is only used for the Console, and should NEVER be
+         * used for anything else! Just pretend like it doesn't exist and
+         * don't use it.
+         *
+         * The WPFLoop for anything related to the visuals. It's important
+         * for a smooth interaface that this loop runs fast, so DON'T do
+         * anything complicated or time-intensive on there.
+         *
+         * The AILoop is for any AI logic. This is where things like the
+         * customers, car AI, car sensors, etc are supposed to run. Still
+         * needs to run fast, but can more easily deal with irregular
+         * refresh rates.
+         */
+        public static readonly TickLoop CommandLoop = new MainLoop("CMD", 60);
+        public static readonly TickLoop WPFLoop = new MainLoop("WPF");
+        public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
-        private ConsoleWindow consoleWindow;
+        private readonly ConsoleWindow consoleWindow;
+        private readonly ModelDesigner.ModelDesigner modelDesigner;
+        private readonly Stopwatch Stopwatch = new Stopwatch();
 
-        private string filePath;
+        public CityRenderHandler CityRenderHandler { get; private set; }
+        public CustomerRenderHandler CustomerRenderHandler { get; private set; }
+        public CarRenderHandler CarRenderHandler { get; private set; }
+        public SimulationControlHandler SimulationControlHandler { get; private set; }
+        public PropertyDisplayHandler PropertyDisplayHandler { get; private set; }
+        public ZoomHandler ZoomHandler { get; private set; }
 
         public int Ticks { get; set; }
-        public double SecondsRunning { get; private set; }
+        public double SecondsRunning { get; set; }
+
+        public float Zoom { get; set; } = 1.0F;
 
         public MainScreen()
         {
             consoleWindow = new ConsoleWindow();
-            
-            InitializeComponent();
-            Loop.Subscribe(Update);
+            modelDesigner = new ModelDesigner.ModelDesigner();
             CommandLoop.Start();
+            
+            Initialized += (sender, args) => Initialize();
+            InitializeComponent();
+        }
+
+        private void Initialize()
+        {
             GPSSystem.Setup();
 
-            // Showing list of properties in settings tab
-            Loaded += (sender, args) => createPropertyList();
+            CityRenderHandler = new CityRenderHandler(this, CanvasMain);
+            CustomerRenderHandler = new CustomerRenderHandler(CanvasMain, this);
+            CarRenderHandler = new CarRenderHandler(CanvasMain, this);
+            SimulationControlHandler = new SimulationControlHandler(this);
+            PropertyDisplayHandler = new PropertyDisplayHandler(this);
+            ZoomHandler = new ZoomHandler(this);
+
+
+            WPFLoop.Subscribe(Update);
+            
+            CommandLoop.Subscribe(CmdUpdate);
+
+            PreviewMouseWheel += ZoomHandler.Scroll;
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             consoleWindow.AllowClose = true;
             consoleWindow.Close();
+            modelDesigner.AllowClose = true;
+            modelDesigner.Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
-            {
-                DefaultExt = ".xml",
-                Filter = "XML documents (.xml)|*.xml"
-            };
-
-            // Display OpenFileDialog by calling ShowDialog method
-            var result = dlg.ShowDialog();
-
-            // Get the selected file name and display in a TextBox
-            if (result == true)
-            {
-                
-                // Open document
-                var fileName = dlg.FileName;
-                filePath = fileName;
-                var cityname = Path.GetFileNameWithoutExtension(fileName);
-                TBCity.Text = cityname;
-                CityName.Content = "City : " + cityname.First().ToString().ToUpper() + cityname.Substring(1);
-            }
+            SimulationControlHandler.SelectButtonClick();
         }
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
-            // Loads the city file and parses the information into a City.
-            var file = new XmlDocument();
-            file.Load(filePath);
-            CityParser.MakeCity(file);
-            var city = City.Instance;
-
-            drawCity(city);
-
-            createPropertyList();
-            //Enables buttons and tabs so the user can acces them.
-            BtnStart.IsEnabled = true;
-            BtnPause.IsEnabled = true;
-            BtnStop.IsEnabled = true;
-            TabItemSettings.IsEnabled = true;
-            TabItemResults.IsEnabled = true;
-
-            // Fills in the current City information that is needed.
-            LabelSimulationRoad.Content = city.Roads.Count;
-            LabelSimulationIntersection.Content = city.Intersections.Count;
-            LabelSimulationBuilding.Content = city.Buildings.Count;
-            LabelSimulationGarage.Content = city.Buildings.FindAll(building => building is Garage).Count;
-            LabelSimulationAmountCostumer.Content = city.Customers.Count;
+            SimulationControlHandler.LoadButtonClick();
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            Loop.Start();
-            App.Console.Print("Start pressed");
-
-            var city = City.Instance;
-            foreach (var Customer in city.Customers)
-            {
-                CanvasMain.Children.Add(Customer.CustomerControl);
-            }
-
-            foreach (var car in city.Cars)
-            {
-                CarControl carcontrol = new CarControl(car);
-                CanvasMain.Children.Add(carcontrol);
-            }
+            SimulationControlHandler.StartButtonClick();
+            Stopwatch.Start();
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
-            Loop.Stop();
-            App.Console.Print("Pause pressed");
+            SimulationControlHandler.PauseButtonClick();
+            Stopwatch.Stop();
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-            Loop.Stop();
-            City.Instance.Controller.Reset();
-            App.Console.Print("Reset pressed");
-        }
-
-        // Creates a label for every property.
-        public void createPropertyList()
-        { 
-            StackPanelSettings.Children.Clear();
-            var properties = CommandHandler.GetProperties();
-            foreach (var property in properties)
-            {
-                var propname = property.Key.ToString();
-                var propvalue = property.Value.Value.ToString();
-
-                var prop = new PropertySettings(propname, propvalue);
-                StackPanelSettings.Children.Add(prop);
-            }
+            SimulationControlHandler.ResetButtonClick();
+            LabelSimulationTime.Content = "00:00:00";
+            Stopwatch.Reset();
+            
+            CommandLoop.Register();
+            WPFLoop.Register();
+            AILoop.Register();
+            GPSSystem.Setup();
         }
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
@@ -176,72 +156,67 @@ namespace KBS2
 
         }
 
-        // Method for saving the new values the user has filled in in the Settings tab.
+        /// <summary>
+        /// Method for the save button with saving the new values the user has filled in in the Settings tab.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            string s = "1,5";
-            string y = "1";
-            foreach (var child in StackPanelSettings.Children)
-            {
-                var propertyControl = (PropertySettings)child;
-                var name = propertyControl.LabelPropertyName.Content.ToString();
-                var property = CommandHandler.GetProperties().First(p => p.Key == name);
-
-                if (propertyControl.TBCurrentValue.Text != property.Value.ToString())
-                {
-                    var value = propertyControl.TBCurrentValue.Text;
-                    CommandHandler.HandleInput($"set { name } { value }");
-                    propertyControl.CurrentValue = propertyControl.TBCurrentValue.Text;
-                }
-         
-                if (propertyControl.LabelPropertyName.Content.ToString() == "startingPrice")
-                {              
-                    s = propertyControl.TBCurrentValue.Text.ToString();
-                }
-
-                if (propertyControl.LabelPropertyName.Content.ToString() == "pricePerKilometer")
-                {
-                   y = propertyControl.TBCurrentValue.Text.ToString();   
-                }
-            }
-            LabelSimulationPriceFormula.Content = $" {s} + {y} * km";
+            PropertyDisplayHandler.SaveProperties();
+            PropertyDisplayHandler.UpdatePriceLabel(LabelSimulationPriceFormula);
         }
 
         private void BtnDefault_Click(object sender, RoutedEventArgs e)
         {
-            CommandHandler.ModifyProperty("main.tickRate", 30);
-            CommandHandler.ModifyProperty("command.tickRate", 30);
-            CommandHandler.ModifyProperty("startingPrice", 1.50);
-            CommandHandler.ModifyProperty("pricePerKilometer", 1.00);
-            CommandHandler.ModifyProperty("customerSpawnRate", 0.2f);
-            CommandHandler.ModifyProperty("availableCars", 10);
-            CommandHandler.ModifyProperty("customerCount", 10);
-            CommandHandler.ModifyProperty("globalSpeedLimit", -1);
-            CommandHandler.ModifyProperty("avgGroupSize", 10);
-            createPropertyList();
+            PropertyDisplayHandler.ResetDefaults();
         }
 
+        /// <summary>
+        /// This method updates the timer of the simulation
+        /// </summary>
         public void UpdateTimer()
         {
-            LabelSimulationTime.Content = SecondsRunning;
+            var time = Stopwatch.ElapsedMilliseconds;
+            var temp = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(time);
+            LabelSimulationTime.Content = $"{temp:mm:ss:FF}";
         }
 
-        public double GetSeconds()
+        /// <summary>
+        /// This method is calculating seconds from ticks
+        /// </summary>
+        /// <returns>seconds the simulation is running</returns>
+        public double CalculateSeconds()
         {
-            return Math.Round(Ticks / 100.0, 2);
+            return Ticks / 30.0d;
         }
 
         public void Update()
         {
-            LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
-            LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
-
             Ticks++;
-            SecondsRunning = GetSeconds();
+            SecondsRunning = CalculateSeconds();
             UpdateTimer();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void CmdUpdate()
+        {
+            if (CitySystem.City.Instance == null) return;
+
+            var maxWidth = 0.0;
+            var maxHeight = 0.0;
+            foreach (var road in CitySystem.City.Instance.Roads)
+            {
+                if (road.Start.X * Zoom > maxWidth) maxWidth = road.Start.X * Zoom;
+                if (road.End.X * Zoom > maxWidth) maxWidth = road.End.X * Zoom;
+                if (road.Start.Y * Zoom > maxHeight) maxHeight = road.Start.Y * Zoom;
+                if (road.End.Y * Zoom > maxHeight) maxHeight = road.End.Y * Zoom;
+            }
+
+            CanvasMain.Width = Math.Max(maxWidth + 400, Width - 50);
+            CanvasMain.Height = Math.Max(maxHeight + 50, Height - 50);
+        }
+
+        private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
             if (consoleWindow.IsVisible)
             {
@@ -253,32 +228,26 @@ namespace KBS2
             }
         }
 
-        private void BtnConsole_Click(object sender, RoutedEventArgs e)
+        private void BtnCarModelMaker_Click(object sender, RoutedEventArgs e)
+        {
+            if (consoleWindow.IsVisible)
+            {
+                modelDesigner.Hide();
+            }
+            else
+            {
+                modelDesigner.Show();
+            }
+        }
+
+        private void BtnCityMaker_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        public void drawCity(City city)
+        private void Zoom_Changed(object sender, SelectionChangedEventArgs e)
         {
-            CanvasMain.Children.Clear();
-            foreach (var building in city.Buildings)
-            {
-                BuildingControl b = new BuildingControl(building.Location, building.Size);
-                
-                CanvasMain.Children.Add(b);
-            }
-
-            foreach (var road in city.Roads)
-            {
-                RoadControl rc = new RoadControl(road);
-                CanvasMain.Children.Add(rc);
-            }
-
-            foreach (var intersection in city.Intersections)
-            {
-                IntersectionControl ic = new IntersectionControl(intersection);
-                CanvasMain.Children.Add(ic);
-            }
-        }
+            ZoomHandler?.ZoomBoxChanged();
+        }        
     }
 }

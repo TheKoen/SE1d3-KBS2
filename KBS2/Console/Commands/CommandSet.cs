@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
-using KBS2.Exceptions;
-using KBS2.Util;
+using CommandSystem;
+using CommandSystem.Exceptions;
+using CommandSystem.PropertyManagement;
 
 namespace KBS2.Console.Commands
 {
@@ -22,7 +23,7 @@ namespace KBS2.Console.Commands
         
         public IEnumerable<char> Run(params string[] args)
         {
-            if (args.Length <= 1) throw new InvalidParametersException();
+            if (args.Length <= 1) throw new CommandInputException("Invalid parameters");
             
             var prop = args[0];
             var val = new string[args.Length - 1];
@@ -35,18 +36,18 @@ namespace KBS2.Console.Commands
                 // Testing for float
                 output = TestFloat(ref _floatRegex, prop, val);
                 if (output != string.Empty) return output;
-                throw new InvalidParametersException();
+                throw new CommandInputException();
             }
-            catch (InvalidParametersException)
+            catch (CommandInputException)
             {
                 try
                 {
                     // Testing for double
                     output = TestDouble(ref _doubleRegex, prop, val);
                     if (output != string.Empty) return output;
-                    throw new InvalidParametersException();
+                    throw new CommandInputException();
                 }
-                catch (InvalidParametersException)
+                catch (CommandInputException)
                 {
                     // Testing for int
                     output = TestInt(ref _intRegex, prop, val);
@@ -61,7 +62,7 @@ namespace KBS2.Console.Commands
             output = TestString(ref _stringRegex, prop, val);
             if (output != string.Empty) return output;
             
-            throw new InvalidParametersException($"Could not parse input");
+            throw new CommandInputException($"Could not parse input");
         }
 
 
@@ -81,13 +82,13 @@ namespace KBS2.Console.Commands
             try
             {
                 output = new Vector(
-                    double.Parse(vectorMatches.Groups["posX"].Value),
-                    double.Parse(vectorMatches.Groups["posY"].Value)
+                    double.Parse(vectorMatches.Groups["posX"].Value, CultureInfo.InvariantCulture),
+                    double.Parse(vectorMatches.Groups["posY"].Value, CultureInfo.InvariantCulture)
                 );
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, $"{output.X}, {output.Y}");
         }
@@ -107,11 +108,11 @@ namespace KBS2.Console.Commands
             float output;
             try
             {
-                output = float.Parse(floatMatches.Groups["value"].Value);
+                output = float.Parse(floatMatches.Groups["value"].Value, CultureInfo.InvariantCulture);
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, output.ToString(CultureInfo.InvariantCulture));
         }
@@ -131,11 +132,11 @@ namespace KBS2.Console.Commands
             double output;
             try
             {
-                output = double.Parse(doubleMatches.Groups["value"].Value);
+                output = double.Parse(doubleMatches.Groups["value"].Value, CultureInfo.InvariantCulture);
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, output.ToString(CultureInfo.InvariantCulture));
         }
@@ -159,7 +160,7 @@ namespace KBS2.Console.Commands
             }
             catch (OverflowException oe)
             {
-                throw new InvalidParametersException(oe.Message);
+                throw new CommandInputException(oe.Message);
             }
             return TryModifyProperty(prop, output, output.ToString());
         }
@@ -188,21 +189,21 @@ namespace KBS2.Console.Commands
         /// <param name="output">Value to set</param>
         /// <param name="outputStringRep"><see cref="String"/> representation of the value</param>
         /// <returns>Output message</returns>
-        /// <exception cref="InvalidParametersException">Error message</exception>
+        /// <exception cref="CommandInputException">Error message</exception>
         private static string TryModifyProperty(string prop, dynamic output, string outputStringRep)
         {
             try
             {
-                CommandHandler.ModifyProperty(prop, output);
+                PropertyHandler.ModifyProperty(prop, output);
                 return $"Property \"{prop}\" set as ({outputStringRep})";
             }
-            catch (KeyNotFoundException)
+            catch (PropertyHandlerException)
             {
-                throw new InvalidParametersException($"Unknown property \"{prop}\"");
+                throw new CommandInputException($"Unknown property \"{prop}\"");
             }
             catch (TypeMismatchException)
             {
-                throw new InvalidParametersException($"Property \"{prop}\" is not of type {output.GetType().Name}");
+                throw new CommandInputException($"Property \"{prop}\" is not of type {output.GetType().Name}");
             }
         }
     }

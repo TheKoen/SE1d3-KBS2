@@ -3,24 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
-using KBS2.Console;
 using KBS2.CustomerSystem;
+using KBS2.GPS.Algorithms;
+using KBS2.GPS.TSP;
 using KBS2.Util;
 
 namespace KBS2.GPS
 {
     public class GPSSystem
     {
-        private static Property StartingPrice = new Property(1.50);
-        private static Property PricePerKilometer = new Property(1.00);
+        public static Property StartingPrice = new Property(1.50);
+        public static Property PricePerKilometer = new Property(1.00);
+        public static Property availableModel = new Property("TestModel");
+        public static CarModel AvailableModel => CarModel.Get(availableModel.Value);
+
+        private static IAlgorithm Algorithm = new AlgorithmDijkstra();
 
         public static void Setup()
         {
-            CommandHandler.RegisterProperty("startingPrice", ref StartingPrice);
-            CommandHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+            try
+            {
+                PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
+                PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
+                //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
+            }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to register tickRate property for GPSSystem", Colors.Yellow);
+            }
         }
+
 
         /// <summary>
         /// returns a road located at this location
@@ -29,31 +44,8 @@ namespace KBS2.GPS
         /// <returns>the road that the location is at, if none it returns null</returns>
         public static Road GetRoad(Vector location)
         {
-            var roads = City.Instance.Roads;
-
-            foreach (var road in roads)
-            {
-                var laneWidth = road.Width / 2.0;
-                var minX = road.IsXRoad()
-                    ? Math.Min(road.Start.X, road.End.X)
-                    : road.Start.X - laneWidth;
-                var maxX = road.IsXRoad()
-                    ? Math.Max(road.Start.X, road.End.X)
-                    : road.Start.X + laneWidth;
-                var minY = road.IsXRoad()
-                    ? road.Start.Y - laneWidth
-                    : Math.Min(road.Start.Y, road.End.Y);
-                var maxY = road.IsXRoad()
-                    ? road.Start.Y + laneWidth
-                    : Math.Max(road.Start.Y, road.End.Y);
-
-                if (location.X >= minX && location.X <= maxX && location.Y >= minY && location.Y <= maxY)
-                {
-                    return road;
-                }
-            }
-
-            return null;
+            var roads = GetRoadsInRange(location, 12);
+            return roads.Count == 0 ? null : roads.First();
         }
 
         /// <summary>
@@ -106,10 +98,14 @@ namespace KBS2.GPS
             {
                 var distance = CalculateDistance(group.Location, destination.Location);
                 var price = CalculatePrice(distance);
-                App.Console.Print(
-                    $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}");
+                App.Console?.Print(
+                    $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}"
+                );
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to calculate route from {group.Location} to {destination.Location}", Colors.Red);
+            }
 
             // Look to nearest Garage.
             var city = City.Instance;
@@ -130,69 +126,31 @@ namespace KBS2.GPS
                 nearestDistance = tempDistance;
             }
 
-            if (nearestGarage == null) return;
-
-            var car = nearestGarage.SpawnCar(CityController.CAR_ID++, CarModel.TestModel);
-            car.Destination = destination;
+            nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel, new Destination
+            {
+                Location = group.Location,
+                Road = NearestRoad(group.Location)
+            });
         }
 
         /// <summary>
-        /// returns the direction of a car
+        /// returns 
         /// </summary>
         /// <param name="car"></param>
         /// <param name="intersection"></param>
         /// <returns></returns>
         public static Destination GetDirection(Car car, Intersection intersection)
         {
-            var roadsAtInteresection = intersection.GetRoads();
-            var roads = new List<Road>();
-
-            foreach (var road in roadsAtInteresection)
+            var road = car.CurrentRoad;
+            var location = MathUtil.Distance(road.Start, car.Location) <
+                           MathUtil.Distance(road.End, car.Location)
+                ? road.Start
+                : road.End;
+            return Algorithm.Calculate(new Destination
             {
-                if (!car.CurrentRoad.Equals(road)) roads.Add(road);
-            }
-
-            var shortestDistance = double.MaxValue;
-            Road selectedRoad = null;
-            var selectDestination = new Vector();
-
-            foreach (var road in roads)
-            {
-                if (road.Equals(car.Destination.Road))
-                {
-                    var destination = car.Destination;
-                    var distance = MathUtil.DistanceToRoad(destination.Location, road) - road.Width / 4d;
-                    var direction = GetDirectionToRoad(destination.Location, road);
-                    var delta = Vector.Multiply(direction.GetDirection(), distance);
-                    var target = Vector.Add(destination.Location, delta);
-
-                    return new Destination {Road = road, Location = target};
-                }
-
-                var tempDStart = MathUtil.Distance(road.Start, car.Location);
-                var tempDEnd = MathUtil.Distance(road.End, car.Location);
-
-                var closestPointToDestination = tempDStart > tempDEnd ? road.Start : road.End;
-
-                var distanceToDestination = MathUtil.Distance(closestPointToDestination, car.Destination.Location);
-
-                if (!(distanceToDestination < shortestDistance)) continue;
-                shortestDistance = distanceToDestination;
-                selectedRoad = road;
-                selectDestination = closestPointToDestination;
-            }
-
-            return new Destination {Road = selectedRoad, Location = selectDestination};
-        }
-
-        public static DirectionCar GetDirectionToRoad(Vector point, Road road)
-        {
-            if (road.IsXRoad())
-            {
-                return road.Start.Y < point.Y ? DirectionCar.North : DirectionCar.South;
-            }
-
-            return road.Start.X < point.X ? DirectionCar.West : DirectionCar.East;
+                Location = location,
+                Road = car.CurrentRoad
+            }, car.Destination);
         }
 
         public static double CalculateDistance(Vector start, Vector end)
@@ -212,61 +170,67 @@ namespace KBS2.GPS
             }
             catch (Exception)
             {
-                App.Console.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
+                App.Console?.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
                 return 0;
             }
         }
 
-        private static double ExploreIntersection(Intersection intersection, Vector end, Road target, double distance,
-            int cycles, ICollection<Intersection> past)
+        private static double ExploreIntersection(Intersection intersection, Vector end, Road target, double distance, int cycles, ICollection<Intersection> past)
         {
-            if (intersection == null)
+            while (true)
             {
-                App.Console.Print("Warning: Found a problem while exporing route: null terminating road",
-                    Colors.Yellow);
-                return distance;
-            }
-
-            past.Add(intersection);
-
-            foreach (var road in intersection.GetRoads())
-            {
-                if (road.Equals(target))
+                if (intersection == null)
                 {
-                    return distance + MathUtil.Distance(intersection.Location, end);
+                    App.Console?.Print("Warning: Found a problem while exporing route: null terminating road", Colors.Yellow);
+                    return distance;
                 }
+
+                past.Add(intersection);
+
+                foreach (var road in intersection.GetRoads())
+                {
+                    if (road.Equals(target))
+                    {
+                        return distance + MathUtil.Distance(intersection.Location, end);
+                    }
+                }
+
+                var intersections = FindNextIntersections(intersection);
+                var closestIntersection = double.MaxValue;
+                Intersection intersectionNext = null;
+
+                //App.Console?.Print($"Arrived at intersection {intersection.Location}. Found {intersections.Count} options. Evaluating...");
+
+                foreach (var next in intersections)
+                {
+                    if (next == null || past.Contains(next)) continue;
+
+                    var dist = MathUtil.Distance(next.Location, end);
+                    if (!(dist < closestIntersection)) continue;
+                    closestIntersection = dist;
+                    intersectionNext = next;
+                }
+
+                if (cycles++ == 20)
+                {
+                    throw new Exception("Route is impossible.");
+                }
+
+                if (intersectionNext == null)
+                {
+                    throw new Exception("Route is impossible.");
+                }
+
+                distance += MathUtil.Distance(intersection.Location, intersectionNext.Location);
+                intersection = intersectionNext;
             }
-
-            var intersections = FindNextIntersections(intersection);
-            var closestIntersection = double.MaxValue;
-            Intersection intersectionNext = null;
-
-            //MainWindow.Console.Print($"Arrived at intersection {intersection.Location}. Found {intersections.Count} options. Evaluating...");
-
-            foreach (var next in intersections)
-            {
-                if (next == null || past.Contains(next)) continue;
-
-                var dist = MathUtil.Distance(next.Location, end);
-                if (!(dist < closestIntersection)) continue;
-                closestIntersection = dist;
-                intersectionNext = next;
-            }
-
-            if (cycles++ == 20)
-            {
-                throw new Exception("Route is impossible.");
-            }
-
-            if (intersectionNext == null)
-            {
-                throw new Exception("Route is impossible.");
-            }
-
-            distance += MathUtil.Distance(intersection.Location, intersectionNext.Location);
-            return ExploreIntersection(intersectionNext, end, target, distance, cycles, past);
         }
 
+        /// <summary>
+        /// Find the next intersection of an intersection
+        /// </summary>
+        /// <param name="intersection">intersection to use</param>
+        /// <returns>List with the found intersections</returns>
         public static List<Intersection> FindNextIntersections(Intersection intersection)
         {
             var list = new List<Intersection>();
@@ -294,6 +258,21 @@ namespace KBS2.GPS
                        point.Y >= location.Y - size && point.Y <= location.Y + size;
             });
             return interserction;
+        }
+
+        /// <summary>
+        /// Find the intersections of a road
+        /// </summary>
+        /// <param name="road">road you want to explore</param>
+        /// <returns>List with found Intersections</returns>
+        public static List<Intersection> FindIntersectionsRoad(Road road)
+        {
+            return new List<Intersection>
+            {
+                FindIntersection(road.Start),
+                FindIntersection(road.End)
+            };
+            ;
         }
 
         public static double CalculatePrice(double distance)

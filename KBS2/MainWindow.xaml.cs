@@ -1,9 +1,9 @@
-using KBS2.CitySystem;
-using KBS2.Console;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
-using KBS2.Exceptions;
+using CommandSystem;
+using CommandSystem.Exceptions;
+using KBS2.CitySystem;
 using KBS2.GPS;
 using KBS2.Util.Loop;
 
@@ -15,7 +15,7 @@ namespace KBS2
     public partial class MainWindow
     {
         //public static readonly MainLoop Loop = new MainLoop("main");
-        public static readonly MainLoop CommandLoop = new MainLoop("command");
+        public static readonly TickLoop CommandLoop = new MainLoop("command");
 
         public MainWindow()
         {

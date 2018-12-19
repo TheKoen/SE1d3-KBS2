@@ -1,4 +1,6 @@
 ﻿using KBS2.CarSystem;
+using KBS2.Util;
+using KBS2.Visual;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,31 +25,49 @@ namespace KBS2.Visual.Controls
     {
 
         public Car car { get; set; }
+        public MainScreen Screen { get; set; }
 
-        public CarControl(Car c)
+        public CarControl(Car car, MainScreen screen)
         {
-            this.car = c;
-            var x = carSpawnDirectionDeterminesRotation(car.Direction);
-            RenderTransform = new RotateTransform(x);
-            Margin = new Thickness(c.Location.X, c.Location.Y, 0, 0);
+            Screen = screen;
+            this.car = car;
             InitializeComponent();
+            Update();
+            MainScreen.WPFLoop.Subscribe(Update);
         }
 
-        private int carSpawnDirectionDeterminesRotation(DirectionCar direction)
+        public void Update()
         {
-            switch (direction)
-            {
-                case DirectionCar.North:
-                    return 0;
-                case DirectionCar.East:
-                    return +90;
-                case DirectionCar.South:
-                    return +180;
-                case DirectionCar.West:
-                    return -90;
-                default:
-                    return 0;
-            }   
+            var angle = -MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
+            while (angle < 0) angle += 360;
+            if (angle >= 360) angle -= 360;
+            RenderTransform = new RotateTransform(angle, 0.5, 0.5);
+
+            var rotation = car.Rotation;
+            var xoffset = Vector.Multiply(MathUtil.Normalize(MathUtil.RotateVector(rotation, 90)), car.Width / 2d);
+            var yoffset = Vector.Multiply(MathUtil.Normalize(MathUtil.RotateVector(xoffset, 90)), car.Length / 2d);
+
+            var location = new Vector(car.Location.X, car.Location.Y);
+            location = Vector.Subtract(location, xoffset);
+            location = Vector.Subtract(location, yoffset);
+
+            var zoom = Screen.Zoom;
+            Margin = new Thickness(location.X * zoom, location.Y * zoom, 0, 0);
+            CarRectangle.Width = 5 * zoom;
+            CarRectangle.Height = 10 * zoom;
+        }
+
+        public void Car_Select(object sender, MouseButtonEventArgs e)
+        {
+            //Empty info tab
+            Screen.TabItemInfo.Content = null;
+            
+            //Add info about this car
+            CarInfoUserControl ci = new CarInfoUserControl(car);
+            Screen.TabItemInfo.Content = ci;
+
+            //Open the info tab of selected car
+            Screen.TabItemInfo.IsSelected = true;
         }
     }
 }
