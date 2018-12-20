@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using KBS2.CarSystem.Sensors;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
@@ -43,6 +44,8 @@ namespace KBS2.CarSystem
         private bool obtainedNewTarget;
         private int turning;
         private Vector newTarget;
+        private bool flipping;
+        private bool approach;
 
         public CarController(Car car)
         {
@@ -91,6 +94,10 @@ namespace KBS2.CarSystem
                 .Any(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side));
         }
 
+        public void PassengersReady()
+        {
+        }
+
         /// <summary>
         /// Runs the main car logic. Needs to be subscribed to the MainLoop.
         /// </summary>
@@ -101,6 +108,8 @@ namespace KBS2.CarSystem
             {
                 Init();
             }
+
+            Car.PassengerCount = Car.Passengers.Count;
 
             // Update the current road with the road at our location.
             Car.CurrentRoad = GPSSystem.GetRoad(Car.Location);
@@ -123,12 +132,11 @@ namespace KBS2.CarSystem
                 if (!obtainedNewTarget)
                 {
                     var intersection = GPSSystem.FindIntersection(GetClosestRoadPoint(Car.Location));
-                    if (intersection == null)
-                        return;
+                    if (intersection == null) return;
 
                     var target = GPSSystem.GetDirection(Car, intersection);
                     newTarget = target.Location;
-                    App.Console.Print($"Obtained a new target: {newTarget}");
+                    App.Console.Print($"[C{Car.Id}] Obtained a new target: {newTarget}", Colors.Blue);
                     obtainedNewTarget = true;
                 }
             }
@@ -145,7 +153,13 @@ namespace KBS2.CarSystem
                     Car.CurrentTarget = newTarget;
                     newTarget = new Vector(-1, -1);
                 }
+
                 HandleTurn(ref velocity, ref yaw, ref addedRotation);
+            }
+            else if (flipping)
+            {
+                flipping = false;
+                App.Console.Print($"[C{Car.Id}] Turn-around done", Colors.Blue);
             }
 
             if (Car.CurrentRoad == null || Car.CurrentIntersection != null)
@@ -157,19 +171,34 @@ namespace KBS2.CarSystem
                 // Check how far we are from our destination.
                 if (!closeToDestination)
                 {
+                    if (approach)
+                    {
+                        approach = false;
+                        App.Console.Print($"[C{Car.Id}] Approach done", Colors.Blue);
+                    }
+
                     // Call the handle functions to stay in the lane and accelerate/deccelerate.
                     HandleStayInLane(ref velocity, ref yaw, ref addedRotation);
                     HandleAccelerate(ref velocity, ref distanceToTarget);
                 }
                 else
                 {
+                    if (!approach)
+                    {
+                        approach = true;
+                        App.Console.Print($"[C{Car.Id}] Initiating approach", Colors.Blue);
+                    }
+
                     // Call the handle function to approach the target.
                     HandleApproachTarget(ref velocity, ref yaw, ref addedRotation, ref distanceToDestination);
                 }
             }
 
             // Update the car's velocity with the result of the handle functions.
+            var speed = velocity.Length;
             velocity = MathUtil.RotateVector(velocity, -addedRotation);
+            velocity.Normalize();
+            velocity = Vector.Multiply(velocity, speed);
             Car.Velocity = velocity;
             var rotation = new Vector(velocity.X, velocity.Y);
             rotation.Normalize();
@@ -191,11 +220,19 @@ namespace KBS2.CarSystem
             // Get the current speed and rotation of the car.
             var speed = velocity.Length;
             var rotation = MathUtil.VelocityToRotation(velocity);
+            var intersection = Car.CurrentIntersection;
 
             // If we're going too fast to turn, slow down.
             if (speed > maxTurningSpeed)
             {
                 velocity = Vector.Add(velocity, CalculateDeccelerationVector(velocity));
+            }
+
+            // If we're not on the intersection yet, just keep driving straight.
+            if (intersection == null)
+            {
+                HandleStayInLane(ref velocity, ref yaw, ref addedRotation);
+                return;
             }
 
             // Get the target and current location.
@@ -211,16 +248,31 @@ namespace KBS2.CarSystem
             if (angle < 0) angle += 360;
 
             // If the angle is more than 225 degrees (-90 - 45), rotate to the left.
-            if (angle > 225)
+            if (angle > 225 && angle < 315)
             {
-                addedRotation += rotationSpeed * 0.8;
+                // If we're not turning around, slowly turn left.
+                if (!flipping)
+                {
+                    addedRotation += rotationSpeed * 0.8;
+                }
+                // If we are turning around, keep steering steeply left.
+                else
+                {
+                    addedRotation += rotationSpeed * 6;
+                }
             }
-            else if (angle > 135)
+            // If the angle is more than 135 degrees (180 - 45), turn around.
+            else if (angle > 135 && angle < 315)
             {
-                addedRotation += rotationSpeed * 12;
+                if (!flipping)
+                {
+                    flipping = true;
+                    App.Console.Print($"[C{Car.Id}] Initiating turn-around", Colors.Blue);
+                }
+                addedRotation += rotationSpeed * 6;
             }
             // If the angle is more than 45 degrees (90 - 45), rotate to the right.
-            else if (angle > 45)
+            else if (angle > 45 && angle < 315)
             {
                 addedRotation -= rotationSpeed * 6;
             }
@@ -230,16 +282,20 @@ namespace KBS2.CarSystem
                 addedRotation = yaw < 0 ? rotationSpeed : -rotationSpeed;
             }
         }
-
-        // TODO: Rework target approaching.
+        
         public void HandleApproachTarget(ref Vector velocity, ref double yaw, ref double addedRotation, ref double distanceToDestination)
         {
             var speed = velocity.Length;
             var rotation = MathUtil.VelocityToRotation(velocity);
             
-            if (speed > maxTurningSpeed / 2d || distanceToDestination < 20)
+            if (speed > maxTurningSpeed / 2d || Car.Passengers.Count > 0 || distanceToDestination < 20)
             {
-                velocity = speed > 0.1
+                if (speed < 0.05 && speed > 0)
+                {
+                    App.Console.Print($"[C{Car.Id}] Stopped", Colors.Blue);
+                    velocity = new Vector();
+                }
+                velocity = speed > 0.05
                     ? Vector.Add(velocity, CalculateDeccelerationVector(velocity))
                     : new Vector();
             }
@@ -360,7 +416,7 @@ namespace KBS2.CarSystem
             var target = Car.CurrentTarget;
             var destination = Car.Destination;
 
-            return distanceToDestination < 20 && MathUtil.Distance(target, destination.Location) < 10;
+            return distanceToDestination < 50 && MathUtil.Distance(target, destination.Location) < 10;
         }
 
         private static Vector GetClosestRoadPoint(Vector location)

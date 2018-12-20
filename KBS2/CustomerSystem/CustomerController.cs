@@ -1,6 +1,7 @@
 ﻿using KBS2.Util;
 using System;
 using System.Windows;
+using KBS2.CitySystem;
 
 namespace KBS2.CustomerSystem
 
@@ -112,6 +113,12 @@ namespace KBS2.CustomerSystem
                     direction = new Vector(x, y);
                 }
             }
+        }
+
+        public void Destroy()
+        {
+            City.Instance.Customers.Remove(Customer);
+            MainScreen.AILoop.Unsubscribe(Update);
         }
     }
 }

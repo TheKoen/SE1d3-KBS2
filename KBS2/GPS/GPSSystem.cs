@@ -101,7 +101,10 @@ namespace KBS2.GPS
                 App.Console.Print(
                     $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}");
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to calculate price for route from {group.Location} to {destination.Location}", Colors.Yellow);
+            }
 
             // Look to nearest Garage.
             var city = City.Instance;
@@ -151,46 +154,6 @@ namespace KBS2.GPS
                 Location = location,
                 Road = car.CurrentRoad
             }, car.Destination);
-
-            /*var roadsAtInteresection = intersection.GetRoads();
-            var roads = new List<Road>();
-
-            foreach (var road in roadsAtInteresection)
-            {
-                if (!car.CurrentRoad.Equals(road)) roads.Add(road);
-            }
-
-            var shortestDistance = double.MaxValue;
-            Road selectedRoad = null;
-            var selectDestination = new Vector();
-
-            foreach (var road in roads)
-            {
-                if (road.Equals(car.Destination.Road))
-                {
-                    var destination = car.Destination;
-                    var distance = MathUtil.DistanceToRoad(destination.Location, road) - road.Width / 4d;
-                    var direction = GetDirectionToRoad(destination.Location, road);
-                    var delta = Vector.Multiply(direction.GetVector(), distance);
-                    var target = Vector.Add(destination.Location, delta);
-
-                    return new Destination {Road = road, Location = target};
-                }
-
-                var tempDStart = MathUtil.Distance(road.Start, car.Location);
-                var tempDEnd = MathUtil.Distance(road.End, car.Location);
-
-                var closestPointToDestination = tempDStart > tempDEnd ? road.Start : road.End;
-
-                var distanceToDestination = MathUtil.Distance(closestPointToDestination, car.Destination.Location);
-
-                if (!(distanceToDestination < shortestDistance)) continue;
-                shortestDistance = distanceToDestination;
-                selectedRoad = road;
-                selectDestination = closestPointToDestination;
-            }
-
-            return new Destination {Road = selectedRoad, Location = selectDestination};*/
         }
 
         public static DirectionCar GetDirectionToRoad(Vector point, Road road)
