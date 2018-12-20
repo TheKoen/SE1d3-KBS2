@@ -61,7 +61,8 @@ namespace KBS2.Visual
 
             try
             {
-                CityParser.MakeCity(file);
+                var cityname = Screen.TBCity.Text;
+                CityParser.MakeCity(file, cityname.First().ToString().ToUpper() + cityname.Substring(1));
             }
             catch (Exception ex)
             {

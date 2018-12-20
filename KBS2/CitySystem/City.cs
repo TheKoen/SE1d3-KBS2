@@ -9,6 +9,8 @@ namespace KBS2.CitySystem
     {
         public static City Instance { get; private set; }
 
+        public string Name { get; }
+
         private readonly Property availableCars = new Property(5);
         public int AvailableCars {
             get => availableCars.Value;
@@ -41,9 +43,11 @@ namespace KBS2.CitySystem
 
         public CityController Controller { get; }
 
-        public City()
+        public City(string name)
         {
             Instance = this;
+
+            Name = name;
 
             Roads = new List<Road>();
             Buildings = new List<Building>();
