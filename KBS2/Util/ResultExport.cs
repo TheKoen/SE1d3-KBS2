@@ -103,6 +103,9 @@ namespace KBS2.Util
                     XmlElement carElement = doc.CreateElement("Car");
                     carsElement.AppendChild(carElement);
 
+                    XmlAttribute carId = doc.CreateAttribute("CarId");
+                    carId.Value = car.ID.ToString();
+
                     XmlAttribute model = doc.CreateAttribute("Model");
                     model.Value = car.Model;
 
@@ -126,6 +129,9 @@ namespace KBS2.Util
                 {
                     XmlElement customerGroupElement = doc.CreateElement("CustomerGroup");
                     customerGroupsElement.AppendChild(customerGroupsElement);
+
+                    XmlAttribute id = doc.CreateAttribute("Id");
+                    id.Value = customerGroup.ID.ToString();
 
                     XmlAttribute tripId = doc.CreateAttribute("TripId");
                     tripId.Value = customerGroup.Trip.ID.ToString();
@@ -200,17 +206,18 @@ namespace KBS2.Util
                     XmlElement tripElement = doc.CreateElement("Trip");
                     tripsElement.AppendChild(tripElement);
 
+                    XmlAttribute id = doc.CreateAttribute("Id");
+                    id.Value = trip.ID.ToString();
+
                     XmlAttribute startLocation = doc.CreateAttribute("StartLocation");
                     startLocation.Value = $"{trip.StartLocation.X},{trip.StartLocation.Y}";
 
                     XmlAttribute endLocation = doc.CreateAttribute("EndLocation");
                     endLocation.Value = $"{trip.EndLocation.X},{trip.EndLocation.Y}";
 
-                    XmlAttribute car = doc.CreateAttribute("Car");
-                    car.Value = trip.Car;
-
-                    X
-
+                    XmlAttribute car = doc.CreateAttribute("CarId");
+                    car.Value = trip.Car.ID.ToString();
+                    
                     tripElement.Attributes.Append(startLocation);
                     tripElement.Attributes.Append(endLocation);
                 }
