@@ -13,7 +13,7 @@ namespace KBS2.CitySystem
         public static int CAR_ID;
 
         private static readonly Random Random = new Random();
-        private readonly Property customerSpawnRate = new Property(0.2F);
+        private readonly Property customerSpawnRate = new Property(0.05F);
 
         private City City { get; }
 

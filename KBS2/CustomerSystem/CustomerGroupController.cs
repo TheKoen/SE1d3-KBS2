@@ -84,7 +84,7 @@ namespace KBS2.CustomerSystem
 
             if (RequestedCar)
             {
-                var car = City.Instance.Cars.Find(c => MathUtil.Distance(c.Location, Group.Location) < 30);
+                var car = City.Instance.Cars.Find(c => MathUtil.Distance(c.Location, Group.Location) < 20);
                 if (car == null || car.Passengers.Count > 0) return;
                 
                 Group.Customers.ForEach(customer => customer.Controller.Destroy());

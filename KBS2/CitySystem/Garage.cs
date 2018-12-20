@@ -25,7 +25,7 @@ namespace KBS2.CitySystem
 
             foreach (var cityCar in City.Instance.Cars)
             {
-                if (MathUtil.Distance(Location, cityCar.Location) < 50)
+                if (MathUtil.Distance(Location, cityCar.Location) < 100)
                 {
                     var thread = new Thread(() =>
                     {
