@@ -1,5 +1,5 @@
 ﻿using KBS2.CustomerSystem;
-using KBS2.Windows;
+using KBS2.Visual;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,7 +28,7 @@ namespace KBS2.Visual.Controls
             //Empty info tab
             Screen.TabItemInfo.Content = null;
 
-            //Add info about this car
+            //Add info about this customer
             var ci = new CustomerInfoUserControl(customer);
             Screen.TabItemInfo.Content = ci;
 

@@ -30,7 +30,7 @@ namespace KBS2.Visual
                 var propertyName = property.Key;
                 var propertyValue = property.Value.Value.ToString();
 
-                PropertyPanel.Children.Add(new PropertySettings(propertyName, propertyValue));
+                PropertyPanel.Children.Add(new PropertySettings(propertyName, propertyValue, true));
             }
         }
 

@@ -88,7 +88,6 @@ namespace KBS2.CustomerSystem
             Mood = CustomerSystem.Moral.Happy;
             
             Controller = new CustomerController(this);
-
             MainScreen.AILoop.Subscribe(Controller.Update);
         }
 
