@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using KBS2.Util.Loop;
 
 namespace KBS2.Database
@@ -20,17 +21,31 @@ namespace KBS2.Database
 
         static DatabaseHelper()
         {
-            using (var database = new MyDatabase("killakid"))
+            Application.Current.Exit += (sender, args) =>
             {
+                DatabaseLoop.Stop();
+                Database?.Dispose();
+            };
+
+            DatabaseLoop.EnqueueAction(() =>
+            {
+                App.Console?.Print("Connecting to database", Colors.LimeGreen);
+                Database = new MyDatabase("killakid");
+                App.Console?.Print("Connected!", Colors.LimeGreen);
+            });
+
+            QueueDatabaseAction((database) =>
+            {
+                App.Console?.Print($"Setting up DBHandler with DB {database}", Colors.LimeGreen);
+
                 foreach (var gender in database.Genders)
                 {
                     App.Console?.Print($"Loaded gender {gender.Name}");
                     Genders.Add(gender);
                 }
 
-                Application.Current.Exit += (sender, args) => Database?.Dispose();
-                Database = database;
-            }
+            });
+            DatabaseLoop.Start();
         }
 
         public static Gender GetGender(string gender)
@@ -38,7 +53,7 @@ namespace KBS2.Database
             var genderObject = Genders.Find(g => g.Name.Equals(gender));
             if (genderObject == null)
             {
-                using (var database = new MyDatabase("killakid"))
+                QueueDatabaseAction((database) =>
                 {
                     genderObject = new Gender
                     {
@@ -48,7 +63,7 @@ namespace KBS2.Database
 
                     database.Genders.Add(genderObject);
                     database.SaveChanges();
-                }
+                });
             }
 
             return genderObject;
@@ -56,19 +71,22 @@ namespace KBS2.Database
 
         public static void QueueDatabaseAction(DatabaseAction action)
         {
+            App.Console?.Print($"Queued a DBAction", Colors.LimeGreen);
             DatabaseLoop.EnqueueAction(() => action.Invoke(Database));
         }
 
         public static void QueueDatabaseRequest<T>(DatabaseRequest<T> request, DatbaseCallback<T> callback, TickLoop loop) where T : class
         {
+            App.Console?.Print($"Queued a DBRequest", Colors.LimeGreen);
             DatabaseLoop.EnqueueAction(() =>
             {
                 var results = request.Invoke(Database);
+                App.Console?.Print($"Retrieved {results.Count} items from DB, queueing callback", Colors.LimeGreen);
                 loop.EnqueueAction(() => callback.Invoke(results));
             });
         }
 
-        public static Database.Vector CreateVector(System.Windows.Vector vector)
+        public static Vector CreateVector(System.Windows.Vector vector)
         {
             return new Vector
             {
@@ -82,16 +100,12 @@ namespace KBS2.Database
             var results = (from obj in set
                            where predicate(obj)
                            select obj).ToList();
-            if (results.Count == 0)
-            {
-                return null;
-            }
-            return results.First();
+            return results.Count == 0 ? null : results.First();
         }
 
         public static bool MatchVectors(Vector vector1, System.Windows.Vector vector2)
         {
-            return vector1.X == vector2.X && vector1.Y == vector2.Y;
+            return Math.Abs(vector1.X - vector2.X) < 0.01 && Math.Abs(vector1.Y - vector2.Y) < 0.01;
         }
     }
 }

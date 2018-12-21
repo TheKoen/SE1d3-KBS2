@@ -113,6 +113,7 @@ namespace KBS2.Util.Loop
             var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             while (Queue.Count > 0)
             {
+                App.Console?.Print($"Invoking a SyncAction on {Name} loop", Colors.LimeGreen);
                 Queue.Dequeue()?.Invoke();
 
                 var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
@@ -129,6 +130,7 @@ namespace KBS2.Util.Loop
             }
             catch (Exception exception)
             {
+                //throw exception;
                 App.Console.Print($"Exception in {Name} loop: {exception}", Colors.Red);
 
                 exceptionCount++;

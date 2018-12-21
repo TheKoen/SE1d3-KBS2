@@ -7,14 +7,25 @@ using System.Windows;
 
 namespace KBS2.Database
 {
-    class ResultsHandler
+    public class ResultsHandler
     {
         private CityInstance Instance { get; set; }
-        private MainScreen Screen { get; set; }
+        private MainScreen Screen { get; }
+        private int ticks;
 
         public ResultsHandler(MainScreen screen)
         {
             Screen = screen;
+
+            MainScreen.CommandLoop.Subscribe(() =>
+            {
+                ticks++;
+                if (ticks == 500)
+                {
+                    ticks = 0;
+                    Update();
+                }
+            });
         }
 
         public void OnCustomerGroupAdd(object source, GroupEventArgs e)
@@ -107,7 +118,7 @@ namespace KBS2.Database
 
             DatabaseHelper.QueueDatabaseAction((database) =>
             {
-                var garage = DatabaseHelper.GetObject<Garage>(database.Garages,
+                /*var garage = DatabaseHelper.GetObject<Garage>(database.Garages,
                     g => DatabaseHelper.MatchVectors(g.Location, carObject.Garage));
                 if (garage == null) throw new Exception($"Unknown garage {carObject.Garage}");
 
@@ -129,45 +140,73 @@ namespace KBS2.Database
                 };
 
                 database.Trips.Add(trip);
-                database.SaveChanges();
+                database.SaveChanges();*/
             });
         }
 
         public void Update()
         {
             DatabaseHelper.QueueDatabaseRequest(
-                database => (from car in database.Cars
-                             where car.CityInstance.ID == Instance.ID
-                             select car).ToList(),
+                database => Instance != null
+                    ? (from customer in database.Customers
+                        where customer.CustomerGroup.CityInstance.ID == Instance.ID
+                        select customer).ToList()
+                    : new List<Customer>(),
+                data =>
+                {
+                    Screen.LabelResultTotalCustomers.Content = data.Count;
+                    if (data.Count == 0) return;
+                    Screen.LabelResultAvgAge.Content = Math.Round(data.Average(customer => customer.Age));
+                    Screen.LabelResultAvgMoral.Content = Math.Round(data.Average(customer => customer.Moral));
+                },
+                MainScreen.WPFLoop
+            );
+
+            DatabaseHelper.QueueDatabaseRequest(
+                database => Instance != null
+                    ? (from car in database.Cars
+                        where car.CityInstance.ID == Instance.ID
+                        select car).ToList()
+                    : new List<Car>(),
                 data =>
                 {
                     Screen.LabelResultTotalCars.Content = data.Count;
+                    if (data.Count == 0) return;
                     Screen.LabelResultDistanceTotalCar.Content = data.Sum(car => car.DistanceTravelled);
                     Screen.LabelResultDistanceAvarageCustomers.Content =
-                        Math.Round((double) data.Sum(car => car.DistanceTravelled));
+                        Math.Round(data.Average(car => car.DistanceTravelled));
                 },
                 MainScreen.WPFLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
-                database => (from review in database.Reviews
-                             where review.Trip.Car.CityInstance.ID == Instance.ID
-                             select review).ToList(),
+                database => Instance != null
+                    ? (from review in database.Reviews
+                        where review.Trip.Car.CityInstance.ID == Instance.ID
+                        select review).ToList()
+                    : new List<Review>(),
                 data =>
                 {
-                    Screen.LabelResultAvgReviewRating.Content = Math.Round((double)data.Sum(review => review.Rating));
+                    if (data.Count == 0) return;
+                    Screen.LabelResultAvgReviewRating.Content = Math.Round(data.Average(review => review.Rating));
                 },
                 MainScreen.WPFLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
-                database => (from trip in database.Trips
-                             where trip.Car.CityInstance.ID == Instance.ID
-                             select trip).ToList(),
+                database => Instance != null
+                    ? (from trip in database.Trips
+                        where trip.Car.CityInstance.ID == Instance.ID
+                        select trip).ToList()
+                    : new List<Trip>(),
                 data =>
                 {
+                    Screen.LabelResultRide.Content = data.Count;
+                    if (data.Count == 0) return;
                     Screen.LabelResultTotalEarned.Content = $"€{data.Sum(trip => trip.Price):0.00}";
                     Screen.LabelResultAvgPrice.Content = $"€{data.Sum(review => review.Price):0.00}";
+                    Screen.LabelResultDistanceTotal.Content = data.Sum(trip => trip.Distance);
+                    Screen.LabelResultDistanceAvarage.Content = Math.Round(data.Average(trip => trip.Distance));
                 },
                 MainScreen.WPFLoop
             );

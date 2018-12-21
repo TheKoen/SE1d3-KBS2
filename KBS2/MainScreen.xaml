@@ -32,11 +32,15 @@
 
             <TabItem x:Name="TabItemSimulation" Header="Simulation" Margin="-2,-2,-20,-2" >
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="314*"/>
+                        <ColumnDefinition Width="27*"/>
+                    </Grid.ColumnDefinitions>
 
 
                     <Button x:Name="BtnSelect" Content="Select City" HorizontalAlignment="Left" Margin="22,18,0,0" VerticalAlignment="Top" Width="73" Height="26" Click="BtnSelect_Click" />
                     <TextBox x:Name="TBCity" HorizontalAlignment="Left" Height="26" Margin="113,18,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="128" IsReadOnly="True"/>
-                    <Button x:Name="BtnLoad" Content="Load" HorizontalAlignment="Left" Margin="265,18,0,0" VerticalAlignment="Top" Width="65" Height="26" Click="BtnLoad_Click"/>
+                    <Button x:Name="BtnLoad" Content="Load" HorizontalAlignment="Left" Margin="265,18,0,0" VerticalAlignment="Top" Width="65" Height="26" Click="BtnLoad_Click" Grid.ColumnSpan="2"/>
 
 
                     <Label x:Name="CityName" Content="" HorizontalAlignment="Left" Margin="121,49,0,0" VerticalAlignment="Top" Width="168" FontSize="18"/>
@@ -50,7 +54,7 @@
                     <Label x:Name="LabelSimulationGarage" Content="0" HorizontalAlignment="Left" Margin="139,160,0,0" VerticalAlignment="Top" Width="150" Background="White"/>
 
 
-                    <Label Content="Customers" HorizontalAlignment="Left" Margin="121,182,0,0" VerticalAlignment="Top" FontSize="18" Grid.ColumnSpan="2"/>
+                    <Label Content="Customers" HorizontalAlignment="Left" Margin="121,182,0,0" VerticalAlignment="Top" FontSize="18"/>
                     <Label Content="Amount:" HorizontalAlignment="Left" Margin="48,216,0,0" VerticalAlignment="Top"/>
                     <Label Content="Succesful rides:" HorizontalAlignment="Left" Margin="48,242,0,0" VerticalAlignment="Top"/>
                     <Label Content="Rides cancelled:" HorizontalAlignment="Left" Margin="48,268,0,0" VerticalAlignment="Top" Width="98"/>
@@ -74,12 +78,12 @@
                     <Label x:Name="LabelSimulationPriceFormula" Content="1.50 + (1.00 * km)" HorizontalAlignment="Left" Margin="73,465,0,0" VerticalAlignment="Top" Width="193" FontSize="20"/>
 
 
-                    <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="42,0,0,92" VerticalAlignment="Bottom" Width="70" Height="40" Background="#FF1BE72C" Click="BtnStart_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="141,0,0,92" VerticalAlignment="Bottom" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnStop" Content="Reset" HorizontalAlignment="Left" Margin="238,0,0,92" VerticalAlignment="Bottom" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
-                    <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="100,0,0,35" VerticalAlignment="Bottom" Height="57" Width="153" FontSize="36" />
-                    <Button x:Name="BtnConsole" Content="Console" HorizontalAlignment="Left" Margin="280,0,0,10.4" VerticalAlignment="Bottom" Width="50" Click="BtnConsole_Click"/>
-                    <Button x:Name="BtnCityMaker" Content="City Maker" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="BtnCityMaker_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="42,0,0,92.4" VerticalAlignment="Bottom" Width="70" Height="40" Background="#FF1BE72C" Click="BtnStart_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnPause" Content="Pause" HorizontalAlignment="Left" Margin="141,0,0,92.4" VerticalAlignment="Bottom" Width="72" Height="40" Background="#FFDDED1F" RenderTransformOrigin="0.457,-0.147" Click="BtnPause_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnStop" Content="Reset" HorizontalAlignment="Left" Margin="238,0,0,92.4" VerticalAlignment="Bottom" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
+                    <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="100,0,0,35.4" VerticalAlignment="Bottom" Height="57" Width="153" FontSize="36" />
+                    <Button x:Name="BtnConsole" Content="Console" HorizontalAlignment="Left" Margin="280,0,0,10.4" VerticalAlignment="Bottom" Width="50" Click="BtnConsole_Click" Grid.ColumnSpan="2"/>
+                    <Button x:Name="BtnCityMaker" Content="City Maker" HorizontalAlignment="Left" Margin="10,0,0,10.4" VerticalAlignment="Bottom" Width="75" Click="BtnCityMaker_Click" IsEnabled="False"/>
                     <Button x:Name="BtnCarModelMaker" Content="Car Model Designer" HorizontalAlignment="Left" Margin="121,0,0,10.4" VerticalAlignment="Bottom" Width="117" Click="BtnCarModelMaker_Click"/>
 
 

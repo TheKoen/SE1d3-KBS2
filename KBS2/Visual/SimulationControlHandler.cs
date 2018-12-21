@@ -14,9 +14,13 @@ namespace KBS2.Visual
         private MainScreen Screen { get; }
         private string SelectedFilePath { get; set; }
 
+        public static ResultsHandler Results { get; set; }
+
         public SimulationControlHandler(MainScreen screen)
         {
             Screen = screen;
+            
+            Results = new ResultsHandler(Screen);
         }
 
         public void SelectButtonClick()
@@ -78,6 +82,8 @@ namespace KBS2.Visual
 
             EnableButtonsAndTabs();
             UpdateCountLabels(city);
+
+            Results.OnSimulationLoad(this, new SimulationEventArgs(CitySystem.City.Instance));
         }
 
         private void EnableButtonsAndTabs()
@@ -128,10 +134,6 @@ namespace KBS2.Visual
             Screen.BtnPause.IsEnabled = false;
             Screen.BtnStop.IsEnabled = false;
             App.Console.Print("Reset pressed");
-
-            var results = new ResultsHandler();
-            results.Setup();
-            results.Update();
 
             LoadButtonClick();
             ResetLabels();
