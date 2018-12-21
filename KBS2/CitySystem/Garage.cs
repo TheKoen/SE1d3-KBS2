@@ -52,7 +52,7 @@ namespace KBS2.CitySystem
             }
 
             var location = new Vector(x, y);
-            var car = model.CreateCar(id, location, Direction);
+            var car = model.CreateCar(id, location, this, Direction);
             Vector destination;
             switch (Direction)
             {

@@ -55,7 +55,7 @@ namespace KBS2.Util
                 // Customers
 
                 var customers = (from c in database.Customers
-                                 where c.CustomerGroup.CityInstance == simulation.CityInstance
+                                 where c.CustomerGroup.CityInstance.ID == simulation.CityInstance.ID
                                  select c).ToList();
 
                 XmlElement customersElement = doc.CreateElement("Customers");
@@ -65,6 +65,9 @@ namespace KBS2.Util
                 {
                     XmlElement customerElement = doc.CreateElement("Customer");
                     customersElement.AppendChild(customerElement);
+
+                    XmlAttribute id = doc.CreateAttribute("Id");
+                    id.Value = customer.ID.ToString();
 
                     XmlAttribute firstName = doc.CreateAttribute("FirstName");
                     firstName.Value = customer.FirstName;
@@ -78,9 +81,10 @@ namespace KBS2.Util
                     XmlAttribute gender = doc.CreateAttribute("Gender");
                     gender.Value = customer.Gender.Name;
 
-                    XmlAttribute customerGroupId = doc.CreateAttribute("customerGroupId");
+                    XmlAttribute customerGroupId = doc.CreateAttribute("CustomerGroupId");
                     customerGroupId.Value = customer.CustomerGroup.ID.ToString();
-                    
+
+                    customerElement.Attributes.Append(id);
                     customerElement.Attributes.Append(firstName);
                     customerElement.Attributes.Append(lastName);
                     customerElement.Attributes.Append(age);
@@ -91,7 +95,7 @@ namespace KBS2.Util
                 // cars
 
                 var cars = (from c in database.Cars
-                            where c.CityInstance == simulation.CityInstance
+                            where c.CityInstance.ID == simulation.CityInstance.ID
                             select c).ToList();
 
 
@@ -111,7 +115,8 @@ namespace KBS2.Util
 
                     XmlAttribute garageId = doc.CreateAttribute("GarageId");
                     garageId.Value = car.Garage.ID.ToString();
-                    
+
+                    carElement.Attributes.Append(carId);
                     carElement.Attributes.Append(model);
                     carElement.Attributes.Append(garageId);
                 }
@@ -119,7 +124,7 @@ namespace KBS2.Util
                 // CustomerGroups
 
                 var customerGroups = (from c in database.CustomerGroups
-                                      where c.CityInstance == simulation.CityInstance
+                                      where c.CityInstance.ID == simulation.CityInstance.ID
                                       select c).ToList();
 
                 XmlElement customerGroupsElement = doc.CreateElement("CustomerGroups");
@@ -128,7 +133,7 @@ namespace KBS2.Util
                 foreach (var customerGroup in customerGroups)
                 {
                     XmlElement customerGroupElement = doc.CreateElement("CustomerGroup");
-                    customerGroupsElement.AppendChild(customerGroupsElement);
+                    customerGroupsElement.AppendChild(customerGroupElement);
 
                     XmlAttribute id = doc.CreateAttribute("Id");
                     id.Value = customerGroup.ID.ToString();
@@ -136,11 +141,12 @@ namespace KBS2.Util
                     XmlAttribute tripId = doc.CreateAttribute("TripId");
                     tripId.Value = customerGroup.Trip.ID.ToString();
 
+                    customerGroupElement.Attributes.Append(id);
                     customerGroupElement.Attributes.Append(tripId);
                 }
 
                 var reviews = (from r in database.Reviews
-                               where r.Customer.CustomerGroup.CityInstance == simulation.CityInstance
+                               where r.Customer.CustomerGroup.CityInstance.ID == simulation.CityInstance.ID
                                select r).ToList();
 
                 // reviews
@@ -175,7 +181,7 @@ namespace KBS2.Util
                 // garages
 
                 var garages = (from g in database.Garages
-                               where g.City == simulation.CityInstance.City
+                               where g.City.CityName == simulation.CityInstance.City.CityName
                                select g).ToList();
 
                 XmlElement garagesElement = doc.CreateElement("Garages");
@@ -186,16 +192,20 @@ namespace KBS2.Util
                     XmlElement garageElement = doc.CreateElement("Garage");
                     garagesElement.AppendChild(garageElement);
 
+                    XmlAttribute id = doc.CreateAttribute("Id");
+                    id.Value = garage.ID.ToString();
+
                     XmlAttribute garageLocation = doc.CreateAttribute("Location");
                     garageLocation.Value = $"{garage.Location.X}, {garage.Location.Y}";
-                    
+
+                    garageElement.Attributes.Append(id);
                     garageElement.Attributes.Append(garageLocation);
                 }
 
                 // trips
 
                 var trips = (from t in database.Trips
-                             where t.Car.CityInstance == simulation.CityInstance
+                             where t.Car.CityInstance.ID == simulation.CityInstance.ID
                              select t).ToList();
 
                 XmlElement tripsElement = doc.CreateElement("Trips");
@@ -217,10 +227,12 @@ namespace KBS2.Util
 
                     XmlAttribute car = doc.CreateAttribute("CarId");
                     car.Value = trip.Car.ID.ToString();
-                    
+
+                    tripElement.Attributes.Append(id);
                     tripElement.Attributes.Append(startLocation);
                     tripElement.Attributes.Append(endLocation);
                 }
+                doc.Save(popupWindow.FileName);
 
                 ResultExported?.Invoke(null, EventArgs.Empty);
             }

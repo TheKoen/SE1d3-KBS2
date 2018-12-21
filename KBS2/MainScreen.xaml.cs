@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using KBS2.CitySystem;
 using KBS2.Visual;
 using KBS2.Database;
+using KBS2.Util;
 
 namespace KBS2
 {
@@ -82,6 +83,8 @@ namespace KBS2
             CommandLoop.Subscribe(CmdUpdate);
 
             PreviewMouseWheel += ZoomHandler.Scroll;
+
+            ResultImport.ImportResult();
         }
 
         protected override void OnClosing(CancelEventArgs e)
