@@ -1,6 +1,7 @@
 ﻿using KBS2.Util;
 using System;
 using System.Windows;
+using KBS2.CitySystem;
 
 namespace KBS2.CustomerSystem
 
@@ -52,6 +53,14 @@ namespace KBS2.CustomerSystem
         }
 
         /// <summary>
+        /// The customer makes a review depending on how long they had to wait, their moral state and the time of the ride.
+        /// </summary>
+        public void MakeReview()
+        {
+            Review r = new Review(Customer);
+        }
+
+        /// <summary>
         /// Change the moral of a customer
         /// </summary>
         /// <param name="Moral"></param>
@@ -85,6 +94,7 @@ namespace KBS2.CustomerSystem
                 return;
             }
             
+            //Customer randomly walks around while waiting on the car
             if(walking && !direction.Equals(Customer.Location))
             {
                 if (!MoveTowardsLocation(direction))
@@ -112,6 +122,12 @@ namespace KBS2.CustomerSystem
                     direction = new Vector(x, y);
                 }
             }
+        }
+
+        public void Destroy()
+        {
+            City.Instance.Customers.Remove(Customer);
+            MainScreen.AILoop.Unsubscribe(Update);
         }
     }
 }

@@ -37,7 +37,9 @@ namespace KBS2.Visual
             {
                 if (!HasControlFor(customer))
                 {
-                    _Canvas.Children.Add(new CustomerControl(customer, Screen));
+                    var c = new CustomerControl(customer, Screen);
+                    Panel.SetZIndex(c, 100);
+                    _Canvas.Children.Add(c);
                 }
             }
         }

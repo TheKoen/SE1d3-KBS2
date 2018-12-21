@@ -11,7 +11,6 @@ namespace KBS2.GPS.Algorithms
     {
         public Destination Calculate(Destination carDestination, Destination endDestination)
         {
-            App.Console.Print($"carDestination: {carDestination.Location}, endDestination: {endDestination.Location}");
             var network = RoadNetwork.GetInstance();
             var startNode = new Node(GPSSystem.FindIntersection(carDestination.Location).Location);
             var endNodes = AlgorithmTools.IntersectionTupleToNodeTuple(

@@ -37,10 +37,11 @@ namespace KBS2.Visual.Controls
             LabelInfoLocation.DataContext = customer;
             LabelInfoDestination.DataContext = customer;
 
+            Review r = new Review(Customer);
             //Depending on the gender of our customer, a profile picture will be selected to represent it.
-            
 
-            if(customer.Gender == "Female" || customer.Gender == "Male")
+
+            if (customer.Gender == "Female" || customer.Gender == "Male")
             {
                 profilePicturePath = customer.Gender == "Female"
                 ? new Uri(@" /KBS2;component/Images/Female_Profile_Picture.jpg", UriKind.Relative)

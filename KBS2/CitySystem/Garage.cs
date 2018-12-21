@@ -9,7 +9,7 @@ namespace KBS2.CitySystem
     public class Garage : Building
     {
         public DirectionCar Direction { get; }
-        public int AvailableCars { get; set; } = 1;
+        public int AvailableCars { get; set; } = 2;
 
         public Garage(Vector location, int size) : base(location, size)
         {
@@ -24,7 +24,7 @@ namespace KBS2.CitySystem
 
             foreach (var cityCar in City.Instance.Cars)
             {
-                if (MathUtil.Distance(Location, cityCar.Location) < 50)
+                if (MathUtil.Distance(Location, cityCar.Location) < 100)
                 {
                     var thread = new Thread(() =>
                     {

@@ -124,7 +124,10 @@
     <Compile Include="Console\Commands\CommandProperties.cs" />
     <Compile Include="Console\Commands\CommandSet.cs" />
     <Compile Include="Console\Commands\CommandsSensors.cs" />
+    <Compile Include="CustomerSystem\Review.cs" />
     <Compile Include="Database\DatabaseClasses.cs" />
+    <Compile Include="Database\DatabaseHandler.cs" />
+    <Compile Include="Database\Results.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
     <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
