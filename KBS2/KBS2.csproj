@@ -83,6 +83,21 @@
     <Compile Include="CarSystem\Destination.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadar.cs" />
     <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
+    <Compile Include="CityDesigner\CityDesignerWindow.xaml.cs">
+      <DependentUpon>CityDesignerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CityDesigner\CityLoader.cs" />
+    <Compile Include="CityDesigner\CitySaver.cs" />
+    <Compile Include="CityDesigner\LoadedCityEventArgs.cs" />
+    <Compile Include="CityDesigner\NumericUpDownControl.xaml.cs">
+      <DependentUpon>NumericUpDownControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CityDesigner\ObjectCreators\BuildingCreator.cs" />
+    <Compile Include="CityDesigner\ObjectCreators\GarageCreator.cs" />
+    <Compile Include="CityDesigner\ObjectCreators\IntersectionCreator.cs" />
+    <Compile Include="CityDesigner\ObjectCreators\RoadCreator.cs" />
+    <Compile Include="CityDesigner\ObjectHandler.cs" />
+    <Compile Include="CityDesigner\Tools.cs" />
     <Compile Include="CitySystem\Building.cs" />
     <Compile Include="CarSystem\Car.cs" />
     <Compile Include="CarSystem\CarController.cs" />
@@ -134,6 +149,7 @@
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Util\ResultImport.cs" />
     <Compile Include="Visual\Controls\PropertySettings.xaml.cs">
       <DependentUpon>PropertySettings.xaml</DependentUpon>
     </Compile>
@@ -163,6 +179,7 @@
     </Compile>
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
+    <Compile Include="Util\ResultExport.cs" />
     <Compile Include="Util\StringConverters.cs" />
     <Compile Include="Visual\CityRenderHandler.cs" />
     <Compile Include="Visual\Controls\CarControl.xaml.cs">
@@ -195,6 +212,14 @@
     <Compile Include="Visual\Controls\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="CityDesigner\CityDesignerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CityDesigner\NumericUpDownControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="Visual\ZoomHandler.cs" />
     <Page Include="ConsoleWindow.xaml">
       <SubType>Designer</SubType>
@@ -297,9 +322,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\happy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CityDesigner\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">

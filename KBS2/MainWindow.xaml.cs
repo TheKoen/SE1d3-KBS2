@@ -5,6 +5,7 @@ using CommandSystem;
 using CommandSystem.Exceptions;
 using KBS2.CitySystem;
 using KBS2.GPS;
+using KBS2.CityDesigner;
 using KBS2.Util.Loop;
 
 namespace KBS2
@@ -19,6 +20,10 @@ namespace KBS2
 
         public MainWindow()
         {
+            var window = new CityDesignerWindow();
+            window.InitializeComponent();
+             
+            /**
             InitializeComponent();
             CommandLoop.Start();
 
@@ -91,8 +96,9 @@ namespace KBS2
                     MainConsole.Print(exception.Message, Colors.Red);
                 }
             };
-            
+            **/
         }
+        
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {

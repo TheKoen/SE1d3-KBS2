@@ -18,8 +18,6 @@ namespace KBS2.Database
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<CityInstance> CityInstances { get; set; }
-
-
     }
 
     public class Simulation

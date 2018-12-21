@@ -90,12 +90,8 @@ namespace KBS2.CitySystem
                 case "Building":
                     return new Building(loc, size);
                 case "Garage":
-                    if (Enum.TryParse(node.Attributes["Direction"].InnerText, out DirectionCar direction))
-                    {
-                        return new Garage(loc, size, direction);
-                    }
-
-                    throw new XmlException("Garage doesn't have a valid direction");
+                    return new Garage(loc, size);
+                   
                 default:
                     return null;
             }

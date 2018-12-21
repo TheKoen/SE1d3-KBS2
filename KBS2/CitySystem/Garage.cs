@@ -12,9 +12,8 @@ namespace KBS2.CitySystem
         public int AvailableCars { get; set; } = 2;
         public CarModel Model { get; set; } = CarModel.Get("TestModel");
 
-        public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
+        public Garage(Vector location, int size) : base(location, size)
         {
-            Direction = direction;
         }
 
         public Car SpawnCar(int id, Destination finalDestination)
