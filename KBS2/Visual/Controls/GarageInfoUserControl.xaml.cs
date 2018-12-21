@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KBS2.CarSystem;
 
 namespace KBS2.Visual.Controls
 {
@@ -25,6 +26,7 @@ namespace KBS2.Visual.Controls
         public Garage Building { get; set; }
         private StackPanel PropertyPanel { get; }
         private PropertySettings AvailableCarsProperty;
+        private PropertySettings CarModelProperties;
 
         public GarageInfoUserControl(Building building)
         {
@@ -42,6 +44,13 @@ namespace KBS2.Visual.Controls
 
             AvailableCarsProperty = new PropertySettings(propertyName, propertyValue, true);
             PropertyPanel.Children.Add(AvailableCarsProperty);
+
+            var propertyName2 = "Model";
+            var propertyValue2 = Building.Model.Name;
+
+            CarModelProperties = new PropertySettings(propertyName2, propertyValue2, false);
+            CarModelProperties.PreviewTextInput -= CarModelProperties.NumberValidationTextBox;
+            PropertyPanel.Children.Add(CarModelProperties);
         }
 
         private void BtnGarageSave_Click(object sender, RoutedEventArgs e)
@@ -56,6 +65,19 @@ namespace KBS2.Visual.Controls
                 //Set new value.
                 var newValue = (int)Math.Round(double.Parse(AvailableCarsProperty.TBCurrentValue.Text));
                 Building.AvailableCars = newValue;
+            }
+
+            if (Building.Model.ToString() != CarModelProperties.TBCurrentValue.Text)
+            {
+                var newValue = CarModelProperties.TBCurrentValue.Text;
+                try
+                {
+                    Building.Model = CarModel.Get(newValue);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The changes have not been saved, the given model does not exist.", "Changes not saved.", MessageBoxButton.OK);
+                }
             }
         }
     }

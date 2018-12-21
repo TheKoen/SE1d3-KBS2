@@ -10,13 +10,14 @@ namespace KBS2.CitySystem
     {
         public DirectionCar Direction { get; }
         public int AvailableCars { get; set; } = 2;
+        public CarModel Model { get; set; } = CarModel.Get("TestModel");
 
         public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
         {
             Direction = direction;
         }
 
-        public Car SpawnCar(int id, CarModel model, Destination finalDestination)
+        public Car SpawnCar(int id, Destination finalDestination)
         {
             if (AvailableCars <= 0)
             {
@@ -30,7 +31,7 @@ namespace KBS2.CitySystem
                     var thread = new Thread(() =>
                     {
                         Thread.Sleep(1000);
-                        SpawnCar(id, model, finalDestination);
+                        SpawnCar(id, finalDestination);
                     });
                     thread.Start();
                     return null;
@@ -53,7 +54,7 @@ namespace KBS2.CitySystem
             }
 
             var location = new Vector(x, y);
-            var car = model.CreateCar(id, location, Direction);
+            var car = Model.CreateCar(id, location, Direction);
             Vector destination;
             switch (Direction)
             {
