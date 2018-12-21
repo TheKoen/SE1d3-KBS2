@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using KBS2.Util.Loop;
 
 namespace KBS2.Database
 {
     public delegate void DatabaseAction(MyDatabase database);
+    public delegate void DatbaseCallback<T>(ICollection<T> data) where T : class;
+    public delegate ICollection<T> DatabaseRequest<T>(MyDatabase database) where T : class;
 
     public static class DatabaseHelper
     {
         private static readonly List<Gender> Genders = new List<Gender>();
+        private static readonly TickLoop DatabaseLoop = new ThreadLoop("DB");
+
+        private static MyDatabase Database;
 
         static DatabaseHelper()
         {
@@ -22,6 +27,9 @@ namespace KBS2.Database
                     App.Console?.Print($"Loaded gender {gender.Name}");
                     Genders.Add(gender);
                 }
+
+                Application.Current.Exit += (sender, args) => Database?.Dispose();
+                Database = database;
             }
         }
 
@@ -48,7 +56,16 @@ namespace KBS2.Database
 
         public static void QueueDatabaseAction(DatabaseAction action)
         {
+            DatabaseLoop.EnqueueAction(() => action.Invoke(Database));
+        }
 
+        public static void QueueDatabaseRequest<T>(DatabaseRequest<T> request, DatbaseCallback<T> callback, TickLoop loop) where T : class
+        {
+            DatabaseLoop.EnqueueAction(() =>
+            {
+                var results = request.Invoke(Database);
+                loop.EnqueueAction(() => callback.Invoke(results));
+            });
         }
 
         public static Database.Vector CreateVector(System.Windows.Vector vector)

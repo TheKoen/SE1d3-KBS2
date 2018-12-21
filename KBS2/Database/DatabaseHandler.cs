@@ -136,7 +136,7 @@ namespace KBS2.Database
             SimulationID = simulation.ID;
         }
 
-        public void Update(Results Data)
+        public void Update(ResultsHandler Data)
         {
             // Pak de laatste city uit de cities tabel
             var sim = (from s in Database.Simulations

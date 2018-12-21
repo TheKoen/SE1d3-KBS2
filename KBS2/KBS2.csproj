@@ -114,7 +114,7 @@
     <Compile Include="Database\DatabaseHandler.cs" />
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Database\ResultEvents.cs" />
-    <Compile Include="Database\Results.cs" />
+    <Compile Include="Database\ResultsHandler.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
     <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />

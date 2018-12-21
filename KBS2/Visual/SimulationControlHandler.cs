@@ -129,7 +129,7 @@ namespace KBS2.Visual
             Screen.BtnStop.IsEnabled = false;
             App.Console.Print("Reset pressed");
 
-            var results = new Results();
+            var results = new ResultsHandler();
             results.Setup();
             results.Update();
 

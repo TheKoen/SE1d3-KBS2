@@ -139,18 +139,6 @@
                                 <Label  x:Name="LabelResultAvgAge" Content="" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Requests" Width="150"/>
-                                <Label x:Name="LabelResultRequests" Content=""  Width="150"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Cancellation" Width="150"/>
-                                <Label x:Name="LabelResultCancel" Content="" Width="150"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Deaths" Width="150"/>
-                                <Label x:Name="LabelResultDeaths" Content="" Width="150"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
                                 <Label Content="Rides" Width="150"/>
                                 <Label x:Name="LabelResultRide" Content="" Width="150"/>
                             </StackPanel>

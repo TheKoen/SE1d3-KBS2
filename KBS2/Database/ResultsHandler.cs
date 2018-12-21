@@ -7,14 +7,15 @@ using System.Windows;
 
 namespace KBS2.Database
 {
-    class Results
+    class ResultsHandler
     {
-        public DatabaseHandler DatabaseHandler { get; private set; } = new DatabaseHandler();
-
-        //lijst met info
-        public List<Database.Customer> CustomerList { get; set; }
         private CityInstance Instance { get; set; }
-        //event based van simulatie de data opslaan, elke 5 seconde stuurt hij de data naar db.
+        private MainScreen Screen { get; set; }
+
+        public ResultsHandler(MainScreen screen)
+        {
+            Screen = screen;
+        }
 
         public void OnCustomerGroupAdd(object source, GroupEventArgs e)
         {
@@ -27,7 +28,7 @@ namespace KBS2.Database
                     Trip = null
                 };
 
-                foreach(var customer in groupObject.Customers)
+                foreach (var customer in groupObject.Customers)
                 {
                     database.Customers.Add(new Customer
                     {
@@ -40,29 +41,28 @@ namespace KBS2.Database
                 }
 
                 database.SaveChanges();
-            });              
+            });
         }
 
         public void OnSimulationLoad(object source, SimulationEventArgs e)
         {
-
             CitySystem.City cityObject = e.City;
             DatabaseHelper.QueueDatabaseAction((database) =>
             {
                 var cities = (from c in database.Cities
-                            where c.CityName.Equals(e.CityName)
-                            select c).ToList();
+                    where c.CityName.Equals(e.CityName)
+                    select c).ToList();
                 City city;
-                if(cities.Count == 0)
+                if (cities.Count == 0)
                 {
                     city = new City()
                     {
                         CityName = e.CityName
                     };
                     database.Cities.Add(city);
-                    foreach(var building in cityObject.Buildings)
+                    foreach (var building in cityObject.Buildings)
                     {
-                        if(building is CitySystem.Garage garage)
+                        if (building is CitySystem.Garage garage)
                         {
                             database.Garages.Add(
                                 new Garage
@@ -95,7 +95,7 @@ namespace KBS2.Database
                 database.Simulations.Add(simulation);
                 database.SaveChanges();
             });
-        } 
+        }
 
         public void OnTripEnd(object source, TripEventArgs e)
         {
@@ -107,14 +107,16 @@ namespace KBS2.Database
 
             DatabaseHelper.QueueDatabaseAction((database) =>
             {
-                var garage = DatabaseHelper.GetObject<Garage>(database.Garages, g => DatabaseHelper.MatchVectors(g.Location, carObject.Garage));
+                var garage = DatabaseHelper.GetObject<Garage>(database.Garages,
+                    g => DatabaseHelper.MatchVectors(g.Location, carObject.Garage));
                 if (garage == null) throw new Exception($"Unknown garage {carObject.Garage}");
 
                 var car = new Car
                 {
                     CityInstance = Instance,
                     Garage = garage,
-                    Model = carObject.Model.Name
+                    Model = carObject.Model.Name,
+                    DistanceTravelled = (int) Math.Round(carObject.DistanceTraveled)
                 };
 
                 var trip = new Trip
@@ -131,17 +133,44 @@ namespace KBS2.Database
             });
         }
 
-        public void Setup()
-        {
-            DatabaseHandler.Setup();
-        }
-
         public void Update()
         {
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from car in database.Cars
+                             where car.CityInstance.ID == Instance.ID
+                             select car).ToList(),
+                data =>
+                {
+                    Screen.LabelResultTotalCars.Content = data.Count;
+                    Screen.LabelResultDistanceTotalCar.Content = data.Sum(car => car.DistanceTravelled);
+                    Screen.LabelResultDistanceAvarageCustomers.Content =
+                        Math.Round((double) data.Sum(car => car.DistanceTravelled));
+                },
+                MainScreen.WPFLoop
+            );
 
-            DatabaseHandler.Update(this);
-            
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from review in database.Reviews
+                             where review.Trip.Car.CityInstance.ID == Instance.ID
+                             select review).ToList(),
+                data =>
+                {
+                    Screen.LabelResultAvgReviewRating.Content = Math.Round((double)data.Sum(review => review.Rating));
+                },
+                MainScreen.WPFLoop
+            );
+
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from trip in database.Trips
+                             where trip.Car.CityInstance.ID == Instance.ID
+                             select trip).ToList(),
+                data =>
+                {
+                    Screen.LabelResultTotalEarned.Content = $"€{data.Sum(trip => trip.Price):0.00}";
+                    Screen.LabelResultAvgPrice.Content = $"€{data.Sum(review => review.Price):0.00}";
+                },
+                MainScreen.WPFLoop
+            );
         }
     }
-
 }

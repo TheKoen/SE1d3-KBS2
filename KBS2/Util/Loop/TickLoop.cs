@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using CommandSystem;
 using CommandSystem.PropertyManagement;
@@ -6,12 +7,16 @@ using KBS2.Console;
 
 namespace KBS2.Util.Loop
 {
+    public delegate void SyncAction();
+
     public abstract class TickLoop
     {
         protected string Name { get; }
 
         private Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
+
+        private readonly Queue<SyncAction> Queue = new Queue<SyncAction>();
 
         private event Update UpdateEvent;
 
@@ -35,6 +40,11 @@ namespace KBS2.Util.Loop
             {
                 App.Console?.Print($"Unable to register tickRate property for {Name} loop", Colors.Yellow);
             }
+        }
+
+        public void EnqueueAction(SyncAction action)
+        {
+            Queue.Enqueue(action);
         }
 
         /// <summary>
@@ -86,9 +96,36 @@ namespace KBS2.Util.Loop
         protected void Update(object source, EventArgs args)
         {
             var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+            CatchExceptions(HandleQueue); 
+            CatchExceptions(() => UpdateEvent?.Invoke());
+
+            var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
+            var interval = CalculateInterval(tickRate.Value);
+            if (taken > interval)
+            {
+                App.Console.Print($"{Name} loop is running {taken - interval}ms behind!", Colors.Yellow);
+            }
+        }
+
+        private void HandleQueue()
+        {
+            var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            while (Queue.Count > 0)
+            {
+                Queue.Dequeue()?.Invoke();
+
+                var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
+                var interval = CalculateInterval(tickRate.Value);
+                if (taken > interval) break;
+            }
+        }
+
+        private void CatchExceptions(Action action)
+        {
             try
             {
-                UpdateEvent?.Invoke();
+                action.Invoke();
             }
             catch (Exception exception)
             {
@@ -100,12 +137,6 @@ namespace KBS2.Util.Loop
                     Stop();
                     App.Console.Print($"{Name} loop has been stopped due to too many exceptions!", Colors.Red);
                 }
-            }
-            var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
-            var interval = CalculateInterval(tickRate.Value);
-            if (taken > interval)
-            {
-                App.Console.Print($"{Name} loop is running {taken - interval}ms behind!", Colors.Yellow);
             }
         }
 
