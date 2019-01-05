@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Windows.Media;
+using KBS2.CarSystem;
 using KBS2.CitySystem;
 using KBS2.GPS;
 using KBS2.Util;
@@ -80,7 +82,22 @@ namespace KBS2.CustomerSystem
         public void Update() {
             var buitenRange = Group.Customers.Any(c => MathUtil.Distance(c.Location, Group.Location) > GroupRadius);
 
-            if (buitenRange || RequestedCar) return;
+            if (RequestedCar)
+            {
+                var car = City.Instance.Cars.Find(c => MathUtil.Distance(c.Location, Group.Location) < 20);
+                if (car == null || car.Passengers.Count > 0) return;
+                
+                Group.Customers.ForEach(customer => customer.Controller.Destroy());
+                MainScreen.AILoop.Unsubscribe(Update);
+                car.Passengers.AddRange(Group.Customers);
+                var destination = Group.Destination.Location;
+                App.Console.Print($"Passengers entered car {car.Id} with destination {destination}", Colors.Blue);
+                car.Destination = new Destination {Location = destination, Road = GPSSystem.NearestRoad(destination)};
+                car.Controller.PassengersReady();
+                return;
+            }
+
+            if (buitenRange) return;
             var road = GPSSystem.NearestRoad(Group.Destination.Location);
             GPSSystem.RequestCar(new CarSystem.Destination { Location = Group.Destination.Location, Road = road }, Group);
             RequestedCar = true;

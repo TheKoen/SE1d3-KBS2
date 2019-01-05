@@ -49,11 +49,7 @@ namespace KBS2.CustomerSystem
         public Building Destination
         {
             get => Group.Destination;
-            set
-            {
-                Group.Destination = value;
-                
-            }
+            set => Group.Destination = value;
         }
 
         public void UpdateDestination()

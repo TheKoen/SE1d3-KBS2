@@ -51,6 +51,8 @@ namespace KBS2.Visual.Controls
             location = Vector.Subtract(location, xoffset);
             location = Vector.Subtract(location, yoffset);
 
+            if (double.IsNaN(location.Length)) return;
+
             var zoom = Screen.Zoom;
             Margin = new Thickness(location.X * zoom, location.Y * zoom, 0, 0);
             CarRectangle.Width = 5 * zoom;

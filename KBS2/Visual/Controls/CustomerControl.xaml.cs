@@ -40,8 +40,8 @@ namespace KBS2.Visual.Controls
         {
             var zoom = Screen.Zoom;
             Margin = new Thickness(customer.Location.X * zoom, customer.Location.Y * zoom, 0, 0);
-            Height = 8 * zoom;
-            Width = 8 * zoom;
+            Height = 20 * zoom;
+            Width = 20 * zoom;
             EllipseCustomer.Height = 8 * zoom;
             EllipseCustomer.Width = 8 * zoom;
         }
