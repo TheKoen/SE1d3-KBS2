@@ -179,6 +179,12 @@
       <DependentUpon>IntersectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\TextBoxProperties.cs" />
+    <Compile Include="Visual\Controls\ReviewInfoUserControl.xaml.cs">
+      <DependentUpon>ReviewInfoUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Visual\Controls\ReviewListWindow.xaml.cs">
+      <DependentUpon>ReviewListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Visual\Controls\RoadControl.xaml.cs">
       <DependentUpon>RoadControl.xaml</DependentUpon>
     </Compile>
@@ -247,6 +253,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ModelDesigner\SensorPickerWindow.xaml" />
+    <Page Include="Visual\Controls\ReviewInfoUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\ReviewListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Visual\Controls\RoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

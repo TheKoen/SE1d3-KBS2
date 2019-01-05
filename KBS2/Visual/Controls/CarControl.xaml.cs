@@ -63,7 +63,7 @@ namespace KBS2.Visual.Controls
             Screen.TabItemInfo.Content = null;
             
             //Add info about this car
-            CarInfoUserControl ci = new CarInfoUserControl(car);
+            CarInfoUserControl ci = new CarInfoUserControl(car, Screen);
             Screen.TabItemInfo.Content = ci;
 
             //Open the info tab of selected car

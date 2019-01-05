@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace KBS2.CustomerSystem
 {
-    class Review
+    public class Review
     {
         public Customer CustomerData { get; set; }
         public DateTime Date { get; set; }

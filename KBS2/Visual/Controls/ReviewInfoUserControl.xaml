@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="KBS2.Visual.Controls.ReviewInfoUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KBS2.Visual.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="800">
+    <Grid Height="150" Width="800" Background="#FFFDFAFA">
+        <Label x:Name="LabelCustomerName" Content="Customer name." HorizontalAlignment="Left" Margin="141,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelReviewNr" Content="Review Nr." HorizontalAlignment="Left" Margin="291,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelDate" Content="Review Date" HorizontalAlignment="Left" Margin="437,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Rating:" HorizontalAlignment="Left" Margin="666,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelRating" Content="★★★★★" HorizontalAlignment="Left" Margin="713,6,0,0" VerticalAlignment="Top" FontSize="16" Foreground="Red"/>
+        <Image x:Name="ProfilePicture" Height="100" Width="115" VerticalAlignment="Top" Margin="10,10,675,0" />
+        <Border BorderThickness="2"
+        BorderBrush="#FF000000"
+        VerticalAlignment="Top" Margin="10,10,675,0" CornerRadius="8,8,8,8" Height="100" Width="115">
+
+        </Border>
+        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="99" Margin="141,41,0,0" Stroke="Black" VerticalAlignment="Top" Width="572"/>
+        <TextBlock x:Name="TBContent" HorizontalAlignment="Left" Margin="141,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="99" Width="572"/>
+    </Grid>
+</UserControl>
