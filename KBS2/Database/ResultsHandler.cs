@@ -144,6 +144,7 @@ namespace KBS2.Database
             });
         }
 
+        // Only LabelResultAvgCustomers and LabelResultAvgReviewRating are still missing. Car doesn't save this info?
         public void Update()
         {
             DatabaseHelper.QueueDatabaseRequest(
@@ -154,10 +155,12 @@ namespace KBS2.Database
                     : new List<Customer>(),
                 data =>
                 {
+                    Screen.LabelResultCustomer.Content = data.Count;
                     Screen.LabelResultTotalCustomers.Content = data.Count;
                     if (data.Count == 0) return;
                     Screen.LabelResultAvgAge.Content = Math.Round(data.Average(customer => customer.Age));
                     Screen.LabelResultAvgMoral.Content = Math.Round(data.Average(customer => customer.Moral));
+                    
                 },
                 MainScreen.WPFLoop
             );
@@ -170,10 +173,11 @@ namespace KBS2.Database
                     : new List<Car>(),
                 data =>
                 {
+                    Screen.LabelResultCars.Content = data.Count;
                     Screen.LabelResultTotalCars.Content = data.Count;
                     if (data.Count == 0) return;
                     Screen.LabelResultDistanceTotalCar.Content = data.Sum(car => car.DistanceTravelled);
-                    Screen.LabelResultDistanceAvarageCustomers.Content =
+                    Screen.LabelResultDistanceAvarageCars.Content =
                         Math.Round(data.Average(car => car.DistanceTravelled));
                 },
                 MainScreen.WPFLoop
@@ -207,6 +211,21 @@ namespace KBS2.Database
                     Screen.LabelResultAvgPrice.Content = $"€{data.Sum(review => review.Price):0.00}";
                     Screen.LabelResultDistanceTotal.Content = data.Sum(trip => trip.Distance);
                     Screen.LabelResultDistanceAvarage.Content = Math.Round(data.Average(trip => trip.Distance));
+                    
+                },
+                MainScreen.WPFLoop
+            );
+
+            DatabaseHelper.QueueDatabaseRequest(
+                database => Instance != null
+                    ? (from simulation in database.Simulations
+                       where simulation.CityInstance.ID == Instance.ID
+                       select simulation).ToList()
+                    : new List<Simulation>(),
+                data =>
+                {
+                    if (data.Count == 0) return;
+                    Screen.LabelResultTimeElapsed.Content = data.Select(sim => sim.Duration);
                 },
                 MainScreen.WPFLoop
             );

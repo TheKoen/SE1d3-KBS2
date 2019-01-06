@@ -171,7 +171,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Distance Average" Width="150"/>
-                                <Label x:Name="LabelResultDistanceAvarageCustomers" Content="" Width="150"/>
+                                <Label x:Name="LabelResultDistanceAvarageCars" Content="" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Average customers per car" Width="150"/>
