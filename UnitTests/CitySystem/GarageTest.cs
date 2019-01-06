@@ -13,7 +13,7 @@ namespace UnitTests.CitySystem
         [TestCase(40, 20, DirectionCar.North, 13.3, 20)]
         [TestCase(60, 60, DirectionCar.East, 60, 93.3)]
         [TestCase(60, 60, DirectionCar.West, 60, 86.6)]
-        public void TestSpawnCar(double gx, double gy, DirectionCar direction, double ex, double ey)
+        public void TestSpawnCar(double gx, double gy, double ex, double ey)
         {
             
             var city = new CityBuilder()
@@ -21,10 +21,10 @@ namespace UnitTests.CitySystem
                 .Road(new Vector(0, 90), new Vector(100, 90), 10)
                 .Build();
 
-            var garage = new Garage(new Vector(gx, gy), 20, direction);
+            var garage = new Garage(new Vector(gx, gy), 20);
             city.Buildings.Add(garage);
 
-            var car = garage.SpawnCar(0, CarModel.Get("TestModel"));
+            var car = garage.SpawnCar(0, CarModel.Get("TestModel"), new Destination());
 
             Assert.AreEqual(ex, car.Location.X, 0.5);
             Assert.AreEqual(ey, car.Location.Y, 0.5);

@@ -23,6 +23,7 @@ namespace UnitTests.Util
         private CarModel model = CarModel.Get("TestModel");
         private int width;
         private int length;
+        private Garage garage;
         private Road currentRoad;
 
         public CarBuilder Location(Vector location)
@@ -39,7 +40,7 @@ namespace UnitTests.Util
 
         public CarBuilder Width(int width)
         {
-            this.width =width;
+            this.width = width;
             return this;
         }
 
@@ -67,6 +68,12 @@ namespace UnitTests.Util
             return this;
         }
 
+        public CarBuilder Garge(Garage garage)
+        {
+            this.garage = garage;
+            return this;
+        }
+
         public Car Build()
         {
             if (location == null)
@@ -74,7 +81,7 @@ namespace UnitTests.Util
                 throw new ArgumentException("Location cannot be null");
             }
 
-            var car = new Car(ID++, model, location, new List<Sensor>(), direction, width, length)
+            var car = new Car(ID++, model, location, new List<Sensor>(), garage, direction, width, length)
             {
                 CurrentRoad = currentRoad
             };

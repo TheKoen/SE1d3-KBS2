@@ -13,13 +13,18 @@ namespace KBS2.Util
     {
         public static event EventHandler ResultImported;
 
+        /// <summary>
+        /// Import results from .xml file into database
+        /// </summary>
         public static void ImportResult()
         {
             var doc = new XmlDocument();
 
-            var popupWindow = new OpenFileDialog();
-            popupWindow.Title = "Load City";
-            popupWindow.Filter = "XML file | *.xml";
+            var popupWindow = new OpenFileDialog()
+            {
+                Title = "Load City",
+                Filter = "XML file | *.xml"
+            };
             if (popupWindow.ShowDialog() == DialogResult.OK)
             {
 

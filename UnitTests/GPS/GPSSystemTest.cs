@@ -63,8 +63,8 @@ namespace UnitTests.GPS
         public void RequestCarTest(double gX, double gY, double eX, double eY, DirectionCar direction)
         {
             var road = new Road(new Vector(0, 50), new Vector(100, 50), 10, 100);
-            var garage1 = new Garage(new Vector(80, 20), 10, DirectionCar.East);
-            var garage2 = new Garage(new Vector(20, 80), 10, DirectionCar.East);
+            var garage1 = new Garage(new Vector(80, 20), 10);
+            var garage2 = new Garage(new Vector(20, 80), 10);
             var building = new Building(new Vector(gX, gY), 1);
 
             var city = new CityBuilder()
@@ -123,7 +123,7 @@ namespace UnitTests.GPS
                 .Intersection(intersections[3])
                 .Build();
 
-            var car = new Car(1, CarModel.Get("TestModel"), new Vector(cX, cY), new List<Sensor>(), direction, 5, 5);
+            var car = new Car(1, CarModel.Get("TestModel"), new Vector(cX, cY), new List<Sensor>(), new Garage(new Vector(0,0), 100) ,direction, 5, 5);
             city.Cars.Add(car);
 
             car.Destination = new Destination {Location = new Vector(dX, dY), Road = roads[destRoad]};

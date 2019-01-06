@@ -14,11 +14,17 @@ namespace KBS2.Util
     {
         public static event EventHandler ResultExported;
 
-        public static void ExportResult(int simulationId)
+        /// <summary>
+        /// Export specific simulation to .xml file
+        /// </summary>
+        /// <param name="simulationId">specify which simulation you want to export</param>
+        public static void ExportResult(int simulationId, String databaseName)
         {
-            var popupWindow = new SaveFileDialog();
-            popupWindow.Title = "Save Results";
-            popupWindow.Filter = "XML file | *.xml";
+            var popupWindow = new SaveFileDialog()
+            {
+                Title = "Save Results",
+                Filter = "XML file | *.xml"
+            };
             popupWindow.ShowDialog();
 
             XmlDocument doc = new XmlDocument();
@@ -29,7 +35,7 @@ namespace KBS2.Util
             XmlElement results = doc.CreateElement("Results");
             doc.AppendChild(results);
 
-            using (var database = new MyDatabase("killakid"))
+            using (var database = new MyDatabase(databaseName))
             {
                 var simulation = (from s in database.Simulations
                                   where s.ID == simulationId
