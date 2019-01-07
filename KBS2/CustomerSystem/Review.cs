@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace KBS2.CustomerSystem
 {
-    class Review
+    public class Review
     {
         public Customer CustomerData { get; set; }
         public DateTime Date { get; set; }
@@ -25,29 +23,31 @@ namespace KBS2.CustomerSystem
         public string CreateContent(Moral moral)
         {
             var content = "";
-            //Open xml
-            var file = new XmlDocument();
+
+            //Open XML File
+            XDocument file = XDocument.Load(@"CustomerSystem/Reviews.xml");
+
+
+            //Make a list of all reviews belonging to the current mood.
+            List<string> reviewlist = new List<string>();
+
+            //Query to fetch and fill the reviewlist above.
             try
             {
-
-                file.Load("Reviews.xml");
+                reviewlist = (from r in file.Descendants("ReviewList").Elements($"{moral.ToString()}").Elements("review")
+                              select r.Value).ToList();
             }
-            catch
+            catch (System.NullReferenceException)
             {
-                content = "Loading of content failed.";
+                return content = "Failed to load review content.";
             }
-            
-            var root = file.DocumentElement;
-            if (root == null) throw new XmlException("Missing root node");
 
-            var mood = file.SelectSingleNode($"//ReviewList/Mood/{moral}");
-            if (mood == null)
-                throw new XmlException("Missing mood in reviewlist.");
-
+            //Random number for index will be generated and given as content
             Random random = new Random();
-            content = mood.ChildNodes[random.Next(0, mood.ChildNodes.Count)].InnerText;
-            
-            return content; 
+
+
+
+            return content = reviewlist[random.Next(0, reviewlist.Count)];
             //Random description in section of depending moral
         }
 

@@ -26,8 +26,9 @@
         BorderBrush="#FF000000"
         VerticalAlignment="Top" Margin="193,28,74,0" CornerRadius="8,8,8,8" Height="117"/>
         <Label Content="Properties:" HorizontalAlignment="Left" Margin="12,298,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.385" FontWeight="Bold"/>
-        <Button x:Name="BtnCarSave" Content="Save Changes" HorizontalAlignment="Left" Margin="150,451,0,0" VerticalAlignment="Top" Width="82" Click="BtnCarSave_Click"/>
+        <Button x:Name="BtnCarSave" Content="Save Changes" HorizontalAlignment="Left" Margin="52,437,0,0" VerticalAlignment="Top" Width="82" Click="BtnCarSave_Click"/>
         <StackPanel x:Name="StackPanelCar" Orientation="Vertical" Margin="0,328,35,70"/>
+        <Button x:Name="BtnViewReview" Content="View Reviews" HorizontalAlignment="Left" Margin="248,437,0,0" VerticalAlignment="Top" Width="75" Click="BtnViewReview_Click" />
 
     </Grid>
 </UserControl>

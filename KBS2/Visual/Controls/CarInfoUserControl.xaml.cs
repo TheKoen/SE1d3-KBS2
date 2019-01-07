@@ -1,8 +1,8 @@
-﻿using System;
+﻿using KBS2.CarSystem;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using KBS2.CarSystem;
 
 namespace KBS2.Visual.Controls
 {
@@ -15,11 +15,14 @@ namespace KBS2.Visual.Controls
         private StackPanel PropertyPanel { get; }
         private Car Car;
         private PropertySettings CarMaxSpeedProperties;
+        private PropertySettings CarModelProperties;
+        private MainScreen Screen;
 
-        public CarInfoUserControl(Car car)
+        public CarInfoUserControl(Car car, MainScreen screen)
         {
             InitializeComponent();
 
+            Screen = screen;
             Car = car;
             LabelInfoCarID.Content = car.Id;
             LabelInfoCarModel.Content = car.Model.Name;
@@ -44,6 +47,13 @@ namespace KBS2.Visual.Controls
 
             CarMaxSpeedProperties = new PropertySettings(propertyName, propertyValue, true);
             PropertyPanel.Children.Add(CarMaxSpeedProperties);
+
+            var propertyName2 = "Model";
+            var propertyValue2 = Car.Model.Name;
+
+            CarModelProperties = new PropertySettings(propertyName2, propertyValue2, false);
+            CarModelProperties.PreviewTextInput -= CarModelProperties.NumberValidationTextBox;
+            PropertyPanel.Children.Add(CarModelProperties);
         }
 
         /// <summary>
@@ -70,7 +80,23 @@ namespace KBS2.Visual.Controls
             {
                 var newValue = double.Parse(CarMaxSpeedProperties.TBCurrentValue.Text);
                 Car.MaxSpeed = newValue;
+                var newValue2 = CarModelProperties.TBCurrentValue.Text;
+                try
+                {
+                    Car.Model = CarModel.Get(newValue2);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The changes have not been saved, the given model does not exist.", "Changes not saved.", MessageBoxButton.OK);
+                    return;
+                }
             }
+        }
+
+        private void BtnViewReview_Click(object sender, RoutedEventArgs e)
+        {
+            ReviewListWindow rlc = new ReviewListWindow(Car);
+            rlc.Show();
         }
     }
 }
