@@ -120,8 +120,8 @@ namespace KBS2.Database
 
             DatabaseHelper.QueueDatabaseAction((database) =>
             {
-                /*var garage = DatabaseHelper.GetObject<Garage>(database.Garages,
-                    g => DatabaseHelper.MatchVectors(g.Location, carObject.Garage));
+                var garage = DatabaseHelper.GetObject(database.Garages,
+                    g => DatabaseHelper.MatchVectors(g.Location, carObject.Garage.Location));
                 if (garage == null) throw new Exception($"Unknown garage {carObject.Garage}");
 
                 var car = new Car
@@ -142,7 +142,7 @@ namespace KBS2.Database
                 };
 
                 database.Trips.Add(trip);
-                database.SaveChanges();*/
+                database.SaveChanges();
             });
         }
 
