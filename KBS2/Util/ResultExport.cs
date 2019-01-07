@@ -18,7 +18,7 @@ namespace KBS2.Util
         /// Export specific simulation to .xml file
         /// </summary>
         /// <param name="simulationId">specify which simulation you want to export</param>
-        public static void ExportResult(int simulationId, String databaseName)
+        public static void ExportResult(int simulationId, string databaseName)
         {
             var popupWindow = new SaveFileDialog()
             {

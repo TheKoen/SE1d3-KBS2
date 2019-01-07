@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -13,13 +14,10 @@ namespace KBS2.Util
     {
         public static event EventHandler ResultImported;
 
-        /// <summary>
-        /// Import results from .xml file into database
-        /// </summary>
-        public static void ImportResult()
-        {
-            var doc = new XmlDocument();
+        public static string Path { get; private set; } 
 
+        public static void SetPath()
+        {
             var popupWindow = new OpenFileDialog()
             {
                 Title = "Load City",
@@ -28,11 +26,28 @@ namespace KBS2.Util
             if (popupWindow.ShowDialog() == DialogResult.OK)
             {
 
-                doc.Load(popupWindow.FileName);
+                Path = popupWindow.FileName;
             }
             else
             {
                 throw new Exception("Please select a document.");
+            }
+        }
+
+        /// <summary>
+        /// Import results from .xml file into database
+        /// </summary>
+        public static void ImportResult(Window window)
+        {
+            var doc = new XmlDocument();
+
+            if(!string.IsNullOrWhiteSpace(Path))
+            {
+                doc.Load(Path);
+            }
+            else
+            {
+                throw new Exception("Import document not selected.");
             }
 
             // Exception handeling
@@ -102,7 +117,7 @@ namespace KBS2.Util
                     }
                     else if (garages.ChildNodes[i].Attributes[j].Name == "Location")
                     {
-                        g.Location = new Vector
+                        g.Location = new Database.Vector
                         {
                             X = int.Parse(garages.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).First()),
                             Y = int.Parse(garages.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).Last())
@@ -354,6 +369,8 @@ namespace KBS2.Util
                 }
 
                 dataBase.SaveChanges();
+
+                System.Windows.MessageBox.Show(window, "Import sucess", "Import", MessageBoxButton.OK);
 
                 ResultImported?.Invoke(null, EventArgs.Empty);
             }
