@@ -10,7 +10,7 @@ namespace KBS2.GPS.Algorithms
 {
     public class AlgorithmDijkstra : IAlgorithm
     {
-        public static int debuggerIndex;
+        private static int _debuggerIndex;
         
         public Destination Calculate(Destination carDestination, Destination endDestination)
         {
@@ -18,18 +18,18 @@ namespace KBS2.GPS.Algorithms
             var startNode = new Node(GPSSystem.FindIntersection(carDestination.Location).Location);
             var endNodes = AlgorithmTools.IntersectionTupleToNodeTuple(
                 AlgorithmTools.GetIntersectionOrderForRoadSide(endDestination.Road, endDestination.Location));
-            
-            AssignNodeValues(ref network, ref startNode);
 
             if (startNode.Equals(endNodes.Item1))
             {
-                AlgorithmDebuggerWindow.Instance.AddNetworkResult(debuggerIndex++.ToString(), network, 
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
                     startNode, endNodes.Item2, endNodes);
                 return endDestination;
             }
+            
+            AssignNodeValues(ref network, ref startNode);
 
             var nextNode = FindNextNodeOnBestRoute(ref network, endNodes.Item1);
-            AlgorithmDebuggerWindow.Instance.AddNetworkResult(debuggerIndex++.ToString(), network, 
+            AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
                 startNode, nextNode, endNodes);
             var roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
             var roadY = (startNode.PositionY - nextNode.PositionY) / 2.0 + nextNode.PositionY;
@@ -77,7 +77,7 @@ namespace KBS2.GPS.Algorithms
                     .First();
                 previousNode = currentNode;
                 currentNode = bestNode;
-                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{debuggerIndex}#{currentNode.Value}", network,
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{_debuggerIndex}#{currentNode.Value}", network,
                     previousNode, currentNode);
             }
 

@@ -135,7 +135,10 @@
       <DependentUpon>AlgorithmDebuggerWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GPS\Algorithms\AlgorithmAStar.cs" />
     <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
+    <Compile Include="GPS\Algorithms\AlgorithmDStar.cs" />
+    <Compile Include="GPS\Algorithms\AlgorithmFringeSearch.cs" />
     <Compile Include="GPS\AlgorithmTools.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="CustomerSystem\Customer.cs" />
