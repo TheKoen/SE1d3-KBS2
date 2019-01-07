@@ -16,7 +16,7 @@ namespace KBS2.Visual
         private MainScreen Screen { get; }
         private string SelectedFilePath { get; set; }
 
-        public event SimulationLoadEvent SimulationLoad;
+        public static event SimulationLoadEvent SimulationLoad;
 
         public static ResultsHandler Results { get; set; }
 

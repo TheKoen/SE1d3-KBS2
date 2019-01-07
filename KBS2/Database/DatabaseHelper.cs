@@ -40,7 +40,7 @@ namespace KBS2.Database
 
                 foreach (var gender in database.Genders)
                 {
-                    App.Console?.Print($"Loaded gender {gender.Name}");
+                    App.Console?.Print($"Loaded gender {gender.Name} from DB");
                     Genders.Add(gender);
                 }
 
@@ -63,6 +63,8 @@ namespace KBS2.Database
 
                     database.Genders.Add(genderObject);
                     database.SaveChanges();
+
+                    App.Console?.Print($"Added gender {genderObject.Name} to DB");
                 });
             }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KBS2.CarSystem;
+using KBS2.Visual;
 using KBS2.Visual.Controls;
 
 namespace KBS2.Database
@@ -26,8 +27,8 @@ namespace KBS2.Database
                 }
             });
 
-            CitySystem.City.Instance.Controller.OnCustomerGroupAdd += OnCustomerGroupAdd;
-            screen.SimulationControlHandler.SimulationLoad += OnSimulationLoad;
+            CitySystem.CityController.OnCustomerGroupAdd += OnCustomerGroupAdd;
+            SimulationControlHandler.SimulationLoad += OnSimulationLoad;
             CarController.TripEnd += OnTripEnd;
         }
 
