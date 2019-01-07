@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using KBS2.CitySystem;
-using KBS2.GPS;
 
-namespace Algorithms.NodeNetwork
+namespace KBS2.GPS.NodeNetwork
 {
     public static class NodeNetwork
     {
@@ -33,11 +32,26 @@ namespace Algorithms.NodeNetwork
                 Links[i] = new Link(ref nodeA, ref nodeB);
             }
         }
-        
-        public static NodeNetworkCopy GetInstance() => new NodeNetworkCopy(Nodes, Links);
+
+        public static NodeNetworkCopy GetInstance()
+        {
+            var nodes = new Node[Nodes.Length];
+            var links = new Link[Links.Length];
+
+            for (var ni = 0; ni < nodes.Length; ++ni)
+                nodes[ni] = (Node) Nodes[ni].Clone();
+            for (var li = 0; li < links.Length; ++li)
+            {
+                var nodeA = nodes.Single(n => n.Equals(Links[li].NodeA));
+                var nodeB = nodes.Single(n => n.Equals(Links[li].NodeB));
+                links[li] = new Link(ref nodeA, ref nodeB);
+            }
+
+            return new NodeNetworkCopy(nodes, links);
+        }
     }
 
-    public struct NodeNetworkCopy
+    public class NodeNetworkCopy
     {
         public Node[] Nodes { get; set; }
         public Link[] Links { get; set; }

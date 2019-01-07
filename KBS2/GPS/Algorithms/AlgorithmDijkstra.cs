@@ -1,14 +1,17 @@
+using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using Algorithms.NodeNetwork;
-using KBS2;
 using KBS2.CarSystem;
-using KBS2.GPS;
+using KBS2.GPS.NodeNetwork;
 
-namespace Algorithms.Algorithms
+namespace KBS2.GPS.Algorithms
 {
     public class AlgorithmDijkstra : IAlgorithm
     {
+        public static int debuggerIndex;
+        
         public Destination Calculate(Destination carDestination, Destination endDestination)
         {
             App.Console.Print($"carDestination: {carDestination.Location}, endDestination: {endDestination.Location}");
@@ -20,9 +23,15 @@ namespace Algorithms.Algorithms
             AssignNodeValues(ref network, ref startNode);
 
             if (startNode.Equals(endNodes.Item1))
+            {
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult(debuggerIndex++.ToString(), network, 
+                    startNode, endNodes.Item2, endNodes);
                 return endDestination;
+            }
 
             var nextNode = FindNextNodeOnBestRoute(ref network, endNodes.Item1);
+            AlgorithmDebuggerWindow.Instance.AddNetworkResult(debuggerIndex++.ToString(), network, 
+                startNode, nextNode, endNodes);
             var roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
             var roadY = (startNode.PositionY - nextNode.PositionY) / 2.0 + nextNode.PositionY;
             return new Destination
@@ -69,6 +78,8 @@ namespace Algorithms.Algorithms
                     .First();
                 previousNode = currentNode;
                 currentNode = bestNode;
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{debuggerIndex}#{currentNode.Value}", network,
+                    previousNode, currentNode);
             }
 
             return previousNode;

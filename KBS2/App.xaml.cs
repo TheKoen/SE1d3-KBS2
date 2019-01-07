@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using AlgorithmDebugger;
 using KBS2.Console;
 using KBS2.Console.Commands;
+using KBS2.GPS;
 
 namespace KBS2
 {
@@ -11,8 +11,6 @@ namespace KBS2
     public partial class App
     {
         public static ConsoleControl Console;
-
-        public static DebuggerHandler AlgoDebugger = new DebuggerHandler();
 
         public App()
         {

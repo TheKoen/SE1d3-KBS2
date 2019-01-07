@@ -9,10 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandSystem", "CommandSystem\CommandSystem.csproj", "{D04E2688-AB49-4200-B6AD-E3A328AC7F49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithms", "Algorithms\Algorithms.csproj", "{884DBEEB-CBC7-421D-A4DF-A8E01343475D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmDebugger", "AlgorithmDebugger\AlgorithmDebugger.csproj", "{02F473DE-6EC7-476D-BD19-4EBA16F44EA8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,14 +27,6 @@ Global
 		{D04E2688-AB49-4200-B6AD-E3A328AC7F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D04E2688-AB49-4200-B6AD-E3A328AC7F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D04E2688-AB49-4200-B6AD-E3A328AC7F49}.Release|Any CPU.Build.0 = Release|Any CPU
-		{884DBEEB-CBC7-421D-A4DF-A8E01343475D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{884DBEEB-CBC7-421D-A4DF-A8E01343475D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{884DBEEB-CBC7-421D-A4DF-A8E01343475D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{884DBEEB-CBC7-421D-A4DF-A8E01343475D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02F473DE-6EC7-476D-BD19-4EBA16F44EA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02F473DE-6EC7-476D-BD19-4EBA16F44EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02F473DE-6EC7-476D-BD19-4EBA16F44EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02F473DE-6EC7-476D-BD19-4EBA16F44EA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

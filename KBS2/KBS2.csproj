@@ -94,6 +94,12 @@
     <Compile Include="Console\Commands\CommandsSensors.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
+    <Compile Include="GPS\AlgorithmDebuggerWindow.xaml.cs">
+      <DependentUpon>AlgorithmDebuggerWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
+    <Compile Include="GPS\AlgorithmTools.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
     <Compile Include="CustomerSystem\Customer.cs" />
     <Compile Include="CustomerSystem\CustomerController.cs" />
@@ -102,6 +108,10 @@
     <Compile Include="CustomerSystem\Moral.cs" />
     <Compile Include="CitySystem\Intersection.cs" />
     <Compile Include="CitySystem\Road.cs" />
+    <Compile Include="GPS\IAlgorithm.cs" />
+    <Compile Include="GPS\NodeNetwork\Link.cs" />
+    <Compile Include="GPS\NodeNetwork\Node.cs" />
+    <Compile Include="GPS\NodeNetwork\NodeNetwork.cs" />
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
@@ -170,6 +180,10 @@
     <Page Include="Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GPS\AlgorithmDebuggerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainScreen.xaml">
       <SubType>Designer</SubType>
@@ -263,14 +277,6 @@
     <Folder Include="CityDesigner\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlgorithmDebugger\AlgorithmDebugger.csproj">
-      <Project>{02f473de-6ec7-476d-bd19-4eba16f44ea8}</Project>
-      <Name>AlgorithmDebugger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Algorithms\Algorithms.csproj">
-      <Project>{884dbeeb-cbc7-421d-a4df-a8e01343475d}</Project>
-      <Name>Algorithms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
       <Project>{d04e2688-ab49-4200-b6ad-e3a328ac7f49}</Project>
       <Name>CommandSystem</Name>

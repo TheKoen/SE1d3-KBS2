@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Algorithms;
-using Algorithms.Algorithms;
 using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
 using KBS2.Util;
+using AlgorithmDijkstra = KBS2.GPS.Algorithms.AlgorithmDijkstra;
 
 namespace KBS2.GPS
 {
@@ -23,7 +22,7 @@ namespace KBS2.GPS
         private static IAlgorithm Algorithm = new AlgorithmDijkstra();
 
         public static void Setup()
-        {
+        {            
             try
             {
                 PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);

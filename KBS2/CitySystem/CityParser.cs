@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Xml;
-using Algorithms.NodeNetwork;
 using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
+using NodeNetwork = KBS2.GPS.NodeNetwork.NodeNetwork;
 
 namespace KBS2.CitySystem
 {
