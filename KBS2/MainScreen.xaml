@@ -83,7 +83,7 @@
                     <Button x:Name="BtnStop" Content="Reset" HorizontalAlignment="Left" Margin="238,0,0,92.4" VerticalAlignment="Bottom" Width="66" Height="40" Background="Red" Click="BtnStop_Click" IsEnabled="False"/>
                     <Label x:Name="LabelSimulationTime" Content="00:00:00" HorizontalAlignment="Left" Margin="100,0,0,35.4" VerticalAlignment="Bottom" Height="57" Width="153" FontSize="36" />
                     <Button x:Name="BtnConsole" Content="Console" HorizontalAlignment="Left" Margin="280,0,0,10.4" VerticalAlignment="Bottom" Width="50" Click="BtnConsole_Click" Grid.ColumnSpan="2"/>
-                    <Button x:Name="BtnCityMaker" Content="City Maker" HorizontalAlignment="Left" Margin="10,0,0,10.4" VerticalAlignment="Bottom" Width="75" Click="BtnCityMaker_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnCityMaker" Content="City Maker" HorizontalAlignment="Left" Margin="10,0,0,10.4" VerticalAlignment="Bottom" Width="75" Click="BtnCityMaker_Click"/>
                     <Button x:Name="BtnCarModelMaker" Content="Car Model Designer" HorizontalAlignment="Left" Margin="121,0,0,10.4" VerticalAlignment="Bottom" Width="117" Click="BtnCarModelMaker_Click"/>
 
 
