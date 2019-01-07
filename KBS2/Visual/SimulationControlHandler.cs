@@ -9,10 +9,14 @@ using KBS2.Visual.Controls;
 
 namespace KBS2.Visual
 {
+    public delegate void SimulationLoadEvent(object source, SimulationEventArgs args);
+
     public class SimulationControlHandler
     {
         private MainScreen Screen { get; }
         private string SelectedFilePath { get; set; }
+
+        public event SimulationLoadEvent SimulationLoad;
 
         public static ResultsHandler Results { get; set; }
 
@@ -83,7 +87,7 @@ namespace KBS2.Visual
             EnableButtonsAndTabs();
             UpdateCountLabels(city);
 
-            Results.OnSimulationLoad(this, new SimulationEventArgs(CitySystem.City.Instance));
+            SimulationLoad?.Invoke(this, new SimulationEventArgs(CitySystem.City.Instance));
         }
 
         private void EnableButtonsAndTabs()

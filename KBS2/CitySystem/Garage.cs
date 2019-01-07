@@ -23,7 +23,7 @@ namespace KBS2.CitySystem
             if (!hasDirection)
             {
                 var nearest = GPSSystem.NearestRoad(Location);
-                Direction = nearest.IsXRoad() ? DirectionCar.East : DirectionCar.South;
+                Direction = nearest.IsXRoad() ? DirectionCar.East : DirectionCar.North;
                 hasDirection = true;
             }
 

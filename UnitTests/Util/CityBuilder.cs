@@ -11,7 +11,7 @@ namespace UnitTests.Util
         public CityBuilder()
         {
             PropertyHandler.ResetProperties();
-            City = new City();
+            City = new City("Test City");
         }
 
         public CityBuilder Road(Vector start, Vector end, int width)

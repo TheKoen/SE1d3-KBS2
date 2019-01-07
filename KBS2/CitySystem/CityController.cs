@@ -10,9 +10,13 @@ using Vector = System.Windows.Vector;
 
 namespace KBS2.CitySystem
 {
+    public delegate void CustomerGroupAddEvent(object source, GroupEventArgs args);
+
     public class CityController
     {
         public static int CAR_ID;
+
+        public event CustomerGroupAddEvent OnCustomerGroupAdd;
 
         private static readonly Random Random = new Random();
         private readonly Property customerSpawnRate = new Property(0.05F);
@@ -66,7 +70,7 @@ namespace KBS2.CitySystem
 
             var group = new CustomerGroup(groupSize, building, target, (finishedGroup) =>
             {
-                SimulationControlHandler.Results.OnCustomerGroupAdd(this, new GroupEventArgs(finishedGroup, finishedGroup.Customers));
+                OnCustomerGroupAdd?.Invoke(this, new GroupEventArgs(finishedGroup, finishedGroup.Customers));
             });
 
             City.AddGroup(group);
