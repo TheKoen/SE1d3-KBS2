@@ -166,14 +166,24 @@ namespace KBS2
 
         private void BtnSaveSim_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ResultExport.ExportResult(, "killakid");
-            }
-            catch(Exception b)
-            {
-                MessageBox.Show(this, b.Message, "Import error", MessageBoxButton.OK);
-            }
+            var cityInstanceId = SimulationControlHandler.Results.Instance.ID;
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from sim in database.Simulations
+                             where sim.CityInstance.ID == cityInstanceId
+                             select sim).ToList(),
+                data => 
+                {
+                   try
+                   {
+                        ResultExport.ExportResult(data.First().ID, "killakid", this);
+                   }
+                   catch(Exception b)
+                   {
+                        MessageBox.Show(this, b.Message, "Export error", MessageBoxButton.OK);
+                   }
+                }, 
+                CommandLoop
+            );
         }
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)

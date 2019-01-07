@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -18,7 +19,7 @@ namespace KBS2.Util
         /// Export specific simulation to .xml file
         /// </summary>
         /// <param name="simulationId">specify which simulation you want to export</param>
-        public static void ExportResult(int simulationId, string databaseName)
+        public static void ExportResult(int simulationId, string databaseName, Window window)
         {
             var popupWindow = new SaveFileDialog()
             {
@@ -35,7 +36,7 @@ namespace KBS2.Util
             XmlElement results = doc.CreateElement("Results");
             doc.AppendChild(results);
 
-            using (var database = new MyDatabase(databaseName))
+            DatabaseHelper.QueueDatabaseAction(database =>
             {
                 var simulation = (from s in database.Simulations
                                   where s.ID == simulationId
@@ -56,7 +57,7 @@ namespace KBS2.Util
                 simulationElement.Attributes.Append(simulationIdAttribute);
                 simulationElement.Attributes.Append(simulationDuration);
                 simulationElement.Attributes.Append(simulationCityName);
-                
+
 
                 // Customers
 
@@ -145,7 +146,14 @@ namespace KBS2.Util
                     id.Value = customerGroup.ID.ToString();
 
                     XmlAttribute tripId = doc.CreateAttribute("TripId");
-                    tripId.Value = customerGroup.Trip.ID.ToString();
+                    if (customerGroup.Trip == null)
+                    {
+                        tripId.Value = "null";
+                    }
+                    else
+                    {
+                        tripId.Value = customerGroup.Trip.ID.ToString();
+                    }
 
                     customerGroupElement.Attributes.Append(id);
                     customerGroupElement.Attributes.Append(tripId);
@@ -176,7 +184,7 @@ namespace KBS2.Util
 
                     XmlAttribute customerId = doc.CreateAttribute("CustomerId");
                     customerId.Value = review.Customer.ID.ToString();
-                    
+
                     reviewElement.Attributes.Append(content);
                     reviewElement.Attributes.Append(rating);
                     reviewElement.Attributes.Append(tripId);
@@ -240,8 +248,12 @@ namespace KBS2.Util
                 }
                 doc.Save(popupWindow.FileName);
 
-                ResultExported?.Invoke(null, EventArgs.Empty);
-            }
+                MainScreen.CommandLoop.EnqueueAction(() =>
+                {
+                    System.Windows.MessageBox.Show(window, "Exported.", "Export", MessageBoxButton.OK);
+                    ResultExported?.Invoke(null, EventArgs.Empty);
+                });
+            });
             
         }
 

@@ -138,6 +138,7 @@ namespace KBS2.Util
             for(int i = 0; i < cars.ChildNodes.Count; i++)
             {
                 var c = new Car();
+                c.CityInstance = simulationDatabase.CityInstance;
                 var id = 0;
                 for(int j = 0; j < cars.ChildNodes[i].Attributes.Count; j++)
                 {
@@ -168,6 +169,7 @@ namespace KBS2.Util
             for (int i = 0; i < trips.ChildNodes.Count; i++)
             {
                 var t = new Trip();
+                
                 var id = 0;
                 for (int j = 0; j < trips.ChildNodes[i].Attributes.Count; j++)
                 {
@@ -210,6 +212,7 @@ namespace KBS2.Util
             for(int i = 0; i < customerGroups.ChildNodes.Count; i++)
             {
                 var c = new CustomerGroup();
+                c.CityInstance = simulationDatabase.CityInstance;
                 var id = 0;
                 for (int j = 0; j < customerGroups.ChildNodes[i].Attributes.Count; j++)
                 {
@@ -219,7 +222,14 @@ namespace KBS2.Util
                     }
                     else if (customerGroups.ChildNodes[i].Attributes[j].Name == "TripId")
                     {
-                        c.Trip = tripsList[int.Parse(customerGroups.ChildNodes[i].Attributes[j].Value)];
+                        if(customerGroups.ChildNodes[i].Attributes[j].Value == "null")
+                        {
+                            c.Trip = null;
+                        }
+                        else
+                        {
+                            c.Trip = tripsList[int.Parse(customerGroups.ChildNodes[i].Attributes[j].Value)];
+                        }
                     }
                     else
                     {
@@ -258,10 +268,7 @@ namespace KBS2.Util
                     }
                     else if (customers.ChildNodes[i].Attributes[j].Name == "Gender")
                     {
-                        c.Gender = new Gender
-                        {
-                            Name = customers.ChildNodes[i].Attributes[j].Value
-                        };
+                        c.Gender = DatabaseHelper.GetGender(customers.ChildNodes[i].Attributes[j].Value);                  
                     }
                     else if (customers.ChildNodes[i].Attributes[j].Name == "CustomerGroupId")
                     {
@@ -307,24 +314,28 @@ namespace KBS2.Util
                     }
                 }
                 reviewsList.Add(r);
-            }                
+            }
 
             // database connection add all elements
 
-            using (var dataBase = new MyDatabase("killakid"))
+            DatabaseHelper.QueueDatabaseAction(
+            dataBase =>
             {
 
                 // find city with same name
-                City i = (from c in dataBase.Cities
-                         where c.CityName == cityName
-                         select c)?.First();
+                ICollection<City> cities = (from c in dataBase.Cities
+                                            where c.CityName == cityName
+                                            select c).ToList();
+
+                City i = null;
+
 
                 // add new city by name if name is not found
-                if (i == null)
+                if (cities.Count() == 0)
                 {
                     i = new City
                     {
-                        CityName = simulationDatabase.CityInstance.City.CityName
+                        CityName = cityName
                     };
                     dataBase.Cities.Add(i);
 
@@ -335,8 +346,14 @@ namespace KBS2.Util
                         dataBase.Garages.Add(garage.Value);
                     }
                 }
-                dataBase.Simulations.Add(simulationDatabase);
+                else
+                {
+                    i = cities.First();
+                }
+
                 simulationDatabase.CityInstance.City = i;
+                dataBase.Simulations.Add(simulationDatabase);
+                
 
                 // cars
                 foreach (var car in carsList)
@@ -345,35 +362,38 @@ namespace KBS2.Util
                 }
 
                 // trips
-                foreach(var trip in tripsList)
+                foreach (var trip in tripsList)
                 {
                     dataBase.Trips.Add(trip.Value);
                 }
 
                 //customerGroups
-                foreach(var customerGroup in customerGroupsList)
+                foreach (var customerGroup in customerGroupsList)
                 {
                     dataBase.CustomerGroups.Add(customerGroup.Value);
                 }
 
                 //customers
-                foreach(var customer in customersList)
+                foreach (var customer in customersList)
                 {
                     dataBase.Customers.Add(customer.Value);
                 }
 
                 //reviews 
-                foreach(var review in reviewsList)
+                foreach (var review in reviewsList)
                 {
                     dataBase.Reviews.Add(review);
                 }
 
                 dataBase.SaveChanges();
 
-                System.Windows.MessageBox.Show(window, "Import sucess", "Import", MessageBoxButton.OK);
+                MainScreen.CommandLoop.EnqueueAction(() =>
+                {
+                    System.Windows.MessageBox.Show(window, "Import sucess", "Import", MessageBoxButton.OK);
 
-                ResultImported?.Invoke(null, EventArgs.Empty);
-            }
+                    ResultImported?.Invoke(null, EventArgs.Empty);
+                });
+            });
         }
     
         public static void SubscribeResultImported(EventHandler source)
