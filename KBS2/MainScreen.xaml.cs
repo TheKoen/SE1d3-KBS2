@@ -92,6 +92,8 @@ namespace KBS2
             consoleWindow.Close();
             modelDesigner.AllowClose = true;
             modelDesigner.Close();
+            cityDesigner.AllowClose = true;
+            cityDesigner.Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
