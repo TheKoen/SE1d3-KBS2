@@ -98,7 +98,8 @@ namespace KBS2.Console
                         { Foreground = new SolidColorBrush(queued.Item2 ?? Colors.White) }
                 );
                 // Scrolling to the bottom of the ScrollViewer so that the user always sees the new text
-                ScrollViewerOutput.ScrollToBottom();
+                if (CheckBoxAutoscroll.IsChecked ?? false)
+                    ScrollViewerOutput.ScrollToBottom();
             
                 // Adding the output to the output history
                 if (_outputHistory.Count >= _outputHistoryCapacity)
