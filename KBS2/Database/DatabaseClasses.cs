@@ -17,7 +17,7 @@ namespace KBS2.Database
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
-
+        public virtual DbSet<CityInstance> CityInstances { get; set; }
     }
 
     public class Simulation
@@ -67,6 +67,7 @@ namespace KBS2.Database
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string Model { get; set; }
+        public int DistanceTravelled { get; set; }
         public virtual Garage Garage { get; set; }
         public virtual CityInstance CityInstance { get; set; }
     }
@@ -108,6 +109,7 @@ namespace KBS2.Database
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
+        public int Moral { get; set; }
         public virtual Gender Gender { get; set; }
         public virtual CustomerGroup CustomerGroup { get; set; }
     }

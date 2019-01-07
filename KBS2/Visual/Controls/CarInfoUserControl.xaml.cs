@@ -76,7 +76,7 @@ namespace KBS2.Visual.Controls
         /// <param name="e"></param>
         private void BtnCarSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (Car.MaxSpeed.ToString() != CarMaxSpeedProperties.TBCurrentValue.Text || Car.Model.ToString() != CarModelProperties.TBCurrentValue.Text)
+            if (Car.MaxSpeed.ToString() != CarMaxSpeedProperties.TBCurrentValue.Text)
             {
                 var newValue = double.Parse(CarMaxSpeedProperties.TBCurrentValue.Text);
                 Car.MaxSpeed = newValue;

@@ -2,22 +2,31 @@
 using System.Threading;
 using System.Windows;
 using KBS2.CarSystem;
+using KBS2.GPS;
 using KBS2.Util;
 
 namespace KBS2.CitySystem
 {
     public class Garage : Building
     {
-        public DirectionCar Direction { get; }
+        public DirectionCar Direction { get; private set; }
         public int AvailableCars { get; set; } = 2;
+        public CarModel Model { get; set; } = CarModel.Get("TestModel");
+        private bool hasDirection = false;
 
-        public Garage(Vector location, int size, DirectionCar direction) : base(location, size)
+        public Garage(Vector location, int size) : base(location, size)
         {
-            Direction = direction;
         }
 
-        public Car SpawnCar(int id, CarModel model, Destination finalDestination)
+        public Car SpawnCar(int id, Destination finalDestination)
         {
+            if (!hasDirection)
+            {
+                var nearest = GPSSystem.NearestRoad(Location);
+                Direction = nearest.IsXRoad() ? DirectionCar.East : DirectionCar.North;
+                hasDirection = true;
+            }
+
             if (AvailableCars <= 0)
             {
                 return null;
@@ -30,7 +39,7 @@ namespace KBS2.CitySystem
                     var thread = new Thread(() =>
                     {
                         Thread.Sleep(1000);
-                        SpawnCar(id, model, finalDestination);
+                        SpawnCar(id, finalDestination);
                     });
                     thread.Start();
                     return null;
@@ -53,7 +62,7 @@ namespace KBS2.CitySystem
             }
 
             var location = new Vector(x, y);
-            var car = model.CreateCar(id, location, Direction);
+            var car = Model.CreateCar(id, location, this, Direction);
             Vector destination;
             switch (Direction)
             {

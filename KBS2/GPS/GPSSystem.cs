@@ -17,8 +17,6 @@ namespace KBS2.GPS
     {
         public static Property StartingPrice = new Property(1.50);
         public static Property PricePerKilometer = new Property(1.00);
-        public static Property availableModel = new Property("TestModel");
-        public static CarModel AvailableModel => CarModel.Get(availableModel.Value);
 
         private static IAlgorithm Algorithm = new AlgorithmDijkstra();
 
@@ -28,7 +26,6 @@ namespace KBS2.GPS
             {
                 PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
                 PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-                //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
             }
             catch (Exception)
             {
@@ -126,7 +123,7 @@ namespace KBS2.GPS
                 nearestDistance = tempDistance;
             }
 
-            nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel, new Destination
+            nearestGarage?.SpawnCar(CityController.CAR_ID++, new Destination
             {
                 Location = group.Location,
                 Road = NearestRoad(group.Location)

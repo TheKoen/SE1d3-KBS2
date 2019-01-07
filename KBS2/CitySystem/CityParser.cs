@@ -11,7 +11,7 @@ namespace KBS2.CitySystem
 {
     public class CityParser
     {
-        public static City MakeCity(XmlDocument city)
+        public static City MakeCity(XmlDocument city, string name)
         {
             var properties = PropertyHandler.GetProperties();
             if (properties.ContainsKey("availableCars"))
@@ -19,7 +19,7 @@ namespace KBS2.CitySystem
                 PropertyHandler.ResetProperties();
             }
 
-            var cityObject = new City();
+            var cityObject = new City(name);
 
             var root = city.DocumentElement;
             if (root == null) throw new XmlException("Missing root node");
@@ -90,12 +90,8 @@ namespace KBS2.CitySystem
                 case "Building":
                     return new Building(loc, size);
                 case "Garage":
-                    if (Enum.TryParse(node.Attributes["Direction"].InnerText, out DirectionCar direction))
-                    {
-                        return new Garage(loc, size, direction);
-                    }
-
-                    throw new XmlException("Garage doesn't have a valid direction");
+                    return new Garage(loc, size);
+                   
                 default:
                     return null;
             }
