@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
+using KBS2.CitySystem;
 using KBS2.Exceptions;
 
 namespace KBS2.CarSystem
@@ -75,9 +76,9 @@ namespace KBS2.CarSystem
             Name = name;
         }
 
-        public Car CreateCar(int id, Vector location, DirectionCar direction)
+        public Car CreateCar(int id, Vector location, Garage garage, DirectionCar direction)
         {
-            var car = new Car(id, this, location, new List<Sensor>(), direction, 5, 10);
+            var car = new Car(id, this, location, new List<Sensor>(), garage, direction, 5, 10);
             var sensors = Sensors
                 .Select(prototype => prototype.Create(car, prototype.Direction, prototype.Range))
                 .ToList();

@@ -12,12 +12,12 @@ namespace KBS2.Visual
 {
     public class CustomerRenderHandler : IRenderHandler
     {
-        public Canvas Canvas { get; }
+        public Canvas _Canvas { get; }
         public MainScreen Screen { get; set; }
 
         public CustomerRenderHandler(Canvas canvas, MainScreen screen)
         {
-            Canvas = canvas;
+            _Canvas = canvas;
             Screen = screen;
             MainScreen.WPFLoop.Subscribe(Update);
         }
@@ -37,14 +37,16 @@ namespace KBS2.Visual
             {
                 if (!HasControlFor(customer))
                 {
-                    Canvas.Children.Add(new CustomerControl(customer, Screen));
+                    var c = new CustomerControl(customer, Screen);
+                    Panel.SetZIndex(c, 100);
+                    _Canvas.Children.Add(c);
                 }
             }
         }
 
         public bool HasControlFor(Customer customer)
         {
-            foreach (var child in Canvas.Children)
+            foreach (var child in _Canvas.Children)
             {
                 if (child is CustomerControl control)
                 {

@@ -7,7 +7,7 @@ namespace KBS2.CitySystem
     public class Intersection
     {
         public Vector Location { get; }
-        public int Size { get; }
+        public int Size { get; set; }
 
         public Intersection(Vector location, int size)
         {

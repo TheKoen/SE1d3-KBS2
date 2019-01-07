@@ -4,18 +4,27 @@ using System.Linq;
 using System.Windows;
 using System.Xml;
 using KBS2.CitySystem;
+using KBS2.Database;
 using KBS2.Visual.Controls;
 
 namespace KBS2.Visual
 {
+    public delegate void SimulationLoadEvent(object source, SimulationEventArgs args);
+
     public class SimulationControlHandler
     {
         private MainScreen Screen { get; }
         private string SelectedFilePath { get; set; }
 
+        public static event SimulationLoadEvent SimulationLoad;
+
+        public static ResultsHandler Results { get; private set; }
+
         public SimulationControlHandler(MainScreen screen)
         {
             Screen = screen;
+            
+            Results = new ResultsHandler(Screen);
         }
 
         public void SelectButtonClick()
@@ -60,7 +69,8 @@ namespace KBS2.Visual
 
             try
             {
-                CityParser.MakeCity(file);
+                var cityname = Screen.TBCity.Text;
+                CityParser.MakeCity(file, cityname.First().ToString().ToUpper() + cityname.Substring(1));
             }
             catch (Exception ex)
             {
@@ -68,7 +78,7 @@ namespace KBS2.Visual
                 return;
             }
             
-            var city = City.Instance;
+            var city = CitySystem.City.Instance;
 
             Screen.CityRenderHandler.DrawCity(city);
 
@@ -76,6 +86,8 @@ namespace KBS2.Visual
 
             EnableButtonsAndTabs();
             UpdateCountLabels(city);
+
+            SimulationLoad?.Invoke(this, new SimulationEventArgs(CitySystem.City.Instance));
         }
 
         private void EnableButtonsAndTabs()
@@ -85,12 +97,12 @@ namespace KBS2.Visual
             Screen.TabItemResults.IsEnabled = true;
         }
 
-        private void UpdateCountLabels(City city)
+        private void UpdateCountLabels(CitySystem.City city)
         {
             Screen.LabelSimulationRoad.Content = city.Roads.Count;
             Screen.LabelSimulationIntersection.Content = city.Intersections.Count;
             Screen.LabelSimulationBuilding.Content = city.Buildings.Count;
-            Screen.LabelSimulationGarage.Content = city.Buildings.FindAll(building => building is Garage).Count;
+            Screen.LabelSimulationGarage.Content = city.Buildings.FindAll(building => building is CitySystem.Garage).Count;
         }
 
         public void StartButtonClick()
@@ -135,7 +147,7 @@ namespace KBS2.Visual
             MainScreen.WPFLoop.Stop();
             MainScreen.AILoop.Stop();
 
-            City.Instance.Controller.Reset();
+            CitySystem.City.Instance.Controller.Reset();
         }
 
         public void ResetLabels()

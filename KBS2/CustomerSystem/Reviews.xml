@@ -1,0 +1,67 @@
+<ReviewList>
+<Happy>
+	<review>The taxi driver was so kind! =D</review>
+	<review>I'm rating this car 10/10 because the car did not kill my kid.</review>
+	<review>This car drove faster than my mom ;)</review>
+	<review>That was a great experience.</review>
+	<review>Good service, very comfortable, verrrry nice.</review>
+	<review>The trip was great.</review>
+	<review>I love this company, it brings me home every day bro!</review>
+	<review>Good ride.</review>
+</Happy>
+	
+<Neutral>
+	<review>The trip was good enough.</review>
+	<review>My trip was not very comfortable but it was worth the money.</review>
+	<review>This was my second trip with this company, I am not feeling very safe but it was okay.</review>
+	<review>The taxi driver was a little bit creepy, he didn't say anything the whole trip.</review>
+	<review>My time wasn't wasted this time.</review>
+	<review>Decent ride.</review>
+	<review>The car looked nice enough.</review>
+</Neutral>
+	
+<Annoyed>
+	<review>It took a pretty while for the taxi to arrive at my location :/</review>
+	<review>I am a little annoyed, but the trip was decent tho.</review>
+	<review>The driver sucked, it looked like he or she was very badly programmed.</review>
+	<review>My friend was very annoyed, but I guess the taxi took his time.</review>
+	<review>I am a little upset :|</review>
+</Annoyed>
+
+<Sad>
+	<review>I need to cry :,(</review>
+	<review>This experience was not the best experience of my life, in contrary one of the worst.</review>
+	<review>My parents needed to console me after this trip.</review>
+	<review>The trip was scary, I felt uncomfortable.</review>
+	<review>The taxi was so sloooow, I mean... I get the point of driving safe... But this is extraordinary.</review>
+</Sad>
+
+<Mad>
+	<review>I'm going to sue all of you!!!11</review>
+	<review>This trip was horrible.</review>
+	<review>Grrrr this company sucks :(</review>	
+	<review>0/10 very bad service.</review>
+	<review>The car bumped so much!!</review>
+	<review>Seriously... How tf can a car drive so fucking bad.</review>
+</Mad>
+</ReviewList>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

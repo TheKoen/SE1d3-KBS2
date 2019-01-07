@@ -6,7 +6,7 @@ namespace KBS2.CitySystem
     {
 
         public Vector Location { get; }
-        public int Size { get; }
+        public int Size { get; set; }
 
         public Building(Vector location, int size)
         {

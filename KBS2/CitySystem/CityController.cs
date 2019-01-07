@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using CommandSystem.PropertyManagement;
-using KBS2.CustomerSystem;
+using KBS2.Database;
 using KBS2.Util;
+using KBS2.Visual;
+using CustomerGroup = KBS2.CustomerSystem.CustomerGroup;
+using Vector = System.Windows.Vector;
 
 namespace KBS2.CitySystem
 {
+    public delegate void CustomerGroupAddEvent(object source, GroupEventArgs args);
+
     public class CityController
     {
         public static int CAR_ID;
 
+        public static event CustomerGroupAddEvent OnCustomerGroupAdd;
+
         private static readonly Random Random = new Random();
-        private readonly Property customerSpawnRate = new Property(0.2F);
+        private readonly Property customerSpawnRate = new Property(0.05F);
 
         private City City { get; }
 
@@ -62,9 +68,13 @@ namespace KBS2.CitySystem
             var target = buildings[Random.Next(buildings.Count)];
             var groupSize = Random.Next(1, (int) Math.Round(City.AvgGroupSize / 2.0 * 3.0));
 
-            var group = new CustomerGroup(groupSize, building, target);
+            var group = new CustomerGroup(groupSize, building, target, (finishedGroup) =>
+            {
+                OnCustomerGroupAdd?.Invoke(this, new GroupEventArgs(finishedGroup, finishedGroup.Customers));
+            });
 
             City.AddGroup(group);
+            
         }
     }
 }

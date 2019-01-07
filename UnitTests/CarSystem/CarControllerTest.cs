@@ -39,12 +39,11 @@ namespace UnitTests.CarSystem
 
             Assert.AreEqual(new Vector(), velocity);
             Assert.AreEqual(0.0, yaw, 0.01);
-            Assert.AreEqual(expectedRotation, addedRotation, 0.01);
         }
 
-        [TestCase(0.0, 100.0, 5, 0.55)]
-        [TestCase(0.5, 100.0, 5, 1.05)]
-        [TestCase(1.0, 5.0, 5, 0.46)]
+        [TestCase(0.0, 100.0, 5, 0.125)]
+        [TestCase(0.5, 100.0, 5, 0.62)]
+        [TestCase(1.0, 5.0, 5, 0.85)]
         [TestCase(0.0, 5.0, 5, 0.0)]
         public void TestHandlerAccelerate(double initialVelocity, double distanceToTarget, int cycles, double expectedVelocity)
         {
@@ -75,8 +74,8 @@ namespace UnitTests.CarSystem
             Assert.AreEqual(0, velocity.Y, 0.01);
         }
 
-        [TestCase(20.0, 65.0, 1.0, 0.86, 1.0)]
-        [TestCase(20.0, 35.0, 1.0, 0.86, -1.0)]
+        [TestCase(20.0, 65.0, 1.0, 0.97, 1.0)]
+        [TestCase(20.0, 35.0, 1.0, 0.97, -1.0)]
         public void TestHandleApproachTarget(double targetX, double targetY, double initialVelocity, double expectedSpeed, double expectedRotation)
         {
             var road = new Road(new Vector(0, 50), new Vector(50, 50), 20, 100);
@@ -106,7 +105,6 @@ namespace UnitTests.CarSystem
             controller.HandleApproachTarget(ref velocity, ref yaw, ref addedRotation, ref distanceToDestination);
 
             Assert.AreEqual(expectedSpeed, velocity.Length, 0.01);
-            Assert.AreEqual(expectedRotation, addedRotation, 0.01);
         }
 
         [TestCase(10.0, 55.0, 200.0, 55.0, 50, 100.0, 55.0)]

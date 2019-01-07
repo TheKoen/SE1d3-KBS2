@@ -1,20 +1,10 @@
 ﻿using KBS2.CustomerSystem;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace KBS2.Windows
+namespace KBS2.Visual.Controls
+
 {
     /// <summary>
     /// Interaction logic for CustomerInfoUserControl.xaml
@@ -36,14 +26,15 @@ namespace KBS2.Windows
             LabelInfoLocation.DataContext = customer;
             LabelInfoDestination.DataContext = customer;
 
+            Review r = new Review(Customer);
             //Depending on the gender of our customer, a profile picture will be selected to represent it.
-            
 
-            if(customer.Gender == "Female" || customer.Gender == "Male")
+
+            if (customer.Gender == "Female" || customer.Gender == "Male")
             {
                 profilePicturePath = customer.Gender == "Female"
                 ? new Uri(@" /KBS2;component/Images/Female_Profile_Picture.jpg", UriKind.Relative)
-                : new Uri(@" / KBS2;component/Images/Male_Profile_Picture.jpg", UriKind.Relative);
+                : new Uri(@" /KBS2;component/Images/Male_Profile_Picture.jpg", UriKind.Relative);
             }
             else
             {
@@ -51,10 +42,10 @@ namespace KBS2.Windows
                 profilePicturePath = new Uri(@" /KBS2;component/Images/Other_Profile_Picture.png", UriKind.Relative);
             }
 
-            
+
             //Switch case for moral and change picture depending on moral (:
             MoralImage.Source = new BitmapImage(new Uri(@"/KBS2;component/Images/happy.png", UriKind.Relative));
-            
+
             ProfilePicture.Source = new BitmapImage(profilePicturePath);
 
             MainScreen.WPFLoop.Subscribe(Update);

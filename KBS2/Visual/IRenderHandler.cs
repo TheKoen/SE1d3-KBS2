@@ -4,7 +4,7 @@ namespace KBS2.Visual
 {
     public interface IRenderHandler
     {
-        Canvas Canvas { get; }
+        Canvas _Canvas { get; }
 
         void Update();
     }

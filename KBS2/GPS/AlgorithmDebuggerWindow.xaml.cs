@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using KBS2.GPS.NodeNetwork;
@@ -29,20 +26,20 @@ namespace KBS2.GPS
         }
 
         /// <summary>
-        /// Adds a new <see cref="NodeNetworkCopy"/> to this window so it can be reviewed
-        /// </summary>\
+        /// Adds a new <see cref="NodeNetworkCopy"/> to all windows so it can be reviewed
+        /// </summary>
         public void AddNetworkResult(string name, NodeNetworkCopy network, Node from, Node to, Tuple<Node, Node> end)
         {
             _networks.Add(name, new NetworkData(network, from, to, end.Item1, end.Item2));
             Instance.Dispatcher.Invoke(() =>
             {
                 Instance.ListBoxResults.Items.Add(name);
-                var index = Instance.ListBoxResults.Items.Add(new ListBoxItem{ Content = "", IsEnabled = false });
+                Instance.ListBoxResults.Items.Add(new ListBoxItem{ Content = "", IsEnabled = false });
             });
         }
 
         /// <summary>
-        /// Adds a step of the algorithm to this window so it can be reviewed
+        /// Adds a step of the algorithm to all windows so it can be reviewed
         /// </summary>
         public void AddNetworkResult(string name, NodeNetworkCopy network, Node from, Node to)
         {
@@ -73,6 +70,10 @@ namespace KBS2.GPS
                 
         }
 
+        /// <summary>
+        /// Updates the current view using a <see cref="NetworkData"/> object
+        /// </summary>
+        /// <param name="networkData">Object to use for updating</param>
         private void UpdateView(NetworkData networkData)
         {
             CanvasResult.Children.Clear();
@@ -146,6 +147,10 @@ namespace KBS2.GPS
             }
         }
         
+        /// <summary>
+        /// Updates the current view using an <see cref="AlgoStepData"/> object
+        /// </summary>
+        /// <param name="networkData">Object to use for updating</param>
         private void UpdateView(AlgoStepData networkData)
         {
             CanvasResult.Children.Clear();

@@ -16,8 +16,6 @@ namespace KBS2.GPS
     {
         public static Property StartingPrice = new Property(1.50);
         public static Property PricePerKilometer = new Property(1.00);
-        public static Property availableModel = new Property("TestModel");
-        public static CarModel AvailableModel => CarModel.Get(availableModel.Value);
 
         private static IAlgorithm Algorithm = new AlgorithmDijkstra();
 
@@ -27,7 +25,6 @@ namespace KBS2.GPS
             {
                 PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
                 PropertyHandler.RegisterProperty("pricePerKilometer", ref PricePerKilometer);
-                //PropertyHandler.RegisterProperty("availableModel", ref availableModel);
             }
             catch (Exception)
             {
@@ -97,10 +94,14 @@ namespace KBS2.GPS
             {
                 var distance = CalculateDistance(group.Location, destination.Location);
                 var price = CalculatePrice(distance);
-                App.Console.Print(
-                    $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}");
+                App.Console?.Print(
+                    $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}"
+                );
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                App.Console?.Print($"Unable to calculate route from {group.Location} to {destination.Location}", Colors.Red);
+            }
 
             // Look to nearest Garage.
             var city = City.Instance;
@@ -121,15 +122,11 @@ namespace KBS2.GPS
                 nearestDistance = tempDistance;
             }
 
-            var car = nearestGarage?.SpawnCar(CityController.CAR_ID++, AvailableModel);
-            if (car != null)
+            nearestGarage?.SpawnCar(CityController.CAR_ID++, new Destination
             {
-                car.Destination = new Destination
-                {
-                    Location = group.Location,
-                    Road = NearestRoad(group.Location)
-                };
-            }
+                Location = group.Location,
+                Road = NearestRoad(group.Location)
+            });
         }
 
         /// <summary>
@@ -150,56 +147,6 @@ namespace KBS2.GPS
                 Location = location,
                 Road = car.CurrentRoad
             }, car.Destination);
-
-            /*var roadsAtInteresection = intersection.GetRoads();
-            var roads = new List<Road>();
-
-            foreach (var road in roadsAtInteresection)
-            {
-                if (!car.CurrentRoad.Equals(road)) roads.Add(road);
-            }
-
-            var shortestDistance = double.MaxValue;
-            Road selectedRoad = null;
-            var selectDestination = new Vector();
-
-            foreach (var road in roads)
-            {
-                if (road.Equals(car.Destination.Road))
-                {
-                    var destination = car.Destination;
-                    var distance = MathUtil.DistanceToRoad(destination.Location, road) - road.Width / 4d;
-                    var direction = GetDirectionToRoad(destination.Location, road);
-                    var delta = Vector.Multiply(direction.GetVector(), distance);
-                    var target = Vector.Add(destination.Location, delta);
-
-                    return new Destination {Road = road, Location = target};
-                }
-
-                var tempDStart = MathUtil.Distance(road.Start, car.Location);
-                var tempDEnd = MathUtil.Distance(road.End, car.Location);
-
-                var closestPointToDestination = tempDStart > tempDEnd ? road.Start : road.End;
-
-                var distanceToDestination = MathUtil.Distance(closestPointToDestination, car.Destination.Location);
-
-                if (!(distanceToDestination < shortestDistance)) continue;
-                shortestDistance = distanceToDestination;
-                selectedRoad = road;
-                selectDestination = closestPointToDestination;
-            }
-
-            return new Destination {Road = selectedRoad, Location = selectDestination};*/
-        }
-
-        public static DirectionCar GetDirectionToRoad(Vector point, Road road)
-        {
-            if (road.IsXRoad())
-            {
-                return road.Start.Y < point.Y ? DirectionCar.North : DirectionCar.South;
-            }
-
-            return road.Start.X < point.X ? DirectionCar.West : DirectionCar.East;
         }
 
         public static double CalculateDistance(Vector start, Vector end)
@@ -219,59 +166,60 @@ namespace KBS2.GPS
             }
             catch (Exception)
             {
-                App.Console.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
+                App.Console?.Print($"Unable to calculate route from {start} to {end}.", Colors.Red);
                 return 0;
             }
         }
 
-        private static double ExploreIntersection(Intersection intersection, Vector end, Road target, double distance,
-            int cycles, ICollection<Intersection> past)
+        private static double ExploreIntersection(Intersection intersection, Vector end, Road target, double distance, int cycles, ICollection<Intersection> past)
         {
-            if (intersection == null)
+            while (true)
             {
-                App.Console.Print("Warning: Found a problem while exporing route: null terminating road",
-                    Colors.Yellow);
-                return distance;
-            }
-
-            past.Add(intersection);
-
-            foreach (var road in intersection.GetRoads())
-            {
-                if (road.Equals(target))
+                if (intersection == null)
                 {
-                    return distance + MathUtil.Distance(intersection.Location, end);
+                    App.Console?.Print("Warning: Found a problem while exporing route: null terminating road", Colors.Yellow);
+                    return distance;
                 }
+
+                past.Add(intersection);
+
+                foreach (var road in intersection.GetRoads())
+                {
+                    if (road.Equals(target))
+                    {
+                        return distance + MathUtil.Distance(intersection.Location, end);
+                    }
+                }
+
+                var intersections = FindNextIntersections(intersection);
+                var closestIntersection = double.MaxValue;
+                Intersection intersectionNext = null;
+
+                //App.Console?.Print($"Arrived at intersection {intersection.Location}. Found {intersections.Count} options. Evaluating...");
+
+                foreach (var next in intersections)
+                {
+                    if (next == null || past.Contains(next)) continue;
+
+                    var dist = MathUtil.Distance(next.Location, end);
+                    if (!(dist < closestIntersection)) continue;
+                    closestIntersection = dist;
+                    intersectionNext = next;
+                }
+
+                if (cycles++ == 20)
+                {
+                    throw new Exception("Route is impossible.");
+                }
+
+                if (intersectionNext == null)
+                {
+                    throw new Exception("Route is impossible.");
+                }
+
+                distance += MathUtil.Distance(intersection.Location, intersectionNext.Location);
+                intersection = intersectionNext;
             }
-
-            var intersections = FindNextIntersections(intersection);
-            var closestIntersection = double.MaxValue;
-            Intersection intersectionNext = null;
-
-            //MainWindow.Console.Print($"Arrived at intersection {intersection.Location}. Found {intersections.Count} options. Evaluating...");
-
-            foreach (var next in intersections)
-            {
-                if (next == null || past.Contains(next)) continue;
-
-                var dist = MathUtil.Distance(next.Location, end);
-                if (!(dist < closestIntersection)) continue;
-                closestIntersection = dist;
-                intersectionNext = next;
-            }
-
-            if (cycles++ == 20)
-            {
-                throw new Exception("Route is impossible.");
-            }
-
-            if (intersectionNext == null)
-            {
-                throw new Exception("Route is impossible.");
-            }
-
-            distance += MathUtil.Distance(intersection.Location, intersectionNext.Location);
-            return ExploreIntersection(intersectionNext, end, target, distance, cycles, past);
         }
 
         /// <summary>

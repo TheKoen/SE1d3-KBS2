@@ -18,6 +18,7 @@ namespace KBS2.CustomerSystem
         private static readonly Random Random = new Random();
         public List<Customer> Customers { get; set; } = new List<Customer>();
         private Building destination;
+
         public Building Destination
         {
             get => destination;
@@ -27,16 +28,22 @@ namespace KBS2.CustomerSystem
                 Customers.ForEach(customer => customer.UpdateDestination());
             }
         }
+
         public CustomerGroupController Controller { get; set; }
         public Vector Location { get; set; }
         public List<Road> RoadsNear;
 
-        public CustomerGroup(int customers, Building start, Building destination)
+        public CustomerGroup(int customers, Building start, Building destination) : this(customers, start, destination,
+            group => { }) { }
+
+        public CustomerGroup(int customers, Building start, Building destination,
+            Action<CustomerGroup> finishedCallback)
         {
-            for(var i = 0; i < customers; i++)
+            for (var i = 0; i < customers; i++)
             {
                 Customers.Add(new Customer(start.Location, Random.Next(4, 90), start, this));
             }
+
             Location = start.Location;
             Destination = destination;
             Controller = new CustomerGroupController(this);
@@ -69,7 +76,7 @@ namespace KBS2.CustomerSystem
                     if (responseStream != null)
                     {
                         var reader = new StreamReader(responseStream, Encoding.UTF8);
-                        var info = JsonConvert.DeserializeObject <CustomerInfo[]>(reader.ReadToEnd());
+                        var info = JsonConvert.DeserializeObject<CustomerInfo[]>(reader.ReadToEnd());
                         var index = 0;
                         var rand = Random.Next(info.Length);
                         foreach (var customer in Customers)
@@ -84,6 +91,8 @@ namespace KBS2.CustomerSystem
                         App.Console?.Print("Unable to parse names for customers!", Colors.Red);
                     }
                 }
+
+                MainScreen.AILoop.EnqueueAction(() => finishedCallback(this));
             });
             thread.Start();
         }
