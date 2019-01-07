@@ -114,10 +114,10 @@
                     <Label x:Name="LabelResultsSimID" Content="Sim ID:" HorizontalAlignment="Left" Margin="25,66,0,0" VerticalAlignment="Top" Height="26" Width="47"/>
                     <TextBox x:Name="TBResult" HorizontalAlignment="Left" Height="20" Margin="105,22,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                     <TextBox x:Name="TBSimID" HorizontalAlignment="Left" Height="20" Margin="105,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="42"/>
-                    <Button x:Name="BtnSaveSim" Content="Save Results" HorizontalAlignment="Left" Margin="42,585,0,0" VerticalAlignment="Top" Width="92" Height="32" Click="BtnSaveSim_Click">
+                    <Button x:Name="BtnSaveSim" Content="Save Results" HorizontalAlignment="Left" Margin="8,585,0,0" VerticalAlignment="Top" Width="92" Height="32" Click="BtnSaveSim_Click">
                         <Button.ToolTip>Pressing this button saves the results in our database.</Button.ToolTip>
                     </Button>
-                    <Button x:Name="BtnExport" Content="Export Log" HorizontalAlignment="Left" Margin="213,584,0,0" VerticalAlignment="Top"  Width="92" Height="33" Click="BtnExport_Click"/>
+                    <Button x:Name="BtnExport" Content="Export Log" HorizontalAlignment="Left" Margin="105,584,0,0" VerticalAlignment="Top"  Width="92" Height="33" Click="BtnExport_Click"/>
                     <ScrollViewer HorizontalAlignment="Left" Height="482" Margin="10,97,0,0" VerticalAlignment="Top" Width="320">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
@@ -201,6 +201,7 @@
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
+                    <Button x:Name="BtnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="202,584,0,0" VerticalAlignment="Top"  Width="92" Height="33" Click="BtnRefresh_OnClick"/>
                 </Grid>
 
             </TabItem>

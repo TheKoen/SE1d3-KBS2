@@ -22,7 +22,6 @@ namespace KBS2.Database
                 ticks++;
                 if (ticks == 500)
                 {
-                    ticks = 0;
                     Update();
                 }
             });
@@ -83,13 +82,12 @@ namespace KBS2.Database
                                 new Garage
                                 {
                                     City = city,
-                                    Location = DatabaseHelper.CreateVector(building.Location)
+                                    Location = DatabaseHelper.CreateDBVector(building.Location)
                                 }
                             );
                         }
                     }
-                }
-                else
+                } else
                 {
                     city = cities.First();
                 }
@@ -138,8 +136,8 @@ namespace KBS2.Database
                 {
                     Car = car,
                     Distance = carObject.DistanceTraveled,
-                    StartLocation = DatabaseHelper.CreateVector(start),
-                    EndLocation = DatabaseHelper.CreateVector(end),
+                    StartLocation = DatabaseHelper.CreateDBVector(start),
+                    EndLocation = DatabaseHelper.CreateDBVector(end),
                     Price = 0.0
                 };
 
@@ -151,12 +149,21 @@ namespace KBS2.Database
         // Only LabelResultAvgCustomers and LabelResultAvgReviewRating are still missing. Car doesn't save this info?
         public void Update()
         {
+            ticks = 0;
+
+            if (Instance == null) return;
+
+            /*
+             * Queue a request to the database
+             * Read the summery of DatabaseHelper.QueueDatabaseRequest
+             * for more detailed information
+             */
             DatabaseHelper.QueueDatabaseRequest(
-                database => Instance != null
-                    ? (from customer in database.Customers
-                        where customer.CustomerGroup.CityInstance.ID == Instance.ID
-                        select customer).ToList()
-                    : new List<Customer>(),
+                // Request all the customers in the current CityInstance.
+                database => (from customer in database.Customers
+                    where customer.CustomerGroup.CityInstance.ID == Instance.ID
+                    select customer).ToList(),
+                // Update all the labels with the new data.
                 data =>
                 {
                     Screen.LabelResultCustomer.Content = data.Count;
@@ -164,17 +171,15 @@ namespace KBS2.Database
                     if (data.Count == 0) return;
                     Screen.LabelResultAvgAge.Content = Math.Round(data.Average(customer => customer.Age));
                     Screen.LabelResultAvgMoral.Content = Math.Round(data.Average(customer => customer.Moral));
-                    
                 },
+                // Labels can only be updated on the WPF (main) thread so we want to use that one.
                 MainScreen.WPFLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
-                database => Instance != null
-                    ? (from car in database.Cars
-                        where car.CityInstance.ID == Instance.ID
-                        select car).ToList()
-                    : new List<Car>(),
+                database => (from car in database.Cars
+                    where car.CityInstance.ID == Instance.ID
+                    select car).ToList(),
                 data =>
                 {
                     Screen.LabelResultCars.Content = data.Count;
@@ -188,11 +193,9 @@ namespace KBS2.Database
             );
 
             DatabaseHelper.QueueDatabaseRequest(
-                database => Instance != null
-                    ? (from review in database.Reviews
-                        where review.Trip.Car.CityInstance.ID == Instance.ID
-                        select review).ToList()
-                    : new List<Review>(),
+                database => (from review in database.Reviews
+                    where review.Trip.Car.CityInstance.ID == Instance.ID
+                    select review).ToList(),
                 data =>
                 {
                     if (data.Count == 0) return;
@@ -202,11 +205,9 @@ namespace KBS2.Database
             );
 
             DatabaseHelper.QueueDatabaseRequest(
-                database => Instance != null
-                    ? (from trip in database.Trips
-                        where trip.Car.CityInstance.ID == Instance.ID
-                        select trip).ToList()
-                    : new List<Trip>(),
+                database => (from trip in database.Trips
+                    where trip.Car.CityInstance.ID == Instance.ID
+                    select trip).ToList(),
                 data =>
                 {
                     Screen.LabelResultRide.Content = data.Count;
@@ -215,17 +216,14 @@ namespace KBS2.Database
                     Screen.LabelResultAvgPrice.Content = $"€{data.Sum(review => review.Price):0.00}";
                     Screen.LabelResultDistanceTotal.Content = data.Sum(trip => trip.Distance);
                     Screen.LabelResultDistanceAvarage.Content = Math.Round(data.Average(trip => trip.Distance));
-                    
                 },
                 MainScreen.WPFLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
-                database => Instance != null
-                    ? (from simulation in database.Simulations
-                       where simulation.CityInstance.ID == Instance.ID
-                       select simulation).ToList()
-                    : new List<Simulation>(),
+                database => (from simulation in database.Simulations
+                    where simulation.CityInstance.ID == Instance.ID
+                    select simulation).ToList(),
                 data =>
                 {
                     if (data.Count == 0) return;

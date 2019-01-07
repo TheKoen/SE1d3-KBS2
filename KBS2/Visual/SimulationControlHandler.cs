@@ -18,7 +18,7 @@ namespace KBS2.Visual
 
         public static event SimulationLoadEvent SimulationLoad;
 
-        public static ResultsHandler Results { get; set; }
+        public static ResultsHandler Results { get; private set; }
 
         public SimulationControlHandler(MainScreen screen)
         {
