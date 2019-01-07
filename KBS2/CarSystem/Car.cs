@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows;
-using CommandSystem.PropertyManagement;
+﻿using CommandSystem.PropertyManagement;
 using KBS2.CarSystem.Sensors;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
 using KBS2.GPS;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
 
 namespace KBS2.CarSystem
 {
@@ -90,10 +90,10 @@ namespace KBS2.CarSystem
         }
 
         private double distanceTraveled;
-        public double DistanceTraveled 
+        public double DistanceTraveled
         {
             get => distanceTraveled;
-            set 
+            set
             {
                 distanceTraveled = Math.Round(value);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DistanceTraveled"));
@@ -126,6 +126,8 @@ namespace KBS2.CarSystem
         public List<Sensor> Sensors { get; }
 
         public List<Customer> Passengers { get; }
+
+        public List<Review> Reviews { get; set; }
 
         public Road CurrentRoad { get; set; }
         public Intersection CurrentIntersection { get; set; }

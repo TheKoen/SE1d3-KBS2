@@ -9,14 +9,22 @@ using KBS2.Visual.Controls;
 
 namespace KBS2.Visual
 {
+    public delegate void SimulationLoadEvent(object source, SimulationEventArgs args);
+
     public class SimulationControlHandler
     {
         private MainScreen Screen { get; }
         private string SelectedFilePath { get; set; }
 
+        public static event SimulationLoadEvent SimulationLoad;
+
+        public static ResultsHandler Results { get; private set; }
+
         public SimulationControlHandler(MainScreen screen)
         {
             Screen = screen;
+            
+            Results = new ResultsHandler(Screen);
         }
 
         public void SelectButtonClick()
@@ -61,7 +69,8 @@ namespace KBS2.Visual
 
             try
             {
-                CityParser.MakeCity(file);
+                var cityname = Screen.TBCity.Text;
+                CityParser.MakeCity(file, cityname.First().ToString().ToUpper() + cityname.Substring(1));
             }
             catch (Exception ex)
             {
@@ -77,6 +86,8 @@ namespace KBS2.Visual
 
             EnableButtonsAndTabs();
             UpdateCountLabels(city);
+
+            SimulationLoad?.Invoke(this, new SimulationEventArgs(CitySystem.City.Instance));
         }
 
         private void EnableButtonsAndTabs()
@@ -127,10 +138,6 @@ namespace KBS2.Visual
             Screen.BtnPause.IsEnabled = false;
             Screen.BtnStop.IsEnabled = false;
             App.Console.Print("Reset pressed");
-
-            var results = new Results();
-            results.Setup();
-            results.Update();
 
             LoadButtonClick();
             ResetLabels();

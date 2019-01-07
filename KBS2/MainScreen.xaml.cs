@@ -273,6 +273,11 @@ namespace KBS2
         private void Zoom_Changed(object sender, SelectionChangedEventArgs e)
         {
             ZoomHandler?.ZoomBoxChanged();
-        }        
+        }
+
+        private void BtnRefresh_OnClick(object sender, RoutedEventArgs e)
+        {
+            SimulationControlHandler.Results.Update();
+        }
     }
 }

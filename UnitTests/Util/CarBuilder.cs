@@ -81,7 +81,7 @@ namespace UnitTests.Util
                 throw new ArgumentException("Location cannot be null");
             }
 
-            var car = new Car(ID++, model, location, new List<Sensor>(), garage, direction, width, length)
+            var car = new Car(ID++, model, location, new List<Sensor>(), null, direction, width, length)
             {
                 CurrentRoad = currentRoad
             };

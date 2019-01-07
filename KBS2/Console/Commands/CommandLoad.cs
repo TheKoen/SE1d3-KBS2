@@ -30,7 +30,7 @@ namespace KBS2.Console.Commands
             {
                 var file = new XmlDocument();
                 file.Load(args[0]);
-                CityParser.MakeCity(file);
+                //CityParser.MakeCity(file);
             }
             catch (Exception e)
             {

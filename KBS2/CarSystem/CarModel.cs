@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
+using KBS2.CitySystem;
 using KBS2.Exceptions;
 using KBS2.CitySystem;
 

@@ -126,8 +126,9 @@
     <Compile Include="Console\Commands\CommandsSensors.cs" />
     <Compile Include="CustomerSystem\Review.cs" />
     <Compile Include="Database\DatabaseClasses.cs" />
-    <Compile Include="Database\DatabaseHandler.cs" />
-    <Compile Include="Database\Results.cs" />
+    <Compile Include="Database\DatabaseHelper.cs" />
+    <Compile Include="Database\ResultEvents.cs" />
+    <Compile Include="Database\ResultsHandler.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
     <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
@@ -196,6 +197,12 @@
       <DependentUpon>IntersectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\TextBoxProperties.cs" />
+    <Compile Include="Visual\Controls\ReviewInfoUserControl.xaml.cs">
+      <DependentUpon>ReviewInfoUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Visual\Controls\ReviewListWindow.xaml.cs">
+      <DependentUpon>ReviewListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Visual\Controls\RoadControl.xaml.cs">
       <DependentUpon>RoadControl.xaml</DependentUpon>
     </Compile>
@@ -272,6 +279,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ModelDesigner\SensorPickerWindow.xaml" />
+    <Page Include="Visual\Controls\ReviewInfoUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visual\Controls\ReviewListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Visual\Controls\RoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -344,6 +359,11 @@
     <Resource Include="Images\CarPicture1.jpg" />
     <Resource Include="Images\CarPicture2.jpg" />
     <Resource Include="Images\CarPicture3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomerSystem\Reviews.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

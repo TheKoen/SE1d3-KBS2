@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Media;
 using KBS2.CarSystem.Sensors;
 using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
-using KBS2.CitySystem;
+using KBS2.Database;
 using KBS2.GPS;
 using KBS2.Util;
+using City = KBS2.CitySystem.City;
+using Vector = System.Windows.Vector;
 
 namespace KBS2.CarSystem
 {
+    public delegate void TripEndEvent(object source, TripEventArgs args);
+
     public class CarController
     {
         /*
@@ -40,6 +43,8 @@ namespace KBS2.CarSystem
 
         // Maximum speed while turning.
         private const double maxTurningSpeed = 0.3;
+        
+        public static event TripEndEvent TripEnd;
 
         public Car Car { get; set; }
 
@@ -360,6 +365,8 @@ namespace KBS2.CarSystem
                 if (Car.PassengerCount > 0 && speed < 0.05 && speed > 0)
                 {
                     App.Console.Print($"[C{Car.Id}] Dropping customers", Colors.Blue);
+                    var passenger = Car.Passengers[0];
+                    TripEnd?.Invoke(this, new TripEventArgs(passenger.Group, passenger.Building.Location, Car.Location, Car));
                     Car.Passengers.Clear();
                     MainScreen.AILoop.Unsubscribe(Update);
                     City.Instance.Cars.Remove(Car);

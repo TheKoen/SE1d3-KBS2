@@ -18,7 +18,7 @@ namespace UnitTests.CitySystem
                          "<Intersections>\n<Intersection Location =\"35,13\" Size=\"5\"></Intersection>\n</Intersections>\n\n" +
                          "</City>");
 
-            var city = CityParser.MakeCity(file);
+            var city = CityParser.MakeCity(file, "Test City");
 
             Assert.AreEqual(1, city.Roads.Count);
             Assert.AreEqual(1, city.Buildings.Count);
