@@ -42,6 +42,9 @@ namespace KBS2
         private readonly ConsoleWindow consoleWindow;
         private readonly ModelDesigner.ModelDesigner modelDesigner;
         private readonly CityDesigner.CityDesignerWindow cityDesigner;
+        #if DEBUG
+        private readonly AlgorithmDebuggerWindow algorithmDebuggerWindow;
+        #endif
         private readonly Stopwatch Stopwatch = new Stopwatch();
 
         public CityRenderHandler CityRenderHandler { get; private set; }
@@ -61,6 +64,10 @@ namespace KBS2
             consoleWindow = new ConsoleWindow();
             modelDesigner = new ModelDesigner.ModelDesigner();
             cityDesigner = new CityDesigner.CityDesignerWindow();
+            #if DEBUG
+            algorithmDebuggerWindow = AlgorithmDebuggerWindow.Instance;
+            algorithmDebuggerWindow.Show();
+            #endif
             CommandLoop.Start();
             
             Initialized += (sender, args) => Initialize();
@@ -94,6 +101,9 @@ namespace KBS2
             modelDesigner.Close();
             cityDesigner.AllowClose = true;
             cityDesigner.Close();
+            #if DEBUG
+            algorithmDebuggerWindow.Close();
+            #endif
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)

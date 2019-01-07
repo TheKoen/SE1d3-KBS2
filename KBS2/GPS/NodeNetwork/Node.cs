@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace KBS2.GPS.NodeNetwork
 {
-    public class Node : IEquatable<Node>
+    public class Node : IEquatable<Node>, ICloneable
     {
         public double PositionX { get; }
         public double PositionY { get; }
@@ -22,7 +22,12 @@ namespace KBS2.GPS.NodeNetwork
 
         public bool Equals(Node other)
         {
-            return PositionX.Equals(other.PositionX) && PositionY.Equals(other.PositionY);
+            return Math.Abs(PositionX - other.PositionX) < 0.1 && Math.Abs(PositionY - other.PositionY) < 0.1;
+        }
+
+        public object Clone()
+        {
+            return new Node(PositionX, PositionY);
         }
     }
 }

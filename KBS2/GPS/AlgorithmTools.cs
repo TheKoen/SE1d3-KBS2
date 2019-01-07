@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using KBS2.CitySystem;
-using KBS2.GPS.NodeNetwork;
+using Node = KBS2.GPS.NodeNetwork.Node;
 
 namespace KBS2.GPS
 {
