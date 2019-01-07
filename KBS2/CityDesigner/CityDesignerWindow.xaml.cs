@@ -24,7 +24,7 @@ namespace KBS2.CityDesigner
     public partial class CityDesignerWindow : Window
     {
         public ObjectHandler Creator { get; set; }
-
+        public bool AllowClose = false;
         public Tools Tool { get; set; } = Tools.Road;
 
         private Cursor cursorOnCanvas;
