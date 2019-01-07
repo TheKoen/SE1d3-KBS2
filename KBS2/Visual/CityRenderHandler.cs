@@ -33,7 +33,6 @@ namespace KBS2.Visual
             foreach (var building in city.Buildings)
             {
                 var b1 = new BuildingControl(Screen, building);
-                Panel.SetZIndex(b1, 100);
                 _Canvas.Children.Add(b1);
             }
 

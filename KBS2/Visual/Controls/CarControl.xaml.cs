@@ -1,6 +1,6 @@
 ﻿using KBS2.CarSystem;
 using KBS2.Util;
-using KBS2.Windows;
+using KBS2.Visual;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +50,8 @@ namespace KBS2.Visual.Controls
             var location = new Vector(car.Location.X, car.Location.Y);
             location = Vector.Subtract(location, xoffset);
             location = Vector.Subtract(location, yoffset);
+
+            if (double.IsNaN(location.Length)) return;
 
             var zoom = Screen.Zoom;
             Margin = new Thickness(location.X * zoom, location.Y * zoom, 0, 0);

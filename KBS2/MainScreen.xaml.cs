@@ -4,9 +4,11 @@ using System.ComponentModel;
 using KBS2.Util.Loop;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Controls;
 using KBS2.CitySystem;
 using KBS2.Visual;
+using KBS2.Database;
 
 namespace KBS2
 {
@@ -74,7 +76,9 @@ namespace KBS2
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
             ZoomHandler = new ZoomHandler(this);
 
+
             WPFLoop.Subscribe(Update);
+            
             CommandLoop.Subscribe(CmdUpdate);
 
             PreviewMouseWheel += ZoomHandler.Scroll;
@@ -196,11 +200,11 @@ namespace KBS2
 
         public void CmdUpdate()
         {
-            if (City.Instance == null) return;
+            if (CitySystem.City.Instance == null) return;
 
             var maxWidth = 0.0;
             var maxHeight = 0.0;
-            foreach (var road in City.Instance.Roads)
+            foreach (var road in CitySystem.City.Instance.Roads)
             {
                 if (road.Start.X * Zoom > maxWidth) maxWidth = road.Start.X * Zoom;
                 if (road.End.X * Zoom > maxWidth) maxWidth = road.End.X * Zoom;
@@ -244,6 +248,11 @@ namespace KBS2
         private void Zoom_Changed(object sender, SelectionChangedEventArgs e)
         {
             ZoomHandler?.ZoomBoxChanged();
+        }
+
+        private void BtnRefresh_OnClick(object sender, RoutedEventArgs e)
+        {
+            SimulationControlHandler.Results.Update();
         }
     }
 }

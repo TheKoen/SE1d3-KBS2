@@ -14,7 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace KBS2.Windows
+namespace KBS2.Visual.Controls
+
 {
     /// <summary>
     /// Interaction logic for CustomerInfoUserControl.xaml
@@ -36,10 +37,11 @@ namespace KBS2.Windows
             LabelInfoLocation.DataContext = customer;
             LabelInfoDestination.DataContext = customer;
 
+            Review r = new Review(Customer);
             //Depending on the gender of our customer, a profile picture will be selected to represent it.
-            
 
-            if(customer.Gender == "Female" || customer.Gender == "Male")
+
+            if (customer.Gender == "Female" || customer.Gender == "Male")
             {
                 profilePicturePath = customer.Gender == "Female"
                 ? new Uri(@" /KBS2;component/Images/Female_Profile_Picture.jpg", UriKind.Relative)

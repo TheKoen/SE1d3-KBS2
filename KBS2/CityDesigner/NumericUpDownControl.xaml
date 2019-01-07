@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="KBS2.CityDesigner.NumericUpDownControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KBS2.CityDesigner"
+             mc:Ignorable="d" 
+             Height="19" Width="64"
+             MinHeight="19" MinWidth="48">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="0" MinWidth="16" />
+            <ColumnDefinition Width="0" MinWidth="16" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="TextBoxValue" Grid.Column="0" Text="0" TextChanged="TextBoxValue_OnTextChanged" />
+        <Button x:Name="ButtonUp" FontFamily="Marlett" Content="5" Grid.Column="1" Click="ButtonUp_OnClick" />
+        <Button x:Name="ButtonDown" FontFamily="Marlett" Content="6" Grid.Column="2" Click="ButtonDown_OnClick" />
+    </Grid>
+</UserControl>

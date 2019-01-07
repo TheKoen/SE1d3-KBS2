@@ -118,10 +118,7 @@ namespace KBS2.CarSystem
         public CarModel Model
         {
             get => model.Value;
-            set
-            {
-                model.Value = value;
-            }
+            set => model.Value = value;
         }
 
         public Vector Velocity { get; set; } = new Vector(0, 0);
@@ -134,6 +131,8 @@ namespace KBS2.CarSystem
         public Intersection CurrentIntersection { get; set; }
         public Vector CurrentTarget { get; set; }
 
+
+        public Garage Garage { get; set; }
 
         public CarController Controller { get; }
 
@@ -150,10 +149,11 @@ namespace KBS2.CarSystem
         /// <param name="direction">Direction the car is facing</param>
         /// <param name="width"></param>
         /// <param name="length"></param>
-        public Car(int id, CarModel model, Vector location, List<Sensor> sensors, DirectionCar direction, int width, int length)
+        public Car(int id, CarModel model, Vector location, List<Sensor> sensors, Garage garage, DirectionCar direction, int width, int length)
         {
             Id = id;
             Sensors = sensors;
+            Garage = garage;
             Width = width;
             Length = length;
 

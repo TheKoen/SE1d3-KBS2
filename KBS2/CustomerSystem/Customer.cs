@@ -49,11 +49,7 @@ namespace KBS2.CustomerSystem
         public Building Destination
         {
             get => Group.Destination;
-            set
-            {
-                Group.Destination = value;
-                
-            }
+            set => Group.Destination = value;
         }
 
         public void UpdateDestination()
@@ -92,7 +88,6 @@ namespace KBS2.CustomerSystem
             Mood = CustomerSystem.Moral.Happy;
             
             Controller = new CustomerController(this);
-
             MainScreen.AILoop.Subscribe(Controller.Update);
         }
 

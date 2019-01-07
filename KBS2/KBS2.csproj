@@ -37,12 +37,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +83,21 @@
     <Compile Include="CarSystem\Destination.cs" />
     <Compile Include="CarSystem\Sensors\PassiveSensors\EntityRadar.cs" />
     <Compile Include="CarSystem\Sensors\SensorEventArgs.cs" />
+    <Compile Include="CityDesigner\CityDesignerWindow.xaml.cs">
+      <DependentUpon>CityDesignerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CityDesigner\CityLoader.cs" />
+    <Compile Include="CityDesigner\CitySaver.cs" />
+    <Compile Include="CityDesigner\LoadedCityEventArgs.cs" />
+    <Compile Include="CityDesigner\NumericUpDownControl.xaml.cs">
+      <DependentUpon>NumericUpDownControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CityDesigner\ObjectCreators\BuildingCreator.cs" />
+    <Compile Include="CityDesigner\ObjectCreators\GarageCreator.cs" />
+    <Compile Include="CityDesigner\ObjectCreators\IntersectionCreator.cs" />
+    <Compile Include="CityDesigner\ObjectCreators\RoadCreator.cs" />
+    <Compile Include="CityDesigner\ObjectHandler.cs" />
+    <Compile Include="CityDesigner\Tools.cs" />
     <Compile Include="CitySystem\Building.cs" />
     <Compile Include="CarSystem\Car.cs" />
     <Compile Include="CarSystem\CarController.cs" />
@@ -92,6 +124,11 @@
     <Compile Include="Console\Commands\CommandProperties.cs" />
     <Compile Include="Console\Commands\CommandSet.cs" />
     <Compile Include="Console\Commands\CommandsSensors.cs" />
+    <Compile Include="CustomerSystem\Review.cs" />
+    <Compile Include="Database\DatabaseClasses.cs" />
+    <Compile Include="Database\DatabaseHelper.cs" />
+    <Compile Include="Database\ResultEvents.cs" />
+    <Compile Include="Database\ResultsHandler.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
     <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
@@ -111,7 +148,8 @@
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropertySettings.xaml.cs">
+    <Compile Include="Util\ResultImport.cs" />
+    <Compile Include="Visual\Controls\PropertySettings.xaml.cs">
       <DependentUpon>PropertySettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="GPS\TSP\CustomerOrder\NearestNeighbour2.cs" />
@@ -140,6 +178,7 @@
     </Compile>
     <Compile Include="Util\MathUtil.cs" />
     <Compile Include="Console\Commands\CommandTest.cs" />
+    <Compile Include="Util\ResultExport.cs" />
     <Compile Include="Util\StringConverters.cs" />
     <Compile Include="Visual\CityRenderHandler.cs" />
     <Compile Include="Visual\Controls\CarControl.xaml.cs">
@@ -172,6 +211,14 @@
     <Compile Include="Visual\Controls\CustomerInfoUserControl.xaml.cs">
       <DependentUpon>CustomerInfoUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="CityDesigner\CityDesignerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CityDesigner\NumericUpDownControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="Visual\ZoomHandler.cs" />
     <Page Include="ConsoleWindow.xaml">
       <SubType>Designer</SubType>
@@ -238,7 +285,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropertySettings.xaml">
+    <Page Include="Visual\Controls\PropertySettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -268,13 +315,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\happy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CityDesigner\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandSystem\CommandSystem.csproj">
