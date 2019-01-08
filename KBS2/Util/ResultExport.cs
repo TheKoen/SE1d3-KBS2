@@ -27,6 +27,11 @@ namespace KBS2.Util
                 Filter = "XML file | *.xml"
             };
             popupWindow.ShowDialog();
+            
+            if(string.IsNullOrWhiteSpace(popupWindow.FileName))
+            {
+                return;
+            }
 
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
@@ -210,7 +215,7 @@ namespace KBS2.Util
                     id.Value = garage.ID.ToString();
 
                     XmlAttribute garageLocation = doc.CreateAttribute("Location");
-                    garageLocation.Value = $"{garage.Location.X}, {garage.Location.Y}";
+                    garageLocation.Value = $"{garage.Location.X}; {garage.Location.Y}";
 
                     garageElement.Attributes.Append(id);
                     garageElement.Attributes.Append(garageLocation);
@@ -234,10 +239,10 @@ namespace KBS2.Util
                     id.Value = trip.ID.ToString();
 
                     XmlAttribute startLocation = doc.CreateAttribute("StartLocation");
-                    startLocation.Value = $"{trip.StartLocation.X},{trip.StartLocation.Y}";
+                    startLocation.Value = $"{trip.StartLocation.X};{trip.StartLocation.Y}";
 
                     XmlAttribute endLocation = doc.CreateAttribute("EndLocation");
-                    endLocation.Value = $"{trip.EndLocation.X},{trip.EndLocation.Y}";
+                    endLocation.Value = $"{trip.EndLocation.X};{trip.EndLocation.Y}";
 
                     XmlAttribute car = doc.CreateAttribute("CarId");
                     car.Value = trip.Car.ID.ToString();

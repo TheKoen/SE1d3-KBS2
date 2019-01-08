@@ -118,8 +118,8 @@ namespace KBS2.Util
                     {
                         g.Location = new Database.Vector
                         {
-                            X = int.Parse(garages.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).First()),
-                            Y = int.Parse(garages.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).Last())
+                            X = double.Parse(garages.ChildNodes[i].Attributes[j].Value.Split(";".ToCharArray()).First()),
+                            Y = double.Parse(garages.ChildNodes[i].Attributes[j].Value.Split(";".ToCharArray()).Last())
                         };
                     }
                     else
@@ -182,16 +182,16 @@ namespace KBS2.Util
                     {
                         t.StartLocation = new Database.Vector
                         {
-                            X = int.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).First()),
-                            Y = int.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).Last())
+                            X = double.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(";".ToCharArray()).First()),
+                            Y = double.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(";".ToCharArray()).Last())
                         };
                     }
                     else if (trips.ChildNodes[i].Attributes[j].Name == "EndLocation")
                     {
                         t.EndLocation = new Database.Vector
                         {
-                            X = int.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).First()),
-                            Y = int.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(",".ToCharArray()).Last())
+                            X = double.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(";".ToCharArray()).First()),
+                            Y = double.Parse(trips.ChildNodes[i].Attributes[j].Value.Split(";".ToCharArray()).Last())
                         };
                     }
                     else if (trips.ChildNodes[i].Attributes[j].Name == "CarId")
