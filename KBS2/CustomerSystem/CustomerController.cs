@@ -2,6 +2,8 @@
 using System;
 using System.Windows;
 using KBS2.CitySystem;
+using KBS2.Database;
+using KBS2.CarSystem;
 
 namespace KBS2.CustomerSystem
 
@@ -12,12 +14,13 @@ namespace KBS2.CustomerSystem
 
         public Customer Customer { get; set; }
         private bool walking;
-        private Vector direction;
+        private System.Windows.Vector direction;
         private int delay;
 
         public CustomerController(Customer customer)
         {
-            Customer = customer;            
+            Customer = customer;
+            CarController.TripEnd += OnTripEnd;
         }
 
         /// <summary>
@@ -34,14 +37,14 @@ namespace KBS2.CustomerSystem
         /// <summary>
         /// Moves the customer towards the give location.
         /// </summary>
-        public bool MoveTowardsLocation(Vector location)
+        public bool MoveTowardsLocation(System.Windows.Vector location)
         {
             if (Customer.Group == null) return false;
             var cL = Customer.Location;
 
-            var delta = new Vector(location.X - cL.X, location.Y - cL.Y);
+            var delta = new System.Windows.Vector(location.X - cL.X, location.Y - cL.Y);
             delta.Normalize();
-            var target = Vector.Add(Customer.Location, delta);
+            var target = System.Windows.Vector.Add(Customer.Location, delta);
             
             foreach(var road in Customer.Group.RoadsNear)
             {
@@ -52,12 +55,31 @@ namespace KBS2.CustomerSystem
             return true;
         }
 
+        public void OnTripEnd(object source, TripEventArgs args)
+        {
+            //if(Random.Next(5) == 1)
+            //{
+                MakeReview();
+            //}
+        }
+
         /// <summary>
         /// The customer makes a review depending on how long they had to wait, their moral state and the time of the ride.
         /// </summary>
         public void MakeReview()
         {
             Review r = new Review(Customer);
+            var car = CitySystem.City.Instance.Cars.Find(c => c.Passengers.Contains(Customer));
+            try
+            {
+                car.Reviews.Add(r);
+            }
+            catch (Exception)
+            {
+
+                System.Windows.MessageBox.Show("Oepsiewoepsie, Jochem");
+            }
+            
         }
 
         /// <summary>
@@ -119,14 +141,14 @@ namespace KBS2.CustomerSystem
                     walking = true;
                     var x = Random.Next(-10, 10);
                     var y = Random.Next(-10, 10);
-                    direction = new Vector(x, y);
+                    direction = new System.Windows.Vector(x, y);
                 }
             }
         }
 
         public void Destroy()
         {
-            City.Instance.Customers.Remove(Customer);
+            CitySystem.City.Instance.Customers.Remove(Customer);
             MainScreen.AILoop.Unsubscribe(Update);
         }
     }

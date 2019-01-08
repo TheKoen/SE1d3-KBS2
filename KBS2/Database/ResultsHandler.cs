@@ -146,7 +146,7 @@ namespace KBS2.Database
             });
         }
 
-        // Only LabelResultAvgCustomers and LabelResultAvgReviewRating are still missing. Car doesn't save this info?
+       
         public void Update()
         {
             ticks = 0;
@@ -171,6 +171,7 @@ namespace KBS2.Database
                     if (data.Count == 0) return;
                     Screen.LabelResultAvgAge.Content = Math.Round(data.Average(customer => customer.Age));
                     Screen.LabelResultAvgMoral.Content = Math.Round(data.Average(customer => customer.Moral));
+                    
                 },
                 // Labels can only be updated on the WPF (main) thread so we want to use that one.
                 MainScreen.CommandLoop
@@ -216,18 +217,38 @@ namespace KBS2.Database
                     Screen.LabelResultAvgPrice.Content = $"€{data.Sum(review => review.Price):0.00}";
                     Screen.LabelResultDistanceTotal.Content = data.Sum(trip => trip.Distance);
                     Screen.LabelResultDistanceAvarage.Content = Math.Round(data.Average(trip => trip.Distance));
+                    
                 },
                 MainScreen.CommandLoop
             );
-
+            
             DatabaseHelper.QueueDatabaseRequest(
-                database => (from simulation in database.Simulations
-                    where simulation.CityInstance.ID == Instance.ID
-                    select simulation).ToList(),
+                database => (from c in database.Customers
+                             where c.CustomerGroup.Trip != null
+                             join t in database.Trips
+                                on c.CustomerGroup.Trip.ID equals t.ID
+                             where c.CustomerGroup.CityInstance.ID == Instance.ID
+                             select new
+                             {
+                                 customer = c, trip = t
+                             }).ToList(),
                 data =>
                 {
                     if (data.Count == 0) return;
-                    Screen.LabelResultTimeElapsed.Content = data.Select(sim => sim.Duration);
+                    var trips = new List<Trip>();
+
+                    foreach (var d in data)
+                    {
+                        if (trips.All(trip => trip.ID != d.trip.ID))
+                        {
+                            trips.Add(d.trip);
+                            
+                        }
+                    }
+
+                    var avarage = data.Count / trips.Count;
+                    
+                    Screen.LabelResultAvgCustomers.Content = avarage;
                 },
                 MainScreen.CommandLoop
             );

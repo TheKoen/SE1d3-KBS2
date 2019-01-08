@@ -131,6 +131,10 @@
     <Compile Include="Database\ResultsHandler.cs" />
     <Compile Include="Exceptions\KeyExistsException.cs" />
     <Compile Include="CitySystem\Garage.cs" />
+    <Compile Include="GPS\AlgorithmDebuggerWindow.xaml.cs">
+      <DependentUpon>AlgorithmDebuggerWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
     <Compile Include="GPS\AlgorithmTools.cs" />
     <Compile Include="GPS\GPSSystem.cs" />
@@ -144,7 +148,7 @@
     <Compile Include="GPS\IAlgorithm.cs" />
     <Compile Include="GPS\NodeNetwork\Link.cs" />
     <Compile Include="GPS\NodeNetwork\Node.cs" />
-    <Compile Include="GPS\NodeNetwork\RoadNetwork.cs" />
+    <Compile Include="GPS\NodeNetwork\NodeNetwork.cs" />
     <Compile Include="MainScreen.xaml.cs">
       <DependentUpon>MainScreen.xaml</DependentUpon>
     </Compile>
@@ -233,6 +237,10 @@
     <Page Include="Console\ConsoleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GPS\AlgorithmDebuggerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainScreen.xaml">
       <SubType>Designer</SubType>
