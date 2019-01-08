@@ -166,7 +166,28 @@ namespace KBS2
 
         private void BtnShowLatest_Click(object sender, RoutedEventArgs e)
         {
-
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from sim in database.Simulations
+                             select sim).ToList(),
+                data =>
+                {
+                    if (data.Count > 0)
+                    {
+                        var id = data.Max(sim => sim.ID);
+                        var simulation = data.First(sim => sim.ID == id);
+                        SimulationControlHandler.Results.Instance = simulation.CityInstance;
+                        SimulationControlHandler.Results.Update();
+                        TBSimID.Text = id.ToString();
+                        MessageBox.Show($"Loaded data for simulation {id}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No simulations found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        TBSimID.Text = "";
+                    }
+                },
+                CommandLoop
+            );
         }
 
         private void BtnSaveSim_Click(object sender, RoutedEventArgs e)
