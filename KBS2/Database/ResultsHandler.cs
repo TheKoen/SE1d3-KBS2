@@ -221,20 +221,7 @@ namespace KBS2.Database
                 },
                 MainScreen.WPFLoop
             );
-
-            DatabaseHelper.QueueDatabaseRequest(
-                database => (from simulation in database.Simulations
-                    where simulation.CityInstance.ID == Instance.ID
-                    select simulation).ToList(),
-                data =>
-                {
-                    if (data.Count == 0) return;
-                    Screen.LabelResultTimeElapsed.Content = data.Select(sim => sim.Duration);
-                },
-                MainScreen.WPFLoop
-            );
-
-
+            
             DatabaseHelper.QueueDatabaseRequest(
                 database => (from c in database.Customers
                              where c.CustomerGroup.Trip != null

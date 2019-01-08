@@ -192,13 +192,6 @@
                                 <Label Content="Average price per ride" Width="150"/>
                                 <Label x:Name="LabelResultAvgPrice" Content="" Width="150"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Time:" Width="150" FontWeight="Bold" FontSize="14"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Time elapsed" Width="150"/>
-                                <Label x:Name="LabelResultTimeElapsed" Content="" Width="150"/>
-                            </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                     <Button x:Name="BtnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="202,584,0,0" VerticalAlignment="Top"  Width="92" Height="33" Click="BtnRefresh_OnClick"/>
