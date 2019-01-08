@@ -185,7 +185,12 @@ namespace KBS2.Database
                 {
                     Screen.LabelResultCustomer.Content = data.Count;
                     Screen.LabelResultTotalCustomers.Content = data.Count;
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultAvgAge.Content = 0;
+                        Screen.LabelResultAvgMoral.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultAvgAge.Content = Math.Round(data.Average(customer => customer.Age));
                     Screen.LabelResultAvgMoral.Content = Math.Round(data.Average(customer => customer.Moral));
                     
@@ -202,7 +207,12 @@ namespace KBS2.Database
                 {
                     Screen.LabelResultCars.Content = data.Count;
                     Screen.LabelResultTotalCars.Content = data.Count;
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultDistanceTotalCar.Content = 0;
+                        Screen.LabelResultDistanceAvarageCars.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultDistanceTotalCar.Content = data.Sum(car => car.DistanceTravelled);
                     Screen.LabelResultDistanceAvarageCars.Content =
                         Math.Round(data.Average(car => car.DistanceTravelled));
@@ -216,7 +226,11 @@ namespace KBS2.Database
                     select review).ToList(),
                 data =>
                 {
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultAvgReviewRating.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultAvgReviewRating.Content = Math.Round(data.Average(review => review.Rating));
                 },
                 MainScreen.CommandLoop
@@ -229,7 +243,14 @@ namespace KBS2.Database
                 data =>
                 {
                     Screen.LabelResultRide.Content = data.Count;
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultTotalEarned.Content = $"€{0:0.00}";
+                        Screen.LabelResultAvgPrice.Content = $"€{0:0.00}";
+                        Screen.LabelResultDistanceTotal.Content = 0;
+                        Screen.LabelResultDistanceAvarage.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultTotalEarned.Content = $"€{data.Sum(trip => trip.Price):0.00}";
                     Screen.LabelResultAvgPrice.Content = $"€{data.Sum(review => review.Price):0.00}";
                     Screen.LabelResultDistanceTotal.Content = data.Sum(trip => trip.Distance);
@@ -251,7 +272,11 @@ namespace KBS2.Database
                              }).ToList(),
                 data =>
                 {
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultAvgCustomers.Content = 0;
+                        return;
+                    };
                     var trips = new List<Trip>();
 
                     foreach (var d in data)

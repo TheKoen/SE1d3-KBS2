@@ -93,7 +93,7 @@ namespace KBS2
             CommandLoop.Subscribe(CmdUpdate);
 
             PreviewMouseWheel += ZoomHandler.Scroll;
-
+            ResultImport.ResultImported += ResultImportComplete;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -206,6 +206,32 @@ namespace KBS2
                     if (data.Count > 0)
                     {
                         var id = data.Max(sim => sim.ID);
+                        var simulation = data.First(sim => sim.ID == id);
+                        SimulationControlHandler.Results.Instance = simulation.CityInstance;
+                        SimulationControlHandler.Results.Update();
+                        TBSimID.Text = id.ToString();
+                        MessageBox.Show($"Loaded data for simulation {id}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No simulations found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        TBSimID.Text = "";
+                    }
+                },
+                CommandLoop
+            );
+        }
+
+        private void ResultImportComplete(object source, EventArgs args)
+        {
+            var id = ((ImportEventArgs) args).SimID;
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from sim in database.Simulations
+                    select sim).ToList(),
+                data =>
+                {
+                    if (data.Count > 0)
+                    {
                         var simulation = data.First(sim => sim.ID == id);
                         SimulationControlHandler.Results.Instance = simulation.CityInstance;
                         SimulationControlHandler.Results.Update();

@@ -14,7 +14,7 @@ namespace KBS2.Util
     {
         public static event EventHandler ResultImported;
 
-        public static string Path { get; private set; } 
+        public static string Path { get; private set; }
 
         public static void SetPath()
         {
@@ -25,7 +25,6 @@ namespace KBS2.Util
             };
             if (popupWindow.ShowDialog() == DialogResult.OK)
             {
-
                 Path = popupWindow.FileName;
             }
             else
@@ -41,7 +40,7 @@ namespace KBS2.Util
         {
             var doc = new XmlDocument();
 
-            if(!string.IsNullOrWhiteSpace(Path))
+            if (!string.IsNullOrWhiteSpace(Path))
             {
                 doc.Load(Path);
             }
@@ -80,7 +79,7 @@ namespace KBS2.Util
             Simulation simulationDatabase = new Simulation();
             string cityName = "";
             //simulation
-            for(int i = 0; i < simulation.Attributes.Count; i++)
+            for (int i = 0; i < simulation.Attributes.Count; i++)
             {
                 if (simulation.Attributes[i].Name == "SimulationId")
                 {
@@ -111,7 +110,7 @@ namespace KBS2.Util
                 var id = 0;
                 for (int j = 0; j < garages.ChildNodes[i].Attributes.Count; j++)
                 {
-                    if(garages.ChildNodes[i].Attributes[j].Name == "Id")
+                    if (garages.ChildNodes[i].Attributes[j].Name == "Id")
                     {
                         id = int.Parse(garages.ChildNodes[i].Attributes[j].Value);
                     }
@@ -128,29 +127,30 @@ namespace KBS2.Util
                         throw new XmlException("Error in attributes garage");
                     }
                 }
+
                 garageList.Add(id, g);
             }
 
             // cars
 
-            var carsList = new Dictionary<int,Car>();
-            
-            for(int i = 0; i < cars.ChildNodes.Count; i++)
+            var carsList = new Dictionary<int, Car>();
+
+            for (int i = 0; i < cars.ChildNodes.Count; i++)
             {
                 var c = new Car();
                 c.CityInstance = simulationDatabase.CityInstance;
                 var id = 0;
-                for(int j = 0; j < cars.ChildNodes[i].Attributes.Count; j++)
+                for (int j = 0; j < cars.ChildNodes[i].Attributes.Count; j++)
                 {
-                    if(cars.ChildNodes[i].Attributes[j].Name == "CarId")
+                    if (cars.ChildNodes[i].Attributes[j].Name == "CarId")
                     {
                         id = int.Parse(cars.ChildNodes[i].Attributes[j].Value);
                     }
-                    else if(cars.ChildNodes[i].Attributes[j].Name == "Model")
+                    else if (cars.ChildNodes[i].Attributes[j].Name == "Model")
                     {
                         c.Model = cars.ChildNodes[i].Attributes[j].Value;
                     }
-                    else if(cars.ChildNodes[i].Attributes[j].Name == "GarageId")
+                    else if (cars.ChildNodes[i].Attributes[j].Name == "GarageId")
                     {
                         c.Garage = garageList[int.Parse(cars.ChildNodes[i].Attributes[j].Value)];
                     }
@@ -159,6 +159,7 @@ namespace KBS2.Util
                         throw new XmlException("Error in attributes Car");
                     }
                 }
+
                 carsList.Add(id, c);
             }
 
@@ -169,11 +170,11 @@ namespace KBS2.Util
             for (int i = 0; i < trips.ChildNodes.Count; i++)
             {
                 var t = new Trip();
-                
+
                 var id = 0;
                 for (int j = 0; j < trips.ChildNodes[i].Attributes.Count; j++)
                 {
-                    if(trips.ChildNodes[i].Attributes[j].Name == "Id")
+                    if (trips.ChildNodes[i].Attributes[j].Name == "Id")
                     {
                         id = int.Parse(trips.ChildNodes[i].Attributes[j].Value);
                     }
@@ -202,6 +203,7 @@ namespace KBS2.Util
                         throw new XmlException("Error in attributes trip");
                     }
                 }
+
                 tripsList.Add(id, t);
             }
 
@@ -209,20 +211,20 @@ namespace KBS2.Util
 
             var customerGroupsList = new Dictionary<int, CustomerGroup>();
 
-            for(int i = 0; i < customerGroups.ChildNodes.Count; i++)
+            for (int i = 0; i < customerGroups.ChildNodes.Count; i++)
             {
                 var c = new CustomerGroup();
                 c.CityInstance = simulationDatabase.CityInstance;
                 var id = 0;
                 for (int j = 0; j < customerGroups.ChildNodes[i].Attributes.Count; j++)
                 {
-                    if(customerGroups.ChildNodes[i].Attributes[j].Name == "Id")
+                    if (customerGroups.ChildNodes[i].Attributes[j].Name == "Id")
                     {
                         id = int.Parse(customerGroups.ChildNodes[i].Attributes[j].Value);
                     }
                     else if (customerGroups.ChildNodes[i].Attributes[j].Name == "TripId")
                     {
-                        if(customerGroups.ChildNodes[i].Attributes[j].Value == "null")
+                        if (customerGroups.ChildNodes[i].Attributes[j].Value == "null")
                         {
                             c.Trip = null;
                         }
@@ -236,6 +238,7 @@ namespace KBS2.Util
                         throw new XmlException("Error in attributes CustomerGroup");
                     }
                 }
+
                 customerGroupsList.Add(id, c);
             }
 
@@ -250,7 +253,7 @@ namespace KBS2.Util
                 var id = 0;
                 for (int j = 0; j < customers.ChildNodes[i].Attributes.Count; j++)
                 {
-                    if(customers.ChildNodes[i].Attributes[j].Name == "Id")
+                    if (customers.ChildNodes[i].Attributes[j].Name == "Id")
                     {
                         id = int.Parse(customers.ChildNodes[i].Attributes[j].Value);
                     }
@@ -268,7 +271,7 @@ namespace KBS2.Util
                     }
                     else if (customers.ChildNodes[i].Attributes[j].Name == "Gender")
                     {
-                        c.Gender = DatabaseHelper.GetGender(customers.ChildNodes[i].Attributes[j].Value);                  
+                        c.Gender = DatabaseHelper.GetGender(customers.ChildNodes[i].Attributes[j].Value);
                     }
                     else if (customers.ChildNodes[i].Attributes[j].Name == "CustomerGroupId")
                     {
@@ -279,6 +282,7 @@ namespace KBS2.Util
                         throw new XmlException("Error in attributes of customer.");
                     }
                 }
+
                 // add customer to list
                 customersList.Add(id, c);
             }
@@ -287,24 +291,24 @@ namespace KBS2.Util
 
             var reviewsList = new List<Review>();
 
-            for(int i = 0; i < reviews.ChildNodes.Count; i++)
+            for (int i = 0; i < reviews.ChildNodes.Count; i++)
             {
                 var r = new Review();
-                for(int j = 0; j < reviews.ChildNodes[i].Attributes.Count; j++)
+                for (int j = 0; j < reviews.ChildNodes[i].Attributes.Count; j++)
                 {
-                    if(reviews.ChildNodes[i].Attributes[j].Name == "Content")
+                    if (reviews.ChildNodes[i].Attributes[j].Name == "Content")
                     {
                         r.Content = reviews.ChildNodes[i].Attributes[j].Value;
                     }
-                    else if(reviews.ChildNodes[i].Attributes[j].Name == "Rating")
+                    else if (reviews.ChildNodes[i].Attributes[j].Name == "Rating")
                     {
                         r.Rating = int.Parse(reviews.ChildNodes[i].Attributes[j].Value);
                     }
-                    else if(reviews.ChildNodes[i].Attributes[j].Name == "TripId")
+                    else if (reviews.ChildNodes[i].Attributes[j].Name == "TripId")
                     {
                         r.Trip = tripsList[int.Parse(reviews.ChildNodes[i].Attributes[j].Value)];
                     }
-                    else if(reviews.ChildNodes[i].Attributes[j].Name == "CustomerId")
+                    else if (reviews.ChildNodes[i].Attributes[j].Name == "CustomerId")
                     {
                         r.Customer = customersList[int.Parse(reviews.ChildNodes[i].Attributes[j].Value)];
                     }
@@ -313,89 +317,89 @@ namespace KBS2.Util
                         throw new XmlException("Error in attributes review");
                     }
                 }
+
                 reviewsList.Add(r);
             }
 
             // database connection add all elements
 
             DatabaseHelper.QueueDatabaseAction(
-            dataBase =>
-            {
-
-                // find city with same name
-                ICollection<City> cities = (from c in dataBase.Cities
-                                            where c.CityName == cityName
-                                            select c).ToList();
-
-                City i = null;
-
-
-                // add new city by name if name is not found
-                if (cities.Count() == 0)
+                dataBase =>
                 {
-                    i = new City
-                    {
-                        CityName = cityName
-                    };
-                    dataBase.Cities.Add(i);
+                    // find city with same name
+                    ICollection<City> cities = (from c in dataBase.Cities
+                        where c.CityName == cityName
+                        select c).ToList();
 
-                    // add garages 
+                    City i = null;
 
-                    foreach (var garage in garageList)
+
+                    // add new city by name if name is not found
+                    if (cities.Count() == 0)
                     {
-                        dataBase.Garages.Add(garage.Value);
+                        i = new City
+                        {
+                            CityName = cityName
+                        };
+                        dataBase.Cities.Add(i);
+
+                        // add garages 
+
+                        foreach (var garage in garageList)
+                        {
+                            dataBase.Garages.Add(garage.Value);
+                        }
                     }
-                }
-                else
-                {
-                    i = cities.First();
-                }
+                    else
+                    {
+                        i = cities.First();
+                    }
 
-                simulationDatabase.CityInstance.City = i;
-                dataBase.Simulations.Add(simulationDatabase);
-                
+                    simulationDatabase.CityInstance.City = i;
+                    dataBase.Simulations.Add(simulationDatabase);
 
-                // cars
-                foreach (var car in carsList)
-                {
-                    dataBase.Cars.Add(car.Value);
-                }
 
-                // trips
-                foreach (var trip in tripsList)
-                {
-                    dataBase.Trips.Add(trip.Value);
-                }
+                    // cars
+                    foreach (var car in carsList)
+                    {
+                        dataBase.Cars.Add(car.Value);
+                    }
 
-                //customerGroups
-                foreach (var customerGroup in customerGroupsList)
-                {
-                    dataBase.CustomerGroups.Add(customerGroup.Value);
-                }
+                    // trips
+                    foreach (var trip in tripsList)
+                    {
+                        dataBase.Trips.Add(trip.Value);
+                    }
 
-                //customers
-                foreach (var customer in customersList)
-                {
-                    dataBase.Customers.Add(customer.Value);
-                }
+                    //customerGroups
+                    foreach (var customerGroup in customerGroupsList)
+                    {
+                        dataBase.CustomerGroups.Add(customerGroup.Value);
+                    }
 
-                //reviews 
-                foreach (var review in reviewsList)
-                {
-                    dataBase.Reviews.Add(review);
-                }
+                    //customers
+                    foreach (var customer in customersList)
+                    {
+                        dataBase.Customers.Add(customer.Value);
+                    }
 
-                dataBase.SaveChanges();
+                    //reviews 
+                    foreach (var review in reviewsList)
+                    {
+                        dataBase.Reviews.Add(review);
+                    }
 
-                MainScreen.CommandLoop.EnqueueAction(() =>
-                {
-                    System.Windows.MessageBox.Show(window, "Import sucess", "Import", MessageBoxButton.OK);
+                    dataBase.SaveChanges();
 
-                    ResultImported?.Invoke(null, EventArgs.Empty);
+                    MainScreen.CommandLoop.EnqueueAction(() =>
+                    {
+                        System.Windows.MessageBox.Show(window, "Import sucess", "Import", MessageBoxButton.OK);
+
+                        ResultImported?.Invoke(null, new ImportEventArgs {SimID = simulationDatabase.ID});
+                    });
                 });
-            });
         }
-    
+
         public static void SubscribeResultImported(EventHandler source)
         {
             ResultImported += source;
@@ -405,5 +409,10 @@ namespace KBS2.Util
         {
             ResultImported -= source;
         }
+    }
+
+    public class ImportEventArgs : EventArgs
+    {
+        public int SimID { get; set; }
     }
 }
