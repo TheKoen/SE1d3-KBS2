@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using KBS2.CitySystem;
 using KBS2.Visual;
 using KBS2.Database;
+using KBS2.Util;
+using System.IO;
 
 namespace KBS2
 {
@@ -91,6 +93,7 @@ namespace KBS2
             CommandLoop.Subscribe(CmdUpdate);
 
             PreviewMouseWheel += ZoomHandler.Scroll;
+
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -142,12 +145,27 @@ namespace KBS2
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                ResultImport.SetPath();
+                TBResult.Text = Path.GetFileNameWithoutExtension(ResultImport.Path);
+            }
+            catch(Exception b)
+            {
+                MessageBox.Show(this, b.Message, "Import error", MessageBoxButton.OK);
+            }
         }
 
         private void BtnLoadResult_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                ResultImport.ImportResult(this);
+            }
+            catch(Exception b)
+            {
+                MessageBox.Show(this, b.Message, "Import error", MessageBoxButton.OK);
+            }
         }
 
         private void BtnShow_Click(object sender, RoutedEventArgs e)
@@ -207,6 +225,34 @@ namespace KBS2
         private void BtnSaveSim_Click(object sender, RoutedEventArgs e)
         {
 
+            int cityInstanceId = 0;
+
+            try
+            {
+                cityInstanceId = SimulationControlHandler.Results.Instance.ID;
+            }
+            catch(Exception)
+            {
+                MessageBox.Show(this, "Please give some information to save.", "Export", MessageBoxButton.OK);
+                return;
+            }
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from sim in database.Simulations
+                             where sim.CityInstance.ID == cityInstanceId
+                             select sim).ToList(),
+                data => 
+                {
+                   try
+                   {
+                        ResultExport.ExportResult(data.First().ID, "killakid", this);
+                   }
+                   catch(Exception b)
+                   {
+                        MessageBox.Show(this, b.Message, "Export error", MessageBoxButton.OK);
+                   }
+                }, 
+                CommandLoop
+            );
         }
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)

@@ -30,9 +30,11 @@ namespace KBS2.CityDesigner
             }
 
             // save window
-            var popupWindow = new SaveFileDialog();
-            popupWindow.Title = "Save City";
-            popupWindow.Filter = "XML file | *.xml";
+            var popupWindow = new SaveFileDialog()
+            {
+                Title = "Save City",
+                Filter = "Xml file | *.xml"
+            };
             popupWindow.ShowDialog();
 
             XmlDocument doc = new XmlDocument();
