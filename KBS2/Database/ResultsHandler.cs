@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media;
 using KBS2.CarSystem;
 using KBS2.Visual;
 using KBS2.Visual.Controls;
@@ -116,34 +117,50 @@ namespace KBS2.Database
             System.Windows.Vector start = e.Start;
             System.Windows.Vector end = e.End;
             CarSystem.Car carObject = e.Car;
+            var garageLoc = carObject.Garage.Location;
 
-
-            DatabaseHelper.QueueDatabaseAction((database) =>
-            {
-                var garage = DatabaseHelper.GetObject(database.Garages,
-                    g => DatabaseHelper.MatchVectors(g.Location, carObject.Garage.Location));
-                if (garage == null) throw new Exception($"Unknown garage {carObject.Garage}");
-
-                var car = new Car
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from garage in database.Garages
+                             let loc = garage.Location
+                             where loc.X == garageLoc.X && loc.Y == garageLoc.Y
+                             select garage).ToList(),
+                data =>
                 {
-                    CityInstance = Instance,
-                    Garage = garage,
-                    Model = carObject.Model.Name,
-                    DistanceTravelled = (int) Math.Round(carObject.DistanceTraveled)
-                };
+                    if (data.Count == 0)
+                    {
+                        App.Console?.Print("Aaaaaaaah", Colors.Red);
+                    }
+                    else
+                    {
+                        var garage = data.First();
+                        DatabaseHelper.QueueDatabaseAction((database) =>
+                        {
+                            if (garage == null) throw new Exception($"Unknown garage {carObject.Garage}");
 
-                var trip = new Trip
-                {
-                    Car = car,
-                    Distance = carObject.DistanceTraveled,
-                    StartLocation = DatabaseHelper.CreateDBVector(start),
-                    EndLocation = DatabaseHelper.CreateDBVector(end),
-                    Price = 0.0
-                };
+                            var car = new Car
+                            {
+                                CityInstance = Instance,
+                                Garage = garage,
+                                Model = carObject.Model.Name,
+                                DistanceTravelled = (int)Math.Round(carObject.DistanceTraveled)
+                            };
 
-                database.Trips.Add(trip);
-                database.SaveChanges();
-            });
+                            var trip = new Trip
+                            {
+                                Car = car,
+                                Distance = carObject.DistanceTraveled,
+                                StartLocation = DatabaseHelper.CreateDBVector(start),
+                                EndLocation = DatabaseHelper.CreateDBVector(end),
+                                Price = 0.0
+                            };
+
+                            database.Trips.Add(trip);
+                            database.SaveChanges();
+                        });
+                    }
+                },
+                MainScreen.CommandLoop
+            );
         }
 
        

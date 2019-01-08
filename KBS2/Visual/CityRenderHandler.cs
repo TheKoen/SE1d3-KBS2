@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
 using KBS2.CitySystem;
 using KBS2.Visual.Controls;
 
@@ -22,7 +23,13 @@ namespace KBS2.Visual
             if (City.Instance != null)
             {
                 Screen.LabelSimulationAmountCostumer.Content = City.Instance.Customers.Count;
-                Screen.LabelSimulationAmountCars.Content = City.Instance.Cars.Count;
+                var notInUseCars = City.Instance.Buildings
+                    .FindAll(building => building is Garage)
+                    .Sum(building => ((Garage) building).AvailableCars);
+                Screen.LabelSimulationAmountCars.Content = City.Instance.Cars.Count + notInUseCars;
+
+                Screen.LabelSimulationDriving.Content = City.Instance.Cars.Count;
+                Screen.LabelSimulationNotInUse.Content = notInUseCars;
             }
         }
 

@@ -59,7 +59,7 @@ namespace KBS2.CustomerSystem
         {
             //if(Random.Next(5) == 1)
             //{
-                MakeReview();
+               // MakeReview();
             //}
         }
 
@@ -70,15 +70,7 @@ namespace KBS2.CustomerSystem
         {
             Review r = new Review(Customer);
             var car = CitySystem.City.Instance.Cars.Find(c => c.Passengers.Contains(Customer));
-            try
-            {
                 car.Reviews.Add(r);
-            }
-            catch (Exception)
-            {
-
-                System.Windows.MessageBox.Show("Oepsiewoepsie, Jochem");
-            }
             
         }
 

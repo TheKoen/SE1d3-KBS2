@@ -6,6 +6,7 @@ using System.Xml;
 using KBS2.CitySystem;
 using KBS2.Database;
 using KBS2.Visual.Controls;
+using Garage = KBS2.CitySystem.Garage;
 
 namespace KBS2.Visual
 {
