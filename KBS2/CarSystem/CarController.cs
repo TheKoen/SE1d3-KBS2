@@ -362,15 +362,13 @@ namespace KBS2.CarSystem
             if (speed > maxTurningSpeed / 2d || Car.PassengerCount > 0 || distanceToDestination < 20)
             {
                 // Check if we need to drop passengers off.
-                if (Car.PassengerCount > 0 && speed < 0.05 && speed > 0)
+                if (Car.PassengerCount > 0 && /*speed < 0.05 && */speed > 0)
                 {
-                    App.Console.Print($"[C{Car.Id}] Dropping customers", Colors.Blue);
+                    App.Console.Print($"[C{Car.Id}] Dropping customers", Colors.LimeGreen);
                     var passenger = Car.Passengers[0];
                     TripEnd?.Invoke(this, new TripEventArgs(passenger.Group, passenger.Building.Location, Car.Location, Car));
                     Car.Passengers.Clear();
                     MainScreen.AILoop.Unsubscribe(Update);
-                    City.Instance.Cars.Remove(Car);
-                    Car.Location = new Vector(-100, -100);
                 }
 
                 // Slow down the car.
@@ -499,7 +497,7 @@ namespace KBS2.CarSystem
             var target = Car.CurrentTarget;
             var destination = Car.Destination;
 
-            return distanceToDestination < 30 && MathUtil.Distance(target, destination.Location) < 10;
+            return distanceToDestination < 35/* && MathUtil.Distance(target, destination.Location) < 10*/;
         }
 
         private static Vector GetClosestRoadPoint(Vector location)
