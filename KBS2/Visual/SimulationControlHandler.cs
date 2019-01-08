@@ -148,6 +148,8 @@ namespace KBS2.Visual
             MainScreen.AILoop.Stop();
 
             CitySystem.City.Instance.Controller.Reset();
+
+            SimulationLoad?.Invoke(this, new SimulationEventArgs(CitySystem.City.Instance));
         }
 
         public void ResetLabels()
