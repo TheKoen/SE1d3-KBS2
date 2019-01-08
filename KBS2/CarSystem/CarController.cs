@@ -119,12 +119,15 @@ namespace KBS2.CarSystem
                 {
                     resetTarget = true;
                     var closestRoad = GPSSystem.NearestRoad(Car.Location);
-                    Car.CurrentTarget =
-                        MathUtil.Distance(closestRoad.End, Car.Location) >
-                        MathUtil.Distance(closestRoad.Start, Car.Location)
-                            ? closestRoad.Start
-                            : closestRoad.End;
-                    App.Console.Print($"[C{Car.Id}] Lost road, trying to get back on, targeting {Car.CurrentTarget}", Colors.Blue);
+                    if (closestRoad != null && Car != null)
+                    {
+                        Car.CurrentTarget =
+                            MathUtil.Distance(closestRoad.End, Car.Location) >
+                            MathUtil.Distance(closestRoad.Start, Car.Location)
+                                ? closestRoad.Start
+                                : closestRoad.End;
+                        App.Console.Print($"[C{Car.Id}] Lost road, trying to get back on, targeting {Car.CurrentTarget}", Colors.Blue);
+                    };
                 }
             }
             else if (resetTarget)

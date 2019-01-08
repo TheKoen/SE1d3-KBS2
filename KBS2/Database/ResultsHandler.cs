@@ -128,7 +128,7 @@ namespace KBS2.Database
                 {
                     if (data.Count == 0)
                     {
-                        App.Console?.Print("Aaaaaaaah", Colors.Red);
+                        throw new Exception("Cannot find garage in database");
                     }
                     else
                     {
