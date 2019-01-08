@@ -159,6 +159,7 @@ namespace KBS2.CarSystem
             Width = width;
             Length = length;
 
+            Reviews = new List<Review>();
             Passengers = new List<Customer>();
             CurrentRoad = GPSSystem.GetRoad(location);
 
