@@ -70,7 +70,16 @@ namespace KBS2.CustomerSystem
         {
             Review r = new Review(Customer);
             var car = CitySystem.City.Instance.Cars.Find(c => c.Passengers.Contains(Customer));
-            car.Reviews.Add(r);
+            try
+            {
+                car.Reviews.Add(r);
+            }
+            catch (Exception)
+            {
+
+                System.Windows.MessageBox.Show("Oepsiewoepsie, Jochem");
+            }
+            
         }
 
         /// <summary>
