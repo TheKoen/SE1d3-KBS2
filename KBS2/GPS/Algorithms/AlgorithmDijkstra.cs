@@ -1,17 +1,20 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CarSystem;
-using KBS2.Console;
 using KBS2.GPS.NodeNetwork;
 
 namespace KBS2.GPS.Algorithms
 {
     public class AlgorithmDijkstra : IAlgorithm
     {
+        public static int debuggerIndex;
+        
         public Destination Calculate(Destination carDestination, Destination endDestination)
         {
-            var network = RoadNetwork.GetInstance();
+            var network = NodeNetwork.NodeNetwork.GetInstance();
             var startNode = new Node(GPSSystem.FindIntersection(carDestination.Location).Location);
             var endNodes = AlgorithmTools.IntersectionTupleToNodeTuple(
                 AlgorithmTools.GetIntersectionOrderForRoadSide(endDestination.Road, endDestination.Location));
@@ -19,9 +22,15 @@ namespace KBS2.GPS.Algorithms
             AssignNodeValues(ref network, ref startNode);
 
             if (startNode.Equals(endNodes.Item1))
+            {
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult(debuggerIndex++.ToString(), network, 
+                    startNode, endNodes.Item2, endNodes);
                 return endDestination;
+            }
 
             var nextNode = FindNextNodeOnBestRoute(ref network, endNodes.Item1);
+            AlgorithmDebuggerWindow.Instance.AddNetworkResult(debuggerIndex++.ToString(), network, 
+                startNode, nextNode, endNodes);
             var roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
             var roadY = (startNode.PositionY - nextNode.PositionY) / 2.0 + nextNode.PositionY;
             return new Destination
@@ -31,7 +40,7 @@ namespace KBS2.GPS.Algorithms
             };
         }
 
-        private static void AssignNodeValues(ref RoadNetworkCopy network, ref Node startNode)
+        private static void AssignNodeValues(ref NodeNetworkCopy network, ref Node startNode)
         {
             if (startNode.Value == null)
             {
@@ -52,7 +61,7 @@ namespace KBS2.GPS.Algorithms
             }
         }
 
-        private static Node FindNextNodeOnBestRoute(ref RoadNetworkCopy network, Node endNode)
+        private static Node FindNextNodeOnBestRoute(ref NodeNetworkCopy network, Node endNode)
         {
             var currentNode = network.Nodes.Single(n => n.Equals(endNode));
             var previousNode = currentNode;
@@ -68,6 +77,8 @@ namespace KBS2.GPS.Algorithms
                     .First();
                 previousNode = currentNode;
                 currentNode = bestNode;
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{debuggerIndex}#{currentNode.Value}", network,
+                    previousNode, currentNode);
             }
 
             return previousNode;

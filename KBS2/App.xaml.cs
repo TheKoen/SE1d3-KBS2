@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using KBS2.Console;
 using KBS2.Console.Commands;
+using KBS2.GPS;
 
 namespace KBS2
 {
