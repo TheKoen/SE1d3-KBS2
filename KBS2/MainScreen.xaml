@@ -105,7 +105,7 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabItemResults" Header="Results" Margin="90,-2,-125,-2" IsEnabled="False">
+            <TabItem x:Name="TabItemResults" Header="Results" Margin="90,-2,-125,-2" IsEnabled="True">
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
                     <Button x:Name="BtnImport" Content="Import" HorizontalAlignment="Left" Margin="25,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnImport_Click"/>
                     <Button x:Name="BtnLoadResult" Content="Load" HorizontalAlignment="Left" Margin="230,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnLoadResult_Click"/>

@@ -174,7 +174,7 @@ namespace KBS2.Database
                     
                 },
                 // Labels can only be updated on the WPF (main) thread so we want to use that one.
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
@@ -190,7 +190,7 @@ namespace KBS2.Database
                     Screen.LabelResultDistanceAvarageCars.Content =
                         Math.Round(data.Average(car => car.DistanceTravelled));
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
@@ -202,7 +202,7 @@ namespace KBS2.Database
                     if (data.Count == 0) return;
                     Screen.LabelResultAvgReviewRating.Content = Math.Round(data.Average(review => review.Rating));
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
@@ -219,7 +219,7 @@ namespace KBS2.Database
                     Screen.LabelResultDistanceAvarage.Content = Math.Round(data.Average(trip => trip.Distance));
                     
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
             
             DatabaseHelper.QueueDatabaseRequest(
@@ -250,7 +250,7 @@ namespace KBS2.Database
                     
                     Screen.LabelResultAvgCustomers.Content = avarage;
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
         }
     }
