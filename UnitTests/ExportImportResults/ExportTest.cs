@@ -17,7 +17,7 @@ namespace UnitTests.ExportImportResults
         {
             DataBaseUnitTest.FillUnitTestDatabaseWithTestData();
 
-            ResultExport.ExportResult(1, "UnitTestDatabase");
+            //ResultExport.ExportResult(1, "UnitTestDatabase");
         }
     }
 }
