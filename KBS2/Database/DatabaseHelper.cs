@@ -118,8 +118,18 @@ namespace KBS2.Database
             DatabaseLoop.EnqueueAction(() =>
             {
                 var results = request.Invoke(Database);
-                App.Console?.Print($"Retrieved {results.Count} items from DB, queueing callback", Colors.LimeGreen);
-                loop.EnqueueAction(() => callback.Invoke(results));
+                int count;
+                if (results != null)
+                {
+                    count = results.Count;
+                    loop.EnqueueAction(() => callback.Invoke(results));
+                }
+                else
+                {
+                    count = 0;
+                    loop.EnqueueAction(() => callback.Invoke(new List<T>()));
+                }
+                App.Console?.Print($"Retrieved {count} items from DB, queueing callback", Colors.LimeGreen);
             });
         }
 

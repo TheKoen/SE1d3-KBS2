@@ -9,7 +9,7 @@ namespace KBS2.Database
 {
     public class ResultsHandler
     {
-        private CityInstance Instance { get; set; }
+        public CityInstance Instance { get; set; }
         private MainScreen Screen { get; }
         private int ticks;
 
