@@ -500,7 +500,7 @@ namespace KBS2.CarSystem
             var target = Car.CurrentTarget;
             var destination = Car.Destination;
 
-            return distanceToDestination < 35/* && MathUtil.Distance(target, destination.Location) < 10*/;
+            return distanceToDestination < 45/* && MathUtil.Distance(target, destination.Location) < 10*/;
         }
 
         private static Vector GetClosestRoadPoint(Vector location)
