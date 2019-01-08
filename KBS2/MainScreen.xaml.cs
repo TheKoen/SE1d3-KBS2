@@ -180,7 +180,18 @@ namespace KBS2
 
         private void BtnSaveSim_Click(object sender, RoutedEventArgs e)
         {
-            var cityInstanceId = SimulationControlHandler.Results.Instance.ID;
+
+            int cityInstanceId = 0;
+
+            try
+            {
+                cityInstanceId = SimulationControlHandler.Results.Instance.ID;
+            }
+            catch(Exception)
+            {
+                MessageBox.Show(this, "Please give some information to save.", "Export", MessageBoxButton.OK);
+                return;
+            }
             DatabaseHelper.QueueDatabaseRequest(
                 database => (from sim in database.Simulations
                              where sim.CityInstance.ID == cityInstanceId
