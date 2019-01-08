@@ -41,7 +41,15 @@ namespace KBS2.CityDesigner
             //look for cursor
             try { cursorOnCanvas = new Cursor(pathCanvasCursor, true); } catch(ArgumentException) { successFoundCursor = false;  }
         }
-
+        
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (!AllowClose)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+        }
 
         /// <summary>
         /// Save a city
