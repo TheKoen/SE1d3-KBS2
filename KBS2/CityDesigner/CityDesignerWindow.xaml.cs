@@ -23,6 +23,8 @@ namespace KBS2.CityDesigner
     /// </summary>
     public partial class CityDesignerWindow : Window
     {
+        #region Properties & Fields
+
         public ObjectHandler Creator { get; set; }
         public bool AllowClose = false;
         public Tools Tool { get; set; } = Tools.Road;
@@ -32,7 +34,10 @@ namespace KBS2.CityDesigner
         private bool successFoundCursor = true;
         private Cursor defaultCursor = Mouse.OverrideCursor;
 
-        
+        #endregion
+
+        #region Constructor
+
         public CityDesignerWindow()
         {
             MainScreen.CommandLoop.Start();
@@ -42,7 +47,9 @@ namespace KBS2.CityDesigner
             try { cursorOnCanvas = new Cursor(pathCanvasCursor, true); } catch(ArgumentException) { successFoundCursor = false;  }
         }
 
-
+        #endregion
+        
+        #region EventHandlers
         /// <summary>
         /// Save a city
         /// </summary>
@@ -353,6 +360,10 @@ namespace KBS2.CityDesigner
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
         }
 
+        #endregion
+
+        #region Private Methods
+        
         private void changeCursorCanvas(bool onCanvas)
         {
             if(onCanvas && successFoundCursor)
@@ -364,5 +375,6 @@ namespace KBS2.CityDesigner
                 Mouse.OverrideCursor = defaultCursor;
             }
         }
+        #endregion
     }
 }
