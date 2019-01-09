@@ -4,6 +4,6 @@ namespace KBS2.GPS
 {
     public interface IAlgorithm
     {
-        Destination Calculate(Destination carDestination, Destination endDestination);
+        Destination Calculate(long callerId, Destination carDestination, Destination endDestination);
     }
 }

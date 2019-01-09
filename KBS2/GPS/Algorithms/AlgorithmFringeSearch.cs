@@ -4,7 +4,7 @@ namespace KBS2.GPS.Algorithms
 {
     public class AlgorithmFringeSearch : IAlgorithm
     {
-        public Destination Calculate(Destination carDestination, Destination endDestination)
+        public Destination Calculate(long callerId, Destination carDestination, Destination endDestination)
         {
             throw new System.NotImplementedException();
         }

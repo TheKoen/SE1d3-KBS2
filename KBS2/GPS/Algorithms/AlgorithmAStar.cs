@@ -11,24 +11,43 @@ namespace KBS2.GPS.Algorithms
     {
         private static int _debuggerIndex;
         
-        // def node start
-        // def node end
-        // def list:node openlist
-        // def list:node closedlist
-        // 1. def node thisnode -> start
-        // 2. add thisnode to openlist
-        // 3. move thisnode to closedlist
-        // 4. add {adjacent nodes} to openlist
-        // 5. sort openlist by (dist node -> end) asc
-        // 6. thisnode -> first in openlist
-        // 7. mov 3
+        private static Dictionary<long, Tuple<Destination, List<ConnectedNode>>> _calculationCache = new Dictionary<long, Tuple<Destination, List<ConnectedNode>>>();
+
+
+        public static void ClearCache() => _calculationCache.Clear();
         
-        public Destination Calculate(Destination carDestination, Destination endDestination)
+        public Destination Calculate(long callerId, Destination carDestination, Destination endDestination)
         {
             var network = NodeNetwork.NodeNetwork.GetInstance();
             var startNode = new Node(GPSSystem.FindIntersection(carDestination.Location).Location);
             var endNodes = AlgorithmTools.IntersectionTupleToNodeTuple(
                 AlgorithmTools.GetIntersectionOrderForRoadSide(endDestination.Road, endDestination.Location));
+
+            Node nextNode;
+            double roadX, roadY;
+            
+            if (_calculationCache.ContainsKey(callerId))
+            {
+                var tuple = _calculationCache[callerId];
+                if (tuple.Item1.Equals(endDestination))
+                {
+                    var path = tuple.Item2;
+                    var thisNode = path.Single(n => n.Equals(startNode));
+                    nextNode = thisNode.ConnectedTo;
+
+                    AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network,
+                        startNode, nextNode, endNodes);
+                    roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
+                    roadY = (startNode.PositionY - nextNode.PositionY) / 2.0 + nextNode.PositionY;
+                    return new Destination
+                    {
+                        Location = new Vector(nextNode.PositionX, nextNode.PositionY),
+                        Road = GPSSystem.NearestRoad(new Vector(roadX, roadY))
+                    };
+                }
+
+                _calculationCache.Remove(callerId);
+            }
             
             if (startNode.Equals(endNodes.Item1))
             {
@@ -38,11 +57,12 @@ namespace KBS2.GPS.Algorithms
             }
 
             var endNode = endNodes.Item1;
-            var nextNode = CalculatePathNextNode(ref network, ref startNode, ref endNode);
+            nextNode = CalculatePathNextNode(callerId, ref network, ref startNode, ref endNode, endDestination);
             
-            // Debugger Info
-            var roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
-            var roadY = (startNode.PositionY - nextNode.PositionY) / 2.0 + nextNode.PositionY;
+            AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
+                startNode, nextNode, endNodes);
+            roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
+            roadY = (startNode.PositionY - nextNode.PositionY) / 2.0 + nextNode.PositionY;
             return new Destination
             {
                 Location = new Vector(nextNode.PositionX, nextNode.PositionY),
@@ -50,12 +70,13 @@ namespace KBS2.GPS.Algorithms
             };
         }
 
-        private static Node CalculatePathNextNode(ref NodeNetworkCopy network, ref Node startNode, ref Node endNode)
+        private static Node CalculatePathNextNode(long callerId, ref NodeNetworkCopy network, ref Node startNode, ref Node endNode, Destination endDestination)
         {
-            var openNodes = new List<Node> { startNode as ConnectedNode };
-            var closedNodes = new List<Node>();
-            ConnectedNode lastNode;
+            var openNodes = new List<ConnectedNode> { new ConnectedNode(endNode) };
+            var closedNodes = new List<ConnectedNode>();
+            ConnectedNode lastNode = null;
 
+            var updateIndex = 0;
             while (true)
             {
                 // propogate
@@ -65,32 +86,53 @@ namespace KBS2.GPS.Algorithms
                 
                 var neighbours = network.Links
                     .Where(l => l.NodeA.Equals(thisNode) || l.NodeB.Equals(thisNode))
-                    .Select(l => l.NodeA.Equals(thisNode) ? l.NodeB as ConnectedNode : l.NodeA as ConnectedNode)
+                    .Select(l => l.NodeA.Equals(thisNode) ? new ConnectedNode(l.NodeB) : new ConnectedNode(l.NodeA))
                     .ToList();
                 
                 // calculate
-                var enode = endNode;
                 var foundEnd = false;
-                neighbours.ForEach(n =>
+                foreach (var n in neighbours)
                 {
-                    if (n.Equals(enode))
+                    if (closedNodes.SingleOrDefault(cn => cn.Equals(n)) != null) continue;
+                    
+                    if (n.Equals(startNode))
                     {
                         foundEnd = true;
                         lastNode = n;
                     }
 
                     n.ConnectedTo = thisNode;
-                    n.Value = Math.Sqrt(Math.Pow((n.PositionX - enode.PositionX), 2) + Math.Pow((n.PositionY - enode.PositionY), 2));
+                    n.Value = Math.Sqrt(Math.Pow((n.PositionX - startNode.PositionX), 2) + Math.Pow((n.PositionY - startNode.PositionY), 2));
+                    network.Nodes.Single(nn => nn.Equals(n)).Value = n.Value;
+                    AlgorithmDebuggerWindow.Instance.AddNodeUpdateResult($"{_debuggerIndex}${updateIndex++}", network,
+                        n, thisNode);
                     openNodes.Add(n);
-                });
+                }
+
                 if (foundEnd) break;
 
                 // sort
                 openNodes = openNodes.OrderBy(n => n.Value).ToList();
+                
+                // info
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{_debuggerIndex}#{openNodes.First().Value}", network,
+                    thisNode, openNodes.First());
             }
             
+            var roadX = (startNode.PositionX - lastNode.ConnectedTo.PositionX) / 2.0 + lastNode.ConnectedTo.PositionX;
+            var roadY = (startNode.PositionY - lastNode.ConnectedTo.PositionY) / 2.0 + lastNode.ConnectedTo.PositionY;
+            var result =  new Destination
+            {
+                Location = new Vector(lastNode.ConnectedTo.PositionX, lastNode.ConnectedTo.PositionY),
+                Road = GPSSystem.NearestRoad(new Vector(roadX, roadY))
+            };
+            
+            if (_calculationCache.ContainsKey(callerId))
+                _calculationCache.Remove(callerId);
+            _calculationCache.Add(callerId, new Tuple<Destination, List<ConnectedNode>>(endDestination, closedNodes));
+            
             // find next node
-            throw new NotImplementedException();
+            return lastNode.ConnectedTo;
         }
 
         private class ConnectedNode : Node
@@ -102,6 +144,10 @@ namespace KBS2.GPS.Algorithms
             }
 
             public ConnectedNode(Vector vector) : base(vector)
+            {
+            }
+
+            public ConnectedNode(Node node) : base(node.PositionX, node.PositionY)
             {
             }
         }

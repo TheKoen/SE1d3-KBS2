@@ -12,7 +12,7 @@ namespace KBS2.GPS.Algorithms
     {
         private static int _debuggerIndex;
         
-        public Destination Calculate(Destination carDestination, Destination endDestination)
+        public Destination Calculate(long callerId, Destination carDestination, Destination endDestination)
         {
             var network = NodeNetwork.NodeNetwork.GetInstance();
             var startNode = new Node(GPSSystem.FindIntersection(carDestination.Location).Location);
