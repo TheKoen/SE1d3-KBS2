@@ -32,7 +32,7 @@ namespace KBS2.CityDesigner.ObjectCreators
                 // add To list if not excist at start of new road
                 var newIntersection = new Intersection(location, roadMaxSize);
                 intersections.Add(newIntersection);
-                DrawIntersection(canvas, newIntersection, roads, intersections);
+                DrawIntersection(canvas, newIntersection);
                 return newIntersection;
             }
             return null;
