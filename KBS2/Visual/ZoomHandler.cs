@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shapes;
 
 namespace KBS2.Visual
 {
@@ -30,6 +31,13 @@ namespace KBS2.Visual
             // Check if the left mouse button is being held down.
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
+                // Make sure the mouse is over the canvas.
+                var over = Mouse.DirectlyOver;
+                if (!(over is Shape) && !(over is ScrollViewer))
+                {
+                    return;
+                }
+
                 // Get the current position of the mouse relative to the dropdown box.
                 var current = Mouse.GetPosition(Screen.ZoomBox);
 
@@ -94,6 +102,13 @@ namespace KBS2.Visual
         /// </summary>
         public void Scroll(object source, MouseWheelEventArgs args)
         {
+            // Make sure the mouse is over the canvas.
+            var over = Mouse.DirectlyOver;
+            if (!(over is Shape) && !(over is ScrollViewer))
+            {
+                return;
+            }
+
             // Clamp the scroll amount to be above 0
             var value = Math.Max(args.Delta / 6F + 180F, 0F) / 180F;
             // Multiply the zoom level by the value.
