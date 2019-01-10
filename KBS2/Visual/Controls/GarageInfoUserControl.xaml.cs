@@ -56,13 +56,8 @@ namespace KBS2.Visual.Controls
         private void BtnGarageSave_Click(object sender, RoutedEventArgs e)
         {
             //If value changed
-            if(Building.AvailableCars.ToString() == AvailableCarsProperty.TBCurrentValue.Text)
+            if(Building.AvailableCars.ToString() != AvailableCarsProperty.TBCurrentValue.Text)
             {
-                MessageBox.Show("The changes have not been saved, input is same as current value.", "Changes not saved.", MessageBoxButton.OK);
-            }
-            else
-            {
-                //Set new value.
                 var newValue = (int)Math.Round(double.Parse(AvailableCarsProperty.TBCurrentValue.Text));
                 Building.AvailableCars = newValue;
             }
