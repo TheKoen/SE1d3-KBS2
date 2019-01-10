@@ -10,6 +10,7 @@ namespace KBS2.Visual
         private MainScreen Screen { get; }
 
         private Vector mouseOrigin;
+        private bool changing;
         private int time;
 
         public ZoomHandler(MainScreen screen)
@@ -73,6 +74,13 @@ namespace KBS2.Visual
             // Make sure a value has actually been selected.
             if (!(Screen.ZoomBox.SelectedValue is ComboBoxItem input)) return;
 
+            // If we're changing the zoom level already, don't change it again.
+            if (changing)
+            {
+                changing = false;
+                return;
+            }
+
             // Parse the value and set the zoom level.
             if (int.TryParse(input.Content.ToString().Replace("%", ""), out var value))
             {
@@ -89,11 +97,13 @@ namespace KBS2.Visual
             // Clamp the scroll amount to be above 0
             var value = Math.Max(args.Delta / 6F + 180F, 0F) / 180F;
             // Multiply the zoom level by the value.
-            Screen.Zoom = Screen.Zoom * value;
+            Screen.Zoom *= value;
 
             // Update the amount shown in the dropdown box.
+            changing = true;
             Screen.ZoomBox.SelectedIndex = Screen.ZoomBox.Items.Count - 1;
             ((ComboBoxItem) Screen.ZoomBox.SelectedItem).Content = $"{Math.Round(Screen.Zoom * 100)}%";
+            changing = false;
 
             // Tell WPF that we handled the event to prevent the canvas from scrolling.
             args.Handled = true;
