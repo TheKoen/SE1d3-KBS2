@@ -47,6 +47,12 @@ namespace KBS2.GPS
             Instance.Dispatcher.Invoke(() => { Instance.ListBoxResults.Items.Add(name); });
         }
 
+        public void AddNodeUpdateResult(string name, NodeNetworkCopy network, Node target, Node invoker = null)
+        {
+            _networks.Add(name, new NodeUpdateData(network, target, invoker));
+            Instance.Dispatcher.Invoke(() => { Instance.ListBoxResults.Items.Add(name); });
+        }
+
         private void ListBoxResults_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListBoxResults.SelectedValue is ListBoxItem) return;
@@ -66,6 +72,9 @@ namespace KBS2.GPS
                 case AlgoStepData data:
                     UpdateView(data);
                     break;
+                case NodeUpdateData data:
+                    UpdateView(data);
+                    break;
             }
                 
         }
@@ -78,17 +87,7 @@ namespace KBS2.GPS
         {
             CanvasResult.Children.Clear();
 
-            foreach (var link in networkData.Network.Links)
-            {
-                var line = new Line
-                {
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 6.0,
-                    X1 = link.NodeA.PositionX, X2 = link.NodeB.PositionX,
-                    Y1 = link.NodeA.PositionY, Y2 = link.NodeB.PositionY
-                };
-                CanvasResult.Children.Add(line);
-            }
+            DrawNetworkLinks(networkData);
 
             var fromToLine = new Line
             {
@@ -155,17 +154,7 @@ namespace KBS2.GPS
         {
             CanvasResult.Children.Clear();
 
-            foreach (var link in networkData.Network.Links)
-            {
-                var line = new Line
-                {
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 6.0,
-                    X1 = link.NodeA.PositionX, X2 = link.NodeB.PositionX,
-                    Y1 = link.NodeA.PositionY, Y2 = link.NodeB.PositionY
-                };
-                CanvasResult.Children.Add(line);
-            }
+            DrawNetworkLinks(networkData);
 
             var fromToLine = new Line
             {
@@ -188,6 +177,60 @@ namespace KBS2.GPS
             };
             CanvasResult.Children.Add(toEllipse);
             
+            DrawNetworkNodes(networkData);
+        }
+
+        private void UpdateView(NodeUpdateData networkData)
+        {
+            CanvasResult.Children.Clear();
+            
+            DrawNetworkLinks(networkData);
+
+            if (networkData.Invoker != null)
+            {
+                var fromToLine = new Line
+                {
+                    Stroke = Brushes.ForestGreen,
+                    StrokeThickness = 10.0,
+                    Opacity = 0.5,
+                    X1 = networkData.Invoker.PositionX,    X2 = networkData.Target.PositionX,
+                    Y1 = networkData.Invoker.PositionY,    Y2 = networkData.Target.PositionY
+                };
+                CanvasResult.Children.Add(fromToLine);
+            }
+
+            var toEllipse = new Ellipse
+            {
+                Fill = Brushes.ForestGreen,
+                Width = 28,
+                Height = 28,
+                Margin = new Thickness(networkData.Target.PositionX - 14, networkData.Target.PositionY - 14, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+            CanvasResult.Children.Add(toEllipse);
+            
+            DrawNetworkNodes(networkData);
+        }
+
+
+        private void DrawNetworkLinks(INetworkData networkData)
+        {
+            foreach (var link in networkData.Network.Links)
+            {
+                var line = new Line
+                {
+                    Stroke = Brushes.Black,
+                    StrokeThickness = 6.0,
+                    X1 = link.NodeA.PositionX, X2 = link.NodeB.PositionX,
+                    Y1 = link.NodeA.PositionY, Y2 = link.NodeB.PositionY
+                };
+                CanvasResult.Children.Add(line);
+            }
+        }
+
+        private void DrawNetworkNodes(INetworkData networkData)
+        {
             foreach (var node in networkData.Network.Nodes)
             {
                 var ellipse = new Ellipse
@@ -250,6 +293,20 @@ namespace KBS2.GPS
                 Network = network;
                 From = from;
                 To = to;
+            }
+        }
+
+        private struct NodeUpdateData : INetworkData
+        {
+            public NodeNetworkCopy Network { get; }
+            public Node Target { get; }
+            public Node Invoker { get; }
+
+            public NodeUpdateData(NodeNetworkCopy network, Node target, Node invoker = null)
+            {
+                Network = network;
+                Target = target;
+                Invoker = invoker;
             }
         }
     }
