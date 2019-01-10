@@ -58,8 +58,6 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
                         ? Math.Abs(roadValue - laneWidth - currentValue)
                         : Math.Abs(roadValue + laneWidth - currentValue);
                     break;
-                default:
-                    throw new ArgumentException($"Unable to find line in direction {Sensor.Direction}");
             }
         }
     }
