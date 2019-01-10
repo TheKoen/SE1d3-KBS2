@@ -55,7 +55,7 @@ namespace KBS2.CustomerSystem
             {
                 return;
             }
-            if (!road.IsXRoad())
+            if (road.IsXRoad())
             {
                 Group.Location = IsBelowRoad(road)
                     ? new Vector(Group.Location.X, road.Start.Y - road.Width / 2.0 - GroupDistanceFromRoad)
