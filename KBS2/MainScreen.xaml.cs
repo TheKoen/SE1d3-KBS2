@@ -11,6 +11,10 @@ using KBS2.Visual;
 using KBS2.Database;
 using KBS2.Util;
 using System.IO;
+using System.Security;
+using System.Windows.Forms;
+using CommandSystem.Exceptions;
+using MessageBox = System.Windows.MessageBox;
 
 namespace KBS2
 {
@@ -285,7 +289,45 @@ namespace KBS2
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
+            var popupWindow = new SaveFileDialog()
+            {
+                Title = "Save Log",
+                Filter = "TXT file | *.txt"
+            };
+            popupWindow.ShowDialog();
 
+            if (string.IsNullOrWhiteSpace(popupWindow.FileName))
+            {
+                return;
+            }
+
+            // Trying to write to a file
+            try
+            {
+                using (var sw = File.CreateText(popupWindow.FileName))
+                {
+                    foreach (var line in App.Console.GetOutputHistory())
+                    {
+                        sw.WriteLine(line);
+                    }
+                }
+            }
+            catch (SystemException se)
+                when (se.GetType() == typeof(UnauthorizedAccessException) ||
+                      se.GetType() == typeof(SecurityException))
+            {
+                MessageBox.Show(this, $"Accessn't file \"{popupWindow.FileName}\"", "Save error", MessageBoxButton.OK);
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show(this, "Can't write to a system device", "Save error", MessageBoxButton.OK);
+            }
+            catch (IOException ioe)
+                when (ioe.GetType() == typeof(PathTooLongException) ||
+                      ioe.GetType() == typeof(DirectoryNotFoundException))
+            {
+                MessageBox.Show(this, $"Invalid path \"{popupWindow.FileName}\"", "Save error", MessageBoxButton.OK);
+            }
         }
 
         /// <summary>
