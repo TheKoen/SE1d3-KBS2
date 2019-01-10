@@ -82,7 +82,29 @@ namespace KBS2.CityDesigner.ObjectCreators
             }
         }
 
-        public static void DrawIntersection(Canvas canvas, Intersection intersection, List<Road> roads, List<Intersection> intersections)
+        /// <summary>
+        /// Updates the intersections on a specific road
+        /// </summary>
+        /// <param name="road"></param>
+        /// <param name="intersections"></param>
+        public static void UpdateIntersection(Road road, List<Intersection> intersections, List<Road> roadsList)
+        {
+            var intersectionsNeedingUpdate = intersections.FindAll(i => i.Location == road.End || i.Location == road.Start);
+
+            foreach(var intersection in intersectionsNeedingUpdate)
+            {
+                intersection.Size = roadsList
+                    .FindAll(r => r.Start == intersection.Location || r.End == intersection.Location)
+                    .Max(r => r.Width);
+            }
+        }
+
+        /// <summary>
+        /// Draws the intersection on a canvas
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="intersection"></param>
+        public static void DrawIntersection(Canvas canvas, Intersection intersection)
         {
             Canvas.SetTop(IntersectionRectangle, (int)intersection.Location.Y - intersection.Size / 2);
             Canvas.SetLeft(IntersectionRectangle, (int)intersection.Location.X - intersection.Size / 2);
