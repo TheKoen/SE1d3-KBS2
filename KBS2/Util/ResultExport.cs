@@ -253,7 +253,7 @@ namespace KBS2.Util
                 }
                 doc.Save(popupWindow.FileName);
 
-                MainScreen.CommandLoop.EnqueueAction(() =>
+                MainScreen.DrawingLoop.EnqueueAction(() =>
                 {
                     System.Windows.MessageBox.Show(window, "Exported.", "Export", MessageBoxButton.OK);
                     ResultExported?.Invoke(null, EventArgs.Empty);

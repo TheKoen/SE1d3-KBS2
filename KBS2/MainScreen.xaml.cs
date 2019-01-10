@@ -41,9 +41,10 @@ namespace KBS2
          * needs to run fast, but can more easily deal with irregular
          * refresh rates.
          */
-        public static readonly TickLoop CommandLoop = new MainLoop("CMD", 60);
+        public static readonly TickLoop CommandLoop = new MainLoop("CMD");
         public static readonly TickLoop WPFLoop = new MainLoop("WPF");
-        public static readonly TickLoop DrawingLoop = new MainLoop("DRW");
+        public static readonly TickLoop DrawingLoop = new MainLoop("DRW", 60);
+        public static readonly TickLoop ZoomLoop = new ThreadLoop("ZOOM", 60);
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private readonly ConsoleWindow consoleWindow;
@@ -93,6 +94,7 @@ namespace KBS2
             ZoomHandler = new ZoomHandler(this);
 
             DrawingLoop.Start();
+            ZoomLoop.Start();
 
             WPFLoop.Subscribe(Update);
             

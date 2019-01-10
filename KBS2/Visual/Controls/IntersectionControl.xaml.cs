@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace KBS2.Visual.Controls
 {
@@ -20,11 +21,11 @@ namespace KBS2.Visual.Controls
             Screen = screen;
             Intersection = intersection;
             InitializeComponent();
-            
+
             Update();
             var Roads = intersection.GetRoads();
 
-            MainScreen.CommandLoop.Subscribe(Update);
+            MainScreen.ZoomLoop.Subscribe(Update);
 
             foreach (var road in Roads)
             {
@@ -35,21 +36,18 @@ namespace KBS2.Visual.Controls
                     if (intersection.Location.X > RoadAvgX)
                     {
                         IntersectionStripeLeft.Visibility = Visibility.Visible;
-                    }
-                    else
+                    } else
                     {
                         IntersectionStripeRight.Visibility = Visibility.Visible;
                     }
-                }
-                else
+                } else
                 {
                     //boven onder
                     var RoadAvgY = (road.Start.Y + road.End.Y) / 2d;
                     if (intersection.Location.Y > RoadAvgY)
                     {
                         IntersectionStripeTop.Visibility = Visibility.Visible;
-                    }
-                    else
+                    } else
                     {
                         IntersectionStripeBottom.Visibility = Visibility.Visible;
                     }
@@ -63,15 +61,24 @@ namespace KBS2.Visual.Controls
             {
                 return;
             }
+
             lastZoom = Screen.Zoom;
 
             var zoom = Screen.Zoom;
             var size = Intersection.Size;
-            Height = size * zoom;
-            Width = size * zoom;
+            var newHeight = size * zoom;
+            var newWidth = size * zoom;
             var offset = size / 2d;
-            Margin = new Thickness((Intersection.Location.X - offset) * zoom, (Intersection.Location.Y - offset) * zoom, 0, 0);
-            UpdateStripes();
+            var newMargin = new Thickness((Intersection.Location.X - offset) * zoom, (Intersection.Location.Y - offset) * zoom, 0, 0);
+
+            MainScreen.DrawingLoop.EnqueueAction(() =>
+            {
+                Margin = newMargin;
+                Height = newHeight;
+                Width = newWidth;
+
+                UpdateStripes();
+            });
         }
 
         public void UpdateStripes()
@@ -80,27 +87,41 @@ namespace KBS2.Visual.Controls
             var zoom = Screen.Zoom;
 
             // IntersectionStripeTop
-            IntersectionStripeTop.Height = (Height / 2d) + zoom;
-            IntersectionStripeTop.Width = Width * mult;
-            IntersectionStripeTop.Margin = 
-                new Thickness(Width / 2d - IntersectionStripeTop.Width / 2d, 0, 0, 0);
+            RescaleElement(
+                IntersectionStripeTop,
+                Width * mult, Height / 2d + zoom,
+                new Thickness(Width / 2d - IntersectionStripeTop.Width / 2d, 0, 0, 0)
+            );
 
             // IntersectionStripeBottom
-            IntersectionStripeBottom.Height = (Height / 2d) + zoom;
-            IntersectionStripeBottom.Width = Width * mult;
-            IntersectionStripeBottom.Margin =
-                new Thickness(Width / 2d - IntersectionStripeTop.Width / 2d, Height / 2d, 0, 0);
+            RescaleElement(
+                IntersectionStripeBottom,
+                Width * mult, (Height / 2d) + zoom,
+                new Thickness(Width / 2d - IntersectionStripeTop.Width / 2d, Height / 2d, 0, 0)
+            );
 
             // IntersectionStripeLeft
-            IntersectionStripeLeft.Height = Width * mult;
-            IntersectionStripeLeft.Width = (Height / 2d) + zoom;
-            IntersectionStripeLeft.Margin = new Thickness(0, Height / 2d - IntersectionStripeLeft.Height / 2d, 0, 0);
+            RescaleElement(
+                IntersectionStripeLeft,
+                (Height / 2d) + zoom, Width * mult,
+                new Thickness(0, Height / 2d - IntersectionStripeLeft.Height / 2d, 0, 0)
+            );
 
             // IntersectionStripeRight
-            IntersectionStripeRight.Height = Width * mult;
-            IntersectionStripeRight.Width = (Height / 2d) + zoom;
-            IntersectionStripeRight.Margin =
-                new Thickness(Width / 2d, Height / 2d - IntersectionStripeLeft.Height / 2d, 0, 0);
+            RescaleElement(
+                IntersectionStripeRight,
+                (Height / 2d) + zoom, Width * mult,
+                new Thickness(Width / 2d, Height / 2d - IntersectionStripeLeft.Height / 2d, 0, 0)
+            );
+        }
+
+        private static void RescaleElement(FrameworkElement rectangle, double width, double height, Thickness margin)
+        {
+            if (double.IsNaN(width) || double.IsNaN(height)) return;
+
+            rectangle.Width = width;
+            rectangle.Height = height;
+            rectangle.Margin = margin;
         }
     }
 }

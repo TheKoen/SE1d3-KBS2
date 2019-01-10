@@ -18,8 +18,8 @@ namespace KBS2.Visual
         {
             Screen = screen;
 
-            // Subscribe to the command loop to make sure we run all the time.
-            MainScreen.CommandLoop.Subscribe(Update);
+            // Subscribe to the drawing loop to make sure we run all the time.
+            MainScreen.DrawingLoop.Subscribe(Update);
         }
 
         /// <summary>

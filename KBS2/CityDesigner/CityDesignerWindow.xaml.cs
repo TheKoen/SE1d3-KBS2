@@ -40,7 +40,6 @@ namespace KBS2.CityDesigner
 
         public CityDesignerWindow()
         {
-            MainScreen.CommandLoop.Start();
             InitializeComponent();
             Creator = new ObjectHandler(Canvas, this);
             //look for cursor

@@ -20,7 +20,8 @@ namespace KBS2.Visual.Controls
             this.customer = customer;
             InitializeComponent();
             Update();
-            MainScreen.DrawingLoop.Subscribe(Update);
+
+            MainScreen.ZoomLoop.Subscribe(Update);
         }
 
         public void Customer_Select(object sender, MouseButtonEventArgs e)
@@ -39,11 +40,19 @@ namespace KBS2.Visual.Controls
         public void Update()
         {
             var zoom = Screen.Zoom;
-            Margin = new Thickness(customer.Location.X * zoom, customer.Location.Y * zoom, 0, 0);
-            Height = 20 * zoom;
-            Width = 20 * zoom;
-            EllipseCustomer.Height = 8 * zoom;
-            EllipseCustomer.Width = 8 * zoom;
+            var newHeight = 20 * zoom;
+            var newWidth = 20 * zoom;
+            var newMargin = new Thickness(customer.Location.X * zoom, customer.Location.Y * zoom, 0, 0);
+            var newEllipseHeight = 8 * zoom;
+            var newEllipseWidth = 8 * zoom;
+            MainScreen.DrawingLoop.EnqueueAction(() =>
+            {
+                Width = newWidth;
+                Height = newHeight;
+                Margin = newMargin;
+                EllipseCustomer.Height = newEllipseHeight;
+                EllipseCustomer.Width = newEllipseWidth;
+            });
         }
     }
 }

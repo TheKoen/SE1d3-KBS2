@@ -42,7 +42,7 @@ namespace KBS2.Visual.Controls
             InitializeComponent();
             Update();
 
-            MainScreen.CommandLoop.Subscribe(Update);
+            MainScreen.ZoomLoop.Subscribe(Update);
         }
 
         private void Update()
@@ -58,12 +58,21 @@ namespace KBS2.Visual.Controls
             var location = Building.Location;
 
             var offset = size / 2d;
-            Margin = new Thickness((location.X - offset) * zoom, (location.Y - offset) * zoom, 0, 0);
+            var newMargin = new Thickness((location.X - offset) * zoom, (location.Y - offset) * zoom, 0, 0);
 
-            Width = size * zoom;
-            Height = size * zoom;
+            var newWidth = size * zoom;
+            var newHeight = size * zoom;
 
-            Rectangle.StrokeThickness = (size * zoom) / 8d;
+            var newThickness = (size * zoom) / 8d;
+
+            MainScreen.DrawingLoop.EnqueueAction(() =>
+            {
+                Margin = newMargin;
+                Width = newWidth;
+                Height = newHeight;
+
+                Rectangle.StrokeThickness = newThickness;
+            });
         }
 
         public void Building_Selected(object sender, MouseButtonEventArgs e)

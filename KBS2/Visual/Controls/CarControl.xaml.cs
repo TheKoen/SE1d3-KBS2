@@ -33,7 +33,7 @@ namespace KBS2.Visual.Controls
             this.car = car;
             InitializeComponent();
             Update();
-            MainScreen.DrawingLoop.Subscribe(Update);
+            MainScreen.ZoomLoop.Subscribe(Update);
         }
 
         public void Update()
@@ -46,7 +46,6 @@ namespace KBS2.Visual.Controls
             var angle = -MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
             while (angle < 0) angle += 360;
             if (angle >= 360) angle -= 360;
-            RenderTransform = new RotateTransform(angle, 0.5, 0.5);
 
             var rotation = car.Rotation;
             var xoffset = Vector.Multiply(MathUtil.Normalize(MathUtil.RotateVector(rotation, 90)), car.Width / 2d);
@@ -59,9 +58,13 @@ namespace KBS2.Visual.Controls
             if (double.IsNaN(location.Length)) return;
 
             var zoom = Screen.Zoom;
-            Margin = new Thickness(location.X * zoom, location.Y * zoom, 0, 0);
-            CarRectangle.Width = 5 * zoom;
-            CarRectangle.Height = 10 * zoom;
+            MainScreen.DrawingLoop.EnqueueAction(() =>
+            {
+                RenderTransform = new RotateTransform(angle, 0.5, 0.5);
+                Margin = new Thickness(location.X * zoom, location.Y * zoom, 0, 0);
+                CarRectangle.Width = 5 * zoom;
+                CarRectangle.Height = 10 * zoom;
+            });
         }
 
         public void Car_Select(object sender, MouseButtonEventArgs e)

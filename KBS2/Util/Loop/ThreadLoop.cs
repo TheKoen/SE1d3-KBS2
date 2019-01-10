@@ -10,7 +10,7 @@ namespace KBS2.Util.Loop
         private bool running;
         private int interval;
 
-        public ThreadLoop(string name) : base(name)
+        public ThreadLoop(string name, int tickRate = 30) : base(name, tickRate)
         {
             thread = new Thread(Run) {Name = Name};
             interval = CalculateInterval(TickRate);
