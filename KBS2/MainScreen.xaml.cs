@@ -39,6 +39,7 @@ namespace KBS2
          */
         public static readonly TickLoop CommandLoop = new MainLoop("CMD", 60);
         public static readonly TickLoop WPFLoop = new MainLoop("WPF");
+        public static readonly TickLoop DrawingLoop = new MainLoop("DRW");
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private readonly ConsoleWindow consoleWindow;
@@ -87,6 +88,7 @@ namespace KBS2
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
             ZoomHandler = new ZoomHandler(this);
 
+            DrawingLoop.Start();
 
             WPFLoop.Subscribe(Update);
             

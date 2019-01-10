@@ -33,7 +33,7 @@ namespace KBS2.Visual.Controls
             this.car = car;
             InitializeComponent();
             Update();
-            MainScreen.WPFLoop.Subscribe(Update);
+            MainScreen.DrawingLoop.Subscribe(Update);
         }
 
         public void Update()

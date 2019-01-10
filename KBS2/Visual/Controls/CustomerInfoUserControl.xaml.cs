@@ -48,7 +48,7 @@ namespace KBS2.Visual.Controls
 
             ProfilePicture.Source = new BitmapImage(profilePicturePath);
 
-            MainScreen.WPFLoop.Subscribe(Update);
+            MainScreen.DrawingLoop.Subscribe(Update);
         }
 
         private void Update()

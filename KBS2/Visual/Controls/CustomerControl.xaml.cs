@@ -20,7 +20,7 @@ namespace KBS2.Visual.Controls
             this.customer = customer;
             InitializeComponent();
             Update();
-            MainScreen.WPFLoop.Subscribe(Update);
+            MainScreen.DrawingLoop.Subscribe(Update);
         }
 
         public void Customer_Select(object sender, MouseButtonEventArgs e)

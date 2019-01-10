@@ -140,7 +140,6 @@
       <DependentUpon>ConsoleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Console\Commands\CommandLoad.cs" />
-    <Compile Include="Console\Commands\CommandTime.cs" />
     <Compile Include="Console\Commands\CommandExport.cs" />
     <Compile Include="Console\Commands\CommandGet.cs" />
     <Compile Include="Console\Commands\CommandHelp.cs" />
