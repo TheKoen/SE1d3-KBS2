@@ -17,8 +17,6 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class RoadCreator
     {
-        #region Properties & Fields
-
         private static Line roadGhost = new Line()
         {
             Stroke = Brushes.LightSteelBlue,
@@ -48,9 +46,6 @@ namespace KBS2.CityDesigner.ObjectCreators
 
         private static Point startRoad = new Point(0, 0);
 
-        #endregion
-
-        #region Methods
         /// <summary>
         /// Allows the user to draw a ghostRoad on canvas and controls snapfunctions to other roads
         /// </summary>
@@ -275,7 +270,18 @@ namespace KBS2.CityDesigner.ObjectCreators
                             return null;
                         }
                     }
-                }                            
+                }
+                /**
+                if((roadGhostStart == roadI.Start || roadGhostStart == roadI.End) && (roadGhostEnd == roadI.Start || roadGhostEnd == roadI.End))
+                {
+                    if((road.IsXRoad() && roadI.IsXRoad()) || (!road.IsXRoad() && !roadI.IsXRoad()))
+                    {
+                        RemoveGhost(canvas);
+                        return null;
+                    }
+                }
+                */
+                            
             }
             if (CreateMultipleRoadsWhenCrossingEachother(road, roadsList, canvas) == true) // check if road is crossed by ghost road
             {
@@ -289,8 +295,8 @@ namespace KBS2.CityDesigner.ObjectCreators
 
             RemoveGhost(canvas);
             roadsList.Add(road);
-            //IntersectionCreator.UpdateIntersections(ObjectHandler.Roads, ObjectHandler.Intersections);
-            ObjectHandler.RedrawAllObjects(canvas);
+            IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.Start);
+            IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.End);
             return road;
         }
 
@@ -518,10 +524,6 @@ namespace KBS2.CityDesigner.ObjectCreators
             canvas.Children.Add(clone(roadLine));
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
         /// Dirty fix to copy Roads
         /// </summary>
@@ -533,7 +535,5 @@ namespace KBS2.CityDesigner.ObjectCreators
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
-
-        #endregion
     }
 }

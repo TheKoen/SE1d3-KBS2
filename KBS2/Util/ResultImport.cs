@@ -14,14 +14,8 @@ namespace KBS2.Util
     {
         public static event EventHandler ResultImported;
 
-        #region Properties & Fields
-
         public static string Path { get; private set; }
 
-        #endregion
-
-        #region Methods
-        
         public static void SetPath()
         {
             var popupWindow = new OpenFileDialog()
@@ -406,10 +400,6 @@ namespace KBS2.Util
                 });
         }
 
-        #endregion
-
-        #region Event Sub & Unsubscribe methods
-
         public static void SubscribeResultImported(EventHandler source)
         {
             ResultImported += source;
@@ -419,16 +409,10 @@ namespace KBS2.Util
         {
             ResultImported -= source;
         }
-
-        #endregion
     }
 
     public class ImportEventArgs : EventArgs
     {
-        #region Properties & Fields
-
         public int SimID { get; set; }
-
-        #endregion
     }
 }

@@ -9,11 +9,10 @@ namespace KBS2.CityDesigner
 {
 
 
-    public class CitySaver
+    class CitySaver
     {
-        private static event EventHandler CitySaved;
+        public static EventHandler CitySaved;
 
-        #region Methods
 
         public static void SaveCity(List<Road> roads, List<Building> buildings, List<Garage> garages, List<Intersection> intersections)
         {
@@ -129,10 +128,6 @@ namespace KBS2.CityDesigner
             CitySaved?.Invoke(null, EventArgs.Empty);
         }
 
-        #endregion
-
-        #region Sub & UnSubcribe Methods
-
         public static void SubscribeCitySaved(EventHandler source)
         {
             CitySaved += source;
@@ -142,6 +137,5 @@ namespace KBS2.CityDesigner
         {
             CitySaved -= source;
         }
-        #endregion
     }
 }

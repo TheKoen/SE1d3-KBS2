@@ -15,11 +15,6 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class IntersectionCreator
     {
-        #region Properties & Fields
-
-        /// <summary>
-        /// Appearance of the intersection
-        /// </summary>
         private static Rectangle IntersectionRectangle = new Rectangle()
         {
             Fill = Brushes.Red,
@@ -27,38 +22,67 @@ namespace KBS2.CityDesigner.ObjectCreators
             Stroke = Brushes.Black,
         };
 
-        #endregion
+        public static Intersection CreateIntersection(Canvas canvas, List<Road> roads, List<Intersection> intersections, Vector location) 
+        {
+            // search for Intersection add when not excists and more then one Road is connected
+            if (intersections.Find(i => i.Location == location) == null && roads.FindAll(r => r.Start == location || r.End == location).Count >= 2)
+            {
+                // get the MaxSize of the road connected to the Intersection
+                var roadMaxSize = roads.FindAll(r => r.Start == location || r.End == location).Max(r => r.Width);
+                // add To list if not excist at start of new road
+                var newIntersection = new Intersection(location, roadMaxSize);
+                intersections.Add(newIntersection);
+                DrawIntersection(canvas, newIntersection, roads, intersections);
+                return newIntersection;
+            }
+            return null;
+        }
 
-        #region Methods
-
-        /// <summary>
-        /// Updates on every road
-        /// </summary>
-        /// <param name="roads">roads list</param>
-        /// <param name="intersections">intersections </param>
         public static void UpdateIntersections(List<Road> roads, List<Intersection> intersections)
         {
-            foreach (var road in roads)
+            var stupidIntersectionWihoutRoads = new List<Intersection>();
+            var neededIntersections = new List<Intersection>();
+
+            foreach (var intersection in intersections)
             {
-                if (intersections.Find(i => i.Location == road.Start) == null)
+                // set the size of the intersection to the max  with of the roads connected
+                intersection.Size = roads.FindAll(r => r.Start == intersection.Location || r.End == intersection.Location)
+                    .OrderByDescending(r => r.Width)
+                    .First()
+                    .Width;
+
+                if (roads.FindAll(r => r.End == intersection.Location || r.Start == intersection.Location).Count == 1)
                 {
-                    var size = roads.FindAll(r => r.Start == road.Start || r.End == road.End).Max(r => r.Width);
-                    intersections.Add(new Intersection(road.Start, size));
+
+                    stupidIntersectionWihoutRoads.Add(intersection);
                 }
-                if (intersections.Find(i => i.Location == road.End) == null)
+            }
+            roads.ForEach(r =>
+            {
+                if(!intersections.Any(i => i.Location == r.Start || i.Location == r.End) && roads.Any(x => (x.Start == r.Start || x.End == r.Start) && r != x))
                 {
-                    var size = roads.FindAll(r => r.Start == road.Start || r.End == road.End).Max(r => r.Width);
-                    intersections.Add(new Intersection(road.End, size));
+                    intersections.Add(new Intersection(r.Start, roads.FindAll(x => x.Start == r.Start || x.End == r.Start)
+                        .OrderByDescending(x => x.Width)
+                        .First()
+                        .Width));
                 }
+                if(!intersections.Any(i => i.Location == r.Start || i.Location == r.End) && roads.Any(x => (x.Start == r.End || x.End == r.End) && r != x))
+                {
+                    intersections.Add(new Intersection(r.End, roads.FindAll(x => x.Start == r.End || x.End == r.End)
+                        .OrderByDescending(x => x.Width)
+                        .First()
+                        .Width));
+                }
+            } );
+
+            //delete the intersection without road connected
+            foreach (var intersectionItem in stupidIntersectionWihoutRoads)
+            {
+                intersections.Remove(intersectionItem);
             }
         }
 
-        /// <summary>
-        /// Draws the intersection on a spe
-        /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="intersection"></param>
-        public static void DrawIntersection(Canvas canvas, Intersection intersection)
+        public static void DrawIntersection(Canvas canvas, Intersection intersection, List<Road> roads, List<Intersection> intersections)
         {
             Canvas.SetTop(IntersectionRectangle, (int)intersection.Location.Y - intersection.Size / 2);
             Canvas.SetLeft(IntersectionRectangle, (int)intersection.Location.X - intersection.Size / 2);
@@ -68,12 +92,8 @@ namespace KBS2.CityDesigner.ObjectCreators
             canvas.Children.Add(clone(IntersectionRectangle));
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
-        /// Allowes to clone intersections
+        /// Dirty fix to copy Intersection
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
@@ -83,7 +103,5 @@ namespace KBS2.CityDesigner.ObjectCreators
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
-
-        #endregion
     }
 }

@@ -13,18 +13,17 @@ namespace KBS2.CityDesigner
 {
     public delegate void LoadedCityEventHandler(object sender, LoadedCityEventArgs e);
 
-    public static class CityLoader
+    class CityLoader
     {
-        #region Properties & Fields
+        public static event LoadedCityEventHandler LoadedCity;
 
-        private static event LoadedCityEventHandler LoadedCity;
+        public CityLoader Instance { get; private set; }
 
-        #endregion
+        public CityLoader()
+        {
+            Instance = this;
+        }
 
-        #region Methods
-        /// <summary>
-        /// Allows the user to load a specific city he wants to modify
-        /// </summary>
         public static void LoadCity()
         {
             var _roads = new List<Road>();
@@ -96,10 +95,6 @@ namespace KBS2.CityDesigner
             LoadedCity?.Invoke(null, new LoadedCityEventArgs(_roads, _buildings, _garages ,_intersections, popupWindow.FileName));
 
         }
-        #endregion
-
-
-        #region Private Parsers
         private static Vector ParseLocation(string locationString)
         {
             var split = locationString.Split(',');
@@ -154,10 +149,6 @@ namespace KBS2.CityDesigner
                 throw new Exception("It looks like this file is not a city.");
             }
         }
-        #endregion
-
-
-        #region EventMethods
 
         public static void SubscribeLoadedCity(LoadedCityEventHandler source)
         {
@@ -168,6 +159,5 @@ namespace KBS2.CityDesigner
         {
             LoadedCity -= source;
         }
-        #endregion
     }
 }

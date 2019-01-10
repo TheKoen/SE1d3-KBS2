@@ -15,8 +15,6 @@ namespace KBS2.Util
     {
         public static event EventHandler ResultExported;
 
-        #region Methods
-
         /// <summary>
         /// Export specific simulation to .xml file
         /// </summary>
@@ -264,10 +262,6 @@ namespace KBS2.Util
             
         }
 
-        #endregion
-
-        #region Event Sub & Unsubscribe methods
-
         public static void SubscribeResultExported(EventHandler source)
         {
             ResultExported += source;
@@ -277,7 +271,5 @@ namespace KBS2.Util
         {
             ResultExported -= source;
         }
-
-        #endregion
     }
 }

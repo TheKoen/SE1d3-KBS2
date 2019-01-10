@@ -16,8 +16,6 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class GarageCreator
     {
-        #region Properties & Fields
-
         /// <summary>
         /// Appearance of ghostgarage
         /// </summary>
@@ -43,10 +41,6 @@ namespace KBS2.CityDesigner.ObjectCreators
         };
 
         private static readonly int standardSize = 50;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Draws the ghost of a Garge on mouseLocation
@@ -100,20 +94,7 @@ namespace KBS2.CityDesigner.ObjectCreators
         }
 
         /// <summary>
-        /// Removes the ghost garage
-        /// </summary>
-        /// <param name="canvas"></param>
-        public static void RemoveGhost(Canvas canvas)
-        {
-            canvas.Children.Remove(garageGhost);
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// fix to copy Garage
+        /// Dirty fix to copy Garage
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
@@ -124,7 +105,9 @@ namespace KBS2.CityDesigner.ObjectCreators
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
 
-        #endregion
-        
+        public static void RemoveGhost(Canvas canvas)
+        {
+            canvas.Children.Remove(garageGhost);
+        }
     }
 }

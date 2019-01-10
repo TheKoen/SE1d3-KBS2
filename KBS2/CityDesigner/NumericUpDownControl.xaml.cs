@@ -25,7 +25,6 @@ namespace KBS2.CityDesigner
 
         public event ValueChangedEventHandler ValueChanged;
 
-        #region Properties & Fields
         private int _value;
         private int _minValue = int.MinValue;
         private int _maxValue = int.MaxValue;
@@ -65,18 +64,11 @@ namespace KBS2.CityDesigner
 
         public int StepSize { get; set; } = 1;
 
-        #endregion
-
-        #region Constructor
 
         public NumericUpDownControl()
         {
             InitializeComponent();
         }
-
-        #endregion
-
-        #region EventHandlers
 
         private int VerifyValue(string value) =>
             int.TryParse(value, out var output) ? output : Value;
@@ -101,7 +93,5 @@ namespace KBS2.CityDesigner
             Value -= StepSize;
             ValueChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
         }
-
-        #endregion
     }
 }
