@@ -47,6 +47,7 @@ namespace KBS2.Visual.Controls
                     break;
             }
 
+            
             TBContent.Text = review.Content;
 
             Uri profilePicturePath = null;

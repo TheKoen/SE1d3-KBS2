@@ -18,7 +18,7 @@ namespace KBS2.CityDesigner
     public class ObjectHandler
     {
         public Canvas Canvas { get; set; }
-        private CityDesignerWindow window { get; set; }
+        private CityDesignerWindow Window { get; set; }
 
         // items in the city
         public static List<Road> Roads = new List<Road>();
@@ -34,7 +34,7 @@ namespace KBS2.CityDesigner
         public ObjectHandler(Canvas canvas, CityDesignerWindow window)
         {
             Canvas = canvas;
-            this.window = window;
+            Window = window;
 
             //subscribe CityLoadedEvent
             CityLoader.SubscribeLoadedCity(LoadedCityToCanvas);
@@ -147,10 +147,10 @@ namespace KBS2.CityDesigner
         private void displayInfoScreenObject(Road road)
         {
             SelectRoad = road;
-            window.InformationBlockRoad.Visibility = Visibility.Visible;
-            window.InformationBlockBuilding.Visibility = Visibility.Hidden;
-            window.NumericWidthRoad.Value = road.Width;
-            window.NumericMaxSpeedRoad.Value = road.MaxSpeed;
+            Window.InformationBlockRoad.Visibility = Visibility.Visible;
+            Window.InformationBlockBuilding.Visibility = Visibility.Hidden;
+            Window.NumericWidthRoad.Value = road.Width;
+            Window.NumericMaxSpeedRoad.Value = road.MaxSpeed;
         }
 
         /// <summary>
@@ -160,9 +160,9 @@ namespace KBS2.CityDesigner
         private void displayInfoScreenObject(Building building)
         {
             SelectBuildingGarage = building;
-            window.InformationBlockBuilding.Visibility = Visibility.Visible;
-            window.InformationBlockRoad.Visibility = Visibility.Hidden;
-            window.NumericSizeBuilding.Value = SelectBuildingGarage.Size; 
+            Window.InformationBlockBuilding.Visibility = Visibility.Visible;
+            Window.InformationBlockRoad.Visibility = Visibility.Hidden;
+            Window.NumericSizeBuilding.Value = SelectBuildingGarage.Size; 
             
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media;
 using KBS2.CarSystem;
 using KBS2.Visual;
 using KBS2.Visual.Controls;
@@ -9,7 +10,7 @@ namespace KBS2.Database
 {
     public class ResultsHandler
     {
-        private CityInstance Instance { get; set; }
+        public CityInstance Instance { get; set; }
         private MainScreen Screen { get; }
         private int ticks;
 
@@ -116,34 +117,50 @@ namespace KBS2.Database
             System.Windows.Vector start = e.Start;
             System.Windows.Vector end = e.End;
             CarSystem.Car carObject = e.Car;
+            var garageLoc = carObject.Garage.Location;
 
-
-            DatabaseHelper.QueueDatabaseAction((database) =>
-            {
-                var garage = DatabaseHelper.GetObject(database.Garages,
-                    g => DatabaseHelper.MatchVectors(g.Location, carObject.Garage.Location));
-                if (garage == null) throw new Exception($"Unknown garage {carObject.Garage}");
-
-                var car = new Car
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from garage in database.Garages
+                             let loc = garage.Location
+                             where loc.X == garageLoc.X && loc.Y == garageLoc.Y
+                             select garage).ToList(),
+                data =>
                 {
-                    CityInstance = Instance,
-                    Garage = garage,
-                    Model = carObject.Model.Name,
-                    DistanceTravelled = (int) Math.Round(carObject.DistanceTraveled)
-                };
+                    if (data.Count == 0)
+                    {
+                        throw new Exception("Cannot find garage in database");
+                    }
+                    else
+                    {
+                        var garage = data.First();
+                        DatabaseHelper.QueueDatabaseAction((database) =>
+                        {
+                            if (garage == null) throw new Exception($"Unknown garage {carObject.Garage}");
 
-                var trip = new Trip
-                {
-                    Car = car,
-                    Distance = carObject.DistanceTraveled,
-                    StartLocation = DatabaseHelper.CreateDBVector(start),
-                    EndLocation = DatabaseHelper.CreateDBVector(end),
-                    Price = 0.0
-                };
+                            var car = new Car
+                            {
+                                CityInstance = Instance,
+                                Garage = garage,
+                                Model = carObject.Model.Name,
+                                DistanceTravelled = (int)Math.Round(carObject.DistanceTraveled)
+                            };
 
-                database.Trips.Add(trip);
-                database.SaveChanges();
-            });
+                            var trip = new Trip
+                            {
+                                Car = car,
+                                Distance = carObject.DistanceTraveled,
+                                StartLocation = DatabaseHelper.CreateDBVector(start),
+                                EndLocation = DatabaseHelper.CreateDBVector(end),
+                                Price = 0.0
+                            };
+
+                            database.Trips.Add(trip);
+                            database.SaveChanges();
+                        });
+                    }
+                },
+                MainScreen.CommandLoop
+            );
         }
 
        
@@ -168,13 +185,18 @@ namespace KBS2.Database
                 {
                     Screen.LabelResultCustomer.Content = data.Count;
                     Screen.LabelResultTotalCustomers.Content = data.Count;
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultAvgAge.Content = 0;
+                        Screen.LabelResultAvgMoral.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultAvgAge.Content = Math.Round(data.Average(customer => customer.Age));
                     Screen.LabelResultAvgMoral.Content = Math.Round(data.Average(customer => customer.Moral));
                     
                 },
                 // Labels can only be updated on the WPF (main) thread so we want to use that one.
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
@@ -185,12 +207,17 @@ namespace KBS2.Database
                 {
                     Screen.LabelResultCars.Content = data.Count;
                     Screen.LabelResultTotalCars.Content = data.Count;
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultDistanceTotalCar.Content = 0;
+                        Screen.LabelResultDistanceAvarageCars.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultDistanceTotalCar.Content = data.Sum(car => car.DistanceTravelled);
                     Screen.LabelResultDistanceAvarageCars.Content =
                         Math.Round(data.Average(car => car.DistanceTravelled));
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
@@ -199,10 +226,14 @@ namespace KBS2.Database
                     select review).ToList(),
                 data =>
                 {
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultAvgReviewRating.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultAvgReviewRating.Content = Math.Round(data.Average(review => review.Rating));
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
 
             DatabaseHelper.QueueDatabaseRequest(
@@ -212,29 +243,23 @@ namespace KBS2.Database
                 data =>
                 {
                     Screen.LabelResultRide.Content = data.Count;
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultTotalEarned.Content = $"€{0:0.00}";
+                        Screen.LabelResultAvgPrice.Content = $"€{0:0.00}";
+                        Screen.LabelResultDistanceTotal.Content = 0;
+                        Screen.LabelResultDistanceAvarage.Content = 0;
+                        return;
+                    };
                     Screen.LabelResultTotalEarned.Content = $"€{data.Sum(trip => trip.Price):0.00}";
                     Screen.LabelResultAvgPrice.Content = $"€{data.Sum(review => review.Price):0.00}";
                     Screen.LabelResultDistanceTotal.Content = data.Sum(trip => trip.Distance);
                     Screen.LabelResultDistanceAvarage.Content = Math.Round(data.Average(trip => trip.Distance));
                     
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
-
-            DatabaseHelper.QueueDatabaseRequest(
-                database => (from simulation in database.Simulations
-                    where simulation.CityInstance.ID == Instance.ID
-                    select simulation).ToList(),
-                data =>
-                {
-                    if (data.Count == 0) return;
-                    Screen.LabelResultTimeElapsed.Content = data.Select(sim => sim.Duration);
-                },
-                MainScreen.WPFLoop
-            );
-
-
+            
             DatabaseHelper.QueueDatabaseRequest(
                 database => (from c in database.Customers
                              where c.CustomerGroup.Trip != null
@@ -247,7 +272,11 @@ namespace KBS2.Database
                              }).ToList(),
                 data =>
                 {
-                    if (data.Count == 0) return;
+                    if (data.Count == 0)
+                    {
+                        Screen.LabelResultAvgCustomers.Content = 0;
+                        return;
+                    };
                     var trips = new List<Trip>();
 
                     foreach (var d in data)
@@ -263,7 +292,7 @@ namespace KBS2.Database
                     
                     Screen.LabelResultAvgCustomers.Content = avarage;
                 },
-                MainScreen.WPFLoop
+                MainScreen.CommandLoop
             );
         }
     }

@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using KBS2.CitySystem;
 using KBS2.Visual;
 using KBS2.Database;
+using KBS2.Util;
+using System.IO;
 
 namespace KBS2
 {
@@ -37,6 +39,7 @@ namespace KBS2
          */
         public static readonly TickLoop CommandLoop = new MainLoop("CMD", 60);
         public static readonly TickLoop WPFLoop = new MainLoop("WPF");
+        public static readonly TickLoop DrawingLoop = new MainLoop("DRW");
         public static readonly TickLoop AILoop = new ThreadLoop("AI");
 
         private readonly ConsoleWindow consoleWindow;
@@ -85,12 +88,14 @@ namespace KBS2
             PropertyDisplayHandler = new PropertyDisplayHandler(this);
             ZoomHandler = new ZoomHandler(this);
 
+            DrawingLoop.Start();
 
             WPFLoop.Subscribe(Update);
             
             CommandLoop.Subscribe(CmdUpdate);
 
             PreviewMouseWheel += ZoomHandler.Scroll;
+            ResultImport.ResultImported += ResultImportComplete;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -142,27 +147,140 @@ namespace KBS2
 
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                ResultImport.SetPath();
+                TBResult.Text = Path.GetFileNameWithoutExtension(ResultImport.Path);
+            }
+            catch(Exception b)
+            {
+                MessageBox.Show(this, b.Message, "Import error", MessageBoxButton.OK);
+            }
         }
 
         private void BtnLoadResult_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                ResultImport.ImportResult(this);
+            }
+            catch(Exception b)
+            {
+                MessageBox.Show(this, b.Message, "Import error", MessageBoxButton.OK);
+            }
         }
 
         private void BtnShow_Click(object sender, RoutedEventArgs e)
         {
-
+            if (int.TryParse(TBSimID.Text, out var id))
+            {
+                DatabaseHelper.QueueDatabaseRequest(
+                    database => (from sim in database.Simulations
+                                 where sim.ID == id
+                                 select sim).ToList(),
+                    data =>
+                    {
+                        if (data.Count > 0)
+                        {
+                            var simulation = data.First();
+                            SimulationControlHandler.Results.Instance = simulation.CityInstance;
+                            SimulationControlHandler.Results.Update();
+                            MessageBox.Show($"Loaded data for simulation {id}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Unknown simulation ID {id}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            TBSimID.Text = "";
+                        }
+                    },
+                    CommandLoop
+                );
+            }
         }
 
         private void BtnShowLatest_Click(object sender, RoutedEventArgs e)
         {
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from sim in database.Simulations
+                             select sim).ToList(),
+                data =>
+                {
+                    if (data.Count > 0)
+                    {
+                        var id = data.Max(sim => sim.ID);
+                        var simulation = data.First(sim => sim.ID == id);
+                        SimulationControlHandler.Results.Instance = simulation.CityInstance;
+                        SimulationControlHandler.Results.Update();
+                        TBSimID.Text = id.ToString();
+                        MessageBox.Show($"Loaded data for simulation {id}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No simulations found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        TBSimID.Text = "";
+                    }
+                },
+                CommandLoop
+            );
+        }
 
+        private void ResultImportComplete(object source, EventArgs args)
+        {
+            var id = ((ImportEventArgs) args).SimID;
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from sim in database.Simulations
+                    select sim).ToList(),
+                data =>
+                {
+                    if (data.Count > 0)
+                    {
+                        var simulation = data.First(sim => sim.ID == id);
+                        SimulationControlHandler.Results.Instance = simulation.CityInstance;
+                        SimulationControlHandler.Results.Update();
+                        TBSimID.Text = id.ToString();
+                        MessageBox.Show($"Loaded data for simulation {id}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No simulations found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        TBSimID.Text = "";
+                    }
+                },
+                CommandLoop
+            );
         }
 
         private void BtnSaveSim_Click(object sender, RoutedEventArgs e)
         {
 
+            int cityInstanceId = 0;
+
+            try
+            {
+                cityInstanceId = SimulationControlHandler.Results.Instance.ID;
+            }
+            catch(Exception)
+            {
+                MessageBox.Show(this, "Please give some information to save.", "Export", MessageBoxButton.OK);
+                return;
+            }
+            DatabaseHelper.QueueDatabaseRequest(
+                database => (from sim in database.Simulations
+                             where sim.CityInstance.ID == cityInstanceId
+                             select sim).ToList(),
+                data => 
+                {
+                   try
+                   {
+                        ResultExport.ExportResult(data.First().ID, "killakid", this);
+                   }
+                   catch(Exception b)
+                   {
+                        MessageBox.Show(this, b.Message, "Export error", MessageBoxButton.OK);
+                   }
+                }, 
+                CommandLoop
+            );
         }
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)

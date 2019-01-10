@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KBS2.Visual.Controls"
         mc:Ignorable="d"
-        Title="Review List" Height="800" Width="450" WindowStartupLocation="CenterScreen" Deactivated="Window_Deactivated">
+        Title="Review List" Height="800" Width="460" WindowStartupLocation="CenterScreen" Deactivated="Window_Deactivated">
     <Grid>
-        <ScrollViewer HorizontalAlignment="Left" Height="750" VerticalAlignment="Top" Width="435">
-            <StackPanel x:Name="ReviewListStackPanel"/>
+        <ScrollViewer HorizontalAlignment="Left" Height="770" VerticalAlignment="Top" Width="454" Margin="0,0,-0.4,0">
+            <StackPanel x:Name="ReviewListStackPanel" Height="750"/>
         </ScrollViewer>
 
 

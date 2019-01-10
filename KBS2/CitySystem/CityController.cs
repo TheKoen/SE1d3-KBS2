@@ -66,6 +66,8 @@ namespace KBS2.CitySystem
                 .FindAll(build => !(build is Garage));
             var building = buildings[Random.Next(buildings.Count)];
             var target = buildings[Random.Next(buildings.Count)];
+
+            if (building == target) return;
             var groupSize = Random.Next(1, (int) Math.Round(City.AvgGroupSize / 2.0 * 3.0));
 
             var group = new CustomerGroup(groupSize, building, target, (finishedGroup) =>

@@ -59,17 +59,21 @@ namespace KBS2.CustomerSystem
         {
             //if(Random.Next(5) == 1)
             //{
-                MakeReview();
+            var car = ((CarController)source).Car;
+
+            if (car.Passengers.Contains(Customer))
+            {
+                MakeReview(car);
+            }            
             //}
         }
 
         /// <summary>
         /// The customer makes a review depending on how long they had to wait, their moral state and the time of the ride.
         /// </summary>
-        public void MakeReview()
+        public void MakeReview(CarSystem.Car car)
         {
             Review r = new Review(Customer);
-            var car = CitySystem.City.Instance.Cars.Find(c => c.Passengers.Contains(Customer));
             car.Reviews.Add(r);
         }
 

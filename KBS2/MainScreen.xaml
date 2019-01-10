@@ -105,7 +105,7 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabItemResults" Header="Results" Margin="90,-2,-125,-2" IsEnabled="False">
+            <TabItem x:Name="TabItemResults" Header="Results" Margin="90,-2,-125,-2" IsEnabled="True">
                 <Grid Background="#FFE5E5E5" Margin="-2.5,0,0,0">
                     <Button x:Name="BtnImport" Content="Import" HorizontalAlignment="Left" Margin="25,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnImport_Click"/>
                     <Button x:Name="BtnLoadResult" Content="Load" HorizontalAlignment="Left" Margin="230,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnLoadResult_Click"/>
@@ -125,79 +125,72 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Customers" Width="150"/>
-                                <Label x:Name="LabelResultCustomer" Content="" Width="150"/>
+                                <Label x:Name="LabelResultCustomer" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Cars" Width="150"/>
-                                <Label  x:Name="LabelResultCars" Content="" Width="150"/>
+                                <Label  x:Name="LabelResultCars" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Customers:" Width="150" FontWeight="Bold" FontSize="14"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Total" Width="150"/>
-                                <Label x:Name="LabelResultTotalCustomers" Content="" Width="150"/>
+                                <Label x:Name="LabelResultTotalCustomers" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Average age" Width="150"/>
-                                <Label  x:Name="LabelResultAvgAge" Content="" Width="150"/>
+                                <Label  x:Name="LabelResultAvgAge" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Rides" Width="150"/>
-                                <Label x:Name="LabelResultRide" Content="" Width="150"/>
+                                <Label x:Name="LabelResultRide" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Distance Total" Width="150"/>
-                                <Label x:Name="LabelResultDistanceTotal" Content="" Width="150"/>
+                                <Label x:Name="LabelResultDistanceTotal" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Distance Average" Width="150"/>
-                                <Label x:Name="LabelResultDistanceAvarage" Content="" Width="150"/>
+                                <Label x:Name="LabelResultDistanceAvarage" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Average Moral" Width="150"/>
-                                <Label x:Name="LabelResultAvgMoral" Content="" Width="150"/>
+                                <Label x:Name="LabelResultAvgMoral" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Cars:" Width="150" FontWeight="Bold" FontSize="14"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Total" Width="150"/>
-                                <Label x:Name="LabelResultTotalCars" Content="" Width="150"/>
+                                <Label x:Name="LabelResultTotalCars" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Distance total" Width="150"/>
-                                <Label x:Name="LabelResultDistanceTotalCar" Content="" Width="150"/>
+                                <Label x:Name="LabelResultDistanceTotalCar" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Distance Average" Width="150"/>
-                                <Label x:Name="LabelResultDistanceAvarageCars" Content="" Width="150"/>
+                                <Label x:Name="LabelResultDistanceAvarageCars" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Average customers per car" Width="150"/>
-                                <Label x:Name="LabelResultAvgCustomers" Content="" Width="150"/>
+                                <Label x:Name="LabelResultAvgCustomers" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Average review rating" Width="150"/>
-                                <Label x:Name="LabelResultAvgReviewRating" Content="" Width="150"/>
+                                <Label x:Name="LabelResultAvgReviewRating" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Price:" Width="150" FontWeight="Bold" FontSize="14"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Total Earned" Width="150"/>
-                                <Label x:Name="LabelResultTotalEarned" Content="" Width="150"/>
+                                <Label x:Name="LabelResultTotalEarned" Content="0" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Average price per ride" Width="150"/>
-                                <Label x:Name="LabelResultAvgPrice" Content="" Width="150"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Time:" Width="150" FontWeight="Bold" FontSize="14"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Time elapsed" Width="150"/>
-                                <Label x:Name="LabelResultTimeElapsed" Content="" Width="150"/>
+                                <Label x:Name="LabelResultAvgPrice" Content="0" Width="150"/>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>

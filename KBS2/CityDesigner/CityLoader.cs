@@ -33,10 +33,13 @@ namespace KBS2.CityDesigner
 
             var doc = new XmlDocument();
 
-            var popupWindow = new OpenFileDialog();
-            popupWindow.Title = "Load City";
-            popupWindow.Filter = "XML file | *.xml";
-            if(popupWindow.ShowDialog() == DialogResult.OK)
+            var popupWindow = new OpenFileDialog()
+            {
+                Title = "LoadCity",
+                Filter = "XML file | *.xml"
+            };
+
+            if (popupWindow.ShowDialog() == DialogResult.OK)
             {
                 
                 doc.Load(popupWindow.FileName);

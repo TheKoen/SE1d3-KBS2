@@ -23,6 +23,7 @@ namespace UnitTests.Util
         private CarModel model = CarModel.Get("TestModel");
         private int width;
         private int length;
+        private Garage garage;
         private Road currentRoad;
 
         public CarBuilder Location(Vector location)
@@ -39,7 +40,7 @@ namespace UnitTests.Util
 
         public CarBuilder Width(int width)
         {
-            this.width =width;
+            this.width = width;
             return this;
         }
 
@@ -64,6 +65,12 @@ namespace UnitTests.Util
         public CarBuilder CurrentRoad(Road currentRoad)
         {
             this.currentRoad = currentRoad;
+            return this;
+        }
+
+        public CarBuilder Garge(Garage garage)
+        {
+            this.garage = garage;
             return this;
         }
 

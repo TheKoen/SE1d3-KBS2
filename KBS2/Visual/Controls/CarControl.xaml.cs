@@ -33,11 +33,16 @@ namespace KBS2.Visual.Controls
             this.car = car;
             InitializeComponent();
             Update();
-            MainScreen.WPFLoop.Subscribe(Update);
+            MainScreen.DrawingLoop.Subscribe(Update);
         }
 
         public void Update()
         {
+            if (double.IsNaN(car.Location.X))
+            {
+                Screen.CanvasMain.Children.Remove(this);
+            }
+
             var angle = -MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
             while (angle < 0) angle += 360;
             if (angle >= 360) angle -= 360;

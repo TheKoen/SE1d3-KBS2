@@ -35,7 +35,7 @@ namespace KBS2.ModelDesigner
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            Close();
         }
     }
 }
