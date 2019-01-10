@@ -96,7 +96,6 @@
     <Compile Include="Console\ConsoleControlTest.cs" />
     <Compile Include="CustomerSytem\CustomerGroupTest.cs" />
     <Compile Include="CustomerSytem\CustomerTest.cs" />
-    <Compile Include="ExportImportResults\ExportTest.cs" />
     <Compile Include="Util\DataBaseUnitTest.cs" />
     <Compile Include="GPS\GPSSystemTest.cs" />
     <Compile Include="GPS\TSP\DijkstraTest.cs" />
