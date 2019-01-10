@@ -108,7 +108,7 @@ namespace KBS2.Console.Commands
         /// <returns></returns>
         private string printTypes(string[] args)
         {
-            var items = StringConverters.GetSensors();
+            var items = StringConverters.GetSensorNames();
             foreach(var item in items)
             {
                 App.Console.Print(item);

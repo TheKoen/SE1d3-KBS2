@@ -42,7 +42,7 @@ namespace KBS2.Util
         /// returns a List with names of all the sensors in this assembly
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetSensors()
+        public static List<string> GetSensorNames()
         {
             var items = GetSensorsClasses();
             var list = new List<string>();
