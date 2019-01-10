@@ -93,7 +93,10 @@ namespace KBS2.CarSystem
                 .Any(sensor => sensor.GetType() == typeof(T) && sensor.Direction.Equals(side));
         }
 
-        public void PassengersReady() { }
+        public void PassengersReady()
+        {
+            Car.PassengersBoardDistance = Car.DistanceTraveled;
+        }
 
         /// <summary>
         /// Runs the main car logic. Needs to be subscribed to the MainLoop.
@@ -367,7 +370,11 @@ namespace KBS2.CarSystem
                 // Check if we need to drop passengers off.
                 if (Car.PassengerCount > 0 && /*speed < 0.05 && */speed > 0)
                 {
-                    App.Console.Print($"[C{Car.Id}] Dropping customers", Colors.LimeGreen);
+                    var distance = Car.DistanceTraveled - Car.PassengersBoardDistance;
+                    var price = GPSSystem.StartingPrice.Value + GPSSystem.PricePerKilometer.Value * distance;
+                    App.Console.Print($"[C{Car.Id}] Charged €{price:F2} for {distance:F1} units", Colors.Blue);
+                    
+                    App.Console.Print($"[C{Car.Id}] Dropping customers", Colors.Blue);
                     var passenger = Car.Passengers[0];
                     TripEnd?.Invoke(this, new TripEventArgs(passenger.Group, passenger.Building.Location, Car.Location, Car));
                     Car.Passengers.Clear();
