@@ -221,7 +221,7 @@ namespace KBS2.CityDesigner
             //draw Intersection 
             foreach (var intersection in Intersections)
             {
-                IntersectionCreator.DrawIntersection(canvas, intersection, Roads, Intersections);                            
+                IntersectionCreator.DrawIntersection(canvas, intersection);                            
             }
         }
 

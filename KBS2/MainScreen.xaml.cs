@@ -137,6 +137,7 @@ namespace KBS2
         {
             SimulationControlHandler.PauseButtonClick();
             Stopwatch.Stop();
+
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)

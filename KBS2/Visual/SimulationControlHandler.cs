@@ -111,6 +111,7 @@ namespace KBS2.Visual
             Screen.BtnPause.IsEnabled = true;
             Screen.BtnStop.IsEnabled = true;
             Screen.BtnLoad.IsEnabled = false;
+            Screen.TabItemSettings.IsEnabled = false;
             Screen.BtnSelect.IsEnabled = false;
             Screen.BtnStart.IsEnabled = false;
 
@@ -124,6 +125,7 @@ namespace KBS2.Visual
         {
             Screen.BtnStart.IsEnabled = true;
             Screen.BtnPause.IsEnabled = false;
+            Screen.TabItemSettings.IsEnabled = true;
             App.Console.Print("Pause pressed");
             
             MainScreen.WPFLoop.Stop();
@@ -138,6 +140,8 @@ namespace KBS2.Visual
 
             Screen.BtnPause.IsEnabled = false;
             Screen.BtnStop.IsEnabled = false;
+
+            Screen.TabItemSettings.IsEnabled = true;
             App.Console.Print("Reset pressed");
 
             LoadButtonClick();

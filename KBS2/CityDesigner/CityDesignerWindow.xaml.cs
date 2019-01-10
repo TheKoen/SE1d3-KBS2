@@ -320,6 +320,7 @@ namespace KBS2.CityDesigner
                 if (Creator.SelectRoad != null)
                 {
                     Creator.SelectRoad.Width = NumericWidthRoad.Value;
+                    IntersectionCreator.UpdateIntersection(Creator.SelectRoad, ObjectHandler.Intersections, ObjectHandler.Roads);
                     ObjectHandler.RedrawAllObjects(Canvas);
                 }
             }
