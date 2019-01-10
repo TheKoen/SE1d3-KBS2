@@ -15,14 +15,21 @@ namespace KBS2.CityDesigner
 
     class CityLoader
     {
+        #region Properties & Fields
+
         public static event LoadedCityEventHandler LoadedCity;
 
         public CityLoader Instance { get; private set; }
+
+        #endregion  
+
 
         public CityLoader()
         {
             Instance = this;
         }
+
+        #region Public Methods
 
         public static void LoadCity()
         {
@@ -95,6 +102,21 @@ namespace KBS2.CityDesigner
             LoadedCity?.Invoke(null, new LoadedCityEventArgs(_roads, _buildings, _garages ,_intersections, popupWindow.FileName));
 
         }
+
+        public static void SubscribeLoadedCity(LoadedCityEventHandler source)
+        {
+            LoadedCity += source;
+        }
+
+        public static void UnsubcribeLoadedCity(LoadedCityEventHandler source)
+        {
+            LoadedCity -= source;
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private static Vector ParseLocation(string locationString)
         {
             var split = locationString.Split(',');
@@ -150,14 +172,6 @@ namespace KBS2.CityDesigner
             }
         }
 
-        public static void SubscribeLoadedCity(LoadedCityEventHandler source)
-        {
-            LoadedCity += source;
-        }
-
-        public static void UnsubcribeLoadedCity(LoadedCityEventHandler source)
-        {
-            LoadedCity -= source;
-        }
+        #endregion        
     }
 }

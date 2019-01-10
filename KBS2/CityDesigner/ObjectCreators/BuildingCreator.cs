@@ -16,6 +16,8 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class BuildingCreator
     {
+        #region Properties & Fields
+
         private static Rectangle buildingGhost = new Rectangle()
         {
             Fill = Brushes.LightSteelBlue,
@@ -35,6 +37,10 @@ namespace KBS2.CityDesigner.ObjectCreators
         };
 
         private static readonly int standardSize = 50;
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// allows to draw Ghost buildings on mouseLocation
@@ -97,8 +103,12 @@ namespace KBS2.CityDesigner.ObjectCreators
             canvas.Children.Remove(buildingGhost);
         }
 
+        #endregion
+
+        #region Private Methods
+
         /// <summary>
-        /// Dirty fix to copy Roads
+        /// fix to copy Roads
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
@@ -108,5 +118,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
+
+        #endregion
     }
 }

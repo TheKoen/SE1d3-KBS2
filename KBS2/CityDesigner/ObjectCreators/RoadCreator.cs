@@ -17,6 +17,8 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class RoadCreator
     {
+        #region Properties & Fields
+
         private static Line roadGhost = new Line()
         {
             Stroke = Brushes.LightSteelBlue,
@@ -43,8 +45,12 @@ namespace KBS2.CityDesigner.ObjectCreators
         private static readonly int minLengthRoad = 50;
 
 
-
         private static Point startRoad = new Point(0, 0);
+
+        #endregion
+
+
+        #region Public Methods
 
         /// <summary>
         /// Allows the user to draw a ghostRoad on canvas and controls snapfunctions to other roads
@@ -295,10 +301,40 @@ namespace KBS2.CityDesigner.ObjectCreators
 
             RemoveGhost(canvas);
             roadsList.Add(road);
-            IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.Start);
-            IntersectionCreator.CreateIntersection(canvas, ObjectHandler.Roads, ObjectHandler.Intersections, road.End);
+            //IntersectionCreator.UpdateIntersections(ObjectHandler.Roads, ObjectHandler.Intersections);
+            ObjectHandler.RedrawAllObjects(canvas);
             return road;
         }
+
+        /// <summary>
+        /// Removes the ghost road
+        /// </summary>
+        /// <param name="canvas"></param>
+        public static void RemoveGhost(Canvas canvas)
+        {
+            canvas.Children.Remove(roadGhost);
+        }
+
+
+
+        public static void DrawRoad(Canvas canvas, Road road)
+        {
+
+            roadLine.X1 = (int)road.Start.X;
+            roadLine.Y1 = (int)road.Start.Y;
+            roadLine.X2 = (int)road.End.X;
+            roadLine.Y2 = (int)road.End.Y;
+
+
+            Canvas.SetZIndex(roadLine, 2);
+            roadLine.StrokeThickness = road.Width;
+
+            canvas.Children.Add(clone(roadLine));
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private static bool crossesBuildingOrGarage(List<Building> buildingsList, List<Garage> garagesList, Canvas canvas)
         {
@@ -497,32 +533,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             ObjectHandler.RedrawAllObjects(canvas);
             return returnBool;
         }
-
-        /// <summary>
-        /// Removes the ghost road
-        /// </summary>
-        /// <param name="canvas"></param>
-        public static void RemoveGhost(Canvas canvas)
-        {
-            canvas.Children.Remove(roadGhost);
-        }
-
-        
-
-        public static void DrawRoad(Canvas canvas, Road road)
-        {
-
-            roadLine.X1 = (int)road.Start.X;
-            roadLine.Y1 = (int)road.Start.Y;
-            roadLine.X2 = (int)road.End.X;
-            roadLine.Y2 = (int)road.End.Y;
-
-            
-            Canvas.SetZIndex(roadLine, 2);
-            roadLine.StrokeThickness = road.Width;
-
-            canvas.Children.Add(clone(roadLine));
-        }
+      
 
         /// <summary>
         /// Dirty fix to copy Roads
@@ -535,5 +546,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }
+
+        #endregion
     }
 }
