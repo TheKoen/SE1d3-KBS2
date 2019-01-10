@@ -123,7 +123,7 @@ namespace UnitTests.GPS
                 .Intersection(intersections[3])
                 .Build();
 
-            var car = new Car(1, CarModel.Get("TestModel"), new Vector(cX, cY), new List<Sensor>(), null, direction, 5, 5);
+            var car = new Car(1, CarModel.GetModel("TestModel"), new Vector(cX, cY), new List<Sensor>(), null, direction, 5, 5);
             city.Cars.Add(car);
 
             car.Destination = new Destination {Location = new Vector(dX, dY), Road = roads[destRoad]};

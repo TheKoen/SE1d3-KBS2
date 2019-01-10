@@ -11,7 +11,7 @@ namespace KBS2.CitySystem
     {
         public DirectionCar Direction { get; private set; }
         public int AvailableCars { get; set; } = 2;
-        public CarModel Model { get; set; } = CarModel.Get("TestModel");
+        public CarModel Model { get; set; } = CarModel.GetModel("TestModel");
         private bool hasDirection = false;
 
         public Garage(Vector location, int size) : base(location, size)

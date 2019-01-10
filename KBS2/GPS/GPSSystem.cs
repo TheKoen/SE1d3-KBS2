@@ -28,7 +28,7 @@ namespace KBS2.GPS
             }
             catch (Exception)
             {
-                App.Console?.Print($"Unable to register tickRate property for GPSSystem", Colors.Yellow);
+                App.Console?.Print($"Unable to register properties for GPSSystem", Colors.Yellow);
             }
         }
 
@@ -53,11 +53,7 @@ namespace KBS2.GPS
         public static List<Road> GetRoadsInRange(Vector location, int range)
         {
             return City.Instance.Roads
-                .FindAll(road =>
-                {
-                    var dist = MathUtil.DistanceToRoad(location, road);
-                    return dist <= range;
-                });
+                .FindAll(road => MathUtil.DistanceToRoad(location, road) <= range);
         }
 
         /// <summary>

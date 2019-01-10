@@ -87,9 +87,9 @@ namespace KBS2.CarSystem
             return car;
         }
 
-        public static CarModel Get(string name)
+        public static CarModel GetModel(string name)
         {
-            if (!Contains(name))
+            if (!ModelExists(name))
                 throw new KeyNotFoundException($"Car model \"{name}\" does not exist");
             return CarModelList.Last(m => m.Name.Equals(name));
         }
@@ -97,23 +97,16 @@ namespace KBS2.CarSystem
         public static IEnumerable<CarModel> GetAll() =>
             new List<CarModel>(CarModelList);
 
-        public static void Set(CarModel model)
+        public static void AddModel(CarModel model)
         {
-            if (Contains(model.Name))
+            if (ModelExists(model.Name))
                 throw new KeyExistsException($"Car model \"{model.Name}\" already exists");
             CarModelList.Add(model);
         }
 
-        public static bool Contains(string name)
+        public static bool ModelExists(string name)
         {
             return CarModelList.Select(m => m.Name).Contains(name);
-        }
-
-        public static void Remove(string name)
-        {
-            if (!Contains(name))
-                throw new KeyNotFoundException($"Car model \"{name}\" does not exist");
-            CarModelList.RemoveAll(m => m.Name == name);
         }
     }
 }

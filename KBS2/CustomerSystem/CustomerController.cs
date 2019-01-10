@@ -27,7 +27,7 @@ namespace KBS2.CustomerSystem
         /// Looks at the position of the group and checks the distance between self and group.
         /// </summary>
         /// <returns>Distance between group and own location.</returns>
-        public double WhereIsMyGroup()
+        public double DistanceToGroup()
         {
             if (Customer.Group == null) return 0;
             var distance = MathUtil.Distance(Customer.Group.Location, Customer.Location);
@@ -81,7 +81,7 @@ namespace KBS2.CustomerSystem
         /// Change the moral of a customer
         /// </summary>
         /// <param name="Moral"></param>
-        public void MoodChange(double moral)
+        public void ChangeMood(double moral)
         {
             if (moral > 20)
                 Customer.Mood = Moral.Happy;
@@ -101,7 +101,7 @@ namespace KBS2.CustomerSystem
 
         public void Update() {
             // After x time (moral <0 in 1 minute at -0.01 per tick) the customer moral decreases
-            MoodChange(Math.Round(Customer.Moral));
+            ChangeMood(Math.Round(Customer.Moral));
             Customer.Moral = Customer.Moral - 0.01;
             if (Customer.Moral < 0) Customer.Moral = 0;
 
@@ -121,7 +121,7 @@ namespace KBS2.CustomerSystem
 
                 walking = direction.Equals(Customer.Location);
             }
-            else if (WhereIsMyGroup() >= 10)
+            else if (DistanceToGroup() >= 10)
             {
                 MoveTowardsLocation(Customer.Group.Location);
             }

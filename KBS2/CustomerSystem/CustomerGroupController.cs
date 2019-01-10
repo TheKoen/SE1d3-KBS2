@@ -26,21 +26,11 @@ namespace KBS2.CustomerSystem
         }
 
         /// <summary>
-        /// Checks if the road is an Horizontal road or an Vertical road
-        /// </summary>
-        /// <param name="road"></param>
-        /// <returns>returns true with an horizontal road and false with an vertical road</returns>
-        public bool CheckRoadOrientation(Road road)
-        {
-            return road.Start.Y == road.End.Y;
-        }
-
-        /// <summary>
         /// Checks if the customer current position is above or underneath of the road.
         /// </summary>
         /// <param name="road"></param>
         /// <returns>Returns true if the road is underneath and false if the road is above the current customer position.</returns>
-        public bool CheckHorizontalRoadPosition(Road road)
+        public bool IsBelowRoad(Road road)
         {
             return Group.Location.Y - road.Start.Y < 0;
         }
@@ -50,7 +40,7 @@ namespace KBS2.CustomerSystem
         /// </summary>
         /// <param name="road"></param>
         /// <returns>Returns true if the road is right and false if the road is left of the current customer position.</returns>
-        public bool CheckVerticalRoadPosition(Road road)
+        public bool IsRightOfRoad(Road road)
         {
             return Group.Location.X - road.Start.X < 0;
         }
@@ -65,15 +55,15 @@ namespace KBS2.CustomerSystem
             {
                 return;
             }
-            if (CheckRoadOrientation(road))
+            if (!road.IsXRoad())
             {
-                Group.Location = CheckHorizontalRoadPosition(road)
+                Group.Location = IsBelowRoad(road)
                     ? new Vector(Group.Location.X, road.Start.Y - road.Width / 2.0 - GroupDistanceFromRoad)
                     : new Vector(Group.Location.X, road.Start.Y + road.Width / 2.0 + GroupDistanceFromRoad);
             }
             else
             {
-                Group.Location = CheckVerticalRoadPosition(road)
+                Group.Location = IsRightOfRoad(road)
                     ? new Vector(road.Start.X - road.Width / 2.0 - GroupDistanceFromRoad, Group.Location.Y)
                     : new Vector(road.Start.X + road.Width / 2.0 + GroupDistanceFromRoad, Group.Location.Y);
             }

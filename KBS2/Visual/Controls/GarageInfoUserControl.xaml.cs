@@ -67,7 +67,7 @@ namespace KBS2.Visual.Controls
                 var newValue = CarModelProperties.TBCurrentValue.Text;
                 try
                 {
-                    Building.Model = CarModel.Get(newValue);
+                    Building.Model = CarModel.GetModel(newValue);
                 }
                 catch (Exception)
                 {

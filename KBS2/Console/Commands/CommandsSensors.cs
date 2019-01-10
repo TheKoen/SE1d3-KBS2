@@ -61,7 +61,7 @@ namespace KBS2.Console.Commands
             CreateSensor sensorFactory;
             try
             {
-                model = CarModel.Get(args[1]);
+                model = CarModel.GetModel(args[1]);
             }
             catch (Exception e)
             {
@@ -181,7 +181,7 @@ namespace KBS2.Console.Commands
 
             try
             {
-                model = CarModel.Get(args[1]);
+                model = CarModel.GetModel(args[1]);
             }
             catch (Exception)
             {

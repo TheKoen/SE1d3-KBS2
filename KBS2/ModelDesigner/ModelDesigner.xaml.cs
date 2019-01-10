@@ -55,7 +55,7 @@ namespace KBS2.ModelDesigner
                 }
 
                 // Checking if a model with that name already exists
-                if (CarModel.Contains(name))
+                if (CarModel.ModelExists(name))
                 {
                     MessageBox.Show($"A model with the name \"{name}\" already exists");
                     return;
@@ -74,7 +74,7 @@ namespace KBS2.ModelDesigner
                 }
                 
                 // Adding the model to the list for the simulation
-                CarModel.Set(new CarModel(maxSpeed, _currentDesign.SensorList, name));
+                CarModel.AddModel(new CarModel(maxSpeed, _currentDesign.SensorList, name));
                 MessageBox.Show($"Model \"{name}\" was successfully added to the simulation");
             };
             ButtonExport.Click += (sender, args) =>

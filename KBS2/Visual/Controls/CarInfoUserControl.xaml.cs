@@ -83,7 +83,7 @@ namespace KBS2.Visual.Controls
                 var newValue2 = CarModelProperties.TBCurrentValue.Text;
                 try
                 {
-                    Car.Model = CarModel.Get(newValue2);
+                    Car.Model = CarModel.GetModel(newValue2);
                 }
                 catch (Exception)
                 {
