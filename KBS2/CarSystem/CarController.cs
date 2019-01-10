@@ -371,7 +371,7 @@ namespace KBS2.CarSystem
                 if (Car.PassengerCount > 0 && /*speed < 0.05 && */speed > 0)
                 {
                     var distance = Car.DistanceTraveled - Car.PassengersBoardDistance;
-                    var price = GPSSystem.StartingPrice.Value + GPSSystem.PricePerKilometer.Value * distance;
+                    var price = GPSSystem.CalculatePrice(distance);
                     App.Console.Print($"[C{Car.Id}] Charged €{price:F2} for {distance:F1} units", Colors.Blue);
                     
                     App.Console.Print($"[C{Car.Id}] Dropping customers", Colors.Blue);
