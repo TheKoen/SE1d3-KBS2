@@ -100,6 +100,8 @@ namespace KBS2.CarSystem
             }
         }
 
+        public double PassengersBoardDistance;
+
         private int passengerCount;
         public int PassengerCount
         {

@@ -11,7 +11,7 @@ namespace KBS2.GPS.Algorithms
     {
         private static int _debuggerIndex;
         
-        private static Dictionary<long, Tuple<Destination, List<ConnectedNode>>> _calculationCache = new Dictionary<long, Tuple<Destination, List<ConnectedNode>>>();
+        private static readonly Dictionary<long, Tuple<Destination, List<ConnectedNode>>> _calculationCache = new Dictionary<long, Tuple<Destination, List<ConnectedNode>>>();
 
 
         public static void ClearCache() => _calculationCache.Clear();
@@ -25,6 +25,13 @@ namespace KBS2.GPS.Algorithms
 
             Node nextNode;
             double roadX, roadY;
+            
+            if (startNode.Equals(endNodes.Item1))
+            {
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
+                    startNode, endNodes.Item2, endNodes);
+                return endDestination;
+            }
             
             if (_calculationCache.ContainsKey(callerId))
             {
@@ -47,13 +54,6 @@ namespace KBS2.GPS.Algorithms
                 }
 
                 _calculationCache.Remove(callerId);
-            }
-            
-            if (startNode.Equals(endNodes.Item1))
-            {
-                AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
-                    startNode, endNodes.Item2, endNodes);
-                return endDestination;
             }
 
             var endNode = endNodes.Item1;

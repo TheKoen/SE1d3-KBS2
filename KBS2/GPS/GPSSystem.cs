@@ -93,19 +93,10 @@ namespace KBS2.GPS
         /// <param name="group">group who request a car</param>
         public static void RequestCar(Destination destination, CustomerGroup group)
         {
-            try
-            {
-                var distance = CalculateDistance(group.Location, destination.Location);
-                var price = CalculatePrice(distance);
-                App.Console?.Print(
-                    $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}"
-                );
-            }
-            catch (Exception)
-            {
-                App.Console?.Print($"Unable to calculate route from {group.Location} to {destination.Location}", Colors.Red);
-            }
-
+            App.Console?.Print(
+                $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}"
+            );
+            
             // Look to nearest Garage.
             var city = City.Instance;
             var garages = city.Buildings
