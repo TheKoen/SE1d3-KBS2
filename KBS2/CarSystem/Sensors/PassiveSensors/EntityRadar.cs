@@ -7,11 +7,6 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
 {
     public class EntityRadar : PassiveSensor
     {
-        /// <summary>
-        ///     EntityRadar radar checks for entities in range
-        /// </summary>
-        /// <param name="car"></param>
-        /// <param name="range">range of the radar</param>
         public EntityRadar(Car car, double range) : base(car, Direction.Global)
         {
             Range = range;
@@ -21,12 +16,9 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         public List<IEntity> EntitiesInRange { get; set; } = new List<IEntity>();
     }
 
-    /// <summary>
-    ///     Controller for the EntityRadar
-    /// </summary>
     internal class EntityRadarController : SensorController
     {
-        public EntityRadar Radar { get; set; }
+        public EntityRadar Radar { get; }
         public EntityRadarController(EntityRadar radar) : base(radar)
         {
             Radar = radar;
@@ -34,7 +26,7 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         
 
         /// <summary>
-        ///     Checks for entities in range of the radar
+        /// Checks for <see cref="IEntity"/>s in range of the <see cref="EntityRadar"/>
         /// </summary>
         public override void Update()
         {

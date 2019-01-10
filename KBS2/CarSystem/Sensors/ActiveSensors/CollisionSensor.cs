@@ -19,28 +19,24 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
     {
         public CollisionSensorController(CollisionSensor sensor) : base(sensor) { }
 
+        /// <summary>
+        /// Calls the SensorEvent
+        /// </summary>
         public override void Update()
         {
-            if (Sensor.Car.CurrentRoad == null)
-            {
-                return;
-            }
+            if (Sensor.Car.CurrentRoad == null) return;
 
-            var carDir = Sensor.Car.Direction;
-            var sensorDir = GetAbsoluteDirection(carDir);
-            var entities = GetEntitiesInRange(sensorDir);
-
+            var entities = GetEntitiesInRange();
             if (entities.Count == 0) return;
 
             ((CollisionSensor) Sensor).CallEvent(new CollisionSensorEventArgs(((CollisionSensor)Sensor), entities));
         }
 
         /// <summary>
-        ///     Checks if there are any cars in the range of the sensor with the sensors direction
+        /// Checks if there are any <see cref="Car"/>s in the range of the <see cref="CollisionSensor"/>
         /// </summary>
-        /// <param name="sensorDir">the Direction of a sensor</param>
-        /// <returns>a list of cars in range</returns>
-        private List<IEntity> GetEntitiesInRange(DirectionCar sensorDir) // TODO: Why is sensorDir not used?
+        /// <returns><see cref="List{IEntity}"/> of <see cref="Car"/>s in range</returns>
+        private List<IEntity> GetEntitiesInRange()
         {
             var car = Sensor.Car;
             var range = Math.Min(car.CurrentRoad.Width / 4.0, Sensor.Range);
@@ -50,28 +46,6 @@ namespace KBS2.CarSystem.Sensors.ActiveSensors
 
             return City.Instance.Controller.GetEntitiesInRange(center, range)
                 .FindAll(entity => !entity.Equals(car));
-        }
-
-        /// <summary>
-        ///     Converts the direction of the car into a direction of the sensor
-        /// </summary>
-        /// <param name="carDir">car direction</param>
-        /// <returns>direction for the sensor</returns>
-        private DirectionCar GetAbsoluteDirection(DirectionCar carDir)
-        {
-            switch (Sensor.Direction)
-            {
-                case Direction.Front:
-                    return carDir;
-                case Direction.Back:
-                    return carDir.GetOpposite();
-                case Direction.Left:
-                    return carDir.GetPrevious();
-                case Direction.Right:
-                    return carDir.GetNext();
-                default:
-                    throw new ArgumentException($"Unknown direction {Sensor.Direction}");
-            }
         }
     }
 

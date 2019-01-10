@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using KBS2.CitySystem;
-
-namespace KBS2.CarSystem.Sensors
+﻿namespace KBS2.CarSystem.Sensors
 {
     public delegate void EventHandlerSensor(object sender, SensorEventArgs e);
 
@@ -13,23 +9,27 @@ namespace KBS2.CarSystem.Sensors
         protected ActiveSensor(Car car, Direction direction) : base(car, direction) { }
 
         /// <summary>
-        ///     Subscribe to Sensors event
+        /// Subscribe to SensorEvent
         /// </summary>
-        /// <param name="source">method you want to subscribe</param>
+        /// <param name="source">Method to subscribe</param>
         public void SubScribeSensorEvent(EventHandlerSensor source)
         {
             SensorEvent += source;
         }
 
         /// <summary>
-        ///     Unsubscribe to Sensor event
+        /// Unsubscribe to SensorEvent
         /// </summary>
-        /// <param name="source">method you want to unsubscribe</param>
+        /// <param name="source">Method to unsubscribe</param>
         public void UnsubscribeSensorEvent(EventHandlerSensor source)
         {
             SensorEvent -= source;
         }
 
+        /// <summary>
+        /// Calls the SensorEvent
+        /// </summary>
+        /// <param name="args"><see cref="SensorEventArgs"/> passed to the event</param>
         public void CallEvent(SensorEventArgs args)
         {
             SensorEvent?.Invoke(this, args);

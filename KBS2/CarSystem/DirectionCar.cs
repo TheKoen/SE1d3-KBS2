@@ -32,6 +32,11 @@ namespace KBS2.CarSystem
             }
         }
 
+        /// <summary>
+        /// Gets the next <see cref="DirectionCar"/> in clockwise order
+        /// </summary>
+        /// <param name="current">Current <see cref="DirectionCar"/></param>
+        /// <returns>Next <see cref="DirectionCar"/></returns>
         public static DirectionCar GetNext(this DirectionCar current)
         {
             switch (current)
@@ -49,6 +54,11 @@ namespace KBS2.CarSystem
             }
         }
 
+        /// <summary>
+        /// Gets the next <see cref="DirectionCar"/> in counter-clockwise order
+        /// </summary>
+        /// <param name="current">Current <see cref="DirectionCar"/></param>
+        /// <returns>Next <see cref="DirectionCar"/></returns>
         public static DirectionCar GetPrevious(this DirectionCar current)
         {
             switch (current)
@@ -66,6 +76,11 @@ namespace KBS2.CarSystem
             }
         }
 
+        /// <summary>
+        /// Gets a Unit <see cref="Vector"/> for the given <see cref="DirectionCar"/>
+        /// </summary>
+        /// <param name="current">Current <see cref="DirectionCar"/></param>
+        /// <returns>Unit <see cref="Vector"/></returns>
         public static Vector GetVector(this DirectionCar current)
         {
             switch (current)
@@ -83,6 +98,12 @@ namespace KBS2.CarSystem
             }
         }
 
+        /// <summary>
+        /// Rotates the <see cref="DirectionCar"/> using the given <see cref="Direction"/>
+        /// </summary>
+        /// <param name="current">Current <see cref="DirectionCar"/></param>
+        /// <param name="rotation"><see cref="Direction"/> to use for rotation</param>
+        /// <returns>Unit <see cref="Vector"/> of the rotated <see cref="DirectionCar"/></returns>
         public static Vector RotateTo(this DirectionCar current, Direction rotation)
         {
             var direction = current.GetVector();
@@ -101,6 +122,11 @@ namespace KBS2.CarSystem
             }
         }
 
+        /// <summary>
+        /// Parses a <see cref="Vector"/> into a <see cref="DirectionCar"/>
+        /// </summary>
+        /// <param name="vector"><see cref="Vector"/> to parse</param>
+        /// <returns>Parsed <see cref="DirectionCar"/></returns>
         public static DirectionCar Parse(Vector vector)
         {
             if (Math.Abs(MathUtil.VectorToAngle(vector, DirectionCar.North)) <= 45) return DirectionCar.North;

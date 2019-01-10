@@ -35,7 +35,7 @@ namespace UnitTests.CarSystem
             var addedRotation = 0.0;
 
             car.Sensors.ForEach(sensor => sensor.Controller.Update());
-            controller.HandleStayInLane(ref velocity, ref yaw, ref addedRotation);
+            controller.HandleStayInLane(ref yaw, ref addedRotation);
 
             Assert.AreEqual(new Vector(), velocity);
             Assert.AreEqual(0.0, yaw, 0.01);

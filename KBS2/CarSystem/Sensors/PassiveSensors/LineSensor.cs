@@ -4,11 +4,6 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
 {
     public class LineSensor : PassiveSensor
     {
-        /// <summary>
-        ///     Create a lineSensor of a car
-        /// </summary>
-        /// <param name="car"></param>
-        /// <param name="direction">Side where the sensor is located</param>
         public LineSensor(Car car, Direction direction) : base(car, direction)
         {
             Controller = new LineSensorController(this);
@@ -17,26 +12,20 @@ namespace KBS2.CarSystem.Sensors.PassiveSensors
         public double Distance { get; set; }
     }
 
-    /// <summary>
-    ///     Controller of a linesensor
-    /// </summary>
     internal class LineSensorController : SensorController
     {
-        public LineSensor Sensor { get; set; }
+        public new LineSensor Sensor { get; }
         public LineSensorController(LineSensor sensor) : base(sensor) {
             Sensor = sensor;
         }
         
 
         /// <summary>
-        ///     Updates the distance to a line of a lane
+        /// Updates the distance to a line of a lane
         /// </summary>
         public override void Update()
         {
-            if (Sensor.Car.CurrentRoad == null)
-            {
-                return;
-            }
+            if (Sensor.Car.CurrentRoad == null) return;
 
             var currentLoc = Sensor.Car.Location;
             var road = Sensor.Car.CurrentRoad;

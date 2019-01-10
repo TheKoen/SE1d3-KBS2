@@ -1,10 +1,5 @@
-﻿using System;
-
-namespace KBS2.CarSystem.Sensors
+﻿namespace KBS2.CarSystem.Sensors
 {
-    /// <summary>
-    ///     Direction of a sensor
-    /// </summary>
     public enum Direction
     {
         Left,

@@ -8,7 +8,6 @@ using KBS2.CarSystem.Sensors.ActiveSensors;
 using KBS2.CarSystem.Sensors.PassiveSensors;
 using KBS2.CitySystem;
 using KBS2.Exceptions;
-using KBS2.CitySystem;
 
 namespace KBS2.CarSystem
 {
@@ -36,6 +35,8 @@ namespace KBS2.CarSystem
 
     public class CarModel
     {
+        
+        #region Properties & Fields
         
         private static readonly List<CarModel> CarModelList = new List<CarModel>
         {
@@ -69,6 +70,8 @@ namespace KBS2.CarSystem
         public List<SensorPrototype> Sensors { get; }
         public double MaxSpeed { get; }
         public string Name { get; }
+        
+        #endregion
 
         public CarModel(double maxSpeed, List<SensorPrototype> sensors, string name)
         {
@@ -77,6 +80,16 @@ namespace KBS2.CarSystem
             Name = name;
         }
 
+        #region Public Methods
+        
+        /// <summary>
+        /// Creates a <see cref="Car"/> from this <see cref="CarModel"/>
+        /// </summary>
+        /// <param name="id">Id of the new <see cref="Car"/></param>
+        /// <param name="location">Location of the new <see cref="Car"/></param>
+        /// <param name="garage"><see cref="Garage"/> the new <see cref="Car"/> will belong to</param>
+        /// <param name="direction"><see cref="DirectionCar"/> it will face</param>
+        /// <returns>The new <see cref="Car"/></returns>
         public Car CreateCar(int id, Vector location, Garage garage, DirectionCar direction)
         {
             var car = new Car(id, this, location, new List<Sensor>(), garage, direction, 5, 10);
@@ -87,6 +100,11 @@ namespace KBS2.CarSystem
             return car;
         }
 
+        /// <summary>
+        /// Gets a <see cref="CarModel"/> with the specified name
+        /// </summary>
+        /// <param name="name">Name of the <see cref="CarModel"/></param>
+        /// <returns>The <see cref="CarModel"/> matching the name</returns>
         public static CarModel GetModel(string name)
         {
             if (!ModelExists(name))
@@ -104,9 +122,9 @@ namespace KBS2.CarSystem
             CarModelList.Add(model);
         }
 
-        public static bool ModelExists(string name)
-        {
-            return CarModelList.Select(m => m.Name).Contains(name);
-        }
+        public static bool ModelExists(string name) =>
+            CarModelList.Select(m => m.Name).Contains(name);
+        
+        #endregion
     }
 }

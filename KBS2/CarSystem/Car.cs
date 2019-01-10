@@ -14,113 +14,115 @@ namespace KBS2.CarSystem
     {
         public const double DefaultMaxSpeed = 1.0;
 
+        #region Properties & Fields
+        
         public int Id { get; set; }
 
-        private Property location;
+        private readonly Property _location;
         public Vector Location
         {
-            get => location.Value;
+            get => _location.Value;
             set
             {
-                location.Value = value;
+                _location.Value = value;
                 LocationString = $"{Location.X:F0}, {Location.Y:F0}";
             }
         }
 
-        private string locationString;
+        private string _locationString;
 
         public string LocationString
         {
-            get => locationString;
+            get => _locationString;
             private set
             {
-                if (locationString == value) return;
+                if (_locationString == value) return;
 
-                locationString = value;
+                _locationString = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocationString"));
             }
         }
 
-        private Destination destination = new Destination();
+        private Destination _destination = new Destination();
         public Destination Destination
         {
-            get => destination;
+            get => _destination;
             set
             {
-                destination = value;
-                if (destination.Road == null) return;
+                _destination = value;
+                if (_destination.Road == null) return;
                 TargetLocationString = $"{Destination.Location.X:F0}, {Destination.Location.Y:F0}";
             }
         }
 
-        private string targetLocationString;
+        private string _targetLocationString;
 
         public string TargetLocationString
         {
-            get => targetLocationString;
+            get => _targetLocationString;
             private set
             {
-                if (targetLocationString == value) return;
+                if (_targetLocationString == value) return;
 
-                targetLocationString = value;
+                _targetLocationString = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetLocationString"));
             }
         }
 
 
-        private Property direction;
+        private readonly Property _direction;
         public DirectionCar Direction
         {
-            get => direction.Value;
-            set => direction.Value = value;
+            get => _direction.Value;
+            set => _direction.Value = value;
         }
 
-        private Property rotation;
+        private readonly Property _rotation;
         public Vector Rotation
         {
-            get => rotation.Value;
-            set => rotation.Value = value;
+            get => _rotation.Value;
+            set => _rotation.Value = value;
         }
 
-        private Property maxSpeed;
+        private readonly Property _maxSpeed;
         public double MaxSpeed
         {
-            get => maxSpeed.Value;
-            set => maxSpeed.Value = value;
+            get => _maxSpeed.Value;
+            set => _maxSpeed.Value = value;
         }
 
-        private double distanceTraveled;
+        private double _distanceTraveled;
         public double DistanceTraveled
         {
-            get => distanceTraveled;
+            get => _distanceTraveled;
             set
             {
-                distanceTraveled = Math.Round(value);
+                _distanceTraveled = Math.Round(value);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DistanceTraveled"));
             }
         }
 
         public double PassengersBoardDistance;
 
-        private int passengerCount;
+        private int _passengerCount;
         public int PassengerCount
         {
-            get => passengerCount;
+            get => _passengerCount;
             set
             {
-                passengerCount = Passengers.Count;
+                _passengerCount = Passengers.Count;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PassengerCount"));
             }
         }
 
-        private Property model;
+        private readonly Property _model;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public CarModel Model
         {
-            get => model.Value;
-            set => model.Value = value;
+            get => _model.Value;
+            set => _model.Value = value;
         }
 
         public Vector Velocity { get; set; } = new Vector(0, 0);
@@ -142,17 +144,20 @@ namespace KBS2.CarSystem
 
         public int Width { get; set; }
         public int Length { get; set; }
+        
+        #endregion
 
         /// <summary>
-        /// Create a car 
+        /// Create a <see cref="Car"/> 
         /// </summary>
-        /// <param name="id">Unique Id for this car</param>
-        /// <param name="model">The model of this car</param>
-        /// <param name="location">Location of this car</param>
-        /// <param name="sensors">List with sensors for this car</param>
-        /// <param name="direction">Direction the car is facing</param>
-        /// <param name="width"></param>
-        /// <param name="length"></param>
+        /// <param name="id">Unique Id for this <see cref="Car"/></param>
+        /// <param name="model"><see cref="CarModel"/> of this <see cref="Car"/></param>
+        /// <param name="location">Location of this <see cref="Car"/></param>
+        /// <param name="sensors"><see cref="List{Sensor}"/> for this <see cref="Car"/></param>
+        /// <param name="garage"><see cref="Garage"/> this <see cref="Car"/> belongs to</param>
+        /// <param name="direction">Direction the <see cref="Car"/> is facing</param>
+        /// <param name="width">Width of the <see cref="Car"/></param>
+        /// <param name="length">Length of the <see cref="Car"/></param>
         public Car(int id, CarModel model, Vector location, List<Sensor> sensors, Garage garage, DirectionCar direction, int width, int length)
         {
             Id = id;
@@ -168,27 +173,23 @@ namespace KBS2.CarSystem
             Controller = new CarController(this);
             MainScreen.AILoop.Subscribe(Controller.Update);
 
-            this.location = new Property(location);
+            _location = new Property(location);
             //PropertyHandler.RegisterProperty($"car{id}.location", ref this.location);
 
-            this.direction = new Property(direction);
+            _direction = new Property(direction);
             //PropertyHandler.RegisterProperty($"car{id}.direction", ref this.direction);
 
-            rotation = new Property(direction.GetVector());
+            _rotation = new Property(direction.GetVector());
             //PropertyHandler.RegisterProperty($"car{id}.rotation", ref rotation);
 
-            maxSpeed = new Property(DefaultMaxSpeed);
-            PropertyHandler.RegisterProperty($"car{id}.maxSpeed", ref maxSpeed);
+            _maxSpeed = new Property(DefaultMaxSpeed);
+            PropertyHandler.RegisterProperty($"car{id}.maxSpeed", ref _maxSpeed);
 
-            this.model = new Property(model);
+            _model = new Property(model);
             //PropertyHandler.RegisterProperty($"car{id}.model", ref this.model);
         }
 
-        public Vector GetLocation()
-        {
-            return Location;
-        }
-
+        // TODO: Find appropriate summary
         public List<Vector> GetPoints()
         {
             if (Direction == DirectionCar.North || Direction == DirectionCar.South)
