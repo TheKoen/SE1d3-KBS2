@@ -1,10 +1,5 @@
-﻿using KBS2.CarSystem;
-using KBS2.CitySystem;
-using System;
+﻿using KBS2.CitySystem;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -16,105 +11,105 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class GarageCreator
     {
+        private const int StandardSize = 50;
+
         #region Properties & Fields
 
         /// <summary>
-        /// Appearance of ghostgarage
+        /// Appearance of ghost <see cref="Garage"/>
         /// </summary>
-        private static Rectangle garageGhost = new Rectangle()
+        private static readonly Rectangle GarageGhost = new Rectangle()
         {
             Fill = Brushes.LightGoldenrodYellow,
             StrokeThickness = 4,
             Stroke = Brushes.Black,
-            Width = standardSize,
-            Height = standardSize,
+            Width = StandardSize,
+            Height = StandardSize,
         };
 
         /// <summary>
-        /// Appearance of garage
+        /// Appearance of <see cref="Garage"/>
         /// </summary>
-        private static Rectangle garageRectangle = new Rectangle()
+        private static readonly Rectangle GarageRectangle = new Rectangle()
         {
             Fill = Brushes.LightYellow,
             StrokeThickness = 4,
             Stroke = Brushes.Black,
-            Width = standardSize,
-            Height = standardSize,
+            Width = StandardSize,
+            Height = StandardSize,
         };
-
-        private static readonly int standardSize = 50;
 
         #endregion
 
         #region Public Methods
 
         /// <summary>
-        /// Draws the ghost of a Garge on mouseLocation
+        /// Draws the ghost of a <see cref="Garage"/> on mouseLocation
         /// </summary>
-        /// <param name="mouse">Which mouse to look at</param>
-        /// <param name="canvas">Canvas where ghost is drawn on</param>
+        /// <param name="mouse"><see cref="Point"/> of mouse</param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
         public static void DrawGhost(Point mouse, Canvas canvas)
         {
-            canvas.Children.Remove(garageGhost);
-            Canvas.SetTop(garageGhost, (int)mouse.Y - garageGhost.Height / 2);
-            Canvas.SetLeft(garageGhost, (int)mouse.X - garageGhost.Width / 2);
-            garageGhost.Width = standardSize;
-            garageGhost.Height = standardSize;
-            canvas.Children.Add(garageGhost);
+            canvas.Children.Remove(GarageGhost);
+            Canvas.SetTop(GarageGhost, (int)mouse.Y - GarageGhost.Height / 2);
+            Canvas.SetLeft(GarageGhost, (int)mouse.X - GarageGhost.Width / 2);
+            GarageGhost.Width = StandardSize;
+            GarageGhost.Height = StandardSize;
+            canvas.Children.Add(GarageGhost);
         }
 
         /// <summary>
-        /// Creates a garages and adds this to the list 
+        /// Creates a <see cref="Garage"/> and adds this to the list of <see cref="Garage"/>s
         /// </summary>
-        /// <param name="location">location where the garage is place at</param>
-        /// <param name="canvas">canvas where the garage is draw on</param>
-        /// <param name="garageList">list where garage is added at</param>
-        /// <returns>The added garage</returns>
-        public static Garage CreateGarage(Point location, Canvas canvas, List<Garage> garageList, List<Road> roadsList)
+        /// <param name="location">Location of the created <see cref="Garage"/></param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="garageList"><see cref="List{Garage}"/> to add the <see cref="Garage"/> to</param>
+        public static void CreateGarage(Point location, Canvas canvas, List<Garage> garageList)
         {
-            var returnGarage = new Garage(new System.Windows.Vector((int)location.X, (int)location.Y), standardSize);
+            var returnGarage = new Garage(new Vector((int)location.X, (int)location.Y), StandardSize);
 
-            if(!ObjectHandler.Overlaps(returnGarage))
-            {
-                garageList.Add(returnGarage);
-                drawGarage(canvas, returnGarage);
-                return returnGarage;
-            }
-            return null;
+            if (ObjectHandler.Overlaps(returnGarage)) return;
+            garageList.Add(returnGarage);
+            DrawGarage(canvas, returnGarage);
         }
   
 
         /// <summary>
-        /// Draws specific garage on canvas
+        /// Draws a specific <see cref="Garage"/> on a <see cref="Canvas"/>
         /// </summary>
-        /// <param name="canvas">Canvas where garage needs to be drawn on</param>
-        /// <param name="garage">garge that needs to be drawn</param>
-        public static void drawGarage(Canvas canvas, Garage garage)
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="garage"><see cref="Garage"/> to draw</param>
+        public static void DrawGarage(Canvas canvas, Garage garage)
         {
-            canvas.Children.Remove(garageRectangle);
-            Canvas.SetTop(garageRectangle, (int)garage.Location.Y - garage.Size / 2);
-            Canvas.SetLeft(garageRectangle, (int)garage.Location.X - garage.Size / 2);
-            garageRectangle.Width = garage.Size;
-            garageRectangle.Height = garage.Size;
-            canvas.Children.Add(clone(garageRectangle));
+            canvas.Children.Remove(GarageRectangle);
+            Canvas.SetTop(GarageRectangle, (int)garage.Location.Y - garage.Size / 2);
+            Canvas.SetLeft(GarageRectangle, (int)garage.Location.X - garage.Size / 2);
+            GarageRectangle.Width = garage.Size;
+            GarageRectangle.Height = garage.Size;
+            canvas.Children.Add(Clone(GarageRectangle));
         }
 
+        /// <summary>
+        /// Removes ghost <see cref="Garage"/> from <see cref="Canvas"/>
+        /// </summary>
+        /// <param name="canvas"><see cref="Canvas"/> to remove from</param>
         public static void RemoveGhost(Canvas canvas)
         {
-            canvas.Children.Remove(garageGhost);
+            canvas.Children.Remove(GarageGhost);
         }
+        
         #endregion
 
         #region Private Methods
 
         /// <summary>
-        /// Dirty fix to copy Garage
+        /// Fix to copy <see cref="Garage"/>s
         /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private static FrameworkElement clone(FrameworkElement e)
+        /// <param name="e"><see cref="FrameworkElement"/> to copy from</param>
+        /// <returns>Copied <see cref="FrameworkElement"/></returns>
+        private static FrameworkElement Clone(FrameworkElement e)
         {
-            XmlDocument document = new XmlDocument();
+            var document = new XmlDocument();
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }

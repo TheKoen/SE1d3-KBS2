@@ -20,7 +20,7 @@ namespace KBS2.CityDesigner.ObjectCreators
         /// <summary>
         /// Appearance of the intersection
         /// </summary>
-        private static Rectangle IntersectionRectangle = new Rectangle()
+        private static readonly Rectangle IntersectionRectangle = new Rectangle()
         {
             Fill = Brushes.Red,
             StrokeThickness = 4,
@@ -32,10 +32,10 @@ namespace KBS2.CityDesigner.ObjectCreators
         #region Methods
 
         /// <summary>
-        /// Updates on every road
+        /// Updates on every <see cref="Road"/>
         /// </summary>
-        /// <param name="roads">roads list</param>
-        /// <param name="intersections">intersections </param>
+        /// <param name="roads"><see cref="List{Road}"/> to update to</param>
+        /// <param name="intersections"><see cref="List{Intersection}"/> to update to</param>
         public static void UpdateIntersections(List<Road> roads, List<Intersection> intersections)
         {
             foreach (var road in roads)
@@ -54,10 +54,11 @@ namespace KBS2.CityDesigner.ObjectCreators
         }
 
         /// <summary>
-        /// Updates the intersections on a specific road
+        /// Updates the <see cref="Intersection"/>s on a specific <see cref="Road"/>
         /// </summary>
-        /// <param name="road"></param>
-        /// <param name="intersections"></param>
+        /// <param name="road"><see cref="Road"/> to update from</param>
+        /// <param name="intersections"><see cref="List{Intersection}"/> to update to</param>
+        /// <param name="roadsList"><see cref="List{Road}"/> of <see cref="Road"/>s to use</param>
         public static void UpdateIntersection(Road road, List<Intersection> intersections, List<Road> roadsList)
         {
             var intersectionsNeedingUpdate = intersections.FindAll(i => i.Location == road.End || i.Location == road.Start);
@@ -71,18 +72,19 @@ namespace KBS2.CityDesigner.ObjectCreators
         }
 
         /// <summary>
-        /// Draws the intersection on a canvas
+        /// Draws an <see cref="Intersection"/> on a <see cref="Canvas"/>
         /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="intersection"></param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="intersection"><see cref="Intersection"/> to draw</param>
         public static void DrawIntersection(Canvas canvas, Intersection intersection)
         {
             Canvas.SetTop(IntersectionRectangle, (int)intersection.Location.Y - intersection.Size / 2);
             Canvas.SetLeft(IntersectionRectangle, (int)intersection.Location.X - intersection.Size / 2);
-            Canvas.SetZIndex(IntersectionRectangle, 3);
+            Panel.SetZIndex(IntersectionRectangle, 3);
+            
             IntersectionRectangle.Width = intersection.Size;
             IntersectionRectangle.Height = intersection.Size;
-            canvas.Children.Add(clone(IntersectionRectangle));
+            canvas.Children.Add(Clone(IntersectionRectangle));
         }
 
         #endregion
@@ -90,13 +92,13 @@ namespace KBS2.CityDesigner.ObjectCreators
         #region Private Methods
 
         /// <summary>
-        /// Allowes to clone intersections
+        /// Fix to copy <see cref="Intersection"/>s
         /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private static FrameworkElement clone(FrameworkElement e)
+        /// <param name="e"><see cref="FrameworkElement"/> to copy from</param>
+        /// <returns>Copied <see cref="FrameworkElement"/></returns>
+        private static FrameworkElement Clone(FrameworkElement e)
         {
-            XmlDocument document = new XmlDocument();
+            var document = new XmlDocument();
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }

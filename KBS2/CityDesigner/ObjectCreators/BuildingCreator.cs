@@ -1,10 +1,5 @@
 ﻿using KBS2.CitySystem;
-using KBS2.Visual.Controls;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -16,91 +11,86 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class BuildingCreator
     {
+        private const int StandardSize = 50;
+        
         #region Properties & Fields
 
-        private static Rectangle buildingGhost = new Rectangle()
+        private static readonly Rectangle BuildingGhost = new Rectangle()
         {
             Fill = Brushes.LightSteelBlue,
             StrokeThickness = 4,
             Stroke = Brushes.Black,
-            Width = standardSize,
-            Height = standardSize,
+            Width = StandardSize,
+            Height = StandardSize,
         };
 
-        private static Rectangle buildingCreate = new Rectangle()
+        private static readonly Rectangle BuildingCreate = new Rectangle()
         {
             Fill = Brushes.Gray,
             StrokeThickness = 4,
             Stroke = Brushes.Black,
-            Width = standardSize,
-            Height = standardSize,
+            Width = StandardSize,
+            Height = StandardSize,
         };
-
-        private static readonly int standardSize = 50;
 
         #endregion
 
         #region Public Methods
 
         /// <summary>
-        /// allows to draw Ghost buildings on mouseLocation
+        /// Allows to draw ghost <see cref="Building"/>s on mouseLocation
         /// </summary>
-        /// <param name="mouse"></param>
-        /// <param name="canvas"></param>
+        /// <param name="mouse"><see cref="Point"/> of mouse</param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
         public static void DrawGhost(Point mouse, Canvas canvas)
         {
-            canvas.Children.Remove(buildingGhost);
-            Canvas.SetTop(buildingGhost, (int)mouse.Y - buildingGhost.Height / 2);
-            Canvas.SetLeft(buildingGhost, (int)mouse.X - buildingGhost.Width / 2);
-            buildingGhost.Width = standardSize;
-            buildingGhost.Height = standardSize;
-            canvas.Children.Add(buildingGhost);
+            canvas.Children.Remove(BuildingGhost);
+            Canvas.SetTop(BuildingGhost, (int)mouse.Y - BuildingGhost.Height / 2);
+            Canvas.SetLeft(BuildingGhost, (int)mouse.X - BuildingGhost.Width / 2);
+            BuildingGhost.Width = StandardSize;
+            BuildingGhost.Height = StandardSize;
+            canvas.Children.Add(BuildingGhost);
         }
 
         /// <summary>
-        /// Creates a building and add this to the list of buildings
+        /// Creates a <see cref="Building"/> and adds this to the list of <see cref="Building"/>s
         /// </summary>
-        /// <param name="location"></param>
-        /// <param name="canvas"></param>
-        /// <param name="buildingList"></param>
-        /// <returns></returns>
-        public static Building CreateBuilding(Point location, Canvas canvas, List<Building> buildingList)
+        /// <param name="location">Location of the created <see cref="Building"/></param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="buildingList"><see cref="List{Building}"/> of <see cref="Building"/>s</param>
+        public static void CreateBuilding(Point location, Canvas canvas, List<Building> buildingList)
         {
-            var returnBuilding = new Building((Vector)location, standardSize);
+            var returnBuilding = new Building((Vector)location, StandardSize);
 
-            if (!ObjectHandler.Overlaps(returnBuilding))
-            {
-                buildingList.Add(returnBuilding);
-                DrawBuilding(canvas, returnBuilding);
-                return returnBuilding;
-            }
-            return null;
+            if (ObjectHandler.Overlaps(returnBuilding)) return;
+            buildingList.Add(returnBuilding);
+            DrawBuilding(canvas, returnBuilding);
         }
 
         /// <summary>
-        /// Draws a specific building on a canvas
+        /// Draws a specific <see cref="Building"/> on a <see cref="Canvas"/>
         /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="building"></param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="building"><see cref="Building"/> to draw</param>
         public static void DrawBuilding(Canvas canvas, Building building)
         {
-            Canvas.SetLeft(buildingCreate, (int)building.Location.X - building.Size / 2);
-            Canvas.SetTop(buildingCreate, (int)building.Location.Y - building.Size / 2);
-            Canvas.SetZIndex(buildingCreate, 2);
+            Canvas.SetLeft(BuildingCreate, (int)building.Location.X - building.Size / 2);
+            Canvas.SetTop(BuildingCreate, (int)building.Location.Y - building.Size / 2);
+            Panel.SetZIndex(BuildingCreate, 2);
 
-            buildingCreate.Width = building.Size;
-            buildingCreate.Height = building.Size;
+            BuildingCreate.Width = building.Size;
+            BuildingCreate.Height = building.Size;
 
-            canvas.Children.Add(clone(buildingCreate));
+            canvas.Children.Add(Clone(BuildingCreate));
         }
 
         /// <summary>
-        /// remove ghostBuilding from canvas
+        /// Removes ghost <see cref="Building"/> from <see cref="Canvas"/>
         /// </summary>
-        /// <param name="canvas"></param>
+        /// <param name="canvas"><see cref="Canvas"/> to remove from</param>
         public static void RemoveGhost(Canvas canvas)
         {
-            canvas.Children.Remove(buildingGhost);
+            canvas.Children.Remove(BuildingGhost);
         }
 
         #endregion
@@ -108,13 +98,13 @@ namespace KBS2.CityDesigner.ObjectCreators
         #region Private Methods
 
         /// <summary>
-        /// fix to copy Roads
+        /// Fix to copy <see cref="Building"/>s
         /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private static FrameworkElement clone(FrameworkElement e)
+        /// <param name="e"><see cref="FrameworkElement"/> to copy from</param>
+        /// <returns>Copied <see cref="FrameworkElement"/></returns>
+        private static FrameworkElement Clone(FrameworkElement e)
         {
-            XmlDocument document = new XmlDocument();
+            var document = new XmlDocument();
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }

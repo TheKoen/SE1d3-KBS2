@@ -17,282 +17,285 @@ namespace KBS2.CityDesigner.ObjectCreators
 {
     public static class RoadCreator
     {
+        private const int StandardRoadWidth = 20;
+        private const int StandardMaxSpeed = 100;
+        private const int SnapRange = 50;
+        private const int MinLengthRoad = 50;
+        
         #region Properties & Fields
 
-        private static Line roadGhost = new Line()
+        private static readonly Line RoadGhost = new Line()
         {
             Stroke = Brushes.LightSteelBlue,
-            StrokeThickness = standardRoadWidth
+            StrokeThickness = StandardRoadWidth
         };
 
-        private static Line roadLine = new Line()
+        private static readonly Line RoadLine = new Line()
         {
             Stroke = Brushes.LightBlue,
-            StrokeThickness = standardRoadWidth
+            StrokeThickness = StandardRoadWidth
         };
 
-
-        private static Line assistLine = new Line()
+        private static readonly Line AssistLine = new Line()
         {
             Stroke = Brushes.Black,
             StrokeThickness = 1,
             StrokeDashArray = new DoubleCollection() { 2 }
         };
 
-        private static readonly int standardRoadWidth = 20;
-        private static readonly int standardMaxSpeed = 100;
-        private static readonly int snapRange = 50;
-        private static readonly int minLengthRoad = 50;
-
-
-        private static Point startRoad = new Point(0, 0);
+        private static Point _startRoad = new Point(0, 0);
 
         #endregion
-
 
         #region Public Methods
 
         /// <summary>
-        /// Allows the user to draw a ghostRoad on canvas and controls snapfunctions to other roads
+        /// Draws a ghost <see cref="Road"/> on a <see cref="Canvas"/> and controls snapfunctions to other <see cref="Road"/>s
         /// </summary>
-        /// <param name="mouse"></param>
-        /// <param name="canvas"></param>
-        /// <param name="roads"></param>
+        /// <param name="mouse"><see cref="Point"/> of mouse</param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="roads"><see cref="Road"/>s to snap to</param>
         public static void DrawGhost(Point mouse, Canvas canvas, List<Road> roads)
         {
             // set the start point of the road
-            if (startRoad == new Point(0, 0)) { startRoad = mouse; }
+            if (_startRoad == new Point(0, 0))
+                _startRoad = mouse;
 
-            canvas.Children.Remove(roadGhost);
-            canvas.Children.Remove(assistLine);
+            canvas.Children.Remove(RoadGhost);
+            canvas.Children.Remove(AssistLine);
 
             // FakeEndPoint
-            var FakeEndPoint = mouse;
+            var fakeEndPoint = mouse;
 
-            roadGhost.X1 = startRoad.X;
-            roadGhost.Y1 = startRoad.Y;
+            RoadGhost.X1 = _startRoad.X;
+            RoadGhost.Y1 = _startRoad.Y;
 
-            roadGhost.X2 = FakeEndPoint.X;
-            roadGhost.Y2 = FakeEndPoint.Y;
+            RoadGhost.X2 = fakeEndPoint.X;
+            RoadGhost.Y2 = fakeEndPoint.Y;
 
-            //trying to snap the road to antoher road start point
+            // trying to snap the road to antoher road start point
             foreach (var road in roads)
             {
-                //snapping straight
-                if (Util.MathUtil.Distance(new Vector(startRoad.X, startRoad.Y), road.End) <= snapRange)
+                // snapping straight
+                if (Util.MathUtil.Distance(new Vector(_startRoad.X, _startRoad.Y), road.End) <= SnapRange)
                 {
-                    roadGhost.X1 = road.End.X;
-                    roadGhost.Y1 = road.End.Y;
+                    RoadGhost.X1 = road.End.X;
+                    RoadGhost.Y1 = road.End.Y;
                     break;
                 }
-                //snapping straight
-                else if (Util.MathUtil.Distance(new Vector(startRoad.X, startRoad.Y), road.Start) <= snapRange)
+                // snapping straight
+                else if (Util.MathUtil.Distance(new Vector(_startRoad.X, _startRoad.Y), road.Start) <= SnapRange)
                 {
-                    roadGhost.X1 = road.Start.X;
-                    roadGhost.Y1 = road.Start.Y;
+                    RoadGhost.X1 = road.Start.X;
+                    RoadGhost.Y1 = road.Start.Y;
                     break;
                 }
             }
 
-            //trying to snap the road straight 
-            if (Math.Abs(roadGhost.X2 - roadGhost.X1) <= snapRange)
+            // trying to snap the road straight 
+            if (Math.Abs(RoadGhost.X2 - RoadGhost.X1) <= SnapRange)
             {
-                roadGhost.X2 = roadGhost.X1;
+                RoadGhost.X2 = RoadGhost.X1;
             }
-            else if (Math.Abs(roadGhost.Y2 - roadGhost.Y1) <= snapRange)
+            else if (Math.Abs(RoadGhost.Y2 - RoadGhost.Y1) <= SnapRange)
             {
-                roadGhost.Y2 = roadGhost.Y1;
+                RoadGhost.Y2 = RoadGhost.Y1;
             }
 
 
-            //trying to snap the road to another road end point
+            // trying to snap the road to another road end point
             foreach (var road in roads)
             {
-                //check if road is in range
-                if (Util.MathUtil.Distance(new Vector(roadGhost.X2, roadGhost.Y2), new Vector(road.Start.X, road.Start.Y)) <= snapRange)
+                // check if road is in range
+                if (Util.MathUtil.Distance(new Vector(RoadGhost.X2, RoadGhost.Y2), new Vector(road.Start.X, road.Start.Y)) <= SnapRange)
                 {
-                    roadGhost.X2 = road.Start.X;
-                    roadGhost.Y2 = road.Start.Y;
-                    if (Math.Abs(roadGhost.X2 - roadGhost.X1) < Math.Abs(roadGhost.Y2 - roadGhost.Y1))
+                    RoadGhost.X2 = road.Start.X;
+                    RoadGhost.Y2 = road.Start.Y;
+                    if (Math.Abs(RoadGhost.X2 - RoadGhost.X1) < Math.Abs(RoadGhost.Y2 - RoadGhost.Y1))
                     {
-                        roadGhost.X1 = roadGhost.X2;
+                        RoadGhost.X1 = RoadGhost.X2;
                     }
-                    else if (Math.Abs(roadGhost.X2 - roadGhost.X1) > Math.Abs(roadGhost.Y2 - roadGhost.Y1))
+                    else if (Math.Abs(RoadGhost.X2 - RoadGhost.X1) > Math.Abs(RoadGhost.Y2 - RoadGhost.Y1))
                     {
-                        roadGhost.Y1 = roadGhost.Y2;
+                        RoadGhost.Y1 = RoadGhost.Y2;
                     }
 
                 }
-                else if (Util.MathUtil.Distance(new Vector(roadGhost.X2, roadGhost.Y2), new Vector(road.End.X, road.End.Y)) <= snapRange)
+                else if (Util.MathUtil.Distance(new Vector(RoadGhost.X2, RoadGhost.Y2), new Vector(road.End.X, road.End.Y)) <= SnapRange)
                 {
-                    roadGhost.X2 = road.End.X;
-                    roadGhost.Y2 = road.End.Y;
-                    if (Math.Abs(roadGhost.X2 - roadGhost.X1) < Math.Abs(roadGhost.Y2 - roadGhost.Y1))
+                    RoadGhost.X2 = road.End.X;
+                    RoadGhost.Y2 = road.End.Y;
+                    if (Math.Abs(RoadGhost.X2 - RoadGhost.X1) < Math.Abs(RoadGhost.Y2 - RoadGhost.Y1))
                     {
-                        roadGhost.X1 = roadGhost.X2;
+                        RoadGhost.X1 = RoadGhost.X2;
                     }
-                    else if (Math.Abs(roadGhost.X2 - roadGhost.X1) > Math.Abs(roadGhost.Y2 - roadGhost.Y1))
+                    else if (Math.Abs(RoadGhost.X2 - RoadGhost.X1) > Math.Abs(RoadGhost.Y2 - RoadGhost.Y1))
                     {
-                        roadGhost.Y1 = roadGhost.Y2;
+                        RoadGhost.Y1 = RoadGhost.Y2;
                     }
                 }
             }
 
-            //trying to snap the road to same level as nearby road
+            // trying to snap the road to same level as nearby road
 
-            if (roadGhost.X1 == roadGhost.X2 && roadGhost.Y1 != roadGhost.Y2 && Math.Abs(roadGhost.Y2 - roadGhost.Y1) >= minLengthRoad) // Y GhostRoad and GhostRoad is minimumlength
+            if (RoadGhost.X1 == RoadGhost.X2 && RoadGhost.Y1 != RoadGhost.Y2 && Math.Abs(RoadGhost.Y2 - RoadGhost.Y1) >= MinLengthRoad) // Y GhostRoad and GhostRoad is minimumlength
             {
-                var snaproadstart = roads.Find(r => Math.Abs(mouse.Y - r.Start.Y) <= snapRange && !r.IsXRoad()); //find first startNode in snapRange and road is not Xroad 
-                var snapRoadEnd = roads.Find(r => Math.Abs(mouse.Y - r.End.Y) <= snapRange && !r.IsXRoad()); //find first endNode in snapRange and road is not Xroad
+                var snaproadstart = roads.Find(r => Math.Abs(mouse.Y - r.Start.Y) <= SnapRange && !r.IsXRoad()); // find first startNode in snapRange and road is not Xroad 
+                var snapRoadEnd = roads.Find(r => Math.Abs(mouse.Y - r.End.Y) <= SnapRange && !r.IsXRoad()); // find first endNode in snapRange and road is not Xroad
 
                 if (snaproadstart != null)
                 {
-                    roadGhost.Y2 = (int)snaproadstart.Start.Y;
+                    RoadGhost.Y2 = (int)snaproadstart.Start.Y;
 
-                    assistLine.X1 = snaproadstart.Start.X;
-                    assistLine.Y1 = snaproadstart.Start.Y;
-                    assistLine.X2 = roadGhost.X2;
-                    assistLine.Y2 = roadGhost.Y2;
+                    AssistLine.X1 = snaproadstart.Start.X;
+                    AssistLine.Y1 = snaproadstart.Start.Y;
+                    AssistLine.X2 = RoadGhost.X2;
+                    AssistLine.Y2 = RoadGhost.Y2;
 
-                    canvas.Children.Add(assistLine);
+                    canvas.Children.Add(AssistLine);
                 }
                 else if (snapRoadEnd != null)
                 {
-                    roadGhost.Y2 = (int)snapRoadEnd.End.Y;
+                    RoadGhost.Y2 = (int)snapRoadEnd.End.Y;
 
-                    assistLine.X1 = snapRoadEnd.End.X;
-                    assistLine.Y1 = snapRoadEnd.End.Y;
-                    assistLine.X2 = roadGhost.X2;
-                    assistLine.Y2 = roadGhost.Y2;
+                    AssistLine.X1 = snapRoadEnd.End.X;
+                    AssistLine.Y1 = snapRoadEnd.End.Y;
+                    AssistLine.X2 = RoadGhost.X2;
+                    AssistLine.Y2 = RoadGhost.Y2;
 
-                    canvas.Children.Add(assistLine);
+                    canvas.Children.Add(AssistLine);
                 }
             }
-            else if (roadGhost.Y1 == roadGhost.Y2 && roadGhost.X1 != roadGhost.X2 && Math.Abs(roadGhost.X2 - roadGhost.X1) >= minLengthRoad) // X road and GhostRoad is minimumlength
+            else if (RoadGhost.Y1 == RoadGhost.Y2 && RoadGhost.X1 != RoadGhost.X2 &&
+                     Math.Abs(RoadGhost.X2 - RoadGhost.X1) >= MinLengthRoad) // X road and GhostRoad is minimumlength
             {
-                var snaproadstart = roads.Find(r => Math.Abs(mouse.X - r.Start.X) <= snapRange && r.IsXRoad());
-                var snapRoadEnd = roads.Find(r => Math.Abs(mouse.X - r.End.X) <= snapRange && r.IsXRoad());
+                var snaproadstart = roads.Find(r => Math.Abs(mouse.X - r.Start.X) <= SnapRange && r.IsXRoad());
+                var snapRoadEnd = roads.Find(r => Math.Abs(mouse.X - r.End.X) <= SnapRange && r.IsXRoad());
 
                 if (snaproadstart != null)
                 {
-                    roadGhost.X2 = (int)snaproadstart.Start.X;
+                    RoadGhost.X2 = (int)snaproadstart.Start.X;
 
-                    assistLine.X1 = snaproadstart.Start.X;
-                    assistLine.Y1 = snaproadstart.Start.Y;
-                    assistLine.X2 = roadGhost.X2;
-                    assistLine.Y2 = roadGhost.Y2;
+                    AssistLine.X1 = snaproadstart.Start.X;
+                    AssistLine.Y1 = snaproadstart.Start.Y;
+                    AssistLine.X2 = RoadGhost.X2;
+                    AssistLine.Y2 = RoadGhost.Y2;
 
-                    canvas.Children.Add(assistLine);
+                    canvas.Children.Add(AssistLine);
                 }
                 else if (snapRoadEnd != null)
                 {
-                    roadGhost.X2 = (int)snapRoadEnd.End.X;
+                    RoadGhost.X2 = (int)snapRoadEnd.End.X;
 
-                    assistLine.X1 = snapRoadEnd.End.X;
-                    assistLine.Y1 = snapRoadEnd.End.Y;
-                    assistLine.X2 = roadGhost.X2;
-                    assistLine.Y2 = roadGhost.Y2;
+                    AssistLine.X1 = snapRoadEnd.End.X;
+                    AssistLine.Y1 = snapRoadEnd.End.Y;
+                    AssistLine.X2 = RoadGhost.X2;
+                    AssistLine.Y2 = RoadGhost.Y2;
 
-                    canvas.Children.Add(assistLine);
+                    canvas.Children.Add(AssistLine);
                 }
             }
 
             foreach(var road in roads)
             {
-                if (!road.IsXRoad() && roadGhost.Y1 == roadGhost.Y2 && Util.MathUtil.Distance(new Vector(roadGhost.X1, roadGhost.Y1), new Vector(road.Start.X, roadGhost.Y1)) <= snapRange) // ghostRoad X road
+                if (!road.IsXRoad() && RoadGhost.Y1 == RoadGhost.Y2 &&
+                    Util.MathUtil.Distance(new Vector(RoadGhost.X1, RoadGhost.Y1), new Vector(road.Start.X, RoadGhost.Y1)) <= SnapRange) // ghostRoad X road
                 {
-                    roadGhost.X1 = road.Start.X;
+                    RoadGhost.X1 = road.Start.X;
                     break;
                 }
-                else if (road.IsXRoad() && roadGhost.X1 == roadGhost.X2 && Util.MathUtil.Distance(new Vector(roadGhost.X1, roadGhost.Y1), new Vector(roadGhost.X1, road.Start.Y)) <= snapRange) // ghostRoad Y road
+
+                if (road.IsXRoad() && RoadGhost.X1 == RoadGhost.X2 &&
+                    Util.MathUtil.Distance(new Vector(RoadGhost.X1, RoadGhost.Y1), new Vector(RoadGhost.X1, road.Start.Y)) <= SnapRange) // ghostRoad Y road
                 {
-                    roadGhost.Y1 = road.Start.Y;
+                    RoadGhost.Y1 = road.Start.Y;
                     break;
                 }
             }
 
-
-            roadGhost.StrokeThickness = standardRoadWidth;
-            canvas.Children.Add(roadGhost);
+            RoadGhost.StrokeThickness = StandardRoadWidth;
+            canvas.Children.Add(RoadGhost);
         }
 
 
         /// <summary>
-        /// Creates a road and adds this to roadsList
+        /// Creates a <see cref="Road"/> and adds this to the list of <see cref="Road"/>s
         /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="roadsList"></param>
-        /// <returns></returns>
-        public static Road CreateRoad(Canvas canvas, List<Road> roadsList, List<Building> buildingsList, List<Garage> garagesList)
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="roadsList"><see cref="List{Road}"/> of <see cref="Road"/>s</param>
+        /// <param name="buildingsList"><see cref="List{Building}"/> of <see cref="Building"/>s</param>
+        /// <param name="garagesList"><see cref="List{Garage}"/> of <see cref="Garage"/>s</param>
+        public static void CreateRoad(Canvas canvas, List<Road> roadsList, List<Building> buildingsList,
+            List<Garage> garagesList)
         {
-            startRoad = new Point(0, 0);
+            _startRoad = new Point(0, 0);
 
-            Road road = new Road(new Vector((int)roadGhost.X1, (int)roadGhost.Y1), new Vector((int)roadGhost.X2, (int)roadGhost.Y2), standardRoadWidth, standardMaxSpeed);
+            var road = new Road(new Vector((int)RoadGhost.X1, (int)RoadGhost.Y1), new Vector((int)RoadGhost.X2, (int)RoadGhost.Y2), StandardRoadWidth, StandardMaxSpeed);
 
             //check if road is long enough and road 
-            if (Util.MathUtil.Distance(new Vector(roadGhost.X1, roadGhost.Y1), new Vector(roadGhost.X2, roadGhost.Y2)) < minLengthRoad)
+            if (Util.MathUtil.Distance(new Vector(RoadGhost.X1, RoadGhost.Y1), new Vector(RoadGhost.X2, RoadGhost.Y2)) < MinLengthRoad)
             {
                 RemoveGhost(canvas);
-                return null;
+                return;
             }
 
             //check if road is not vertical or horizontal
-            if (!(roadGhost.X1 == roadGhost.X2 || roadGhost.Y1 == roadGhost.Y2))
+            if (!(RoadGhost.X1 == RoadGhost.X2 || RoadGhost.Y1 == RoadGhost.Y2))
             {
                 RemoveGhost(canvas);
-                return null;
+                return;
             }
             // check for coliding with buildings or garages
-            if (crossesBuildingOrGarage(buildingsList, garagesList, canvas))
+            if (CrossesBuildingOrGarage(buildingsList, garagesList, canvas))
             {
                 RemoveGhost(canvas);
-                return null;
+                return;
             };
 
-            var roadGhostStart = new Vector(roadGhost.X1, roadGhost.Y2);
-            var roadGhostEnd = new Vector(roadGhost.X2, roadGhost.Y2);
+            var roadGhostStart = new Vector(RoadGhost.X1, RoadGhost.Y2);
+            var roadGhostEnd = new Vector(RoadGhost.X2, RoadGhost.Y2);
 
             //check if road collides with other roads
             foreach (var roadI in roadsList)
             {
-                if (roadI.IsXRoad() && roadGhost.Y1 == roadGhost.Y2 && roadGhost.Y1 + roadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width/2 && roadGhost.Y1 - roadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width/2) // check if road overlaps
+                if (roadI.IsXRoad() && RoadGhost.Y1 == RoadGhost.Y2 &&
+                    RoadGhost.Y1 + RoadGhost.StrokeThickness/2 >= roadI.Start.Y - roadI.Width / 2 &&
+                    RoadGhost.Y1 - RoadGhost.StrokeThickness/2 <= roadI.Start.Y + roadI.Width / 2) // check if road overlaps
                 { 
-                    if((Math.Min(roadGhost.X1, roadGhost.X2) < Math.Min(roadI.Start.X, roadI.End.X) && Math.Max(roadGhost.X1, roadGhost.X2) > Math.Min(roadI.Start.X, roadI.End.X)) || (Math.Min(roadGhost.X1, roadGhost.X2) < Math.Max(roadI.Start.X, roadI.End.X) && Math.Max(roadGhost.X1, roadGhost.X2) > Math.Max(roadI.Start.X, roadI.End.X)))
+                    if(Math.Min(RoadGhost.X1, RoadGhost.X2) < Math.Min(roadI.Start.X, roadI.End.X) &&
+                       Math.Max(RoadGhost.X1, RoadGhost.X2) > Math.Min(roadI.Start.X, roadI.End.X)
+                       ||
+                       Math.Min(RoadGhost.X1, RoadGhost.X2) < Math.Max(roadI.Start.X, roadI.End.X) &&
+                       Math.Max(RoadGhost.X1, RoadGhost.X2) > Math.Max(roadI.Start.X, roadI.End.X))
                     {
                         if ((roadGhostStart != roadI.Start && roadGhostStart != roadI.End && roadGhostEnd != roadI.Start && roadGhostEnd != roadI.End) || road.IsXRoad())
                         {
                             RemoveGhost(canvas);
-                            return null;
+                            return;
                         }
                     }
                 }
-                if(!roadI.IsXRoad() && roadGhost.X1 == roadGhost.X2 && roadGhost.X1 + roadGhost.StrokeThickness/2 >= roadI.Start.X - roadI.Width/2 && roadGhost.X1 - roadGhost.StrokeThickness/2 <= roadI.Start.X + roadI.Width/2) // chekf if road overlaps
-                {
-                    if((Math.Min(roadGhost.Y1, roadGhost.Y2) < Math.Min(roadI.Start.Y, roadI.End.Y) && Math.Max(roadGhost.Y1, roadGhost.Y2) > Math.Min(roadI.Start.Y, roadI.End.Y)) || (Math.Min(roadGhost.Y1, roadGhost.Y2) < Math.Max(roadI.Start.Y, roadI.End.Y) && Math.Max(roadGhost.Y1, roadGhost.Y2) > Math.Max(roadI.Start.Y, roadI.End.Y)))
-                    {
-                        if ((roadGhostStart != roadI.Start && roadGhostStart != roadI.End && roadGhostEnd != roadI.Start && roadGhostEnd != roadI.End) || !road.IsXRoad())
-                        {
-                            RemoveGhost(canvas);
-                            return null;
-                        }
-                    }
-                }
-                /**
-                if((roadGhostStart == roadI.Start || roadGhostStart == roadI.End) && (roadGhostEnd == roadI.Start || roadGhostEnd == roadI.End))
-                {
-                    if((road.IsXRoad() && roadI.IsXRoad()) || (!road.IsXRoad() && !roadI.IsXRoad()))
-                    {
-                        RemoveGhost(canvas);
-                        return null;
-                    }
-                }
-                */
-                            
+
+                if (roadI.IsXRoad() || RoadGhost.X1 != RoadGhost.X2 ||
+                    !(RoadGhost.X1 + RoadGhost.StrokeThickness / 2 >= roadI.Start.X - roadI.Width / 2) ||
+                    !(RoadGhost.X1 - RoadGhost.StrokeThickness / 2 <= roadI.Start.X + roadI.Width / 2)) continue;
+                
+                if ((!(Math.Min(RoadGhost.Y1, RoadGhost.Y2) < Math.Min(roadI.Start.Y, roadI.End.Y)) ||
+                     !(Math.Max(RoadGhost.Y1, RoadGhost.Y2) > Math.Min(roadI.Start.Y, roadI.End.Y))) &&
+                    (!(Math.Min(RoadGhost.Y1, RoadGhost.Y2) < Math.Max(roadI.Start.Y, roadI.End.Y)) ||
+                     !(Math.Max(RoadGhost.Y1, RoadGhost.Y2) > Math.Max(roadI.Start.Y, roadI.End.Y)))) continue;
+                
+                if ((roadGhostStart == roadI.Start || roadGhostStart == roadI.End ||
+                     roadGhostEnd == roadI.Start || roadGhostEnd == roadI.End) && road.IsXRoad()) continue;
+                
+                RemoveGhost(canvas);
+                return;       
             }
+            
             if (CreateMultipleRoadsWhenCrossingEachother(road, roadsList, canvas) == true) // check if road is crossed by ghost road
             {
                 RemoveGhost(canvas);
-                return null;
+                return;
             }
 
 
@@ -303,144 +306,156 @@ namespace KBS2.CityDesigner.ObjectCreators
             roadsList.Add(road);
             //IntersectionCreator.UpdateIntersections(ObjectHandler.Roads, ObjectHandler.Intersections);
             ObjectHandler.RedrawAllObjects(canvas);
-            return road;
         }
 
         /// <summary>
-        /// Removes the ghost road
+        /// Removes ghost <see cref="Road"/> from <see cref="Canvas"/>
         /// </summary>
-        /// <param name="canvas"></param>
+        /// <param name="canvas"><see cref="Canvas"/> to remove from</param>
         public static void RemoveGhost(Canvas canvas)
         {
-            canvas.Children.Remove(roadGhost);
+            canvas.Children.Remove(RoadGhost);
         }
 
 
-
+        /// <summary>
+        /// Draws a specific <see cref="Road"/> on a <see cref="Canvas"/>
+        /// </summary>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <param name="road"><see cref="Road"/> to draw</param>
         public static void DrawRoad(Canvas canvas, Road road)
         {
+            RoadLine.X1 = (int)road.Start.X;
+            RoadLine.Y1 = (int)road.Start.Y;
+            RoadLine.X2 = (int)road.End.X;
+            RoadLine.Y2 = (int)road.End.Y;
 
-            roadLine.X1 = (int)road.Start.X;
-            roadLine.Y1 = (int)road.Start.Y;
-            roadLine.X2 = (int)road.End.X;
-            roadLine.Y2 = (int)road.End.Y;
 
+            Panel.SetZIndex(RoadLine, 2);
+            RoadLine.StrokeThickness = road.Width;
 
-            Canvas.SetZIndex(roadLine, 2);
-            roadLine.StrokeThickness = road.Width;
-
-            canvas.Children.Add(clone(roadLine));
+            canvas.Children.Add(Clone(RoadLine));
         }
 
         #endregion
 
         #region Private Methods
 
-        private static bool crossesBuildingOrGarage(List<Building> buildingsList, List<Garage> garagesList, Canvas canvas)
+        /// <summary>
+        /// Checks if the current ghost <see cref="Road"/> crosses <see cref="Building"/>s or <see cref="Garage"/>s
+        /// </summary>
+        /// <param name="buildingsList"><see cref="List{Building}"/> of <see cref="Building"/>s to check</param>
+        /// <param name="garagesList"><see cref="List{Garage}"/> of <see cref="Garage"/>s to check</param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <returns></returns>
+        private static bool CrossesBuildingOrGarage(List<Building> buildingsList, List<Garage> garagesList, Canvas canvas)
         {
-            //Check if road crosses building
+            // Check if road crosses building
             foreach (var building in buildingsList)
             {
-                if(roadGhost.Y1 == roadGhost.Y2) // X road
+                if(RoadGhost.Y1 == RoadGhost.Y2) // X road
                 {
-                    if((roadGhost.Y1 - standardRoadWidth/2 <= building.Location.Y + building.Size/2 && roadGhost.Y1 + standardRoadWidth/2 >= building.Location.Y - building.Size/2)) // check if is on same Y level
-                    {
-                        if(Math.Max(roadGhost.X1, roadGhost.X2) >= building.Location.X - building.Size/2 && Math.Min(roadGhost.X1, roadGhost.X2) <= building.Location.X + building.Size/2)// check if if X is on same level
-                        {
-                            RemoveGhost(canvas);
-                            return true;
-                        }
-                    }
+                    if ((!(RoadGhost.Y1 - StandardRoadWidth / 2 <= building.Location.Y + building.Size / 2) ||
+                         !(RoadGhost.Y1 + StandardRoadWidth / 2 >= building.Location.Y - building.Size / 2))) continue;
+                    
+                    if (!(Math.Max(RoadGhost.X1, RoadGhost.X2) >= building.Location.X - building.Size / 2) ||
+                        !(Math.Min(RoadGhost.X1, RoadGhost.X2) <= building.Location.X + building.Size / 2))
+                        continue;
+                        
+                    RemoveGhost(canvas);
+                    return true;
                 }
-                else if(roadGhost.X1 == roadGhost.X2) // Y road
-                {
-                    if(roadGhost.X1 - standardRoadWidth/2 <= building.Location.X + building.Size / 2 && roadGhost.X1 + standardRoadWidth/2 >= building.Location.X - building.Size/2) // check if is on same Y level
-                    {
-                        if (Math.Max(roadGhost.Y1, roadGhost.Y2) >= building.Location.Y - building.Size / 2 && Math.Min(roadGhost.Y1, roadGhost.Y2) <= building.Location.Y + building.Size / 2)// check if if X is on same level
-                        {
-                            RemoveGhost(canvas);
-                            return true;
-                        }
-                    }
-                }
+
+                if (RoadGhost.X1 != RoadGhost.X2) continue;
+                
+                if (!(RoadGhost.X1 - StandardRoadWidth / 2 <= building.Location.X + building.Size / 2) ||
+                    !(RoadGhost.X1 + StandardRoadWidth / 2 >= building.Location.X - building.Size / 2)) continue;
+                    
+                if (!(Math.Max(RoadGhost.Y1, RoadGhost.Y2) >= building.Location.Y - building.Size / 2) ||
+                    !(Math.Min(RoadGhost.Y1, RoadGhost.Y2) <= building.Location.Y + building.Size / 2))
+                    continue;
+                        
+                RemoveGhost(canvas);
+                return true;
             }
 
             //Check if road crosses Garage
             foreach (var garage in garagesList)
             {
-                if (roadGhost.Y1 == roadGhost.Y2) // X road
+                if (RoadGhost.Y1 == RoadGhost.Y2) // X road
                 {
-                    if ((roadGhost.Y1 - standardRoadWidth / 2 <= garage.Location.Y + garage.Size / 2 && roadGhost.Y1 + standardRoadWidth / 2 >= garage.Location.Y - garage.Size / 2)) // check if is on same Y level
-                    {
-                        if (Math.Max(roadGhost.X1, roadGhost.X2) >= garage.Location.X - garage.Size / 2 && Math.Min(roadGhost.X1, roadGhost.X2) <= garage.Location.X + garage.Size / 2)// check if if X is on same level
-                        {
-                            RemoveGhost(canvas);
-                            return true;
-                        }
-                    }
+                    if ((!(RoadGhost.Y1 - StandardRoadWidth / 2 <= garage.Location.Y + garage.Size / 2) ||
+                         !(RoadGhost.Y1 + StandardRoadWidth / 2 >= garage.Location.Y - garage.Size / 2))) continue;
+                    
+                    if (!(Math.Max(RoadGhost.X1, RoadGhost.X2) >= garage.Location.X - garage.Size / 2) ||
+                        !(Math.Min(RoadGhost.X1, RoadGhost.X2) <= garage.Location.X + garage.Size / 2)) continue;
+                        
+                    RemoveGhost(canvas);
+                    return true;
                 }
-                else if (roadGhost.X1 == roadGhost.X1) // Y road
-                {
-                    if ((roadGhost.X1 - standardRoadWidth / 2 <= garage.Location.X + garage.Size / 2 && roadGhost.X1 + standardRoadWidth / 2 >= garage.Location.X - garage.Size / 2)) // check if is on same Y level
-                    {
-                        if (Math.Max(roadGhost.Y1, roadGhost.Y2) >= garage.Location.Y - garage.Size / 2 && Math.Min(roadGhost.Y1, roadGhost.Y2) <= garage.Location.Y + garage.Size / 2)// check if if X is on same level
-                        {
-                            RemoveGhost(canvas);
-                            return true;
-                        }
-                    }
-                }
+
+                if (RoadGhost.X1 != RoadGhost.X1) continue;
+                
+                if ((!(RoadGhost.X1 - StandardRoadWidth / 2 <= garage.Location.X + garage.Size / 2) ||
+                     !(RoadGhost.X1 + StandardRoadWidth / 2 >= garage.Location.X - garage.Size / 2))) continue;
+                    
+                if (!(Math.Max(RoadGhost.Y1, RoadGhost.Y2) >= garage.Location.Y - garage.Size / 2) ||
+                    !(Math.Min(RoadGhost.Y1, RoadGhost.Y2) <= garage.Location.Y + garage.Size / 2)) continue;
+                        
+                RemoveGhost(canvas);
+                return true;
             }
             return false;
         }
 
         
+        /// <summary>
+        /// Creates multiple <see cref="Road"/>s when different <see cref="Road"/>s intersect
+        /// </summary>
+        /// <param name="road1">New intersecting <see cref="Road"/></param>
+        /// <param name="roadsList"><see cref="List{Road}"/> of <see cref="Road"/>s</param>
+        /// <param name="canvas"><see cref="Canvas"/> to work with</param>
+        /// <returns>True when <see cref="Road"/>s have been created</returns>
         private static bool CreateMultipleRoadsWhenCrossingEachother(Road road1, List<Road> roadsList, Canvas canvas)
         {
-            bool returnBool = false;
-            List<Road> removeRoads = new List<Road>();
-            List<Road> addRoads = new List<Road>();
+            var returnBool = false;
 
             var crossingRoads = roadsList.FindAll(r => // find all roads that are crossed and order from Low to high
             {
-                if (road1.IsXRoad() && !r.IsXRoad() && (road1.End != r.End && road1.End != r.Start && road1.Start != r.End && road1.Start != r.Start))
+                if (road1.IsXRoad() && !r.IsXRoad() &&
+                    road1.End != r.End && road1.End != r.Start &&
+                    road1.Start != r.End && road1.Start != r.Start)
                 {
-                    if(Math.Max(r.Start.Y, r.End.Y) >= road1.Start.Y && Math.Min(r.Start.Y, r.End.Y) <= road1.Start.Y && Math.Max(road1.Start.X, road1.End.X) >= r.Start.X && Math.Min(road1.Start.X, road1.End.X) <= r.Start.X )
-                    {
+                    if(Math.Max(r.Start.Y, r.End.Y) >= road1.Start.Y &&
+                       Math.Min(r.Start.Y, r.End.Y) <= road1.Start.Y &&
+                       Math.Max(road1.Start.X, road1.End.X) >= r.Start.X &&
+                       Math.Min(road1.Start.X, road1.End.X) <= r.Start.X )
                         return true;
-                    }
                 }
-                else if (!road1.IsXRoad() && r.IsXRoad() && (road1.End != r.End && road1.End != r.Start && road1.Start != r.End && road1.Start != r.Start))
+                else if (!road1.IsXRoad() && r.IsXRoad() &&
+                         road1.End != r.End && road1.End != r.Start &&
+                         road1.Start != r.End && road1.Start != r.Start)
                 {
-                    if (Math.Max(r.Start.X, r.End.X) >= road1.Start.X && Math.Min(r.Start.X, r.End.X) <= road1.Start.X && Math.Max(road1.Start.Y, road1.End.Y) >= r.Start.Y && Math.Min(road1.Start.Y, road1.End.Y) <= r.Start.Y)
-                    {
+                    if (Math.Max(r.Start.X, r.End.X) >= road1.Start.X &&
+                        Math.Min(r.Start.X, r.End.X) <= road1.Start.X &&
+                        Math.Max(road1.Start.Y, road1.End.Y) >= r.Start.Y &&
+                        Math.Min(road1.Start.Y, road1.End.Y) <= r.Start.Y)
                         return true;
-                    }
                 }
                 return false;
-            }).OrderBy(r =>
-            {
-                if (r.IsXRoad())
-                {
-                    return r.Start.Y;
-                }
-                else
-                {
-                    return r.Start.X;
-                }
-            }).ToList();
+            }).OrderBy(r => r.IsXRoad() ? r.Start.Y : r.Start.X).ToList();
 
-            if(crossingRoads.Count() == 0)
-            {
-                return returnBool;
-            }
+            if(!crossingRoads.Any())
+                return false;
 
             if (road1.IsXRoad())
             {
                 var location = (Math.Min(road1.Start.X, road1.End.X) == road1.Start.X) ? road1.Start : road1.End; // determine whats start location
-                for (int i = 0; i < crossingRoads.Count + 1; i++)
+                for (var i = 0; i < crossingRoads.Count + 1; i++)
                 {
-                    if(i < crossingRoads.Count && crossingRoads[i].Start.X == location.X && crossingRoads.Last() != crossingRoads[i]) // if there is not a piece of road behind the first cross
+                    if(i < crossingRoads.Count &&
+                       crossingRoads[i].Start.X == location.X &&
+                       crossingRoads.Last() != crossingRoads[i]) // if there is not a piece of road behind the first cross
                     {
                         var roadCrossNew1 = new Road(crossingRoads[i].Start, location, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
                         var roadCrossNew2 = new Road(location, crossingRoads[i].End, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
@@ -453,7 +468,7 @@ namespace KBS2.CityDesigner.ObjectCreators
                     {
                         var beginNewRoad = location;
                         location = new Vector(crossingRoads[i].Start.X, location.Y);
-                        var roadNew = new Road(beginNewRoad, location, standardRoadWidth, standardMaxSpeed);
+                        var roadNew = new Road(beginNewRoad, location, StandardRoadWidth, StandardMaxSpeed);
                         var roadCrossNew1 = new Road(crossingRoads[i].Start, location, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
                         var roadCrossNew2 = new Road(location, crossingRoads[i].End, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
                         roadsList.Remove(crossingRoads[i]);
@@ -465,7 +480,9 @@ namespace KBS2.CityDesigner.ObjectCreators
                     else if(location.X == crossingRoads.Last().Start.X) // last part of road
                     {
                         var beginNewRoad = location;
-                        var roadNew = (Math.Max(road1.Start.X, road1.End.X) == road1.End.X) ? new Road(beginNewRoad, road1.End, standardRoadWidth, standardMaxSpeed) : new Road(beginNewRoad, road1.Start, standardRoadWidth, standardMaxSpeed);
+                        var roadNew = (Math.Max(road1.Start.X, road1.End.X) == road1.End.X)
+                            ? new Road(beginNewRoad, road1.End, StandardRoadWidth, StandardMaxSpeed)
+                            : new Road(beginNewRoad, road1.Start, StandardRoadWidth, StandardMaxSpeed);
                         roadsList.Add(roadNew);
                         returnBool = true;
                     }
@@ -481,7 +498,7 @@ namespace KBS2.CityDesigner.ObjectCreators
             else if(!road1.IsXRoad())
             {
                 var location = (Math.Min(road1.Start.Y, road1.End.Y) == road1.Start.Y) ? road1.Start : road1.End; // determine whats start location
-                for (int i = 0; i < crossingRoads.Count + 1; i++)
+                for (var i = 0; i < crossingRoads.Count + 1; i++)
                 {
                     if(i < crossingRoads.Count && crossingRoads[i].Start.Y == location.Y && crossingRoads.Last() != crossingRoads[i]) // if there is not a piece of road behind the first cross
                     {
@@ -496,7 +513,7 @@ namespace KBS2.CityDesigner.ObjectCreators
                     {
                         var beginNewRoad = location;
                         location = new Vector(location.X, crossingRoads[i].Start.Y);
-                        var roadNew = new Road(beginNewRoad, location, standardRoadWidth, standardMaxSpeed);
+                        var roadNew = new Road(beginNewRoad, location, StandardRoadWidth, StandardMaxSpeed);
                         var roadCrossNew1 = new Road(crossingRoads[i].Start, location, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
                         var roadCrossNew2 = new Road(location, crossingRoads[i].End, crossingRoads[i].Width, crossingRoads[i].MaxSpeed);
                         roadsList.Remove(crossingRoads[i]);
@@ -508,13 +525,13 @@ namespace KBS2.CityDesigner.ObjectCreators
                     else if(location.Y == crossingRoads.Last().Start.Y) // last part of road
                     {
                         var beginNewRoad = location;
-                        var roadNew = (Math.Max(road1.Start.Y, road1.End.Y) == road1.End.Y) ? new Road(beginNewRoad, road1.End, standardRoadWidth, standardMaxSpeed) : new Road(beginNewRoad, road1.Start, standardRoadWidth, standardMaxSpeed);
-                        if (Util.MathUtil.Distance(roadNew.Start, roadNew.End) > minLengthRoad)
-                        {
-                            roadsList.Add(roadNew);
-                            returnBool = true;
-                        }
-                        
+                        var roadNew = (Math.Max(road1.Start.Y, road1.End.Y) == road1.End.Y)
+                            ? new Road(beginNewRoad, road1.End, StandardRoadWidth, StandardMaxSpeed)
+                            : new Road(beginNewRoad, road1.Start, StandardRoadWidth, StandardMaxSpeed);
+                        if (!(Util.MathUtil.Distance(roadNew.Start, roadNew.End) > MinLengthRoad)) continue;
+                        roadsList.Add(roadNew);
+                        returnBool = true;
+
                     }
                     else if(location == road1.End || location == road1.Start) // no last part of road
                     {
@@ -536,13 +553,13 @@ namespace KBS2.CityDesigner.ObjectCreators
       
 
         /// <summary>
-        /// Dirty fix to copy Roads
+        /// Fix to copy <see cref="Road"/>s
         /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private static FrameworkElement clone(FrameworkElement e)
+        /// <param name="e"><see cref="FrameworkElement"/> to copy from</param>
+        /// <returns>Copied <see cref="FrameworkElement"/></returns>
+        private static FrameworkElement Clone(FrameworkElement e)
         {
-            XmlDocument document = new XmlDocument();
+            var document = new XmlDocument();
             document.LoadXml(XamlWriter.Save(e));
             return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
         }

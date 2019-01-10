@@ -1,10 +1,6 @@
-﻿using KBS2.CarSystem;
-using KBS2.CitySystem;
+﻿using KBS2.CitySystem;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
@@ -13,30 +9,25 @@ namespace KBS2.CityDesigner
 {
     public delegate void LoadedCityEventHandler(object sender, LoadedCityEventArgs e);
 
-    class CityLoader
+    internal static class CityLoader
     {
         #region Properties & Fields
 
         public static event LoadedCityEventHandler LoadedCity;
 
-        public CityLoader Instance { get; private set; }
-
         #endregion  
-
-
-        public CityLoader()
-        {
-            Instance = this;
-        }
 
         #region Public Methods
 
+        /// <summary>
+        /// Loads a user-selected <see cref="City"/>
+        /// </summary>
         public static void LoadCity()
         {
-            var _roads = new List<Road>();
-            var _intersections = new List<Intersection>();
-            var _buildings = new List<Building>();
-            var _garages = new List<Garage>();
+            var roads = new List<Road>();
+            var intersections = new List<Intersection>();
+            var buildings = new List<Building>();
+            var garages = new List<Garage>();
 
             var doc = new XmlDocument();
 
@@ -60,28 +51,28 @@ namespace KBS2.CityDesigner
             if (root == null) throw new XmlException("Missing root node");
 
             //selecting and adding roads to List
-            var roads = doc.SelectSingleNode("//City/Roads");
-            if (roads == null)
+            var xmlRoads = doc.SelectSingleNode("//City/Roads");
+            if (xmlRoads == null)
                 throw new XmlException("Missing roads in city.");
-            foreach (var road in roads.ChildNodes)
+            foreach (var road in xmlRoads.ChildNodes)
             {
-                _roads.Add(ParseRoad((XmlNode)road));
+                roads.Add(ParseRoad((XmlNode)road));
             }
 
             //selecting and adding buildings to List
-            var buildings = doc.SelectSingleNode("//City/Buildings");
-            if (buildings == null)
+            var xmlBuildings = doc.SelectSingleNode("//City/Buildings");
+            if (xmlBuildings == null)
                 throw new XmlException("Missing buildings in city.");
-            foreach (var building in buildings.ChildNodes)
+            foreach (var building in xmlBuildings.ChildNodes)
             {
                 var b = ParseBuilding((XmlNode)building);
                 if(b.GetType() == typeof(Garage))
                 {
-                    _garages.Add((Garage)b);
+                    garages.Add((Garage)b);
                 }
                 else if(b.GetType() == typeof(Building))
                 {
-                    _buildings.Add(b);
+                    buildings.Add(b);
                 }
                 else
                 {
@@ -90,24 +81,32 @@ namespace KBS2.CityDesigner
             }
 
             //selecting and adding intersections to list
-            var intersections = doc.SelectSingleNode("//City/Intersections");
-            if (intersections == null)
+            var xmlIntersections = doc.SelectSingleNode("//City/Intersections");
+            if (xmlIntersections == null)
                 throw new XmlException("Missing intersections in city.");
-            foreach (var intersection in intersections.ChildNodes)
+            foreach (var intersection in xmlIntersections.ChildNodes)
             {
-                _intersections.Add(ParseIntersection((XmlNode)intersection));
+                intersections.Add(ParseIntersection((XmlNode)intersection));
             }
 
             //Invoke the event
-            LoadedCity?.Invoke(null, new LoadedCityEventArgs(_roads, _buildings, _garages ,_intersections, popupWindow.FileName));
+            LoadedCity?.Invoke(null, new LoadedCityEventArgs(roads, buildings, garages ,intersections, popupWindow.FileName));
 
         }
 
+        /// <summary>
+        /// Subscribe to LoadedCity
+        /// </summary>
+        /// <param name="source">Method to subscribe</param>
         public static void SubscribeLoadedCity(LoadedCityEventHandler source)
         {
             LoadedCity += source;
         }
 
+        /// <summary>
+        /// Unsubscribe to LoadedCity
+        /// </summary>
+        /// <param name="source">Method to unsubscribe</param>
         public static void UnsubcribeLoadedCity(LoadedCityEventHandler source)
         {
             LoadedCity -= source;

@@ -17,6 +17,8 @@ namespace KBS2.CityDesigner
 {
     public class ObjectHandler
     {
+        #region Properties & Fields
+        
         public Canvas Canvas { get; set; }
         private CityDesignerWindow Window { get; set; }
 
@@ -30,6 +32,8 @@ namespace KBS2.CityDesigner
         //selected items
         public Road SelectRoad { get; set; }
         public Building SelectBuildingGarage { get; set; }
+        
+        #endregion
 
         public ObjectHandler(Canvas canvas, CityDesignerWindow window)
         {
@@ -40,6 +44,8 @@ namespace KBS2.CityDesigner
             CityLoader.SubscribeLoadedCity(LoadedCityToCanvas);
         }
         
+
+        #region EventHandlers
         
         private void LoadedCityToCanvas(object sender, LoadedCityEventArgs e)
         {
@@ -49,11 +55,15 @@ namespace KBS2.CityDesigner
             Garages = e.Garages;
             RedrawAllObjects(Canvas);
         }
+        
+        #endregion
 
               
 
+        #region Public Methods
+        
         /// <summary>
-        /// Get data of a Right clicked object
+        /// Gets data of a right-clicked object
         /// </summary>
         public void GetObject()
         {
@@ -68,117 +78,78 @@ namespace KBS2.CityDesigner
                     {
                         if(mouseY < road.Start.Y && mouseY > road.End.Y)
                         {
-                            if(mouseX == road.Start.X ||(mouseX <= (road.Start.X + road.Width/2)) && (mouseX >= (road.Start.X - road.Width/2)))
+                            if(mouseX == road.Start.X ||
+                               (mouseX <= (road.Start.X + road.Width/2)) &&
+                               (mouseX >= (road.Start.X - road.Width/2)))
                             {
                                 //display the information about the found road
-                                displayInfoScreenObject(road);
+                                DisplayInfoScreenObject(road);
                                 return;
                             }
                         }
                     }
-                    if(road.End.Y > road.Start.Y)
-                    {
-                        if (mouseY > road.Start.Y && mouseY < road.End.Y)
-                        {
-                            if (mouseX == road.Start.X || (mouseX <= (road.Start.X + road.Width / 2)) && (mouseX >= (road.Start.X - road.Width / 2)))
-                            {
-                                //display the information about the found road
-                                displayInfoScreenObject(road);
-                                return;
-                            }
-                        }
-                    }
+
+                    if (!(road.End.Y > road.Start.Y)) continue;
+                    
+                    if (!(mouseY > road.Start.Y) || !(mouseY < road.End.Y)) continue;
+                        
+                    if (mouseX != road.Start.X &&
+                        ((!(mouseX <= (road.Start.X + road.Width / 2))) ||
+                         (!(mouseX >= (road.Start.X - road.Width / 2))))) continue;
+                            
+                    //display the information about the found road
+                    DisplayInfoScreenObject(road);
+                    return;
                 }
-                else
+
+                if(road.Start.X > road.End.X)
                 {
-                    if(road.Start.X > road.End.X)
+                    if (mouseX > road.End.X && mouseX < road.Start.X)
                     {
-                        if (mouseX > road.End.X && mouseX < road.Start.X)
+                        if (mouseY == road.Start.Y || (mouseY <= (road.Start.Y + road.Width / 2)) && (mouseY >= (road.Start.Y - road.Width / 2)))
                         {
-                            if (mouseY == road.Start.Y || (mouseY <= (road.Start.Y + road.Width / 2)) && (mouseY >= (road.Start.Y - road.Width / 2)))
-                            {
-                                //display the information about the found road
-                                displayInfoScreenObject(road);
-                                return;
-                            }
-                        }
-                    }
-                    if(road.End.X > road.Start.X)
-                    {
-                        if (mouseX < road.End.X && mouseX > road.Start.X)
-                        {
-                            if (mouseY == road.Start.Y || (mouseY <= (road.Start.Y + road.Width / 2)) && (mouseY >= (road.Start.Y - road.Width / 2)))
-                            {
-                                //display the information about the found road
-                                displayInfoScreenObject(road);
-                                return;
-                            }
+                            //display the information about the found road
+                            DisplayInfoScreenObject(road);
+                            return;
                         }
                     }
                 }
+
+                if (!(road.End.X > road.Start.X)) continue;
+                
+                if (!(mouseX < road.End.X) || !(mouseX > road.Start.X)) continue;
+                    
+                if (mouseY != road.Start.Y && (!(mouseY <= road.Start.Y + road.Width / 2) || !(mouseY >= road.Start.Y - road.Width / 2))) continue;
+                        
+                //display the information about the found road
+                DisplayInfoScreenObject(road);
+                return;
             }
 
             //check if Cursor is on a Building
             foreach (var building in Buildings)
             {
-                if (mouseX <= building.Location.X + building.Size/2 && mouseX >= building.Location.X - building.Size/2 && mouseY <= building.Location.Y + building.Size/2 && mouseY >= building.Location.Y - building.Size/2)
-                {
-                    displayInfoScreenObject(building);
-                    return;
-                }
+                if (!(mouseX <= building.Location.X + building.Size / 2) ||
+                    !(mouseX >= building.Location.X - building.Size / 2) ||
+                    !(mouseY <= building.Location.Y + building.Size / 2) ||
+                    !(mouseY >= building.Location.Y - building.Size / 2)) continue;
+                DisplayInfoScreenObject(building);
+                return;
             }
 
             //check if Cursor is on a Building
             foreach (var garage in Garages)
             {
-                if (mouseX <= garage.Location.X + garage.Size / 2 && mouseX >= garage.Location.X - garage.Size / 2 && mouseY <= garage.Location.Y + garage.Size / 2 && mouseY >= garage.Location.Y - garage.Size / 2)
-                {
-                    displayInfoScreenObject(garage);
-                    return;
-                }
+                if (!(mouseX <= garage.Location.X + garage.Size / 2) ||
+                    !(mouseX >= garage.Location.X - garage.Size / 2) ||
+                    !(mouseY <= garage.Location.Y + garage.Size / 2) ||
+                    !(mouseY >= garage.Location.Y - garage.Size / 2)) continue;
+                DisplayInfoScreenObject(garage);
+                return;
             }
 
         }
         
-        /// <summary>
-        /// Displays the information about a specific road given by click right click on a road (function GetObject)
-        /// </summary>
-        /// <param name="road"></param>
-        private void displayInfoScreenObject(Road road)
-        {
-            SelectRoad = road;
-            Window.InformationBlockRoad.Visibility = Visibility.Visible;
-            Window.InformationBlockBuilding.Visibility = Visibility.Hidden;
-            Window.NumericWidthRoad.Value = road.Width;
-            Window.NumericMaxSpeedRoad.Value = road.MaxSpeed;
-        }
-
-        /// <summary>
-        /// Displays the information about a specific building given by click right click on a building (function GetObject)
-        /// </summary>
-        /// <param name="building"></param>
-        private void displayInfoScreenObject(Building building)
-        {
-            SelectBuildingGarage = building;
-            Window.InformationBlockBuilding.Visibility = Visibility.Visible;
-            Window.InformationBlockRoad.Visibility = Visibility.Hidden;
-            Window.NumericSizeBuilding.Value = SelectBuildingGarage.Size; 
-            
-        }
-
-
-        /// <summary>
-        /// Dirty fix to copy rectangles
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private FrameworkElement Clone(FrameworkElement e)
-        {
-            XmlDocument document = new XmlDocument();
-            document.LoadXml(XamlWriter.Save(e));
-            return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
-        }
-
         /// <summary>
         /// Remove ghosts
         /// </summary>
@@ -190,7 +161,7 @@ namespace KBS2.CityDesigner
         }
 
         /// <summary>
-        /// Redraw all objects on Canvas
+        /// Redraw all objects on <see cref="Canvas"/>
         /// </summary>
         public static void RedrawAllObjects(Canvas canvas)
         {
@@ -212,7 +183,7 @@ namespace KBS2.CityDesigner
             //draw Garages
             foreach (var garage in Garages)
             {
-                GarageCreator.drawGarage(canvas, garage);
+                GarageCreator.DrawGarage(canvas, garage);
             }
 
             // check for unnessesary intersection if so remove or nessesary
@@ -226,10 +197,10 @@ namespace KBS2.CityDesigner
         }
 
         /// <summary>
-        /// Checks if building or garages overlaps building, garage or road
+        /// Checks if the given <see cref="Building"/> overlaps with any other objects
         /// </summary>
-        /// <param name="buildingI">building or garage you want to check</param>
-        /// <returns>returns true when </returns>
+        /// <param name="buildingI"><see cref="Building"/> to check</param>
+        /// <returns>returns true when the given <see cref="Building"/> overlaps anything</returns>
         public static bool Overlaps(Building buildingI)
         {
             //check for garages 
@@ -274,10 +245,10 @@ namespace KBS2.CityDesigner
         }
 
         /// <summary>
-        /// Location contains object returns true if so
+        /// Checks if a location <see cref="Vector"/> is within an object
         /// </summary>
-        /// <param name="location"></param>
-        /// <returns></returns>
+        /// <param name="location"><see cref="Vector"/> to check</param>
+        /// <returns>True if <see cref="Vector"/> is within an object</returns>
         public static bool LocationContainsObject(Vector location)
         {
             foreach(var road in Roads)
@@ -289,26 +260,71 @@ namespace KBS2.CityDesigner
             }
             foreach(var building in Buildings)
             {
-                if(location.X >= building.Location.X - building.Size/2 && location.X <= building.Location.X + building.Size/2)
+                if (!(location.X >= building.Location.X - building.Size / 2) ||
+                    !(location.X <= building.Location.X + building.Size / 2)) continue;
+                
+                if (location.Y >= building.Location.Y - building.Size / 2 && location.Y <= building.Location.Y + building.Size / 2)
                 {
-                    if (location.Y >= building.Location.Y - building.Size / 2 && location.Y <= building.Location.Y + building.Size / 2)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             foreach(var garage in Garages)
             {
-                if(location.X >= garage.Location.X - garage.Size/2 && location.X <= garage.Location.X + garage.Size/2)
+                if (!(location.X >= garage.Location.X - garage.Size / 2) ||
+                    !(location.X <= garage.Location.X + garage.Size / 2)) continue;
+                
+                if (location.Y >= garage.Location.Y - garage.Size / 2 && location.Y <= garage.Location.Y + garage.Size / 2)
                 {
-                    if (location.Y >= garage.Location.Y - garage.Size / 2 && location.Y <= garage.Location.Y + garage.Size / 2)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
         }
+        
+        #endregion
+        
+        #region Private Methods
+        
+        /// <summary>
+        /// Displays the information about a specific road given by click right click on a road (function GetObject)
+        /// </summary>
+        /// <param name="road"></param>
+        private void DisplayInfoScreenObject(Road road)
+        {
+            SelectRoad = road;
+            Window.InformationBlockRoad.Visibility = Visibility.Visible;
+            Window.InformationBlockBuilding.Visibility = Visibility.Hidden;
+            Window.NumericWidthRoad.Value = road.Width;
+            Window.NumericMaxSpeedRoad.Value = road.MaxSpeed;
+        }
+
+        /// <summary>
+        /// Displays the information about a specific building given by click right click on a building (function GetObject)
+        /// </summary>
+        /// <param name="building"></param>
+        private void DisplayInfoScreenObject(Building building)
+        {
+            SelectBuildingGarage = building;
+            Window.InformationBlockBuilding.Visibility = Visibility.Visible;
+            Window.InformationBlockRoad.Visibility = Visibility.Hidden;
+            Window.NumericSizeBuilding.Value = SelectBuildingGarage.Size; 
+            
+        }
+
+
+        /// <summary>
+        /// Fix to copy Rectangles
+        /// </summary>
+        /// <param name="e"><see cref="FrameworkElement"/> to copy from</param>
+        /// <returns>Copied <see cref="FrameworkElement"/></returns>
+        private FrameworkElement Clone(FrameworkElement e)
+        {
+            var document = new XmlDocument();
+            document.LoadXml(XamlWriter.Save(e));
+            return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
+        }
+        
+        #endregion
 
     }
 }

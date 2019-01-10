@@ -1,15 +1,12 @@
 ﻿using KBS2.CitySystem;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 
 namespace KBS2.CityDesigner
 {
-
-
-    class CitySaver
+    internal static class CitySaver
     {
         public static EventHandler CitySaved;
 
@@ -37,32 +34,33 @@ namespace KBS2.CityDesigner
             };
             popupWindow.ShowDialog();
 
-            XmlDocument doc = new XmlDocument();
-            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-            XmlElement root = doc.DocumentElement;
+            var doc = new XmlDocument();
+            var xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            var root = doc.DocumentElement;
             doc.InsertBefore(xmlDeclaration, root);
 
-            XmlElement cityElement = doc.CreateElement("City");
+            var cityElement = doc.CreateElement("City");
             doc.AppendChild(cityElement);
             
-            XmlElement roadsElement = doc.CreateElement("Roads");
+            // saving roads
+            var roadsElement = doc.CreateElement("Roads");
             cityElement.AppendChild(roadsElement);
 
             foreach(var road in roads)
             {
-                XmlElement roadElement = doc.CreateElement("Road");
+                var roadElement = doc.CreateElement("Road");
                 roadsElement.AppendChild(roadElement);
 
-                XmlAttribute start = doc.CreateAttribute("Start");
+                var start = doc.CreateAttribute("Start");
                 start.Value = road.Start.X.ToString() + ", "  + road.Start.Y.ToString();
 
-                XmlAttribute end = doc.CreateAttribute("End");
+                var end = doc.CreateAttribute("End");
                 end.Value = road.End.X.ToString() + ", " + road.End.Y.ToString();
 
-                XmlAttribute width = doc.CreateAttribute("Width");
+                var width = doc.CreateAttribute("Width");
                 width.Value = road.Width.ToString();
 
-                XmlAttribute maxSpeed = doc.CreateAttribute("MaxSpeed");
+                var maxSpeed = doc.CreateAttribute("MaxSpeed");
                 maxSpeed.Value = road.MaxSpeed.ToString();
 
                 roadElement.Attributes.Append(start);
@@ -71,33 +69,35 @@ namespace KBS2.CityDesigner
                 roadElement.Attributes.Append(maxSpeed);
             }
 
-            XmlElement buildingsElement = doc.CreateElement("Buildings");
+            // saving buildings
+            var buildingsElement = doc.CreateElement("Buildings");
             cityElement.AppendChild(buildingsElement);
 
             foreach (var building in buildings)
             {
-                XmlElement buildingElement = doc.CreateElement("Building");
+                var buildingElement = doc.CreateElement("Building");
                 buildingsElement.AppendChild(buildingElement);
 
-                XmlAttribute location = doc.CreateAttribute("Location");
+                var location = doc.CreateAttribute("Location");
                 location.Value = ((int)building.Location.X).ToString() + ", " + ((int)building.Location.Y).ToString();
 
-                XmlAttribute size = doc.CreateAttribute("Size");
+                var size = doc.CreateAttribute("Size");
                 size.Value = building.Size.ToString();
 
                 buildingElement.Attributes.Append(location);
                 buildingElement.Attributes.Append(size);
             }
 
+            // saving garages
             foreach (var garage in garages)
             {
-                XmlElement garageElement = doc.CreateElement("Garage");
+                var garageElement = doc.CreateElement("Garage");
                 buildingsElement.AppendChild(garageElement);
 
-                XmlAttribute location = doc.CreateAttribute("Location");
+                var location = doc.CreateAttribute("Location");
                 location.Value = ((int)garage.Location.X).ToString() + ", " + ((int)garage.Location.Y).ToString();
 
-                XmlAttribute size = doc.CreateAttribute("Size");
+                var size = doc.CreateAttribute("Size");
                 size.Value = garage.Size.ToString();
 
                 garageElement.Attributes.Append(location);
@@ -105,18 +105,19 @@ namespace KBS2.CityDesigner
             }
 
 
-            XmlElement intersectionsElement = doc.CreateElement("Intersections");
+            // saving intersections
+            var intersectionsElement = doc.CreateElement("Intersections");
             cityElement.AppendChild(intersectionsElement);
 
             foreach(var intersection in intersections)
             {
-                XmlElement intersectionElement = doc.CreateElement("Intersection");
+                var intersectionElement = doc.CreateElement("Intersection");
                 intersectionsElement.AppendChild(intersectionElement);
 
-                XmlAttribute location = doc.CreateAttribute("Location");
+                var location = doc.CreateAttribute("Location");
                 location.Value = intersection.Location.X.ToString() + ", " + intersection.Location.Y.ToString();
 
-                XmlAttribute size = doc.CreateAttribute("Size");
+                var size = doc.CreateAttribute("Size");
                 size.Value = intersection.Size.ToString();
 
                 intersectionElement.Attributes.Append(location);
@@ -128,11 +129,19 @@ namespace KBS2.CityDesigner
             CitySaved?.Invoke(null, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Subscribe to CitySaved
+        /// </summary>
+        /// <param name="source">Method to subscribe</param>
         public static void SubscribeCitySaved(EventHandler source)
         {
             CitySaved += source;
         }
 
+        /// <summary>
+        /// Unsubscribe to CitySaved
+        /// </summary>
+        /// <param name="source">Method to unsubscribe</param>
         public static void UnsubscribeCitySaved(EventHandler source)
         {
             CitySaved -= source;

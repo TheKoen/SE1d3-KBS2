@@ -1,28 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace KBS2.CityDesigner
 {
     /// <summary>
     /// Interaction logic for NumericUpDownControl.xaml
     /// </summary>
-    public partial class NumericUpDownControl : UserControl
+    public partial class NumericUpDownControl
     {
         public delegate void ValueChangedEventHandler(object source, PropertyChangedEventArgs e);
 
+        #region Properties & Fields
+        
         public event ValueChangedEventHandler ValueChanged;
 
         private int _value;
@@ -64,12 +54,16 @@ namespace KBS2.CityDesigner
 
         public int StepSize { get; set; } = 1;
 
+        #endregion
+        
 
         public NumericUpDownControl()
         {
             InitializeComponent();
         }
 
+        #region Private Methods
+        
         private int VerifyValue(string value) =>
             int.TryParse(value, out var output) ? output : Value;
 
@@ -93,5 +87,7 @@ namespace KBS2.CityDesigner
             Value -= StepSize;
             ValueChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
         }
+        
+        #endregion
     }
 }
