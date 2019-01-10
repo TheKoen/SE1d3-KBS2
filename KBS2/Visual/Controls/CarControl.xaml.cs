@@ -40,7 +40,7 @@ namespace KBS2.Visual.Controls
         {
             if (double.IsNaN(car.Location.X))
             {
-                Screen.CanvasMain.Children.Remove(this);
+                MainScreen.DrawingLoop.EnqueueAction(() => Screen.CanvasMain.Children.Remove(this));
             }
 
             var angle = -MathUtil.VectorToAngle(car.Rotation, DirectionCar.North);
