@@ -9,6 +9,7 @@ using KBS2.CitySystem;
 using KBS2.CustomerSystem;
 using KBS2.Util;
 using AlgorithmDijkstra = KBS2.GPS.Algorithms.AlgorithmDijkstra;
+using AlgorithmAStar = KBS2.GPS.Algorithms.AlgorithmAStar;
 
 namespace KBS2.GPS
 {
@@ -17,10 +18,12 @@ namespace KBS2.GPS
         public static Property StartingPrice = new Property(1.50);
         public static Property PricePerKilometer = new Property(1.00);
 
-        private static IAlgorithm Algorithm = new AlgorithmDijkstra();
+        private static IAlgorithm Algorithm = new AlgorithmAStar();
 
         public static void Setup()
-        {            
+        {
+            AlgorithmAStar.ClearCache();
+            
             try
             {
                 PropertyHandler.RegisterProperty("startingPrice", ref StartingPrice);
@@ -86,19 +89,10 @@ namespace KBS2.GPS
         /// <param name="group">group who request a car</param>
         public static void RequestCar(Destination destination, CustomerGroup group)
         {
-            try
-            {
-                var distance = CalculateDistance(group.Location, destination.Location);
-                var price = CalculatePrice(distance);
-                App.Console?.Print(
-                    $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}. Total price: €{price:0.00}"
-                );
-            }
-            catch (Exception)
-            {
-                App.Console?.Print($"Unable to calculate route from {group.Location} to {destination.Location}", Colors.Red);
-            }
-
+            App.Console?.Print(
+                $"Group #{group.GetHashCode()} has requested a car from {group.Location} to {destination.Location}"
+            );
+            
             // Look to nearest Garage.
             var city = City.Instance;
             var garages = city.Buildings
@@ -138,11 +132,13 @@ namespace KBS2.GPS
                            MathUtil.Distance(road.End, car.Location)
                 ? road.Start
                 : road.End;
-            return Algorithm.Calculate(new Destination
-            {
-                Location = location,
-                Road = car.CurrentRoad
-            }, car.Destination);
+            return Algorithm.Calculate(car.Id,
+                new Destination
+                {
+                    Location = location,
+                    Road = car.CurrentRoad
+                }, 
+                car.Destination);
         }
 
         public static double CalculateDistance(Vector start, Vector end)

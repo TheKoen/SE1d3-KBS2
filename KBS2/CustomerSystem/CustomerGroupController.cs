@@ -55,7 +55,7 @@ namespace KBS2.CustomerSystem
             {
                 return;
             }
-            if (!road.IsXRoad())
+            if (road.IsXRoad())
             {
                 Group.Location = IsBelowRoad(road)
                     ? new Vector(Group.Location.X, road.Start.Y - road.Width / 2.0 - GroupDistanceFromRoad)
@@ -76,6 +76,7 @@ namespace KBS2.CustomerSystem
             {
                 var car = City.Instance.Cars.Find(c => MathUtil.Distance(c.Location, Group.Location) < 20);
                 if (car == null || car.Passengers.Count > 0) return;
+                
                 
                 Group.Customers.ForEach(customer => customer.Controller.Destroy());
                 MainScreen.AILoop.Unsubscribe(Update);
