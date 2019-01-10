@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using CommandSystem;
 using CommandSystem.PropertyManagement;
@@ -25,7 +26,7 @@ namespace KBS2.Visual
             PropertyPanel.Children.Clear();
 
             var properties = PropertyHandler.GetProperties();
-            foreach (var property in properties)
+            foreach (var property in new Dictionary<string, Property>(properties))
             {
                 var propertyName = property.Key;
                 var propertyValue = property.Value.Value.ToString();
