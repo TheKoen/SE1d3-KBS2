@@ -23,6 +23,8 @@ namespace KBS2.CityDesigner
     /// </summary>
     public partial class CityDesignerWindow : Window
     {
+        #region Properties & Fields
+
         public ObjectHandler Creator { get; set; }
         public bool AllowClose = false;
         public Tools Tool { get; set; } = Tools.Road;
@@ -32,7 +34,10 @@ namespace KBS2.CityDesigner
         private bool successFoundCursor = true;
         private Cursor defaultCursor = Mouse.OverrideCursor;
 
-        
+        #endregion
+
+        #region Constructor
+
         public CityDesignerWindow()
         {
             MainScreen.CommandLoop.Start();
@@ -52,7 +57,7 @@ namespace KBS2.CityDesigner
         }
 
         #endregion
-        
+
         #region EventHandlers
         /// <summary>
         /// Save a city
@@ -66,11 +71,11 @@ namespace KBS2.CityDesigner
             {
                 CitySaver.SaveCity(ObjectHandler.Roads, ObjectHandler.Buildings, ObjectHandler.Garages, ObjectHandler.Intersections);
             }
-            catch(Exception b)
+            catch (Exception b)
             {
                 MessageBox.Show(windowDesigner, b.Message, "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
+
         }
 
         /// <summary>
@@ -84,11 +89,11 @@ namespace KBS2.CityDesigner
             {
                 CityLoader.LoadCity();
             }
-            catch(Exception b)
+            catch (Exception b)
             {
                 MessageBox.Show(windowDesigner, b.Message, "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
+
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace KBS2.CityDesigner
         /// <param name="e"></param>
         private void ChangeTool(object sender, RoutedEventArgs e)
         {
-            if(e.Source == RoadButton)
+            if (e.Source == RoadButton)
             {
                 //set tool
                 Tool = Tools.Road;
@@ -118,7 +123,7 @@ namespace KBS2.CityDesigner
                 GarageButton.IsEnabled = true;
                 RoadButton.IsEnabled = false;
             }
-            else if(e.Source == BuildingButton)
+            else if (e.Source == BuildingButton)
             {
                 //set tool
                 Tool = Tools.Building;
@@ -128,7 +133,7 @@ namespace KBS2.CityDesigner
                 GarageButton.IsEnabled = true;
                 RoadButton.IsEnabled = true;
             }
-            else if(e.Source == GarageButton)
+            else if (e.Source == GarageButton)
             {
                 //set tool
                 Tool = Tools.Garage;
@@ -139,7 +144,7 @@ namespace KBS2.CityDesigner
                 RoadButton.IsEnabled = true;
             }
         }
-        
+
 
         private bool leftButtonWasPressed;
 
@@ -165,14 +170,14 @@ namespace KBS2.CityDesigner
             {
                 leftButtonWasPressed = true;
                 // drawing Ghost Road
-                if(Tool == Tools.Road) { RoadCreator.DrawGhost(e.GetPosition(Canvas), Canvas, ObjectHandler.Roads); }
+                if (Tool == Tools.Road) { RoadCreator.DrawGhost(e.GetPosition(Canvas), Canvas, ObjectHandler.Roads); }
 
-            }         
+            }
         }
-        
+
         private void MouseReleaseOnCanvasEventHandler(object sender, MouseEventArgs e)
         {
-            if(leftButtonWasPressed == true)
+            if (leftButtonWasPressed == true)
             {
                 leftButtonWasPressed = false;
                 // drawing Real Road
@@ -265,7 +270,7 @@ namespace KBS2.CityDesigner
                 {
                     ObjectHandler.Garages.Remove((Garage)Creator.SelectBuildingGarage);
                 }
-                else  if(Creator.SelectBuildingGarage != null)
+                else if (Creator.SelectBuildingGarage != null)
                 {
                     ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
                 }
@@ -288,14 +293,14 @@ namespace KBS2.CityDesigner
             //Remove object hide information
             ObjectHandler.Roads.Remove(Creator.SelectRoad);
             ObjectHandler.RedrawAllObjects(Canvas);
-            if(Creator.SelectBuildingGarage != null && Creator.SelectBuildingGarage.GetType() == typeof(Garage))
+            if (Creator.SelectBuildingGarage != null && Creator.SelectBuildingGarage.GetType() == typeof(Garage))
             {
                 ObjectHandler.Garages.Remove((Garage)Creator.SelectBuildingGarage);
             }
-            else if(Creator.SelectBuildingGarage != null)
+            else if (Creator.SelectBuildingGarage != null)
             {
                 ObjectHandler.Buildings.Remove(Creator.SelectBuildingGarage);
-            }            
+            }
             InformationBlockRoad.Visibility = Visibility.Hidden;
             InformationBlockBuilding.Visibility = Visibility.Hidden;
             Creator.SelectRoad = null;
@@ -319,8 +324,8 @@ namespace KBS2.CityDesigner
                     ObjectHandler.RedrawAllObjects(Canvas);
                 }
             }
-            catch(NullReferenceException) { } // because creator does not exist before the first event is fired in XML
-            
+            catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
+
         }
 
         /// <summary>
@@ -335,7 +340,7 @@ namespace KBS2.CityDesigner
                 if (Creator.SelectBuildingGarage != null)
                 {
                     Creator.SelectBuildingGarage.Size = NumericSizeBuilding.Value;
-                    if (ObjectHandler.Overlaps(Creator.SelectBuildingGarage)) 
+                    if (ObjectHandler.Overlaps(Creator.SelectBuildingGarage))
                     {
                         Creator.SelectBuildingGarage.Size--;
                         NumericSizeBuilding.Value--;
@@ -345,7 +350,7 @@ namespace KBS2.CityDesigner
             }
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
         }
-        
+
         /// <summary>
         /// EventHandler that changes the max speed of a road 
         /// </summary>
@@ -364,16 +369,21 @@ namespace KBS2.CityDesigner
             catch (NullReferenceException) { } // because creator does not exist before the first event is fired in XML
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void changeCursorCanvas(bool onCanvas)
         {
-            if(onCanvas && successFoundCursor)
+            if (onCanvas && successFoundCursor)
             {
-                Mouse.OverrideCursor = cursorOnCanvas;                 
+                Mouse.OverrideCursor = cursorOnCanvas;
             }
             else
             {
                 Mouse.OverrideCursor = defaultCursor;
             }
         }
+        #endregion
     }
 }
