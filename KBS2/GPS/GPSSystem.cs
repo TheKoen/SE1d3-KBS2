@@ -222,6 +222,24 @@ namespace KBS2.GPS
             }
         }
 
+        public static Intersection NearestIntersection(Vector location)
+        {
+            var city = City.Instance;
+            Intersection closestIntersection = null;
+            var closestDistance = double.MaxValue;
+
+            foreach (var intersection in city.Intersections)
+            {
+                var distance = MathUtil.Distance(location, intersection.Location);
+                if (!(distance < closestDistance)) continue;
+
+                closestDistance = distance;
+                closestIntersection = intersection;
+            }
+
+            return closestIntersection;
+        }
+
         /// <summary>
         /// Find the next intersection of an intersection
         /// </summary>
