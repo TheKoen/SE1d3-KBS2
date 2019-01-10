@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Media;
 using CommandSystem;
 using CommandSystem.PropertyManagement;
@@ -16,7 +18,7 @@ namespace KBS2.Util.Loop
         private Property tickRate = new Property(30);
         public int TickRate => tickRate.Value;
 
-        private readonly Queue<SyncAction> Queue = new Queue<SyncAction>();
+        private readonly ConcurrentQueue<SyncAction> Queue = new ConcurrentQueue<SyncAction>();
 
         private event Update UpdateEvent;
 
@@ -35,8 +37,7 @@ namespace KBS2.Util.Loop
             try
             {
                 PropertyHandler.RegisterProperty($"{Name}.tickRate", ref tickRate);
-            }
-            catch (Exception)
+            } catch (Exception)
             {
                 App.Console?.Print($"Unable to register tickRate property for {Name} loop", Colors.Yellow);
             }
@@ -97,7 +98,7 @@ namespace KBS2.Util.Loop
         {
             var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-            CatchExceptions(HandleQueue); 
+            CatchExceptions(HandleQueue);
             CatchExceptions(() => UpdateEvent?.Invoke());
 
             var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
@@ -113,7 +114,14 @@ namespace KBS2.Util.Loop
             var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             while (Queue.Count > 0)
             {
-                Queue.Dequeue()?.Invoke();
+                if (Queue.TryDequeue(out var action))
+                {
+                    action.Invoke();
+                }
+                else
+                {
+                    break;
+                }
 
                 var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
                 var interval = CalculateInterval(tickRate.Value);
@@ -126,8 +134,7 @@ namespace KBS2.Util.Loop
             try
             {
                 action.Invoke();
-            }
-            catch (Exception exception)
+            } catch (Exception exception)
             {
                 //throw exception;
                 App.Console.Print($"Exception in {Name} loop: {exception}", Colors.Red);
@@ -148,7 +155,7 @@ namespace KBS2.Util.Loop
         /// <returns></returns>
         protected static int CalculateInterval(int tickRate)
         {
-            return (int)Math.Round(1000.0 / tickRate);
+            return (int) Math.Round(1000.0 / tickRate);
         }
     }
 }
