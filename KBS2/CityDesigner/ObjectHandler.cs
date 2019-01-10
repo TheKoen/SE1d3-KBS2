@@ -17,6 +17,8 @@ namespace KBS2.CityDesigner
 {
     public class ObjectHandler
     {
+        #region Properties & Fields
+
         public Canvas Canvas { get; set; }
         private CityDesignerWindow Window { get; set; }
 
@@ -31,6 +33,9 @@ namespace KBS2.CityDesigner
         public Road SelectRoad { get; set; }
         public Building SelectBuildingGarage { get; set; }
 
+        #endregion
+
+        #region Constructor
         public ObjectHandler(Canvas canvas, CityDesignerWindow window)
         {
             Canvas = canvas;
@@ -39,8 +44,15 @@ namespace KBS2.CityDesigner
             //subscribe CityLoadedEvent
             CityLoader.SubscribeLoadedCity(LoadedCityToCanvas);
         }
-        
-        
+        #endregion
+
+        #region EventHandlers
+
+        /// <summary>
+        /// Loads the city onto the canvas called by event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadedCityToCanvas(object sender, LoadedCityEventArgs e)
         {
             Roads = e.Roads;
@@ -49,8 +61,9 @@ namespace KBS2.CityDesigner
             Garages = e.Garages;
             RedrawAllObjects(Canvas);
         }
+        #endregion
 
-              
+        #region Methods
 
         /// <summary>
         /// Get data of a Right clicked object
@@ -138,46 +151,7 @@ namespace KBS2.CityDesigner
                 }
             }
 
-        }
-        
-        /// <summary>
-        /// Displays the information about a specific road given by click right click on a road (function GetObject)
-        /// </summary>
-        /// <param name="road"></param>
-        private void displayInfoScreenObject(Road road)
-        {
-            SelectRoad = road;
-            Window.InformationBlockRoad.Visibility = Visibility.Visible;
-            Window.InformationBlockBuilding.Visibility = Visibility.Hidden;
-            Window.NumericWidthRoad.Value = road.Width;
-            Window.NumericMaxSpeedRoad.Value = road.MaxSpeed;
-        }
-
-        /// <summary>
-        /// Displays the information about a specific building given by click right click on a building (function GetObject)
-        /// </summary>
-        /// <param name="building"></param>
-        private void displayInfoScreenObject(Building building)
-        {
-            SelectBuildingGarage = building;
-            Window.InformationBlockBuilding.Visibility = Visibility.Visible;
-            Window.InformationBlockRoad.Visibility = Visibility.Hidden;
-            Window.NumericSizeBuilding.Value = SelectBuildingGarage.Size; 
-            
-        }
-
-
-        /// <summary>
-        /// Dirty fix to copy rectangles
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private FrameworkElement Clone(FrameworkElement e)
-        {
-            XmlDocument document = new XmlDocument();
-            document.LoadXml(XamlWriter.Save(e));
-            return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
-        }
+        }        
 
         /// <summary>
         /// Remove ghosts
@@ -215,13 +189,13 @@ namespace KBS2.CityDesigner
                 GarageCreator.drawGarage(canvas, garage);
             }
 
-            // check for unnessesary intersection if so remove or nessesary
+            // Updates intersections
             IntersectionCreator.UpdateIntersections(Roads, Intersections);
 
             //draw Intersection 
             foreach (var intersection in Intersections)
             {
-                IntersectionCreator.DrawIntersection(canvas, intersection, Roads, Intersections);                            
+                IntersectionCreator.DrawIntersection(canvas, intersection);                            
             }
         }
 
@@ -309,6 +283,49 @@ namespace KBS2.CityDesigner
             }
             return false;
         }
+        #endregion
 
+        #region Private Methods
+
+        /// <summary>
+        /// Displays the information about a specific road given by click right click on a road (function GetObject)
+        /// </summary>
+        /// <param name="road"></param>
+        private void displayInfoScreenObject(Road road)
+        {
+            SelectRoad = road;
+            Window.InformationBlockRoad.Visibility = Visibility.Visible;
+            Window.InformationBlockBuilding.Visibility = Visibility.Hidden;
+            Window.NumericWidthRoad.Value = road.Width;
+            Window.NumericMaxSpeedRoad.Value = road.MaxSpeed;
+        }
+
+        /// <summary>
+        /// Displays the information about a specific building given by click right click on a building (function GetObject)
+        /// </summary>
+        /// <param name="building"></param>
+        private void displayInfoScreenObject(Building building)
+        {
+            SelectBuildingGarage = building;
+            Window.InformationBlockBuilding.Visibility = Visibility.Visible;
+            Window.InformationBlockRoad.Visibility = Visibility.Hidden;
+            Window.NumericSizeBuilding.Value = SelectBuildingGarage.Size;
+
+        }
+
+
+        /// <summary>
+        /// fix to copy rectangles
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private FrameworkElement Clone(FrameworkElement e)
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(XamlWriter.Save(e));
+            return (FrameworkElement)XamlReader.Load(new XmlNodeReader(document));
+        }
+
+        #endregion
     }
 }

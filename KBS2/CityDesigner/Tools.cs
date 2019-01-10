@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace KBS2.CityDesigner
 {
+    /// <summary>
+    /// Enum for different kinds of tools
+    /// </summary>
     public enum Tools
     {
         Road,
