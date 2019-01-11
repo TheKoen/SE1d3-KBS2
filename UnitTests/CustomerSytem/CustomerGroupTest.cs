@@ -17,7 +17,6 @@ namespace UnitTests.CustomerSytem
             var building = new Building(new Vector(groupX, groupY), 8);
             var road1 = new Road(new Vector(0, 50), new Vector(10, 50), 10, 100);
             var road2 = new Road(new Vector(0, 20), new Vector(10, 20), 10, 100);
-            // TODO: Is it correct that this variable is not used?
             var city = new CityBuilder()
                 .Road(road1)
                 .Road(road2)
@@ -39,7 +38,6 @@ namespace UnitTests.CustomerSytem
         {
             var building = new Building(new Vector(gX, gY), 8);
             var road = new Road(new Vector(r1X, r1Y), new Vector(r2X, r2Y), 10, 100);
-            // TODO: Is it correct that this variable is not used?
             var city = new CityBuilder()
                 .Road(road)
                 .Building(building)

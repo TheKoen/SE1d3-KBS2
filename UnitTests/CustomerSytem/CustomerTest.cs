@@ -38,7 +38,6 @@ namespace UnitTests.CustomerSytem
         public void TestMoveTowardsLocation(double tx, double ty, double time)
         {
             var building = new Building(new Vector(100, 100), 1);
-            // TODO: Is it correct that this variable is not used?
             var city = new CityBuilder()
                 .Building(building)
                 .Build();

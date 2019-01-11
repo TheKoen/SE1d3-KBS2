@@ -25,16 +25,24 @@ namespace KBS2
     {
         /*
          * A note on loops:
-         * There's 3 different loops, a CommandLoop, a WPFLoop and an AILoop.
+         * There's 5 different loops, a CommandLoop, a WPFLoop, a DrawingLoop,
+         * a ZoomLoop and an AILoop.
          * Make sure you understand what they are before subscribing to one!
          *
-         * The CommandLoop is only used for the Console, and should NEVER be
-         * used for anything else! Just pretend like it doesn't exist and
-         * don't use it.
+         * The CommandLoop is mostly used for the Console and some other
+         * miscellaneous tasks like handling data that came back from the
+         * database.
          *
-         * The WPFLoop for anything related to the visuals. It's important
-         * for a smooth interaface that this loop runs fast, so DON'T do
-         * anything complicated or time-intensive on there.
+         * The WPFLoop for a lot of things related to the visuals. It's
+         * importantfor a smooth interaface that this loop runs fast, so
+         * DON'T doanything complicated or time-intensive on there.
+         *
+         * The DrawingLoop is for drawing the entities (roads, cars, etc)
+         * on the canvas. The DrawingLoop gets it's data from the ZoomLoop.
+         *
+         * The ZoomLoop handles the calculations for the position and scale
+         * of the entities and sends that data over to the DrawingLoop for
+         * rendering.
          *
          * The AILoop is for any AI logic. This is where things like the
          * customers, car AI, car sensors, etc are supposed to run. Still
@@ -63,7 +71,6 @@ namespace KBS2
         public ZoomHandler ZoomHandler { get; private set; }
 
         public int Ticks { get; set; }
-        public double SecondsRunning { get; set; }
 
         public float Zoom { get; set; } = 1.0F;
 
@@ -359,19 +366,9 @@ namespace KBS2
             LabelSimulationTime.Content = $"{temp:mm:ss:FF}";
         }
 
-        /// <summary>
-        /// This method is calculating seconds from ticks
-        /// </summary>
-        /// <returns>seconds the simulation is running</returns>
-        public double CalculateSeconds()
-        {
-            return Ticks / 30.0d;
-        }
-
         public void Update()
         {
             Ticks++;
-            SecondsRunning = CalculateSeconds();
             UpdateTimer();
         }
 
