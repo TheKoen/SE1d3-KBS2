@@ -64,7 +64,7 @@ namespace KBS2.GPS.Algorithms
             nextNode = CalculatePathNextNode(callerId, ref network, ref startNode, ref endNode, endDestination);
             
             #if DEBUG
-            AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
+            AlgorithmDebuggerWindow.Instance.AddNetworkResult("AS" + _debuggerIndex++, network,
                 startNode, nextNode, endNodes);
             #endif
             roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
@@ -111,7 +111,7 @@ namespace KBS2.GPS.Algorithms
                     n.Value = Math.Sqrt(Math.Pow((n.PositionX - startNode.PositionX), 2) + Math.Pow((n.PositionY - startNode.PositionY), 2));
                     network.Nodes.Single(nn => nn.Equals(n)).Value = n.Value;
                     #if DEBUG
-                    AlgorithmDebuggerWindow.Instance.AddNodeUpdateResult($"{_debuggerIndex}${updateIndex++}", network,
+                    AlgorithmDebuggerWindow.Instance.AddNodeUpdateResult($"AS{_debuggerIndex}${updateIndex++}", network,
                         n, thisNode);
                     #endif
                     openNodes.Add(n);
@@ -124,7 +124,7 @@ namespace KBS2.GPS.Algorithms
                 
                 // info
                 #if DEBUG
-                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{_debuggerIndex}#{openNodes.First().Value}", network,
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"AS{_debuggerIndex}#{openNodes.First().Value}", network,
                     thisNode, openNodes.First());
                 #endif
             }

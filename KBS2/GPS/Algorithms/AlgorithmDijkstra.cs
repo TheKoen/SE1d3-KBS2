@@ -1,7 +1,4 @@
-using System;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using KBS2.CarSystem;
 using KBS2.GPS.NodeNetwork;
@@ -32,7 +29,7 @@ namespace KBS2.GPS.Algorithms
 
             var nextNode = FindNextNodeOnBestRoute(ref network, endNodes.Item1);
             #if DEBUG
-            AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
+            AlgorithmDebuggerWindow.Instance.AddNetworkResult("DY" + _debuggerIndex++, network,
                 startNode, nextNode, endNodes);
             #endif
             var roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
@@ -82,7 +79,7 @@ namespace KBS2.GPS.Algorithms
                 previousNode = currentNode;
                 currentNode = bestNode;
                 #if DEBUG
-                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{_debuggerIndex}#{currentNode.Value}", network,
+                AlgorithmDebuggerWindow.Instance.AddNetworkResult($"DY{_debuggerIndex}#{currentNode.Value}", network,
                     previousNode, currentNode);
                 #endif
             }

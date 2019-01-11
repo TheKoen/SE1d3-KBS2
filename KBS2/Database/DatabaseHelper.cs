@@ -61,34 +61,6 @@ namespace KBS2.Database
         }
 
         /// <summary>
-        /// Get the gender object for the specified gender or
-        /// create one if it doesn't exist.
-        /// </summary>
-        /// <param name="gender">Gender to get the object for</param>
-        public static Gender GetGender(string gender)
-        {
-            var genderObject = Genders.Find(g => g.Name.Equals(gender));
-            if (genderObject == null)
-            {
-                QueueDatabaseAction((database) =>
-                {
-                    genderObject = new Gender
-                    {
-                        Name = gender
-                    };
-                    Genders.Add(genderObject);
-
-                    database.Genders.Add(genderObject);
-                    database.SaveChanges();
-
-                    App.Console?.Print($"Added gender {genderObject.Name} to DB");
-                });
-            }
-
-            return genderObject;
-        }
-
-        /// <summary>
         /// Queues an action to the database. Generally used for saving
         /// data to the database.
         /// The DatabaseAction will always be executed on the database
@@ -148,17 +120,32 @@ namespace KBS2.Database
             };
         }
 
-        public static T GetObject<T>(DbSet<T> set, Predicate<T> predicate) where T : class
+        /// <summary>
+        /// Get the gender object for the specified gender or
+        /// create one if it doesn't exist.
+        /// </summary>
+        /// <param name="gender">Gender to get the object for</param>
+        public static Gender GetGender(string gender)
         {
-            var results = (from obj in set
-                where predicate(obj)
-                select obj).ToList();
-            return results.Count == 0 ? null : results.First();
-        }
+            var genderObject = Genders.Find(g => g.Name.Equals(gender));
+            if (genderObject == null)
+            {
+                QueueDatabaseAction((database) =>
+                {
+                    genderObject = new Gender
+                    {
+                        Name = gender
+                    };
+                    Genders.Add(genderObject);
 
-        public static bool MatchVectors(Vector vector1, System.Windows.Vector vector2)
-        {
-            return Math.Abs(vector1.X - vector2.X) < 0.01 && Math.Abs(vector1.Y - vector2.Y) < 0.01;
+                    database.Genders.Add(genderObject);
+                    database.SaveChanges();
+
+                    App.Console?.Print($"Added gender {genderObject.Name} to DB");
+                });
+            }
+
+            return genderObject;
         }
     }
 }

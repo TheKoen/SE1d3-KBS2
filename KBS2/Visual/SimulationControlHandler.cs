@@ -147,7 +147,6 @@ namespace KBS2.Visual
             LoadButtonClick();
             ResetLabels();
             Screen.Ticks = 0;
-            Screen.SecondsRunning = 0;
             Screen.UpdateTimer();
             MainScreen.WPFLoop.Stop();
             MainScreen.AILoop.Stop();
