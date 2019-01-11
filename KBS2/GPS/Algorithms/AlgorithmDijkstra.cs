@@ -21,16 +21,20 @@ namespace KBS2.GPS.Algorithms
 
             if (startNode.Equals(endNodes.Item1))
             {
+                #if DEBUG
                 AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
                     startNode, endNodes.Item2, endNodes);
+                #endif
                 return endDestination;
             }
             
             AssignNodeValues(ref network, ref startNode);
 
             var nextNode = FindNextNodeOnBestRoute(ref network, endNodes.Item1);
+            #if DEBUG
             AlgorithmDebuggerWindow.Instance.AddNetworkResult(_debuggerIndex++.ToString(), network, 
                 startNode, nextNode, endNodes);
+            #endif
             var roadX = (startNode.PositionX - nextNode.PositionX) / 2.0 + nextNode.PositionX;
             var roadY = (startNode.PositionY - nextNode.PositionY) / 2.0 + nextNode.PositionY;
             return new Destination
@@ -77,8 +81,10 @@ namespace KBS2.GPS.Algorithms
                     .First();
                 previousNode = currentNode;
                 currentNode = bestNode;
+                #if DEBUG
                 AlgorithmDebuggerWindow.Instance.AddNetworkResult($"{_debuggerIndex}#{currentNode.Value}", network,
                     previousNode, currentNode);
+                #endif
             }
 
             return previousNode;
