@@ -33,11 +33,15 @@ namespace KBS2.Database
                 Database?.Dispose();
             };
 
+            string executable = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string path = (System.IO.Path.GetDirectoryName(executable));
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+
             // Queue an action to the DatabaseLoop to create the connection.
             DatabaseLoop.EnqueueAction(() =>
             {
                 App.Console?.Print("Connecting to database", Colors.LimeGreen);
-                Database = new MyDatabase("killakid");
+                Database = new MyDatabase("test");
                 App.Console?.Print("Connected!", Colors.LimeGreen);
             });
 
