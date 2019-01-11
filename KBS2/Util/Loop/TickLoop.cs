@@ -128,7 +128,7 @@ namespace KBS2.Util.Loop
 
                 var taken = DateTimeOffset.Now.ToUnixTimeMilliseconds() - time;
                 var interval = CalculateInterval(tickRate.Value);
-                if (taken > interval) break;
+                if (taken > interval / 2d) break;
             }
         }
 
