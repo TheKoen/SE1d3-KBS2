@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Windows;
 using CommandSystem.PropertyManagement;
 
@@ -22,31 +23,30 @@ namespace KBS2.Util.Loop
         {
             while (running)
             {
-                Update(this, null);
+                var taken = Update(this, null);
 
-                Thread.Sleep(interval);
+                Thread.Sleep(Math.Max(interval - (int) taken, 0));
             }
         }
 
         public override void Start()
         {
-            if (!running)
-            {
-                while (thread.IsAlive)
-                {
-                    if (running)
-                    {
-                        return;
-                    }
+            if (running) return;
 
-                    Thread.Sleep(20);
+            while (thread.IsAlive)
+            {
+                if (running)
+                {
+                    return;
                 }
 
-                running = true;
-
-                thread = new Thread(Run);
-                thread.Start();
+                Thread.Sleep(20);
             }
+
+            running = true;
+
+            thread = new Thread(Run);
+            thread.Start();
         }
 
         public override void Stop()

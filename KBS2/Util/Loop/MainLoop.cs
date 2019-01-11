@@ -17,7 +17,7 @@ namespace KBS2.Util.Loop
             {
                 Interval = new TimeSpan(0, 0, 0, 0, CalculateInterval(TickRate))
             };
-            timer.Tick += Update;
+            timer.Tick += (sender, args) => Update(sender, args);
         }
 
         /// <summary>

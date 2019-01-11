@@ -94,7 +94,8 @@ namespace KBS2.Util.Loop
         /// </summary>
         /// <param name="source"></param>
         /// <param name="args"></param>
-        protected void Update(object source, EventArgs args)
+        /// <returns>the amount of millseconds taken</returns>
+        protected long Update(object source, EventArgs args)
         {
             var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
@@ -107,6 +108,8 @@ namespace KBS2.Util.Loop
             {
                 App.Console.Print($"{Name} loop is running {taken - interval}ms behind!", Colors.Yellow);
             }
+
+            return taken;
         }
 
         private void HandleQueue()
