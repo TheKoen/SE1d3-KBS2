@@ -7,6 +7,7 @@ using CommandSystem.PropertyManagement;
 using KBS2.CarSystem;
 using KBS2.CitySystem;
 using KBS2.CustomerSystem;
+using KBS2.GPS.Algorithms;
 using KBS2.Util;
 using AlgorithmDijkstra = KBS2.GPS.Algorithms.AlgorithmDijkstra;
 using AlgorithmAStar = KBS2.GPS.Algorithms.AlgorithmAStar;
@@ -15,10 +16,15 @@ namespace KBS2.GPS
 {
     public class GPSSystem
     {
+        public static Tuple<string, IAlgorithm>[] AlgorithmList = {
+            new Tuple<string, IAlgorithm>("Dijkstra", new AlgorithmDijkstra()), 
+            new Tuple<string, IAlgorithm>("AStar", new AlgorithmAStar()), 
+        };
+        
         public static Property StartingPrice = new Property(1.50);
         public static Property PricePerKilometer = new Property(1.00);
 
-        private static IAlgorithm Algorithm = new AlgorithmAStar();
+        public static IAlgorithm Algorithm = AlgorithmList[1].Item2;
 
         public static void Setup()
         {

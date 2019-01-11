@@ -158,6 +158,9 @@
       <DependentUpon>AlgorithmDebuggerWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GPS\AlgorithmPickerWindow.xaml.cs">
+      <DependentUpon>AlgorithmPickerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GPS\Algorithms\AlgorithmAStar.cs" />
     <Compile Include="GPS\Algorithms\AlgorithmDijkstra.cs" />
     <Compile Include="GPS\AlgorithmTools.cs" />
@@ -266,6 +269,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="GPS\AlgorithmPickerWindow.xaml" />
     <Page Include="MainScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
