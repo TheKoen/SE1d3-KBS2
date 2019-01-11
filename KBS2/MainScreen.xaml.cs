@@ -435,5 +435,16 @@ namespace KBS2
         {
             SimulationControlHandler.Results.Update();
         }
+
+        private void BtnPickAlgorithm_OnClick(object sender, RoutedEventArgs e)
+        {
+            var algorithmPicker = new AlgorithmPickerWindow();
+            
+            algorithmPicker.ShowDialog();
+            if (!algorithmPicker.Success) return;
+
+            GPSSystem.Algorithm = algorithmPicker.SelectedAlgorithm.Item2;
+            LblAlgorithm.Content = algorithmPicker.SelectedAlgorithm.Item1;
+        }
     }
 }
